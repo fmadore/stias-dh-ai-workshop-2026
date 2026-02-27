@@ -37,7 +37,9 @@
 		return () => observer.disconnect();
 	});
 
-	const dirClass = $derived(direction === 'left' ? 'from-left' : direction === 'right' ? 'from-right' : '');
+	const dirClass = $derived(
+		direction === 'left' ? 'from-left' : direction === 'right' ? 'from-right' : ''
+	);
 </script>
 
 <div bind:this={element} class="scroll-reveal {dirClass}">

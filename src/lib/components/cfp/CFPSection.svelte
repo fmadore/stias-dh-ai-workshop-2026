@@ -12,7 +12,10 @@
 	const keyDates = $derived([
 		{ label: m.submission_deadline(), value: formatDate(cfpInfo.deadline) },
 		{ label: m.notification_date(), value: formatDate(cfpInfo.notificationDate) },
-		{ label: m.workshop_dates(), value: formatDateRange(siteConfig.dates.start, siteConfig.dates.end) }
+		{
+			label: m.workshop_dates(),
+			value: formatDateRange(siteConfig.dates.start, siteConfig.dates.end)
+		}
 	]);
 
 	function formatDate(isoDate: string): string {
@@ -43,18 +46,30 @@
 			<h2 class="text-2xl mb-8 text-surface-900 dark:text-surface-50">{m.key_dates()}</h2>
 			<div class="relative">
 				<!-- Connecting line -->
-				<div class="absolute left-[11px] top-2 bottom-2 w-px bg-gradient-to-b from-secondary-400 via-secondary-300 to-primary-400 hidden sm:block"></div>
+				<div
+					class="absolute left-[11px] top-2 bottom-2 w-px bg-gradient-to-b from-secondary-400 via-secondary-300 to-primary-400 hidden sm:block"
+				></div>
 
 				<div class="space-y-6">
 					{#each keyDates as dateItem}
 						<div class="flex items-start gap-5">
 							<!-- Timeline dot -->
-							<div class="flex-shrink-0 relative z-10 w-6 h-6 rounded-full bg-white dark:bg-surface-800 border-2 border-secondary-400 mt-0.5 hidden sm:flex items-center justify-center">
+							<div
+								class="flex-shrink-0 relative z-10 w-6 h-6 rounded-full bg-white dark:bg-surface-800 border-2 border-secondary-400 mt-0.5 hidden sm:flex items-center justify-center"
+							>
 								<div class="w-2 h-2 rounded-full bg-secondary-400"></div>
 							</div>
-							<div class="flex-1 bg-white dark:bg-surface-800/80 rounded-xl p-5 border border-surface-200/50 dark:border-surface-700/50">
-								<p class="text-sm font-sans font-medium text-surface-400 dark:text-surface-500 uppercase tracking-wider mb-1">{dateItem.label}</p>
-								<p class="text-lg font-sans font-semibold text-surface-900 dark:text-surface-50">{dateItem.value}</p>
+							<div
+								class="flex-1 bg-white dark:bg-surface-800/80 rounded-xl p-5 border border-surface-200/50 dark:border-surface-700/50"
+							>
+								<p
+									class="text-sm font-sans font-medium text-surface-400 dark:text-surface-500 uppercase tracking-wider mb-1"
+								>
+									{dateItem.label}
+								</p>
+								<p class="text-lg font-sans font-semibold text-surface-900 dark:text-surface-50">
+									{dateItem.value}
+								</p>
 							</div>
 						</div>
 					{/each}
@@ -67,7 +82,11 @@
 	<ScrollReveal delay={1}>
 		<div>
 			<h2 class="text-2xl mb-4 text-surface-900 dark:text-surface-50">{m.guidelines()}</h2>
-			<p class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg">{t(cfpInfo.guidelines)}</p>
+			<p
+				class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg"
+			>
+				{t(cfpInfo.guidelines)}
+			</p>
 		</div>
 	</ScrollReveal>
 
@@ -77,8 +96,12 @@
 			<h2 class="text-2xl mb-6 text-surface-900 dark:text-surface-50">{m.suggested_topics()}</h2>
 			<ul class="space-y-3">
 				{#each cfpInfo.topics as topic}
-					<li class="flex items-start gap-4 text-surface-600 dark:text-surface-300 font-sans font-light">
-						<span class="flex-shrink-0 w-1.5 h-6 rounded-full bg-gradient-to-b from-secondary-400 to-secondary-500 mt-0.5"></span>
+					<li
+						class="flex items-start gap-4 text-surface-600 dark:text-surface-300 font-sans font-light"
+					>
+						<span
+							class="flex-shrink-0 w-1.5 h-6 rounded-full bg-gradient-to-b from-secondary-400 to-secondary-500 mt-0.5"
+						></span>
 						<span class="leading-relaxed">{t(topic)}</span>
 					</li>
 				{/each}

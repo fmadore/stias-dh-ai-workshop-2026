@@ -6,7 +6,9 @@
 	import { Menu, X, Sun, Moon } from 'lucide-svelte';
 
 	let mobileMenuOpen = $state(false);
-	let darkMode = $state(typeof document !== 'undefined' && document.documentElement.classList.contains('dark'));
+	let darkMode = $state(
+		typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
+	);
 
 	const navLinks = $derived([
 		{ href: `${base}/`, label: m.nav_home() },
@@ -37,12 +39,20 @@
 	}
 </script>
 
-<header class="fixed top-0 left-0 right-0 z-50 bg-white/85 dark:bg-surface-900/90 backdrop-blur-md border-b border-surface-200/60 dark:border-surface-700/60">
+<header
+	class="fixed top-0 left-0 right-0 z-50 bg-white/85 dark:bg-surface-900/90 backdrop-blur-md border-b border-surface-200/60 dark:border-surface-700/60"
+>
 	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 		<div class="flex items-center justify-between h-18">
 			<!-- Logo / Title -->
-			<a href="{base}/" class="flex items-center gap-2 text-primary-700 dark:text-primary-400 text-xl tracking-tight font-serif">
-				DH & AI <span class="text-surface-400 dark:text-surface-500 font-sans text-sm font-light tracking-wider uppercase">African Studies</span>
+			<a
+				href="{base}/"
+				class="flex items-center gap-2 text-primary-700 dark:text-primary-400 text-xl tracking-tight font-serif"
+			>
+				DH & AI <span
+					class="text-surface-400 dark:text-surface-500 font-sans text-sm font-light tracking-wider uppercase"
+					>African Studies</span
+				>
 			</a>
 
 			<!-- Desktop Navigation -->
@@ -56,7 +66,8 @@
 					>
 						{link.label}
 						{#if isActive(link.href)}
-							<span class="absolute bottom-0 left-3 right-3 h-0.5 bg-secondary-400 rounded-full"></span>
+							<span class="absolute bottom-0 left-3 right-3 h-0.5 bg-secondary-400 rounded-full"
+							></span>
 						{/if}
 					</a>
 				{/each}
@@ -92,7 +103,9 @@
 
 		<!-- Mobile Navigation with smooth transition -->
 		<nav
-			class="md:hidden overflow-hidden transition-all duration-300 ease-in-out {mobileMenuOpen ? 'max-h-96 opacity-100 pb-4' : 'max-h-0 opacity-0'}"
+			class="md:hidden overflow-hidden transition-all duration-300 ease-in-out {mobileMenuOpen
+				? 'max-h-96 opacity-100 pb-4'
+				: 'max-h-0 opacity-0'}"
 			aria-label="Mobile navigation"
 		>
 			<div class="border-t border-surface-200/60 dark:border-surface-700/60 pt-3">

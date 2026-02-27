@@ -8,10 +8,7 @@
 	import MapEmbed from '$lib/components/venue/MapEmbed.svelte';
 </script>
 
-<SEO
-	title="{m.nav_venue()} | {siteConfig.shortTitle}"
-	description={m.seo_venue_description()}
-/>
+<SEO title="{m.nav_venue()} | {siteConfig.shortTitle}" description={m.seo_venue_description()} />
 
 <div class="bg-cream">
 	<PageHeader title={m.section_venue()} />

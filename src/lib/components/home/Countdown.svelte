@@ -8,9 +8,7 @@
 	const startDate = new Date(siteConfig.dates.start + 'T09:00:00').getTime();
 	const endDate = new Date(siteConfig.dates.end + 'T18:00:00').getTime();
 
-	const status = $derived(
-		now >= endDate ? 'ended' : now >= startDate ? 'started' : 'upcoming'
-	);
+	const status = $derived(now >= endDate ? 'ended' : now >= startDate ? 'started' : 'upcoming');
 
 	const diff = $derived(Math.max(0, startDate - now));
 	const days = $derived(Math.floor(diff / (1000 * 60 * 60 * 24)));
@@ -50,10 +48,14 @@
 				<div class="text-xl text-white/20 font-light select-none pb-5">:</div>
 			{/if}
 			<div class="text-center min-w-[3.5rem]">
-				<div class="text-3xl sm:text-4xl font-sans font-semibold text-white tabular-nums tracking-tight">
+				<div
+					class="text-3xl sm:text-4xl font-sans font-semibold text-white tabular-nums tracking-tight"
+				>
 					{String(unit.value).padStart(2, '0')}
 				</div>
-				<div class="text-[11px] sm:text-xs text-white/40 mt-1.5 uppercase tracking-wider font-sans font-light">
+				<div
+					class="text-[11px] sm:text-xs text-white/40 mt-1.5 uppercase tracking-wider font-sans font-light"
+				>
 					{unit.label}
 				</div>
 			</div>

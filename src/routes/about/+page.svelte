@@ -9,10 +9,7 @@
 	import { thematicAxes } from '$lib/data/thematic-axes';
 </script>
 
-<SEO
-	title="{m.nav_about()} | {siteConfig.shortTitle}"
-	description={m.seo_about_description()}
-/>
+<SEO title="{m.nav_about()} | {siteConfig.shortTitle}" description={m.seo_about_description()} />
 
 <div class="bg-cream">
 	<PageHeader title={m.nav_about()} />
@@ -22,7 +19,9 @@
 	<section class="py-16 sm:py-20 bg-white dark:bg-surface-800/50">
 		<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 			<ScrollReveal>
-				<h2 class="text-2xl sm:text-3xl mb-10 text-surface-900 dark:text-surface-50">{m.section_thematic_axes()}</h2>
+				<h2 class="text-2xl sm:text-3xl mb-10 text-surface-900 dark:text-surface-50">
+					{m.section_thematic_axes()}
+				</h2>
 			</ScrollReveal>
 			<div class="space-y-6">
 				{#each thematicAxes as axis, i}

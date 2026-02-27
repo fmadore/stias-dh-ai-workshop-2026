@@ -18,12 +18,16 @@
 	}
 </script>
 
-<div class="bg-white dark:bg-surface-800/80 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+<div
+	class="bg-white dark:bg-surface-800/80 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+>
 	<div class="p-6 sm:p-7">
 		<div class="flex flex-col sm:flex-row items-center sm:items-start gap-5">
 			<!-- Avatar — larger presence -->
 			<div class="flex-shrink-0">
-				<div class="w-28 h-28 rounded-2xl overflow-hidden bg-primary-500/8 flex items-center justify-center ring-2 ring-surface-200/50 dark:ring-surface-700/50">
+				<div
+					class="w-28 h-28 rounded-2xl overflow-hidden bg-primary-500/8 flex items-center justify-center ring-2 ring-surface-200/50 dark:ring-surface-700/50"
+				>
 					<img
 						src="{base}{organizer.image}"
 						alt={organizer.name}
@@ -34,19 +38,29 @@
 							target.nextElementSibling?.classList.remove('hidden');
 						}}
 					/>
-					<span class="hidden text-2xl font-sans font-bold text-primary-500">{getInitials(organizer.name)}</span>
+					<span class="hidden text-2xl font-sans font-bold text-primary-500"
+						>{getInitials(organizer.name)}</span
+					>
 				</div>
 			</div>
 
 			<!-- Info — clear hierarchy -->
 			<div class="flex-1 text-center sm:text-left">
 				<h3 class="text-xl font-serif text-surface-900 dark:text-surface-50">{organizer.name}</h3>
-				<p class="text-sm font-sans font-medium text-primary-600 dark:text-primary-400 mt-0.5">{t(organizer.role)}</p>
-				<p class="text-sm font-sans text-surface-400 dark:text-surface-500 mb-3">{t(organizer.affiliation)}</p>
+				<p class="text-sm font-sans font-medium text-primary-600 dark:text-primary-400 mt-0.5">
+					{t(organizer.role)}
+				</p>
+				<p class="text-sm font-sans text-surface-400 dark:text-surface-500 mb-3">
+					{t(organizer.affiliation)}
+				</p>
 
 				<div class="w-8 h-px bg-secondary-400/40 mb-3 mx-auto sm:mx-0"></div>
 
-				<p class="text-sm text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light mb-3">{t(organizer.bio)}</p>
+				<p
+					class="text-sm text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light mb-3"
+				>
+					{t(organizer.bio)}
+				</p>
 				<div class="flex items-center gap-3 justify-center sm:justify-start">
 					{#if organizer.website}
 						<a

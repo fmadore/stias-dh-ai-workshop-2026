@@ -6,10 +6,7 @@
 	import CFPSection from '$lib/components/cfp/CFPSection.svelte';
 </script>
 
-<SEO
-	title="{m.nav_cfp()} | {siteConfig.shortTitle}"
-	description={m.seo_cfp_description()}
-/>
+<SEO title="{m.nav_cfp()} | {siteConfig.shortTitle}" description={m.seo_cfp_description()} />
 
 <div class="bg-cream">
 	<PageHeader title={m.section_cfp()} />

@@ -22,11 +22,11 @@ export const cfpInfo: CFPInfo = {
 		},
 		{
 			en: 'Ethical frameworks for AI research in African contexts',
-			fr: "Cadres éthiques pour la recherche en IA dans les contextes africains"
+			fr: 'Cadres éthiques pour la recherche en IA dans les contextes africains'
 		},
 		{
 			en: 'Sustainability of digital research infrastructure in Africa',
-			fr: "Durabilité des infrastructures de recherche numérique en Afrique"
+			fr: 'Durabilité des infrastructures de recherche numérique en Afrique'
 		},
 		{
 			en: 'Decolonial approaches to digital knowledge production',
@@ -34,7 +34,7 @@ export const cfpInfo: CFPInfo = {
 		},
 		{
 			en: 'Multilingual knowledge representation and ontologies for African studies',
-			fr: "Représentation multilingue des savoirs et ontologies pour les études africaines"
+			fr: 'Représentation multilingue des savoirs et ontologies pour les études africaines'
 		}
 	],
 	submissionUrl: undefined,

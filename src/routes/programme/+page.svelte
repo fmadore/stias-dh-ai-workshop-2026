@@ -29,9 +29,13 @@
 				</div>
 			{:else}
 				<ScrollReveal>
-					<div class="bg-white dark:bg-surface-800/80 rounded-xl p-14 text-center border border-surface-200/50 dark:border-surface-700/50">
+					<div
+						class="bg-white dark:bg-surface-800/80 rounded-xl p-14 text-center border border-surface-200/50 dark:border-surface-700/50"
+					>
 						<Calendar size={48} class="mx-auto text-surface-300 dark:text-surface-600 mb-4" />
-						<p class="text-lg text-surface-400 dark:text-surface-500 font-sans font-light">{m.programme_tba()}</p>
+						<p class="text-lg text-surface-400 dark:text-surface-500 font-sans font-light">
+							{m.programme_tba()}
+						</p>
 					</div>
 				</ScrollReveal>
 			{/if}

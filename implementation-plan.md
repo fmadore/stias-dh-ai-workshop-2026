@@ -8,15 +8,15 @@
 
 ## 1. Tech Stack & Dependencies
 
-| Layer | Tool | Version | Purpose |
-|-------|------|---------|---------|
-| Framework | SvelteKit | latest (Svelte 5) | SSG framework |
-| UI Library | Skeleton | v3 (`@skeletonlabs/skeleton` + `@skeletonlabs/skeleton-svelte`) | Theme system, utility classes, components |
-| CSS | Tailwind CSS | v4 (`@tailwindcss/vite`) | Utility-first styling |
-| i18n | Paraglide JS | v2 (`@inlang/paraglide-js`) | Compile-time bilingual EN/FR |
-| Icons | Lucide Svelte | latest | Icon system (Skeleton's recommended) |
-| Deployment | `@sveltejs/adapter-static` | latest | Static site generation |
-| Hosting | GitHub Pages | — | Free static hosting via GitHub Actions |
+| Layer      | Tool                       | Version                                                         | Purpose                                   |
+| ---------- | -------------------------- | --------------------------------------------------------------- | ----------------------------------------- |
+| Framework  | SvelteKit                  | latest (Svelte 5)                                               | SSG framework                             |
+| UI Library | Skeleton                   | v3 (`@skeletonlabs/skeleton` + `@skeletonlabs/skeleton-svelte`) | Theme system, utility classes, components |
+| CSS        | Tailwind CSS               | v4 (`@tailwindcss/vite`)                                        | Utility-first styling                     |
+| i18n       | Paraglide JS               | v2 (`@inlang/paraglide-js`)                                     | Compile-time bilingual EN/FR              |
+| Icons      | Lucide Svelte              | latest                                                          | Icon system (Skeleton's recommended)      |
+| Deployment | `@sveltejs/adapter-static` | latest                                                          | Static site generation                    |
+| Hosting    | GitHub Pages               | —                                                               | Free static hosting via GitHub Actions    |
 
 ---
 
@@ -106,195 +106,198 @@ All content lives in typed `.ts` files under `src/lib/data/`. Translation keys a
 
 ```typescript
 export interface LocalizedString {
-  en: string;
-  fr: string;
+	en: string;
+	fr: string;
 }
 
 export interface Organizer {
-  id: string;
-  name: string;
-  role: LocalizedString;          // e.g. "Organizer" / "Organisateur"
-  affiliation: LocalizedString;
-  bio: LocalizedString;
-  image: string;                  // path to photo in /static/images/organizers/
-  website?: string;
-  orcid?: string;
+	id: string;
+	name: string;
+	role: LocalizedString; // e.g. "Organizer" / "Organisateur"
+	affiliation: LocalizedString;
+	bio: LocalizedString;
+	image: string; // path to photo in /static/images/organizers/
+	website?: string;
+	orcid?: string;
 }
 
 export interface Participant {
-  id: string;
-  name: string;
-  affiliation: LocalizedString;
-  country: string;
-  image?: string;
-  website?: string;
-  presentationTitle?: LocalizedString;
+	id: string;
+	name: string;
+	affiliation: LocalizedString;
+	country: string;
+	image?: string;
+	website?: string;
+	presentationTitle?: LocalizedString;
 }
 
 export interface ThematicAxis {
-  id: string;
-  number: number;
-  title: LocalizedString;
-  description: LocalizedString;
-  icon: string;                   // Lucide icon name
+	id: string;
+	number: number;
+	title: LocalizedString;
+	description: LocalizedString;
+	icon: string; // Lucide icon name
 }
 
 export interface Session {
-  id: string;
-  time: string;                   // e.g. "09:00 - 10:30"
-  title: LocalizedString;
-  type: 'keynote' | 'panel' | 'workshop' | 'break' | 'social';
-  speakers?: string[];            // references to participant IDs
-  description?: LocalizedString;
-  room?: string;
+	id: string;
+	time: string; // e.g. "09:00 - 10:30"
+	title: LocalizedString;
+	type: 'keynote' | 'panel' | 'workshop' | 'break' | 'social';
+	speakers?: string[]; // references to participant IDs
+	description?: LocalizedString;
+	room?: string;
 }
 
 export interface ProgrammeDay {
-  date: string;                   // ISO date
-  dayLabel: LocalizedString;      // e.g. "Day 1" / "Jour 1"
-  title: LocalizedString;         // e.g. "Opening & Keynotes"
-  sessions: Session[];
+	date: string; // ISO date
+	dayLabel: LocalizedString; // e.g. "Day 1" / "Jour 1"
+	title: LocalizedString; // e.g. "Opening & Keynotes"
+	sessions: Session[];
 }
 
 export interface VenueInfo {
-  name: string;
-  fullName: LocalizedString;
-  address: string;
-  city: string;
-  country: string;
-  coordinates: { lat: number; lng: number };
-  description: LocalizedString;
-  website: string;
-  travelInfo: LocalizedString;
-  accommodationInfo: LocalizedString;
+	name: string;
+	fullName: LocalizedString;
+	address: string;
+	city: string;
+	country: string;
+	coordinates: { lat: number; lng: number };
+	description: LocalizedString;
+	website: string;
+	travelInfo: LocalizedString;
+	accommodationInfo: LocalizedString;
 }
 
 export interface CFPInfo {
-  deadline: string;               // ISO date
-  notificationDate: string;
-  topics: LocalizedString[];
-  submissionUrl?: string;
-  guidelines: LocalizedString;
+	deadline: string; // ISO date
+	notificationDate: string;
+	topics: LocalizedString[];
+	submissionUrl?: string;
+	guidelines: LocalizedString;
 }
 
 export interface SiteConfig {
-  title: LocalizedString;
-  shortTitle: string;
-  description: LocalizedString;
-  dates: { start: string; end: string };
-  location: string;
-  url: string;
+	title: LocalizedString;
+	shortTitle: string;
+	description: LocalizedString;
+	dates: { start: string; end: string };
+	location: string;
+	url: string;
 }
 ```
 
 ### 3.2 Sample Data Files
 
 **`src/lib/data/site-config.ts`**
+
 ```typescript
 import type { SiteConfig } from '$lib/types';
 
 export const siteConfig: SiteConfig = {
-  title: {
-    en: 'Digital Humanities and Artificial Intelligence in African Studies: Towards Sustainable and Equitable Practices',
-    fr: 'Humanités numériques et intelligence artificielle en études africaines : vers des pratiques durables et équitables'
-  },
-  shortTitle: 'DH & AI in African Studies',
-  description: {
-    en: 'A workshop at STIAS, Stellenbosch, exploring how DH and AI transform research in African Studies.',
-    fr: 'Un atelier au STIAS, Stellenbosch, explorant comment les HN et l\'IA transforment la recherche en études africaines.'
-  },
-  dates: { start: '2026-09-21', end: '2026-09-24' },
-  location: 'STIAS, Stellenbosch, South Africa',
-  url: 'https://fmadore.github.io/stias-dh-ai-workshop-2026'
+	title: {
+		en: 'Digital Humanities and Artificial Intelligence in African Studies: Towards Sustainable and Equitable Practices',
+		fr: 'Humanités numériques et intelligence artificielle en études africaines : vers des pratiques durables et équitables'
+	},
+	shortTitle: 'DH & AI in African Studies',
+	description: {
+		en: 'A workshop at STIAS, Stellenbosch, exploring how DH and AI transform research in African Studies.',
+		fr: "Un atelier au STIAS, Stellenbosch, explorant comment les HN et l'IA transforment la recherche en études africaines."
+	},
+	dates: { start: '2026-09-21', end: '2026-09-24' },
+	location: 'STIAS, Stellenbosch, South Africa',
+	url: 'https://fmadore.github.io/stias-dh-ai-workshop-2026'
 };
 ```
 
 **`src/lib/data/organizers.ts`**
+
 ```typescript
 import type { Organizer } from '$lib/types';
 
 export const organizers: Organizer[] = [
-  {
-    id: 'madore',
-    name: 'Frédérick Madore',
-    role: { en: 'Organizer', fr: 'Organisateur' },
-    affiliation: { en: 'University of Bayreuth', fr: 'Université de Bayreuth' },
-    bio: {
-      en: 'Historian and data curator at the Cluster of Excellence "Africa Multiple"...',
-      fr: 'Historien et conservateur de données au Cluster d\'Excellence « Africa Multiple »...'
-    },
-    image: '/images/organizers/madore.jpg',
-    website: 'https://www.frederickmadore.com',
-    orcid: '0000-0003-0959-2092'
-  },
-  {
-    id: 'hiribarren',
-    name: 'Vincent Hiribarren',
-    role: { en: 'Organizer', fr: 'Organisateur' },
-    affiliation: { en: "King's College London", fr: "King's College London" },
-    bio: { en: '...', fr: '...' },
-    image: '/images/organizers/hiribarren.jpg'
-  },
-  {
-    id: 'ngue-um',
-    name: 'Emmanuel Ngue Um',
-    role: { en: 'Organizer', fr: 'Organisateur' },
-    affiliation: { en: 'University of Yaoundé 1', fr: 'Université de Yaoundé 1' },
-    bio: { en: '...', fr: '...' },
-    image: '/images/organizers/ngue-um.jpg'
-  },
-  {
-    id: 'van-zaanen',
-    name: 'Menno van Zaanen',
-    role: { en: 'Organizer', fr: 'Organisateur' },
-    affiliation: {
-      en: 'South African Centre for Digital Language Resources (SADiLaR)',
-      fr: 'Centre sud-africain pour les ressources linguistiques numériques (SADiLaR)'
-    },
-    bio: { en: '...', fr: '...' },
-    image: '/images/organizers/van-zaanen.jpg'
-  }
+	{
+		id: 'madore',
+		name: 'Frédérick Madore',
+		role: { en: 'Organizer', fr: 'Organisateur' },
+		affiliation: { en: 'University of Bayreuth', fr: 'Université de Bayreuth' },
+		bio: {
+			en: 'Historian and data curator at the Cluster of Excellence "Africa Multiple"...',
+			fr: "Historien et conservateur de données au Cluster d'Excellence « Africa Multiple »..."
+		},
+		image: '/images/organizers/madore.jpg',
+		website: 'https://www.frederickmadore.com',
+		orcid: '0000-0003-0959-2092'
+	},
+	{
+		id: 'hiribarren',
+		name: 'Vincent Hiribarren',
+		role: { en: 'Organizer', fr: 'Organisateur' },
+		affiliation: { en: "King's College London", fr: "King's College London" },
+		bio: { en: '...', fr: '...' },
+		image: '/images/organizers/hiribarren.jpg'
+	},
+	{
+		id: 'ngue-um',
+		name: 'Emmanuel Ngue Um',
+		role: { en: 'Organizer', fr: 'Organisateur' },
+		affiliation: { en: 'University of Yaoundé 1', fr: 'Université de Yaoundé 1' },
+		bio: { en: '...', fr: '...' },
+		image: '/images/organizers/ngue-um.jpg'
+	},
+	{
+		id: 'van-zaanen',
+		name: 'Menno van Zaanen',
+		role: { en: 'Organizer', fr: 'Organisateur' },
+		affiliation: {
+			en: 'South African Centre for Digital Language Resources (SADiLaR)',
+			fr: 'Centre sud-africain pour les ressources linguistiques numériques (SADiLaR)'
+		},
+		bio: { en: '...', fr: '...' },
+		image: '/images/organizers/van-zaanen.jpg'
+	}
 ];
 ```
 
 **`src/lib/data/thematic-axes.ts`**
+
 ```typescript
 import type { ThematicAxis } from '$lib/types';
 
 export const thematicAxes: ThematicAxis[] = [
-  {
-    id: 'transforming-methods',
-    number: 1,
-    title: {
-      en: 'Transforming Research Methods through AI and Digital Tools in African Studies',
-      fr: 'Transformer les méthodes de recherche par l\'IA et les outils numériques en études africaines'
-    },
-    description: {
-      en: 'This axis asks a fundamental question: how are AI and DH methods changing the study of African cultures, languages, and histories?...',
-      fr: 'Cet axe pose une question fondamentale : comment les méthodes d\'IA et d\'HN transforment-elles l\'étude des cultures, des langues et des histoires africaines ?...'
-    },
-    icon: 'Cpu'
-  },
-  {
-    id: 'sustainable-infrastructure',
-    number: 2,
-    title: {
-      en: 'Building Sustainable Research Infrastructures from African Perspectives',
-      fr: 'Construire des infrastructures de recherche durables à partir de perspectives africaines'
-    },
-    description: { en: '...', fr: '...' },
-    icon: 'Building2'
-  },
-  {
-    id: 'knowledge-systems',
-    number: 3,
-    title: {
-      en: 'Centring African Knowledge Systems in Digital Research Design',
-      fr: 'Centrer les systèmes de savoirs africains dans la conception de la recherche numérique'
-    },
-    description: { en: '...', fr: '...' },
-    icon: 'BookOpen'
-  }
+	{
+		id: 'transforming-methods',
+		number: 1,
+		title: {
+			en: 'Transforming Research Methods through AI and Digital Tools in African Studies',
+			fr: "Transformer les méthodes de recherche par l'IA et les outils numériques en études africaines"
+		},
+		description: {
+			en: 'This axis asks a fundamental question: how are AI and DH methods changing the study of African cultures, languages, and histories?...',
+			fr: "Cet axe pose une question fondamentale : comment les méthodes d'IA et d'HN transforment-elles l'étude des cultures, des langues et des histoires africaines ?..."
+		},
+		icon: 'Cpu'
+	},
+	{
+		id: 'sustainable-infrastructure',
+		number: 2,
+		title: {
+			en: 'Building Sustainable Research Infrastructures from African Perspectives',
+			fr: 'Construire des infrastructures de recherche durables à partir de perspectives africaines'
+		},
+		description: { en: '...', fr: '...' },
+		icon: 'Building2'
+	},
+	{
+		id: 'knowledge-systems',
+		number: 3,
+		title: {
+			en: 'Centring African Knowledge Systems in Digital Research Design',
+			fr: 'Centrer les systèmes de savoirs africains dans la conception de la recherche numérique'
+		},
+		description: { en: '...', fr: '...' },
+		icon: 'BookOpen'
+	}
 ];
 ```
 
@@ -318,26 +321,28 @@ import { getLocale } from '$lib/paraglide/runtime';
 import type { LocalizedString } from '$lib/types';
 
 export function t(str: LocalizedString): string {
-  const locale = getLocale();
-  return str[locale as keyof LocalizedString] ?? str.en;
+	const locale = getLocale();
+	return str[locale as keyof LocalizedString] ?? str.en;
 }
 ```
 
 Usage in components:
+
 ```svelte
 <script>
-  import { t } from '$lib/utils/i18n';
-  import { organizers } from '$lib/data/organizers';
+	import { t } from '$lib/utils/i18n';
+	import { organizers } from '$lib/data/organizers';
 </script>
 
 {#each organizers as org}
-  <p>{t(org.affiliation)}</p>
+	<p>{t(org.affiliation)}</p>
 {/each}
 ```
 
 ### URL strategy
 
 For a static site, the simplest approach is **cookie + URL prefix** strategy:
+
 - `/` → English (default)
 - `/fr/` → French
 - Language switcher triggers `data-sveltekit-reload` for full locale switch
@@ -345,50 +350,52 @@ For a static site, the simplest approach is **cookie + URL prefix** strategy:
 ### Paraglide message samples
 
 **`messages/en.json`**
+
 ```json
 {
-  "nav_home": "Home",
-  "nav_about": "About",
-  "nav_programme": "Programme",
-  "nav_participants": "Participants",
-  "nav_venue": "Venue & Travel",
-  "nav_cfp": "Call for Papers",
-  "hero_dates": "September 21–24, 2026",
-  "hero_location": "STIAS, Stellenbosch, South Africa",
-  "countdown_days": "{count} days",
-  "countdown_hours": "{count} hours",
-  "countdown_minutes": "{count} min",
-  "countdown_seconds": "{count} sec",
-  "section_thematic_axes": "Thematic Axes",
-  "section_organisers": "Organisers",
-  "section_participants": "Participants",
-  "read_more": "Read more",
-  "download_cfp": "Download Call for Papers",
-  "programme_tba": "Programme to be announced"
+	"nav_home": "Home",
+	"nav_about": "About",
+	"nav_programme": "Programme",
+	"nav_participants": "Participants",
+	"nav_venue": "Venue & Travel",
+	"nav_cfp": "Call for Papers",
+	"hero_dates": "September 21–24, 2026",
+	"hero_location": "STIAS, Stellenbosch, South Africa",
+	"countdown_days": "{count} days",
+	"countdown_hours": "{count} hours",
+	"countdown_minutes": "{count} min",
+	"countdown_seconds": "{count} sec",
+	"section_thematic_axes": "Thematic Axes",
+	"section_organisers": "Organisers",
+	"section_participants": "Participants",
+	"read_more": "Read more",
+	"download_cfp": "Download Call for Papers",
+	"programme_tba": "Programme to be announced"
 }
 ```
 
 **`messages/fr.json`**
+
 ```json
 {
-  "nav_home": "Accueil",
-  "nav_about": "À propos",
-  "nav_programme": "Programme",
-  "nav_participants": "Participants",
-  "nav_venue": "Lieu & Accès",
-  "nav_cfp": "Appel à contributions",
-  "hero_dates": "21–24 septembre 2026",
-  "hero_location": "STIAS, Stellenbosch, Afrique du Sud",
-  "countdown_days": "{count} jours",
-  "countdown_hours": "{count} heures",
-  "countdown_minutes": "{count} min",
-  "countdown_seconds": "{count} sec",
-  "section_thematic_axes": "Axes thématiques",
-  "section_organisers": "Organisateurs",
-  "section_participants": "Participants",
-  "read_more": "Lire la suite",
-  "download_cfp": "Télécharger l'appel à contributions",
-  "programme_tba": "Programme à venir"
+	"nav_home": "Accueil",
+	"nav_about": "À propos",
+	"nav_programme": "Programme",
+	"nav_participants": "Participants",
+	"nav_venue": "Lieu & Accès",
+	"nav_cfp": "Appel à contributions",
+	"hero_dates": "21–24 septembre 2026",
+	"hero_location": "STIAS, Stellenbosch, Afrique du Sud",
+	"countdown_days": "{count} jours",
+	"countdown_hours": "{count} heures",
+	"countdown_minutes": "{count} min",
+	"countdown_seconds": "{count} sec",
+	"section_thematic_axes": "Axes thématiques",
+	"section_organisers": "Organisateurs",
+	"section_participants": "Participants",
+	"read_more": "Lire la suite",
+	"download_cfp": "Télécharger l'appel à contributions",
+	"programme_tba": "Programme à venir"
 }
 ```
 
@@ -400,12 +407,12 @@ For a static site, the simplest approach is **cookie + URL prefix** strategy:
 
 Use a **custom theme** via Skeleton's Theme Generator or pick a built-in preset (e.g., `cerberus` or `catppuccin`) and customize. Suggested palette:
 
-| Role | Color | Usage |
-|------|-------|-------|
-| Primary | Deep teal `#0D7377` | CTAs, links, accents |
-| Secondary | Warm gold `#D4A843` | Highlights, badges |
-| Surface | Warm grays | Backgrounds |
-| Error | Standard red | Alerts |
+| Role      | Color               | Usage                |
+| --------- | ------------------- | -------------------- |
+| Primary   | Deep teal `#0D7377` | CTAs, links, accents |
+| Secondary | Warm gold `#D4A843` | Highlights, badges   |
+| Surface   | Warm grays          | Backgrounds          |
+| Error     | Standard red        | Alerts               |
 
 ### Dark Mode
 
@@ -427,59 +434,59 @@ Standard Tailwind breakpoints. Mobile-first. Navigation collapses to hamburger m
 
 ### 6.1 Home (`/`)
 
-| Section | Component | Data Source |
-|---------|-----------|-------------|
-| Hero banner | `Hero.svelte` | `site-config.ts` + Paraglide messages |
-| Countdown | `Countdown.svelte` | Computed from `siteConfig.dates.start` |
-| Key info cards | `KeyInfo.svelte` | `site-config.ts` |
-| Thematic axes preview | `ThematicAxis.svelte` (compact) | `thematic-axes.ts` |
-| Quick links | — | Internal routing |
+| Section               | Component                       | Data Source                            |
+| --------------------- | ------------------------------- | -------------------------------------- |
+| Hero banner           | `Hero.svelte`                   | `site-config.ts` + Paraglide messages  |
+| Countdown             | `Countdown.svelte`              | Computed from `siteConfig.dates.start` |
+| Key info cards        | `KeyInfo.svelte`                | `site-config.ts`                       |
+| Thematic axes preview | `ThematicAxis.svelte` (compact) | `thematic-axes.ts`                     |
+| Quick links           | —                               | Internal routing                       |
 
 ### 6.2 About (`/about`)
 
-| Section | Component | Data Source |
-|---------|-----------|-------------|
-| Full abstract | `AbstractSection.svelte` | Paraglide messages or data file |
-| Three thematic axes | `ThematicAxis.svelte` (full) | `thematic-axes.ts` |
+| Section             | Component                    | Data Source                     |
+| ------------------- | ---------------------------- | ------------------------------- |
+| Full abstract       | `AbstractSection.svelte`     | Paraglide messages or data file |
+| Three thematic axes | `ThematicAxis.svelte` (full) | `thematic-axes.ts`              |
 
 Each axis rendered as an expandable card with icon, title, and description.
 
 ### 6.3 Programme (`/programme`)
 
-| Section | Component | Data Source |
-|---------|-----------|-------------|
-| Day tabs | Skeleton `Tabs` component | `programme.ts` |
-| Session timeline | `ScheduleDay.svelte` + `SessionCard.svelte` | `programme.ts` |
-| Speaker links | Cross-references | `participants.ts` IDs |
+| Section          | Component                                   | Data Source           |
+| ---------------- | ------------------------------------------- | --------------------- |
+| Day tabs         | Skeleton `Tabs` component                   | `programme.ts`        |
+| Session timeline | `ScheduleDay.svelte` + `SessionCard.svelte` | `programme.ts`        |
+| Speaker links    | Cross-references                            | `participants.ts` IDs |
 
 Placeholder "TBA" message until programme is finalized. Use Skeleton's Tab component to switch between days.
 
 ### 6.4 Participants (`/participants`)
 
-| Section | Component | Data Source |
-|---------|-----------|-------------|
-| Organisers section | `OrganizerCard.svelte` (larger) | `organizers.ts` |
-| Participants grid | `ParticipantGrid.svelte` | `participants.ts` |
+| Section            | Component                       | Data Source       |
+| ------------------ | ------------------------------- | ----------------- |
+| Organisers section | `OrganizerCard.svelte` (larger) | `organizers.ts`   |
+| Participants grid  | `ParticipantGrid.svelte`        | `participants.ts` |
 
 Organizers shown as larger featured cards with photo, bio, links. Other participants in a compact grid.
 
 ### 6.5 Venue & Travel (`/venue`)
 
-| Section | Component | Data Source |
-|---------|-----------|-------------|
-| STIAS info | `VenueInfo.svelte` | `venue.ts` |
-| Map | `MapEmbed.svelte` | OpenStreetMap `<iframe>` embed |
-| Travel info | Rendered from data | `venue.ts` |
-| Accommodation | Rendered from data | `venue.ts` |
+| Section       | Component          | Data Source                    |
+| ------------- | ------------------ | ------------------------------ |
+| STIAS info    | `VenueInfo.svelte` | `venue.ts`                     |
+| Map           | `MapEmbed.svelte`  | OpenStreetMap `<iframe>` embed |
+| Travel info   | Rendered from data | `venue.ts`                     |
+| Accommodation | Rendered from data | `venue.ts`                     |
 
 ### 6.6 Call for Papers (`/call-for-papers`)
 
-| Section | Component | Data Source |
-|---------|-----------|-------------|
-| CFP details | `CFPSection.svelte` | `cfp.ts` |
-| Key dates | Timeline display | `cfp.ts` |
-| Submission link | Button | `cfp.ts` |
-| Topics | List | `cfp.ts` |
+| Section         | Component           | Data Source |
+| --------------- | ------------------- | ----------- |
+| CFP details     | `CFPSection.svelte` | `cfp.ts`    |
+| Key dates       | Timeline display    | `cfp.ts`    |
+| Submission link | Button              | `cfp.ts`    |
+| Topics          | List                | `cfp.ts`    |
 
 ---
 
@@ -539,7 +546,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: 'pages'
   cancel-in-progress: false
 
 jobs:
@@ -575,19 +582,19 @@ import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 const config = {
-  preprocess: vitePreprocess(),
-  kit: {
-    adapter: adapter({
-      pages: 'build',
-      assets: 'build',
-      fallback: '404.html',
-      precompress: false
-    }),
-    paths: {
-      base: '/stias-dh-ai-workshop-2026',   // GitHub Pages subpath
-      relative: false                         // needed for Paraglide static
-    }
-  }
+	preprocess: vitePreprocess(),
+	kit: {
+		adapter: adapter({
+			pages: 'build',
+			assets: 'build',
+			fallback: '404.html',
+			precompress: false
+		}),
+		paths: {
+			base: '/stias-dh-ai-workshop-2026', // GitHub Pages subpath
+			relative: false // needed for Paraglide static
+		}
+	}
 };
 
 export default config;
@@ -654,26 +661,31 @@ export default config;
 ## 10. Key Implementation Notes
 
 ### Static Prerendering
+
 All pages are prerendered at build time. Set `export const prerender = true` in the root `+layout.ts`. Each locale variant gets its own static HTML file.
 
 ### Image Handling
+
 - Store organizer/participant photos in `static/images/organizers/`
 - Use consistent naming: `{id}.jpg` matching the data file
 - Provide fallback avatar using Skeleton's `Avatar` component initials mode
 - Consider WebP format for smaller bundles
 
 ### SEO
+
 - Each page gets `<svelte:head>` with title, description, Open Graph tags
 - Paraglide handles `<html lang="...">` automatically
 - `rel="alternate"` hreflang links generated by Paraglide for bilingual SEO
 
 ### Accessibility
+
 - Skeleton components follow WAI-ARIA guidelines out of the box
 - Ensure proper heading hierarchy (h1 → h2 → h3)
 - Test with screen reader
 - Ensure color contrast meets WCAG AA in both light and dark modes
 
 ### Future Extensions
+
 - **Registration form**: Could add a Google Forms embed or link
 - **Proceedings/outputs page**: After the workshop
 - **Photo gallery**: Post-event

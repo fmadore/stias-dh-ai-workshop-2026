@@ -5,10 +5,12 @@
 	let { session }: { session: Session } = $props();
 
 	const typeColors: Record<string, string> = {
-		keynote: 'bg-secondary-400/10 text-secondary-600 dark:text-secondary-400 border-secondary-400/20',
+		keynote:
+			'bg-secondary-400/10 text-secondary-600 dark:text-secondary-400 border-secondary-400/20',
 		panel: 'bg-primary-500/10 text-primary-600 dark:text-primary-400 border-primary-500/20',
 		workshop: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
-		break: 'bg-surface-200/50 text-surface-500 dark:bg-surface-700/50 dark:text-surface-400 border-surface-300/20',
+		break:
+			'bg-surface-200/50 text-surface-500 dark:bg-surface-700/50 dark:text-surface-400 border-surface-300/20',
 		social: 'bg-pink-500/10 text-pink-600 dark:text-pink-400 border-pink-500/20'
 	};
 </script>
@@ -19,7 +21,10 @@
 	</div>
 	<div class="flex-1">
 		<div class="flex items-center gap-2 mb-1">
-			<span class="text-xs px-2 py-0.5 rounded-full border font-medium {typeColors[session.type] || typeColors.panel}">
+			<span
+				class="text-xs px-2 py-0.5 rounded-full border font-medium {typeColors[session.type] ||
+					typeColors.panel}"
+			>
 				{session.type}
 			</span>
 			{#if session.room}

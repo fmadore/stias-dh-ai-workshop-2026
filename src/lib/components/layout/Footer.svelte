@@ -39,7 +39,9 @@
 	<div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
 		<!-- Institutional Logos -->
 		<div>
-			<p class="text-center text-sm font-sans font-light text-primary-200/60 dark:text-surface-500 uppercase tracking-widest mb-8">
+			<p
+				class="text-center text-sm font-sans font-light text-primary-200/60 dark:text-surface-500 uppercase tracking-widest mb-8"
+			>
 				{m.footer_supported_by()}
 			</p>
 			<div class="flex flex-wrap items-center justify-center gap-6">
@@ -50,11 +52,7 @@
 						rel="noopener noreferrer"
 						class="opacity-70 hover:opacity-100 transition-opacity bg-white/95 rounded-lg px-4 py-2"
 					>
-						<img
-							src={logo.src}
-							alt={logo.alt}
-							class="h-10 w-auto object-contain"
-						/>
+						<img src={logo.src} alt={logo.alt} class="h-10 w-auto object-contain" />
 					</a>
 				{/each}
 			</div>
@@ -62,7 +60,8 @@
 
 		<div class="mt-10 pt-8 border-t border-primary-800/50 dark:border-surface-800 text-center">
 			<p class="text-sm text-primary-300/60 dark:text-surface-500 font-light">
-				&copy; {new Date().getFullYear()} {organizers.map(o => o.name).join(', ')}. {m.footer_rights()}
+				&copy; {new Date().getFullYear()}
+				{organizers.map((o) => o.name).join(', ')}. {m.footer_rights()}
 			</p>
 		</div>
 	</div>

@@ -33,7 +33,7 @@ export const organizers: Organizer[] = [
 		},
 		image: '/images/organizers/vincent-hiribarren.png',
 		country: 'United Kingdom',
-		coordinates: { lat: 51.5114, lng: -0.1160 },
+		coordinates: { lat: 51.5114, lng: -0.116 },
 		website: 'https://www.vincenthiribarren.com',
 		orcid: '0000-0002-8742-9576'
 	},
@@ -46,7 +46,7 @@ export const organizers: Organizer[] = [
 			fr: 'Université de Yaoundé 1'
 		},
 		bio: {
-			en: 'Emmanuel Ngue Um is an Associate Professor of African Languages and Linguistics at the University of Yaoundé 1. His current research focuses on developing speech technologies and machine translation services to support the teaching and revitalisation of Africa\'s indigenous languages. He is also involved in developing an ecomuseum to preserve and promote a section of the colonial railway in Cameroon.',
+			en: "Emmanuel Ngue Um is an Associate Professor of African Languages and Linguistics at the University of Yaoundé 1. His current research focuses on developing speech technologies and machine translation services to support the teaching and revitalisation of Africa's indigenous languages. He is also involved in developing an ecomuseum to preserve and promote a section of the colonial railway in Cameroon.",
 			fr: "Emmanuel Ngue Um est maître de conférences en langues et linguistique africaines à l'Université de Yaoundé 1. Ses recherches actuelles portent sur le développement de technologies vocales et de services de traduction automatique pour soutenir l'enseignement et la revitalisation des langues autochtones d'Afrique. Il participe également au développement d'un écomusée visant à préserver et promouvoir un tronçon du chemin de fer colonial au Cameroun."
 		},
 		image: '/images/organizers/emmanuel-ngue-um.jpg',

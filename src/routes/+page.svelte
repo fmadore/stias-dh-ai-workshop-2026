@@ -28,7 +28,9 @@
 	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 		<ScrollReveal>
 			<div class="text-center mb-14">
-				<h2 class="text-2xl sm:text-3xl mb-4 text-surface-900 dark:text-surface-50">{m.section_thematic_axes()}</h2>
+				<h2 class="text-2xl sm:text-3xl mb-4 text-surface-900 dark:text-surface-50">
+					{m.section_thematic_axes()}
+				</h2>
 			</div>
 		</ScrollReveal>
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -63,10 +65,18 @@
 						class="group relative block rounded-xl p-7 bg-white dark:bg-surface-800/80 overflow-hidden border border-surface-200/50 dark:border-surface-700/50 hover:border-transparent transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
 					>
 						<!-- Hover gradient fill -->
-						<div class="absolute inset-0 bg-gradient-to-br from-primary-500 to-primary-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+						<div
+							class="absolute inset-0 bg-gradient-to-br from-primary-500 to-primary-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"
+						></div>
 						<div class="relative z-10">
-							<h3 class="text-lg mb-2 text-surface-900 dark:text-surface-50 group-hover:text-white transition-colors font-serif">{link.title}</h3>
-							<p class="text-sm font-sans text-surface-400 dark:text-surface-500 group-hover:text-white/70 transition-colors flex items-center gap-1">
+							<h3
+								class="text-lg mb-2 text-surface-900 dark:text-surface-50 group-hover:text-white transition-colors font-serif"
+							>
+								{link.title}
+							</h3>
+							<p
+								class="text-sm font-sans text-surface-400 dark:text-surface-500 group-hover:text-white/70 transition-colors flex items-center gap-1"
+							>
 								{m.learn_more()}
 								<ArrowRight size={14} class="group-hover:translate-x-1 transition-transform" />
 							</p>

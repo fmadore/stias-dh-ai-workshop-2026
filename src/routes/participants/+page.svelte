@@ -35,7 +35,9 @@
 			{#if participants.length > 0}
 				<section>
 					<ScrollReveal>
-						<h2 class="text-2xl sm:text-3xl mb-8 text-surface-900 dark:text-surface-50">{m.section_participants()}</h2>
+						<h2 class="text-2xl sm:text-3xl mb-8 text-surface-900 dark:text-surface-50">
+							{m.section_participants()}
+						</h2>
 					</ScrollReveal>
 					<ScrollReveal delay={1}>
 						<ParticipantGrid {participants} />
