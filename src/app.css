@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 @custom-variant dark (&:where(.dark, .dark *));
 @import '@skeletonlabs/skeleton';
-@import '@skeletonlabs/skeleton/optional/presets';
+@import '@skeletonlabs/skeleton-svelte';
 @import '@skeletonlabs/skeleton/themes/cerberus';
 
 /* ========================================

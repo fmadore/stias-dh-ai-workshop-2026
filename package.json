@@ -25,8 +25,8 @@
     "@iconify-json/academicons": "^1.2.4",
     "@iconify/svelte": "^5.2.1",
     "@inlang/paraglide-js": "^2.0.0",
-    "@skeletonlabs/skeleton": "^3.0.0",
-    "@skeletonlabs/skeleton-svelte": "^1.0.0",
+    "@skeletonlabs/skeleton": "^4.12.1",
+    "@skeletonlabs/skeleton-svelte": "^4.12.1",
     "lucide-svelte": "^0.575.0"
   },
   "type": "module"
