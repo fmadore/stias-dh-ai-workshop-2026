@@ -81,5 +81,6 @@
 	{/if}
 
 	<!-- JSON-LD Structured Data -->
-	{@html `<script type="application/ld+json">${jsonLd}</script>`}
+	<!-- eslint-disable-next-line svelte/no-at-html-tags, no-useless-escape -->
+	{@html '<script type="application/ld+json">' + jsonLd + '<\/script>'}
 </svelte:head>

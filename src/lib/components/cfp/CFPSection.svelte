@@ -46,7 +46,7 @@
 				<div class="absolute left-[11px] top-2 bottom-2 w-px bg-gradient-to-b from-secondary-400 via-secondary-300 to-primary-400 hidden sm:block"></div>
 
 				<div class="space-y-6">
-					{#each keyDates as dateItem, i}
+					{#each keyDates as dateItem}
 						<div class="flex items-start gap-5">
 							<!-- Timeline dot -->
 							<div class="flex-shrink-0 relative z-10 w-6 h-6 rounded-full bg-white dark:bg-surface-800 border-2 border-secondary-400 mt-0.5 hidden sm:flex items-center justify-center">
@@ -76,7 +76,7 @@
 		<div>
 			<h2 class="text-2xl mb-6 text-surface-900 dark:text-surface-50">{m.suggested_topics()}</h2>
 			<ul class="space-y-3">
-				{#each cfpInfo.topics as topic, i}
+				{#each cfpInfo.topics as topic}
 					<li class="flex items-start gap-4 text-surface-600 dark:text-surface-300 font-sans font-light">
 						<span class="flex-shrink-0 w-1.5 h-6 rounded-full bg-gradient-to-b from-secondary-400 to-secondary-500 mt-0.5"></span>
 						<span class="leading-relaxed">{t(topic)}</span>
