@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fmadore.github.io/stias-dh-ai-workshop-2026/sitemap.xml

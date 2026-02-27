@@ -1,16 +1,22 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages';
 	import { siteConfig } from '$lib/data/site-config';
+	import SEO from '$lib/components/SEO.svelte';
+	import PageHeader from '$lib/components/layout/PageHeader.svelte';
 	import CFPSection from '$lib/components/cfp/CFPSection.svelte';
 </script>
 
-<svelte:head>
-	<title>{m.nav_cfp()} | {siteConfig.shortTitle}</title>
-</svelte:head>
+<SEO
+	title="{m.nav_cfp()} | {siteConfig.shortTitle}"
+	description={m.seo_cfp_description()}
+/>
 
-<div class="py-8 sm:py-12">
-	<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-		<h1 class="text-3xl sm:text-4xl font-bold mb-8">{m.section_cfp()}</h1>
-		<CFPSection />
+<div class="bg-cream">
+	<PageHeader title={m.section_cfp()} />
+
+	<div class="pb-16 sm:pb-20">
+		<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+			<CFPSection />
+		</div>
 	</div>
 </div>

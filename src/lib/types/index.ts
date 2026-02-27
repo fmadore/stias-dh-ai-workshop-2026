@@ -10,6 +10,8 @@ export interface Organizer {
 	affiliation: LocalizedString;
 	bio: LocalizedString;
 	image: string;
+	country: string;
+	coordinates: { lat: number; lng: number };
 	website?: string;
 	orcid?: string;
 }
@@ -19,6 +21,7 @@ export interface Participant {
 	name: string;
 	affiliation: LocalizedString;
 	country: string;
+	coordinates: { lat: number; lng: number };
 	image?: string;
 	website?: string;
 	presentationTitle?: LocalizedString;

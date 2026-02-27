@@ -6,7 +6,7 @@
 	import { Menu, X, Sun, Moon } from 'lucide-svelte';
 
 	let mobileMenuOpen = $state(false);
-	let darkMode = $state(false);
+	let darkMode = $state(typeof document !== 'undefined' && document.documentElement.classList.contains('dark'));
 
 	const navLinks = $derived([
 		{ href: `${base}/`, label: m.nav_home() },
@@ -21,8 +21,10 @@
 		darkMode = !darkMode;
 		if (darkMode) {
 			document.documentElement.classList.add('dark');
+			localStorage.setItem('theme', 'dark');
 		} else {
 			document.documentElement.classList.remove('dark');
+			localStorage.setItem('theme', 'light');
 		}
 	}
 
@@ -35,12 +37,12 @@
 	}
 </script>
 
-<header class="fixed top-0 left-0 right-0 z-50 bg-surface-50/90 dark:bg-surface-900/90 backdrop-blur-sm border-b border-surface-200 dark:border-surface-700">
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/85 dark:bg-surface-900/90 backdrop-blur-md border-b border-surface-200/60 dark:border-surface-700/60">
 	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-		<div class="flex items-center justify-between h-16">
+		<div class="flex items-center justify-between h-18">
 			<!-- Logo / Title -->
-			<a href="{base}/" class="flex items-center gap-2 font-bold text-primary-500 text-lg">
-				DH+AI
+			<a href="{base}/" class="flex items-center gap-2 text-primary-700 dark:text-primary-400 text-xl tracking-tight font-serif">
+				DH & AI <span class="text-surface-400 dark:text-surface-500 font-sans text-sm font-light tracking-wider uppercase">African Studies</span>
 			</a>
 
 			<!-- Desktop Navigation -->
@@ -48,21 +50,24 @@
 				{#each navLinks as link}
 					<a
 						href={link.href}
-						class="px-3 py-2 text-sm font-medium rounded-md transition-colors {isActive(link.href)
-							? 'bg-primary-500/10 text-primary-600 dark:text-primary-400'
-							: 'text-surface-600 dark:text-surface-300 hover:bg-surface-200 dark:hover:bg-surface-700'}"
+						class="relative px-3 py-2 text-sm font-medium transition-colors {isActive(link.href)
+							? 'text-primary-600 dark:text-primary-400'
+							: 'text-surface-500 dark:text-surface-400 hover:text-surface-900 dark:hover:text-surface-100'}"
 					>
 						{link.label}
+						{#if isActive(link.href)}
+							<span class="absolute bottom-0 left-3 right-3 h-0.5 bg-secondary-400 rounded-full"></span>
+						{/if}
 					</a>
 				{/each}
 			</nav>
 
 			<!-- Right side: Language + Dark mode + Mobile toggle -->
-			<div class="flex items-center gap-2">
+			<div class="flex items-center gap-1">
 				<LanguageSwitcher />
 				<button
 					onclick={toggleDarkMode}
-					class="p-2 rounded-md text-surface-600 dark:text-surface-300 hover:bg-surface-200 dark:hover:bg-surface-700 transition-colors"
+					class="p-2 rounded-full text-surface-400 dark:text-surface-500 hover:text-surface-700 dark:hover:text-surface-200 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors"
 					aria-label={m.dark_mode()}
 				>
 					{#if darkMode}
@@ -73,7 +78,7 @@
 				</button>
 				<button
 					onclick={() => (mobileMenuOpen = !mobileMenuOpen)}
-					class="md:hidden p-2 rounded-md text-surface-600 dark:text-surface-300 hover:bg-surface-200 dark:hover:bg-surface-700 transition-colors"
+					class="md:hidden p-2 rounded-full text-surface-400 dark:text-surface-500 hover:text-surface-700 dark:hover:text-surface-200 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors"
 					aria-label={mobileMenuOpen ? m.menu_close() : m.menu_open()}
 				>
 					{#if mobileMenuOpen}
@@ -85,21 +90,24 @@
 			</div>
 		</div>
 
-		<!-- Mobile Navigation -->
-		{#if mobileMenuOpen}
-			<nav class="md:hidden pb-4 border-t border-surface-200 dark:border-surface-700 pt-2" aria-label="Mobile navigation">
+		<!-- Mobile Navigation with smooth transition -->
+		<nav
+			class="md:hidden overflow-hidden transition-all duration-300 ease-in-out {mobileMenuOpen ? 'max-h-96 opacity-100 pb-4' : 'max-h-0 opacity-0'}"
+			aria-label="Mobile navigation"
+		>
+			<div class="border-t border-surface-200/60 dark:border-surface-700/60 pt-3">
 				{#each navLinks as link}
 					<a
 						href={link.href}
 						onclick={() => (mobileMenuOpen = false)}
-						class="block px-3 py-2 text-sm font-medium rounded-md transition-colors {isActive(link.href)
-							? 'bg-primary-500/10 text-primary-600 dark:text-primary-400'
-							: 'text-surface-600 dark:text-surface-300 hover:bg-surface-200 dark:hover:bg-surface-700'}"
+						class="block px-3 py-2.5 text-sm font-medium transition-colors {isActive(link.href)
+							? 'text-primary-600 dark:text-primary-400 border-l-2 border-secondary-400 pl-4'
+							: 'text-surface-500 dark:text-surface-400 hover:text-surface-900 dark:hover:text-surface-100'}"
 					>
 						{link.label}
 					</a>
 				{/each}
-			</nav>
-		{/if}
+			</div>
+		</nav>
 	</div>
 </header>

@@ -1,40 +1,68 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import * as m from '$lib/paraglide/messages';
 	import { organizers } from '$lib/data/organizers';
-	import { t } from '$lib/utils/i18n';
+
+	const logos = [
+		{
+			src: `${base}/images/logos/point-sud-logo.svg`,
+			alt: 'Point Sud',
+			url: 'https://www.pointsud.org'
+		},
+		{
+			src: `${base}/images/logos/STIAS.png`,
+			alt: 'STIAS — Stellenbosch Institute for Advanced Study',
+			url: 'https://stias.ac.za'
+		},
+		{
+			src: `${base}/images/logos/uni-bayreuth-africa-multiple-logo.jpeg`,
+			alt: 'University of Bayreuth / Africa Multiple',
+			url: 'https://www.africamultiple.uni-bayreuth.de/en/index.html'
+		},
+		{
+			src: `${base}/images/logos/King's_College_London_logo.svg`,
+			alt: "King's College London",
+			url: 'https://www.kcl.ac.uk'
+		},
+		{
+			src: `${base}/images/logos/SADiLaR-1024x487.png`,
+			alt: 'SADiLaR',
+			url: 'https://sadilar.org'
+		}
+	];
 </script>
 
-<footer class="bg-surface-100 dark:bg-surface-800 border-t border-surface-200 dark:border-surface-700 mt-auto">
-	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-			<!-- Organisers -->
-			<div>
-				<h3 class="text-sm font-semibold text-surface-500 dark:text-surface-400 uppercase tracking-wider mb-4">
-					{m.footer_organised_by()}
-				</h3>
-				<ul class="space-y-2">
-					{#each organizers as org}
-						<li class="text-sm text-surface-600 dark:text-surface-300">
-							{org.name} — {t(org.affiliation)}
-						</li>
-					{/each}
-				</ul>
-			</div>
+<footer class="relative bg-primary-900 dark:bg-surface-950 text-white mt-auto overflow-hidden">
+	<!-- Subtle grain -->
+	<div class="grain absolute inset-0"></div>
 
-			<!-- Supported by -->
-			<div>
-				<h3 class="text-sm font-semibold text-surface-500 dark:text-surface-400 uppercase tracking-wider mb-4">
-					{m.footer_supported_by()}
-				</h3>
-				<p class="text-sm text-surface-600 dark:text-surface-300">
-					STIAS — Stellenbosch Institute for Advanced Study
-				</p>
+	<div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+		<!-- Institutional Logos -->
+		<div>
+			<p class="text-center text-sm font-sans font-light text-primary-200/60 dark:text-surface-500 uppercase tracking-widest mb-8">
+				{m.footer_supported_by()}
+			</p>
+			<div class="flex flex-wrap items-center justify-center gap-6">
+				{#each logos as logo}
+					<a
+						href={logo.url}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="opacity-70 hover:opacity-100 transition-opacity bg-white/95 rounded-lg px-4 py-2"
+					>
+						<img
+							src={logo.src}
+							alt={logo.alt}
+							class="h-10 w-auto object-contain"
+						/>
+					</a>
+				{/each}
 			</div>
 		</div>
 
-		<div class="mt-8 pt-8 border-t border-surface-200 dark:border-surface-700 text-center">
-			<p class="text-sm text-surface-500 dark:text-surface-400">
-				&copy; {new Date().getFullYear()} DH & AI in African Studies Workshop. {m.footer_rights()}
+		<div class="mt-10 pt-8 border-t border-primary-800/50 dark:border-surface-800 text-center">
+			<p class="text-sm text-primary-300/60 dark:text-surface-500 font-light">
+				&copy; {new Date().getFullYear()} {organizers.map(o => o.name).join(', ')}. {m.footer_rights()}
 			</p>
 		</div>
 	</div>

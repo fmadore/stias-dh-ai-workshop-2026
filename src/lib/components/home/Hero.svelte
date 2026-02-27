@@ -6,34 +6,48 @@
 	import { MapPin, Calendar } from 'lucide-svelte';
 </script>
 
-<section class="relative overflow-hidden bg-gradient-to-br from-primary-500 via-primary-600 to-primary-800 text-white">
-	<!-- Subtle pattern overlay -->
-	<div class="absolute inset-0 opacity-10">
-		<div class="absolute inset-0" style="background-image: radial-gradient(circle at 25px 25px, white 1px, transparent 0); background-size: 50px 50px;"></div>
+<section class="relative overflow-hidden bg-gradient-to-br from-primary-800 via-primary-700 to-primary-900 text-white grain">
+	<!-- SVG noise texture overlay -->
+	<div class="absolute inset-0 opacity-[0.04]" aria-hidden="true">
+		<svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+			<filter id="heroNoise">
+				<feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+				<feColorMatrix type="saturate" values="0"/>
+			</filter>
+			<rect width="100%" height="100%" filter="url(#heroNoise)" opacity="1"/>
+		</svg>
 	</div>
 
-	<div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-36">
+	<!-- Warm gradient accent at bottom -->
+	<div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-primary-900/40 to-transparent"></div>
+
+	<div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-28 sm:py-36 lg:py-44">
 		<div class="text-center max-w-4xl mx-auto">
-			<p class="text-sm sm:text-base font-medium text-primary-100 uppercase tracking-widest mb-4">
+			<!-- Subtitle / Eyebrow -->
+			<p class="text-sm sm:text-base font-sans font-light text-primary-200/80 uppercase tracking-[0.25em] mb-6">
 				{m.hero_subtitle()}
 			</p>
-			<h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-6">
+
+			<!-- Main title — big serif -->
+			<h1 class="text-4xl sm:text-5xl lg:text-7xl font-normal leading-[1.05] mb-8 tracking-tight">
 				{t(siteConfig.title)}
 			</h1>
 
-			<div class="flex flex-col sm:flex-row items-center justify-center gap-4 text-primary-100 mb-10">
+			<!-- Date & Location -->
+			<div class="flex flex-col sm:flex-row items-center justify-center gap-4 text-primary-100/70 font-sans font-light text-sm sm:text-base mb-14">
 				<span class="flex items-center gap-2">
-					<Calendar size={18} />
+					<Calendar size={16} class="text-secondary-400" />
 					{m.hero_dates()}
 				</span>
-				<span class="hidden sm:inline text-primary-300">|</span>
+				<span class="hidden sm:inline text-primary-400/40">&#x2022;</span>
 				<span class="flex items-center gap-2">
-					<MapPin size={18} />
+					<MapPin size={16} class="text-secondary-400" />
 					{m.hero_location()}
 				</span>
 			</div>
 
-			<div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 sm:p-8 inline-block">
+			<!-- Countdown glass card -->
+			<div class="inline-block bg-white/[0.07] backdrop-blur-sm rounded-2xl px-8 py-6 sm:px-10 sm:py-8 border border-white/[0.08]">
 				<Countdown />
 			</div>
 		</div>

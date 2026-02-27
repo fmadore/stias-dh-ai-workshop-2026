@@ -18,6 +18,13 @@
 	const minutes = $derived(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)));
 	const seconds = $derived(Math.floor((diff % (1000 * 60)) / 1000));
 
+	const units = $derived([
+		{ value: days, label: m.countdown_days({ count: days.toString() }) },
+		{ value: hours, label: m.countdown_hours({ count: hours.toString() }) },
+		{ value: minutes, label: m.countdown_minutes({ count: minutes.toString() }) },
+		{ value: seconds, label: m.countdown_seconds({ count: seconds.toString() }) }
+	]);
+
 	$effect(() => {
 		interval = setInterval(() => {
 			now = Date.now();
@@ -29,33 +36,27 @@
 </script>
 
 {#if status === 'ended'}
-	<p class="text-lg font-medium text-surface-500 dark:text-surface-400">
+	<p class="text-lg font-sans font-light text-surface-400">
 		{m.countdown_event_ended()}
 	</p>
 {:else if status === 'started'}
-	<p class="text-lg font-medium text-secondary-500">
+	<p class="text-lg font-sans font-medium text-secondary-400">
 		{m.countdown_event_started()}
 	</p>
 {:else}
-	<div class="flex items-center justify-center gap-4 sm:gap-6">
-		<div class="text-center">
-			<div class="text-3xl sm:text-4xl font-bold text-primary-500">{days}</div>
-			<div class="text-xs sm:text-sm text-surface-500 dark:text-surface-400 mt-1">{m.countdown_days({ count: days.toString() })}</div>
-		</div>
-		<div class="text-2xl text-surface-300 dark:text-surface-600">:</div>
-		<div class="text-center">
-			<div class="text-3xl sm:text-4xl font-bold text-primary-500">{String(hours).padStart(2, '0')}</div>
-			<div class="text-xs sm:text-sm text-surface-500 dark:text-surface-400 mt-1">{m.countdown_hours({ count: hours.toString() })}</div>
-		</div>
-		<div class="text-2xl text-surface-300 dark:text-surface-600">:</div>
-		<div class="text-center">
-			<div class="text-3xl sm:text-4xl font-bold text-primary-500">{String(minutes).padStart(2, '0')}</div>
-			<div class="text-xs sm:text-sm text-surface-500 dark:text-surface-400 mt-1">{m.countdown_minutes({ count: minutes.toString() })}</div>
-		</div>
-		<div class="text-2xl text-surface-300 dark:text-surface-600">:</div>
-		<div class="text-center">
-			<div class="text-3xl sm:text-4xl font-bold text-primary-500">{String(seconds).padStart(2, '0')}</div>
-			<div class="text-xs sm:text-sm text-surface-500 dark:text-surface-400 mt-1">{m.countdown_seconds({ count: seconds.toString() })}</div>
-		</div>
+	<div class="flex items-center justify-center gap-3 sm:gap-5">
+		{#each units as unit, i}
+			{#if i > 0}
+				<div class="text-xl text-white/20 font-light select-none pb-5">:</div>
+			{/if}
+			<div class="text-center min-w-[3.5rem]">
+				<div class="text-3xl sm:text-4xl font-sans font-semibold text-white tabular-nums tracking-tight">
+					{String(unit.value).padStart(2, '0')}
+				</div>
+				<div class="text-[11px] sm:text-xs text-white/40 mt-1.5 uppercase tracking-wider font-sans font-light">
+					{unit.label}
+				</div>
+			</div>
+		{/each}
 	</div>
 {/if}
