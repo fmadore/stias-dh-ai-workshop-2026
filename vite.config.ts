@@ -11,6 +11,12 @@ export default defineConfig({
 			outdir: './src/lib/paraglide',
 			strategy: ['cookie', 'baseLocale']
 		}),
-		sveltekit()
+		sveltekit({
+			dynamicCompileOptions({ filename }) {
+				if (!filename.includes('node_modules')) {
+					return { runes: true };
+				}
+			}
+		})
 	]
 });
