@@ -5,6 +5,7 @@
 	import SEO from '$lib/components/SEO.svelte';
 	import PageHeader from '$lib/components/layout/PageHeader.svelte';
 	import CFPSection from '$lib/components/cfp/CFPSection.svelte';
+	import DownloadCFPButton from '$lib/components/cfp/DownloadCFPButton.svelte';
 	import { MapPin, Calendar } from 'lucide-svelte';
 </script>
 
@@ -29,7 +30,7 @@
 				>
 					{t(siteConfig.title)}
 				</h2>
-				<div class="flex flex-col sm:flex-row gap-4 text-surface-600 dark:text-surface-300">
+				<div class="flex flex-col sm:flex-row gap-4 text-surface-600 dark:text-surface-300 mb-6">
 					<span class="inline-flex items-center gap-2 font-sans font-light">
 						<Calendar size={18} class="text-primary-500" />
 						{m.hero_dates()}
@@ -39,6 +40,7 @@
 						{m.hero_location()}
 					</span>
 				</div>
+				<DownloadCFPButton variant="primary" />
 			</div>
 		</div>
 	</div>

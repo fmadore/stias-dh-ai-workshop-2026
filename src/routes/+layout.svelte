@@ -2,6 +2,7 @@
 	import '../app.css';
 	import Navbar from '$lib/components/layout/Navbar.svelte';
 	import Footer from '$lib/components/layout/Footer.svelte';
+	import BackToTop from '$lib/components/layout/BackToTop.svelte';
 
 	let { children } = $props();
 </script>
@@ -14,4 +15,5 @@
 		{@render children()}
 	</main>
 	<Footer />
+	<BackToTop />
 </div>

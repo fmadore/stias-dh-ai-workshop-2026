@@ -3,6 +3,7 @@
 	import { siteConfig } from '$lib/data/site-config';
 	import { organizers } from '$lib/data/organizers';
 	import { thematicAxes } from '$lib/data/thematic-axes';
+	import { contactEmails } from '$lib/data/contacts';
 	import { t } from '$lib/utils/i18n';
 	import * as m from '$lib/paraglide/messages';
 	import { getLocale } from '$lib/paraglide/runtime';
@@ -10,13 +11,6 @@
 	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
 
 	const locale = $derived(getLocale());
-
-	const contactEmails: Record<string, string> = {
-		madore: 'frederick.madore@uni-bayreuth.de',
-		hiribarren: 'vincent.hiribarren@kcl.ac.uk',
-		'ngue-um': 'ngueum@gmail.com',
-		'van-zaanen': 'menno.vanzaanen@nwu.ac.za'
-	};
 
 	const keyDates = $derived([
 		{ label: m.submission_deadline(), value: formatDate(cfpInfo.deadline) },
@@ -75,9 +69,7 @@
 					<li
 						class="flex items-start gap-3 text-surface-600 dark:text-surface-300 font-sans font-light"
 					>
-						<span
-							class="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-secondary-400 mt-2.5"
-						></span>
+						<span class="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-secondary-400 mt-2.5"></span>
 						<span class="leading-relaxed">
 							<span class="font-medium text-surface-800 dark:text-surface-100"
 								>{organizer.name}</span
@@ -157,16 +149,12 @@
 					{@const email = contactEmails[organizer.id]}
 					{#if email}
 						<li class="flex items-start gap-3 font-sans font-light">
-							<span class="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-secondary-400 mt-2.5"
-							></span>
+							<span class="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-secondary-400 mt-2.5"></span>
 							<span class="leading-relaxed">
 								<span class="font-medium text-surface-800 dark:text-surface-100"
 									>{organizer.name}</span
 								>:
-								<a
-									href="mailto:{email}"
-									class="text-primary-500 hover:text-primary-600">{email}</a
-								>
+								<a href="mailto:{email}" class="text-primary-500 hover:text-primary-600">{email}</a>
 							</span>
 						</li>
 					{/if}
