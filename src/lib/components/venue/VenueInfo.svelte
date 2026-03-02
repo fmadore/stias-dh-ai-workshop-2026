@@ -27,17 +27,11 @@
 		</a>
 	</div>
 
-	<!-- Travel info -->
+	<!-- Logistics -->
 	<div>
-		<h3 class="text-xl font-bold mb-3">{m.travel_info()}</h3>
-		<p class="text-surface-600 dark:text-surface-300 leading-relaxed">{t(venueInfo.travelInfo)}</p>
-	</div>
-
-	<!-- Accommodation -->
-	<div>
-		<h3 class="text-xl font-bold mb-3">{m.accommodation()}</h3>
+		<h2 class="text-2xl sm:text-3xl font-bold mb-3">{m.logistics_label()}</h2>
 		<p class="text-surface-600 dark:text-surface-300 leading-relaxed">
-			{t(venueInfo.accommodationInfo)}
+			{t(venueInfo.logisticsInfo)}
 		</p>
 	</div>
 </div>

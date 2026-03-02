@@ -61,16 +61,18 @@ export interface VenueInfo {
 	coordinates: { lat: number; lng: number };
 	description: LocalizedString;
 	website: string;
-	travelInfo: LocalizedString;
-	accommodationInfo: LocalizedString;
+	logisticsInfo: LocalizedString;
 }
 
 export interface CFPInfo {
 	deadline: string;
 	notificationDate: string;
-	topics: LocalizedString[];
+	fullPapersDeadline: string;
 	submissionUrl?: string;
+	rationale: LocalizedString;
 	guidelines: LocalizedString;
+	selectionCriteria: LocalizedString;
+	workshopFormat: LocalizedString;
 }
 
 export interface SiteConfig {

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { cfpInfo } from '$lib/data/cfp';
 	import { siteConfig } from '$lib/data/site-config';
+	import { organizers } from '$lib/data/organizers';
+	import { thematicAxes } from '$lib/data/thematic-axes';
 	import { t } from '$lib/utils/i18n';
 	import * as m from '$lib/paraglide/messages';
 	import { getLocale } from '$lib/paraglide/runtime';
@@ -9,9 +11,17 @@
 
 	const locale = $derived(getLocale());
 
+	const contactEmails: Record<string, string> = {
+		madore: 'frederick.madore@uni-bayreuth.de',
+		hiribarren: 'vincent.hiribarren@kcl.ac.uk',
+		'ngue-um': 'ngueum@gmail.com',
+		'van-zaanen': 'menno.vanzaanen@nwu.ac.za'
+	};
+
 	const keyDates = $derived([
 		{ label: m.submission_deadline(), value: formatDate(cfpInfo.deadline) },
 		{ label: m.notification_date(), value: formatDate(cfpInfo.notificationDate) },
+		{ label: m.full_papers_deadline(), value: formatDate(cfpInfo.fullPapersDeadline) },
 		{
 			label: m.workshop_dates(),
 			value: formatDateRange(siteConfig.dates.start, siteConfig.dates.end)
@@ -40,8 +50,147 @@
 </script>
 
 <div class="space-y-14">
-	<!-- Key Dates — Timeline style -->
+	<!-- Rationale -->
 	<ScrollReveal>
+		<div>
+			<h2 class="text-2xl mb-4 text-surface-900 dark:text-surface-50">
+				{m.cfp_rationale_label()}
+			</h2>
+			<p
+				class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg"
+			>
+				{t(cfpInfo.rationale)}
+			</p>
+		</div>
+	</ScrollReveal>
+
+	<!-- Convenors -->
+	<ScrollReveal delay={1}>
+		<div>
+			<h2 class="text-2xl mb-4 text-surface-900 dark:text-surface-50">
+				{m.cfp_convenors_label()}
+			</h2>
+			<ul class="space-y-2">
+				{#each organizers as organizer}
+					<li
+						class="flex items-start gap-3 text-surface-600 dark:text-surface-300 font-sans font-light"
+					>
+						<span
+							class="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-secondary-400 mt-2.5"
+						></span>
+						<span class="leading-relaxed">
+							<span class="font-medium text-surface-800 dark:text-surface-100"
+								>{organizer.name}</span
+							>, {t(organizer.affiliation)}
+						</span>
+					</li>
+				{/each}
+			</ul>
+		</div>
+	</ScrollReveal>
+
+	<!-- Thematic Axes reference -->
+	<ScrollReveal delay={2}>
+		<div>
+			<h2 class="text-2xl mb-4 text-surface-900 dark:text-surface-50">
+				{m.section_thematic_axes()}
+			</h2>
+			<p
+				class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg mb-6"
+			>
+				{m.thematic_axes_reference()}
+			</p>
+			<div class="space-y-8">
+				{#each thematicAxes as axis}
+					<div>
+						<div class="flex items-start gap-4 mb-3">
+							<span
+								class="flex-shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-secondary-400 to-secondary-500 text-white text-sm font-medium flex items-center justify-center mt-0.5"
+							>
+								{axis.number}
+							</span>
+							<h3 class="font-medium text-surface-800 dark:text-surface-100 leading-relaxed">
+								{t(axis.title)}
+							</h3>
+						</div>
+						<p
+							class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg pl-11"
+						>
+							{t(axis.description)}
+						</p>
+					</div>
+				{/each}
+			</div>
+		</div>
+	</ScrollReveal>
+
+	<!-- Workshop Format & Language Policy -->
+	<ScrollReveal delay={3}>
+		<div>
+			<h2 class="text-2xl mb-4 text-surface-900 dark:text-surface-50">
+				{m.workshop_format_label()}
+			</h2>
+			<p
+				class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg"
+			>
+				{t(cfpInfo.workshopFormat)}
+			</p>
+		</div>
+	</ScrollReveal>
+
+	<!-- Guidelines -->
+	<ScrollReveal delay={4}>
+		<div>
+			<h2 class="text-2xl mb-4 text-surface-900 dark:text-surface-50">{m.guidelines()}</h2>
+			<p
+				class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg mb-4"
+			>
+				{t(cfpInfo.guidelines)}
+			</p>
+			<p
+				class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg mb-4"
+			>
+				{m.cfp_contact_text()}
+			</p>
+			<ul class="space-y-2">
+				{#each organizers as organizer}
+					{@const email = contactEmails[organizer.id]}
+					{#if email}
+						<li class="flex items-start gap-3 font-sans font-light">
+							<span class="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-secondary-400 mt-2.5"
+							></span>
+							<span class="leading-relaxed">
+								<span class="font-medium text-surface-800 dark:text-surface-100"
+									>{organizer.name}</span
+								>:
+								<a
+									href="mailto:{email}"
+									class="text-primary-500 hover:text-primary-600">{email}</a
+								>
+							</span>
+						</li>
+					{/if}
+				{/each}
+			</ul>
+		</div>
+	</ScrollReveal>
+
+	<!-- Selection Criteria & Inclusivity -->
+	<ScrollReveal delay={5}>
+		<div>
+			<h2 class="text-2xl mb-4 text-surface-900 dark:text-surface-50">
+				{m.cfp_selection_label()}
+			</h2>
+			<p
+				class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg"
+			>
+				{t(cfpInfo.selectionCriteria)}
+			</p>
+		</div>
+	</ScrollReveal>
+
+	<!-- Key Dates — Timeline style -->
+	<ScrollReveal delay={6}>
 		<div>
 			<h2 class="text-2xl mb-8 text-surface-900 dark:text-surface-50">{m.key_dates()}</h2>
 			<div class="relative">
@@ -78,40 +227,9 @@
 		</div>
 	</ScrollReveal>
 
-	<!-- Guidelines -->
-	<ScrollReveal delay={1}>
-		<div>
-			<h2 class="text-2xl mb-4 text-surface-900 dark:text-surface-50">{m.guidelines()}</h2>
-			<p
-				class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg"
-			>
-				{t(cfpInfo.guidelines)}
-			</p>
-		</div>
-	</ScrollReveal>
-
-	<!-- Topics with gold accent markers -->
-	<ScrollReveal delay={2}>
-		<div>
-			<h2 class="text-2xl mb-6 text-surface-900 dark:text-surface-50">{m.suggested_topics()}</h2>
-			<ul class="space-y-3">
-				{#each cfpInfo.topics as topic}
-					<li
-						class="flex items-start gap-4 text-surface-600 dark:text-surface-300 font-sans font-light"
-					>
-						<span
-							class="flex-shrink-0 w-1.5 h-6 rounded-full bg-gradient-to-b from-secondary-400 to-secondary-500 mt-0.5"
-						></span>
-						<span class="leading-relaxed">{t(topic)}</span>
-					</li>
-				{/each}
-			</ul>
-		</div>
-	</ScrollReveal>
-
 	<!-- Submit button -->
 	{#if cfpInfo.submissionUrl}
-		<ScrollReveal delay={3}>
+		<ScrollReveal delay={7}>
 			<div class="text-center pt-4">
 				<a
 					href={cfpInfo.submissionUrl}
