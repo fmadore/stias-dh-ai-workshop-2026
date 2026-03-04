@@ -1,8 +1,7 @@
 <script lang="ts">
-	import { base } from '$app/paths';
 	import * as m from '$lib/paraglide/messages';
 	import { siteConfig } from '$lib/data/site-config';
-	import { t } from '$lib/utils/i18n';
+	import { t, localePath } from '$lib/utils/i18n';
 	import SEO from '$lib/components/SEO.svelte';
 	import Hero from '$lib/components/home/Hero.svelte';
 	import KeyInfo from '$lib/components/home/KeyInfo.svelte';
@@ -12,9 +11,9 @@
 	import { ArrowRight } from 'lucide-svelte';
 
 	const quickLinks = $derived([
-		{ href: `${base}/call-for-papers`, title: m.section_cfp() },
-		{ href: `${base}/programme`, title: m.section_programme() },
-		{ href: `${base}/venue`, title: m.section_venue() }
+		{ href: localePath('/call-for-papers'), title: m.section_cfp() },
+		{ href: localePath('/programme'), title: m.section_programme() },
+		{ href: localePath('/venue'), title: m.section_venue() }
 	]);
 </script>
 
@@ -43,7 +42,7 @@
 		<ScrollReveal delay={3}>
 			<div class="text-center mt-10">
 				<a
-					href="{base}/about"
+					href={localePath('/about')}
 					class="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-sans font-medium transition-colors group"
 				>
 					{m.learn_more()}

@@ -1,12 +1,25 @@
 <script lang="ts">
-	import { getLocale, setLocale, locales } from '$lib/paraglide/runtime';
+	import { page } from '$app/state';
+	import { base } from '$app/paths';
+	import { getLocale, locales, baseLocale } from '$lib/paraglide/runtime';
 
 	const currentLocale = $derived(getLocale());
 
-	function switchLocale(locale: string) {
-		setLocale(locale as 'en' | 'fr');
-		// Reload the page to apply the new locale
-		window.location.reload();
+	function switchLocale(newLocale: string) {
+		const currentLoc = getLocale();
+		const pathname = window.location.pathname;
+
+		// Strip base path (on client, base is absolute like '/stias-dh-ai-workshop-2026')
+		let path = base ? pathname.slice(base.length) || '/' : pathname;
+
+		// Strip current locale prefix if present
+		if (currentLoc !== baseLocale && path.startsWith(`/${currentLoc}`)) {
+			path = path.slice(`/${currentLoc}`.length) || '/';
+		}
+
+		// Build new path with target locale prefix
+		const prefix = newLocale === baseLocale ? '' : `/${newLocale}`;
+		window.location.href = `${base}${prefix}${path}`;
 	}
 </script>
 

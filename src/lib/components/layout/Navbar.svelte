@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { base } from '$app/paths';
+	import { getLocale, baseLocale } from '$lib/paraglide/runtime';
 	import * as m from '$lib/paraglide/messages';
+	import { localePath } from '$lib/utils/i18n';
 	import LanguageSwitcher from './LanguageSwitcher.svelte';
 	import { Menu, X, Sun, Moon } from 'lucide-svelte';
 
@@ -11,12 +13,12 @@
 	);
 
 	const navLinks = $derived([
-		{ href: `${base}/`, label: m.nav_home() },
-		{ href: `${base}/about`, label: m.nav_about() },
-		{ href: `${base}/programme`, label: m.nav_programme() },
-		{ href: `${base}/participants`, label: m.nav_participants() },
-		{ href: `${base}/venue`, label: m.nav_venue() },
-		{ href: `${base}/call-for-papers`, label: m.nav_cfp() }
+		{ href: localePath('/'), label: m.nav_home() },
+		{ href: localePath('/about'), label: m.nav_about() },
+		{ href: localePath('/programme'), label: m.nav_programme() },
+		{ href: localePath('/participants'), label: m.nav_participants() },
+		{ href: localePath('/venue'), label: m.nav_venue() },
+		{ href: localePath('/call-for-papers'), label: m.nav_cfp() }
 	]);
 
 	function toggleDarkMode() {
@@ -32,10 +34,13 @@
 
 	function isActive(href: string): boolean {
 		const pathname = page.url.pathname;
-		if (href.endsWith('/') && !href.includes('/about') && !href.includes('/programme')) {
-			return pathname === href || pathname === href.slice(0, -1);
+		const pathWithoutBase = pathname.replace(base, '') || '/';
+		const hrefWithoutBase = href.replace(base, '') || '/';
+		if (hrefWithoutBase === '/') {
+			const locale = getLocale();
+			return pathWithoutBase === '/' || pathWithoutBase === `/${locale}` || pathWithoutBase === '';
 		}
-		return pathname.startsWith(href);
+		return pathWithoutBase.startsWith(hrefWithoutBase);
 	}
 </script>
 
@@ -46,7 +51,7 @@
 		<div class="flex items-center justify-between h-18">
 			<!-- Logo / Title -->
 			<a
-				href="{base}/"
+				href={localePath('/')}
 				class="flex items-center gap-2 text-primary-700 dark:text-primary-400 text-xl tracking-tight font-serif"
 			>
 				DH & AI <span

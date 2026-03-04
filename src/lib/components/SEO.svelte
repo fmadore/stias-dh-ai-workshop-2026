@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { base } from '$app/paths';
 	import { page } from '$app/state';
 	import { getLocale } from '$lib/paraglide/runtime';
 	import { siteConfig } from '$lib/data/site-config';
@@ -19,8 +18,12 @@
 	const ogLocale = $derived(locale === 'en' ? 'en_US' : 'fr_FR');
 	const ogAltLocale = $derived(locale === 'en' ? 'fr_FR' : 'en_US');
 
-	const canonicalUrl = $derived(`${siteConfig.url}${page.url.pathname}`);
-	const ogImage = $derived(image ?? `${siteConfig.url}${base}/images/og-default.png`);
+	// Extract route path from page.route.id (e.g., '/[[lang]]/about' → '/about')
+	const routePath = $derived((page.route.id ?? '/').replace('/[[lang]]', '') || '/');
+	const enUrl = $derived(`${siteConfig.url}${routePath}`);
+	const frUrl = $derived(`${siteConfig.url}/fr${routePath}`);
+	const canonicalUrl = $derived(locale === 'en' ? enUrl : frUrl);
+	const ogImage = $derived(image ?? `${siteConfig.url}/images/og-default.png`);
 
 	const jsonLd = $derived(
 		JSON.stringify({
@@ -56,9 +59,9 @@
 	<link rel="canonical" href={canonicalUrl} />
 
 	<!-- Hreflang -->
-	<link rel="alternate" hreflang={locale} href={canonicalUrl} />
-	<link rel="alternate" hreflang={altLocale} href={canonicalUrl} />
-	<link rel="alternate" hreflang="x-default" href={canonicalUrl} />
+	<link rel="alternate" hreflang="en" href={enUrl} />
+	<link rel="alternate" hreflang="fr" href={frUrl} />
+	<link rel="alternate" hreflang="x-default" href={enUrl} />
 
 	<!-- Open Graph -->
 	<meta property="og:title" content={title} />
