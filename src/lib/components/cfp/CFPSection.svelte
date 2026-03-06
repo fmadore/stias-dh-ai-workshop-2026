@@ -7,10 +7,23 @@
 	import { t } from '$lib/utils/i18n';
 	import * as m from '$lib/paraglide/messages';
 	import { getLocale } from '$lib/paraglide/runtime';
-	import { Send } from 'lucide-svelte';
+	import { Send, ExternalLink } from 'lucide-svelte';
 	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
 
+	const JDHASA_NAME = 'Journal of the Digital Humanities Association of Southern Africa (JDHASA)';
+	const JDHASA_URL = 'https://upjournals.up.ac.za/index.php/dhasa';
+
 	const locale = $derived(getLocale());
+
+	const publicationParts = $derived.by(() => {
+		const full = t(cfpInfo.publication);
+		const idx = full.indexOf(JDHASA_NAME);
+		if (idx === -1) return { before: full, after: '' };
+		return {
+			before: full.slice(0, idx),
+			after: full.slice(idx + JDHASA_NAME.length)
+		};
+	});
 
 	const keyDates = $derived([
 		{ label: m.submission_deadline(), value: formatDate(cfpInfo.deadline) },
@@ -163,8 +176,31 @@
 		</div>
 	</ScrollReveal>
 
-	<!-- Selection Criteria & Inclusivity -->
+	<!-- Publication -->
 	<ScrollReveal delay={5}>
+		<div>
+			<h2 class="text-2xl mb-4 text-surface-900 dark:text-surface-50">
+				{m.cfp_publication_label()}
+			</h2>
+			<p
+				class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg"
+			>
+				{publicationParts.before}<a
+					href={JDHASA_URL}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="italic text-primary-500 hover:text-primary-600 inline-items-center"
+					>{JDHASA_NAME}<ExternalLink
+						size={14}
+						class="inline ml-1 -mt-0.5"
+					/></a
+				>{publicationParts.after}
+			</p>
+		</div>
+	</ScrollReveal>
+
+	<!-- Selection Criteria & Inclusivity -->
+	<ScrollReveal delay={6}>
 		<div>
 			<h2 class="text-2xl mb-4 text-surface-900 dark:text-surface-50">
 				{m.cfp_selection_label()}
@@ -178,7 +214,7 @@
 	</ScrollReveal>
 
 	<!-- Key Dates — Timeline style -->
-	<ScrollReveal delay={6}>
+	<ScrollReveal delay={7}>
 		<div>
 			<h2 class="text-2xl mb-8 text-surface-900 dark:text-surface-50">{m.key_dates()}</h2>
 			<div class="relative">
@@ -217,7 +253,7 @@
 
 	<!-- Submit button -->
 	{#if cfpInfo.submissionUrl}
-		<ScrollReveal delay={7}>
+		<ScrollReveal delay={8}>
 			<div class="text-center pt-4">
 				<a
 					href={cfpInfo.submissionUrl}

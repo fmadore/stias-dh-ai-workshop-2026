@@ -19,6 +19,8 @@ export interface CfpPdfLabels {
 	guidelines: string;
 	contactText: string;
 	contacts: { name: string; email: string }[];
+	publicationLabel: string;
+	publication: string;
 	selectionLabel: string;
 	selectionCriteria: string;
 	keyDatesLabel: string;
@@ -317,7 +319,11 @@ export async function generateCfpPdf(labels: CfpPdfLabels, basePath: string): Pr
 	}
 	y += 4;
 
-	// ── 6. Selection Criteria & Inclusivity ──
+	// ── 6. Publication ──
+	sectionHeading(labels.publicationLabel);
+	bodyText(labels.publication);
+
+	// ── 7. Selection Criteria & Inclusivity ──
 	sectionHeading(labels.selectionLabel);
 	bodyText(labels.selectionCriteria);
 

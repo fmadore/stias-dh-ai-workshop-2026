@@ -74,6 +74,8 @@
 					name: o.name,
 					email: contactEmails[o.id]
 				})),
+			publicationLabel: m.cfp_publication_label(),
+			publication: t(cfpInfo.publication),
 			selectionLabel: m.cfp_selection_label(),
 			selectionCriteria: t(cfpInfo.selectionCriteria),
 			keyDatesLabel: m.key_dates(),

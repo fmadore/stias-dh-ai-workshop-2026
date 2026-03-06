@@ -82,6 +82,12 @@ export function generateCfpText(labels: CfpPdfLabels): void {
 		lines.push(`  - ${contact.name}: ${contact.email}`);
 	}
 
+	// Publication
+	lines.push(sectionSeparator());
+	lines.push(labels.publicationLabel.toUpperCase());
+	lines.push('');
+	lines.push(wrapLine(labels.publication, W));
+
 	// Selection Criteria
 	lines.push(sectionSeparator());
 	lines.push(labels.selectionLabel.toUpperCase());

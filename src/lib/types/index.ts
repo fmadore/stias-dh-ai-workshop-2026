@@ -73,6 +73,7 @@ export interface CFPInfo {
 	guidelines: LocalizedString;
 	selectionCriteria: LocalizedString;
 	workshopFormat: LocalizedString;
+	publication: LocalizedString;
 }
 
 export interface SiteConfig {
