@@ -15,6 +15,16 @@
 			url: 'https://stias.ac.za'
 		},
 		{
+			src: `${base}/images/logos/dfg_logo.gif`,
+			alt: 'Deutsche Forschungsgemeinschaft (DFG)',
+			url: 'https://www.dfg.de/en'
+		},
+		{
+			src: `${base}/images/logos/Goethe-Logo.svg.png`,
+			alt: 'Goethe University Frankfurt',
+			url: 'https://www.uni-frankfurt.de/en'
+		},
+		{
 			src: `${base}/images/logos/uni-bayreuth-africa-multiple-logo.jpeg`,
 			alt: 'University of Bayreuth / Africa Multiple',
 			url: 'https://www.africamultiple.uni-bayreuth.de/en/index.html'
