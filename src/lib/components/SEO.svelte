@@ -2,6 +2,8 @@
 	import { page } from '$app/state';
 	import { getLocale } from '$lib/paraglide/runtime';
 	import { siteConfig } from '$lib/data/site-config';
+	import { organizers } from '$lib/data/organizers';
+	import { t } from '$lib/utils/i18n';
 
 	interface Props {
 		title: string;
@@ -33,22 +35,48 @@
 			description: description,
 			startDate: siteConfig.dates.start,
 			endDate: siteConfig.dates.end,
-			eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+			eventAttendanceMode: 'https://schema.org/MixedEventAttendanceMode',
 			eventStatus: 'https://schema.org/EventScheduled',
-			location: {
-				'@type': 'Place',
-				name: 'STIAS — Stellenbosch Institute for Advanced Study',
-				address: {
-					'@type': 'PostalAddress',
-					addressLocality: 'Stellenbosch',
-					addressCountry: 'ZA'
+			location: [
+				{
+					'@type': 'Place',
+					name: 'STIAS — Stellenbosch Institute for Advanced Study',
+					address: {
+						'@type': 'PostalAddress',
+						streetAddress: '10 Marais Street',
+						addressLocality: 'Stellenbosch',
+						postalCode: '7600',
+						addressCountry: 'ZA'
+					}
+				},
+				{
+					'@type': 'VirtualLocation',
+					url: siteConfig.url
 				}
-			},
-			organizer: {
-				'@type': 'Organization',
-				name: 'DH & AI in African Studies Workshop'
-			},
-			url: siteConfig.url
+			],
+			image: ogImage,
+			url: siteConfig.url,
+			organizer: organizers.map((o) => ({
+				'@type': 'Person',
+				name: o.name,
+				...(o.website ? { url: o.website } : {}),
+				affiliation: {
+					'@type': 'Organization',
+					name: t(o.affiliation)
+				}
+			})),
+			performer: organizers.map((o) => ({
+				'@type': 'Person',
+				name: o.name,
+				...(o.website ? { url: o.website } : {})
+			})),
+			offers: {
+				'@type': 'Offer',
+				url: `${siteConfig.url}/call-for-papers`,
+				price: '0',
+				priceCurrency: 'ZAR',
+				availability: 'https://schema.org/InStock'
+			}
 		})
 	);
 </script>
