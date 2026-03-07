@@ -70,6 +70,42 @@
 				name: o.name,
 				...(o.website ? { url: o.website } : {})
 			})),
+			funder: [
+				{
+					'@type': 'Organization',
+					name: 'Deutsche Forschungsgemeinschaft (DFG)',
+					url: 'https://www.dfg.de/en'
+				}
+			],
+			sponsor: [
+				{ '@type': 'Organization', name: 'Point Sud', url: 'https://www.pointsud.org' },
+				{
+					'@type': 'Organization',
+					name: 'STIAS — Stellenbosch Institute for Advanced Study',
+					url: 'https://stias.ac.za'
+				},
+				{
+					'@type': 'Organization',
+					name: 'Deutsche Forschungsgemeinschaft (DFG)',
+					url: 'https://www.dfg.de/en'
+				},
+				{
+					'@type': 'Organization',
+					name: 'Goethe University Frankfurt',
+					url: 'https://www.uni-frankfurt.de/en'
+				},
+				{
+					'@type': 'Organization',
+					name: 'University of Bayreuth / Africa Multiple',
+					url: 'https://www.africamultiple.uni-bayreuth.de/en/index.html'
+				},
+				{
+					'@type': 'Organization',
+					name: "King's College London",
+					url: 'https://www.kcl.ac.uk'
+				},
+				{ '@type': 'Organization', name: 'SADiLaR', url: 'https://sadilar.org' }
+			],
 			offers: {
 				'@type': 'Offer',
 				url: `${siteConfig.url}/call-for-papers`,
