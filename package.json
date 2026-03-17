@@ -40,5 +40,10 @@
 		"jspdf": "^4.2.0",
 		"lucide-svelte": "^0.575.0"
 	},
-	"type": "module"
+	"type": "module",
+	"overrides": {
+		"@tailwindcss/vite": {
+			"vite": "$vite"
+		}
+	}
 }
