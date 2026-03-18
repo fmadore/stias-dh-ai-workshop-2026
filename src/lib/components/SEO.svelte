@@ -16,7 +16,6 @@
 	let { title, description, type = 'website', image, noindex = false }: Props = $props();
 
 	const locale = $derived(getLocale());
-	const altLocale = $derived(locale === 'en' ? 'fr' : 'en');
 	const ogLocale = $derived(locale === 'en' ? 'en_US' : 'fr_FR');
 	const ogAltLocale = $derived(locale === 'en' ? 'fr_FR' : 'en_US');
 

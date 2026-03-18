@@ -37,6 +37,13 @@ export default ts.config(
 		}
 	},
 	{
-		ignores: ['build/', '.svelte-kit/', 'dist/', 'node_modules/', 'src/lib/paraglide/']
+		ignores: [
+			'build/',
+			'.svelte-kit/',
+			'dist/',
+			'node_modules/',
+			'src/lib/paraglide/',
+			'src/paraglide/'
+		]
 	}
 );

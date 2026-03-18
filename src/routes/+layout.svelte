@@ -14,7 +14,9 @@
 		if (!hasVisited) {
 			sessionStorage.setItem('locale_detected', '1');
 			const browserLang = navigator.language || navigator.languages?.[0] || '';
-			const pathname = base ? window.location.pathname.slice(base.length) || '/' : window.location.pathname;
+			const pathname = base
+				? window.location.pathname.slice(base.length) || '/'
+				: window.location.pathname;
 			const isAlreadyFr = pathname.startsWith('/fr');
 			if (browserLang.startsWith('fr') && !isAlreadyFr) {
 				window.location.href = `${base}/fr${pathname}`;

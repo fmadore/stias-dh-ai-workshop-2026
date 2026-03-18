@@ -190,10 +190,7 @@
 					target="_blank"
 					rel="noopener noreferrer"
 					class="italic text-primary-500 hover:text-primary-600 inline-items-center"
-					>{JDHASA_NAME}<ExternalLink
-						size={14}
-						class="inline ml-1 -mt-0.5"
-					/></a
+					>{JDHASA_NAME}<ExternalLink size={14} class="inline ml-1 -mt-0.5" /></a
 				>{publicationParts.after}
 			</p>
 		</div>

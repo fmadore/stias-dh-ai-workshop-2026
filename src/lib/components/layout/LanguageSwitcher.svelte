@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/state';
 	import { base } from '$app/paths';
 	import { getLocale, locales, baseLocale } from '$lib/paraglide/runtime';
 

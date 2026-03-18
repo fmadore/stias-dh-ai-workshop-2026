@@ -104,9 +104,7 @@
 		try {
 			const { generateCfpPdf } = await import('$lib/utils/generate-cfp-pdf');
 			const filename =
-				locale === 'fr'
-					? 'Appel-a-contributions-STIAS-2026.pdf'
-					: 'Call-for-Papers-STIAS-2026.pdf';
+				locale === 'fr' ? 'Appel-a-contributions-STIAS-2026.pdf' : 'Call-for-Papers-STIAS-2026.pdf';
 			await generateCfpPdf(buildLabels(filename), base);
 		} catch (err) {
 			console.error('PDF generation failed:', err);
@@ -122,9 +120,7 @@
 		try {
 			const { generateCfpText } = await import('$lib/utils/generate-cfp-text');
 			const filename =
-				locale === 'fr'
-					? 'Appel-a-contributions-STIAS-2026.txt'
-					: 'Call-for-Papers-STIAS-2026.txt';
+				locale === 'fr' ? 'Appel-a-contributions-STIAS-2026.txt' : 'Call-for-Papers-STIAS-2026.txt';
 			generateCfpText(buildLabels(filename));
 		} catch (err) {
 			console.error('Text generation failed:', err);
