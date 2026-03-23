@@ -11,12 +11,6 @@ export default defineConfig({
 			outdir: './src/lib/paraglide',
 			strategy: ['globalVariable', 'baseLocale']
 		}),
-		sveltekit({
-			dynamicCompileOptions({ filename }) {
-				if (!filename.includes('node_modules')) {
-					return { runes: true };
-				}
-			}
-		})
+		sveltekit()
 	]
 });

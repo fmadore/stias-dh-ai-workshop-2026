@@ -68,41 +68,63 @@ function wrapText(doc: jsPDF, text: string, maxWidth: number): string[] {
 	return doc.splitTextToSize(text, maxWidth) as string[];
 }
 
-async function loadImageAsDataUrl(url: string): Promise<string> {
+interface LoadedImage {
+	dataUrl: string;
+	width: number;
+	height: number;
+}
+
+async function loadImageAsDataUrl(url: string): Promise<LoadedImage> {
 	const response = await fetch(url);
 	const blob = await response.blob();
 
-	if (blob.type === 'image/svg+xml') {
-		// Convert SVG to PNG via canvas
-		const svgText = await blob.text();
-		const svgBlob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
-		const svgUrl = URL.createObjectURL(svgBlob);
+	const needsCanvasConversion =
+		blob.type === 'image/svg+xml' || blob.type === 'image/gif' || url.endsWith('.gif');
+
+	if (needsCanvasConversion) {
+		// Convert SVG/GIF to PNG via canvas
+		const objectUrl = URL.createObjectURL(blob);
 
 		return new Promise((resolve, reject) => {
 			const img = new Image();
 			img.onload = () => {
+				const w = img.naturalWidth || 200;
+				const h = img.naturalHeight || 100;
 				const canvas = document.createElement('canvas');
-				canvas.width = img.naturalWidth || 200;
-				canvas.height = img.naturalHeight || 100;
+				canvas.width = w;
+				canvas.height = h;
 				const ctx = canvas.getContext('2d')!;
 				ctx.drawImage(img, 0, 0);
-				URL.revokeObjectURL(svgUrl);
-				resolve(canvas.toDataURL('image/png'));
+				URL.revokeObjectURL(objectUrl);
+				resolve({ dataUrl: canvas.toDataURL('image/png'), width: w, height: h });
 			};
 			img.onerror = () => {
-				URL.revokeObjectURL(svgUrl);
-				reject(new Error(`Failed to load SVG: ${url}`));
+				URL.revokeObjectURL(objectUrl);
+				reject(new Error(`Failed to load image: ${url}`));
 			};
-			img.src = svgUrl;
+			img.src = objectUrl;
 		});
 	}
 
-	// For PNG/JPEG, convert directly to data URL
+	// For PNG/JPEG, load via Image to get dimensions, then convert to data URL
+	const objectUrl = URL.createObjectURL(blob);
 	return new Promise((resolve, reject) => {
-		const reader = new FileReader();
-		reader.onloadend = () => resolve(reader.result as string);
-		reader.onerror = reject;
-		reader.readAsDataURL(blob);
+		const img = new Image();
+		img.onload = () => {
+			const w = img.naturalWidth || 200;
+			const h = img.naturalHeight || 100;
+			URL.revokeObjectURL(objectUrl);
+			const reader = new FileReader();
+			reader.onloadend = () =>
+				resolve({ dataUrl: reader.result as string, width: w, height: h });
+			reader.onerror = reject;
+			reader.readAsDataURL(blob);
+		};
+		img.onerror = () => {
+			URL.revokeObjectURL(objectUrl);
+			reject(new Error(`Failed to load image: ${url}`));
+		};
+		img.src = objectUrl;
 	});
 }
 
@@ -115,6 +137,8 @@ export async function generateCfpPdf(labels: CfpPdfLabels, basePath: string): Pr
 	const logoFiles = [
 		{ path: '/images/logos/point-sud-logo.svg', alt: 'Point Sud' },
 		{ path: '/images/logos/STIAS.png', alt: 'STIAS' },
+		{ path: '/images/logos/dfg_logo.gif', alt: 'DFG' },
+		{ path: '/images/logos/Goethe-Logo.svg.png', alt: 'Goethe University Frankfurt' },
 		{ path: '/images/logos/uni-bayreuth-africa-multiple-logo.jpeg', alt: 'Africa Multiple' },
 		{ path: "/images/logos/King's_College_London_logo.svg", alt: "King's College London" },
 		{ path: '/images/logos/SADiLaR-1024x487.png', alt: 'SADiLaR' }
@@ -123,10 +147,12 @@ export async function generateCfpPdf(labels: CfpPdfLabels, basePath: string): Pr
 	const [regularBuf, semiBoldBuf, ...logoResults] = await Promise.all([
 		fetch(`${basePath}/fonts/Outfit-Regular.ttf`).then((r) => r.arrayBuffer()),
 		fetch(`${basePath}/fonts/Outfit-SemiBold.ttf`).then((r) => r.arrayBuffer()),
-		...logoFiles.map((logo) => loadImageAsDataUrl(`${basePath}${logo.path}`).catch(() => null))
+		...logoFiles.map((logo) =>
+			loadImageAsDataUrl(`${basePath}${logo.path}`).catch(() => null)
+		)
 	]);
 
-	const logos = logoResults.filter((r): r is string => r !== null);
+	const logos = logoResults.filter((r): r is LoadedImage => r !== null);
 
 	const toBase64 = (buf: ArrayBuffer) => {
 		const bytes = new Uint8Array(buf);
@@ -361,20 +387,36 @@ export async function generateCfpPdf(labels: CfpPdfLabels, basePath: string): Pr
 		doc.text(labels.supportedByLabel.toUpperCase(), PAGE_W / 2, y, { align: 'center' });
 		y += 6;
 
-		// Draw logos centered in a row
+		// Draw logos centered in a row, preserving aspect ratios
 		const logoH = 10;
 		const logoSpacing = 6;
-		// Calculate total width to center them
-		const totalLogosWidth = logos.length * 28 + (logos.length - 1) * logoSpacing;
-		let logoX = (PAGE_W - totalLogosWidth) / 2;
 
-		for (const logoDataUrl of logos) {
+		// Calculate each logo's width based on its natural aspect ratio
+		const logoWidths = logos.map((logo) => {
+			const aspect = logo.width / logo.height;
+			return logoH * aspect;
+		});
+		const totalLogosWidth =
+			logoWidths.reduce((sum, w) => sum + w, 0) + (logos.length - 1) * logoSpacing;
+
+		// If logos overflow the page width, scale them down proportionally
+		const maxWidth = CONTENT_W;
+		const scale = totalLogosWidth > maxWidth ? maxWidth / totalLogosWidth : 1;
+		const finalH = logoH * scale;
+		const finalSpacing = logoSpacing * scale;
+
+		const finalWidths = logoWidths.map((w) => w * scale);
+		const finalTotalWidth =
+			finalWidths.reduce((sum, w) => sum + w, 0) + (logos.length - 1) * finalSpacing;
+		let logoX = (PAGE_W - finalTotalWidth) / 2;
+
+		for (let i = 0; i < logos.length; i++) {
 			try {
-				doc.addImage(logoDataUrl, 'PNG', logoX, y, 28, logoH);
+				doc.addImage(logos[i].dataUrl, 'PNG', logoX, y, finalWidths[i], finalH);
 			} catch {
 				// Skip logos that fail to embed
 			}
-			logoX += 28 + logoSpacing;
+			logoX += finalWidths[i] + finalSpacing;
 		}
 	}
 
