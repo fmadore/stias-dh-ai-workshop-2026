@@ -25,6 +25,8 @@ export interface CfpPdfLabels {
 	selectionCriteria: string;
 	keyDatesLabel: string;
 	keyDates: { label: string; value: string }[];
+	fundingLabel: string;
+	fundingText: string;
 	supportedByLabel: string;
 	siteUrl: string;
 	filename: string;
@@ -353,7 +355,11 @@ export async function generateCfpPdf(labels: CfpPdfLabels, basePath: string): Pr
 	sectionHeading(labels.selectionLabel);
 	bodyText(labels.selectionCriteria);
 
-	// ── 7. Key Dates ──
+	// ── 8. Funding & Logistics ──
+	sectionHeading(labels.fundingLabel);
+	bodyText(labels.fundingText);
+
+	// ── 9. Key Dates ──
 	sectionHeading(labels.keyDatesLabel);
 	for (const dateItem of labels.keyDates) {
 		y = checkPageBreak(doc, y, 12);

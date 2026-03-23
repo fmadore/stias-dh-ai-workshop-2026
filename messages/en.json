@@ -61,5 +61,7 @@
 	"dark_mode": "Toggle dark mode",
 	"menu_open": "Open menu",
 	"menu_close": "Close menu",
-	"back_to_top": "Back to top"
+	"back_to_top": "Back to top",
+	"cfp_funding_label": "Funding & Logistics",
+	"cfp_funding_text": "The DFG Programme Point Sud will cover transportation, accommodation, visa costs, catering and local transport for all selected participants. However, vaccinations, health insurance and meals during travel days to and from Stellenbosch cannot be covered."
 }

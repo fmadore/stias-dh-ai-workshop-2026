@@ -61,5 +61,7 @@
 	"dark_mode": "Basculer le mode sombre",
 	"menu_open": "Ouvrir le menu",
 	"menu_close": "Fermer le menu",
-	"back_to_top": "Retour en haut"
+	"back_to_top": "Retour en haut",
+	"cfp_funding_label": "Financement & logistique",
+	"cfp_funding_text": "Le programme DFG Point Sud prendra en charge le transport, l'hébergement, les frais de visa, la restauration et le transport local pour tou·tes les participant·es sélectionné·es. Cependant, les vaccinations, l'assurance maladie et les repas pendant les jours de voyage vers et depuis Stellenbosch ne peuvent pas être couverts."
 }

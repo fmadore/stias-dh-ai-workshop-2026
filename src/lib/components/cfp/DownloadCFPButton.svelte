@@ -78,6 +78,8 @@
 			publication: t(cfpInfo.publication),
 			selectionLabel: m.cfp_selection_label(),
 			selectionCriteria: t(cfpInfo.selectionCriteria),
+			fundingLabel: m.cfp_funding_label(),
+			fundingText: m.cfp_funding_text(),
 			keyDatesLabel: m.key_dates(),
 			keyDates: [
 				{ label: m.submission_deadline(), value: formatDate(cfpInfo.deadline) },

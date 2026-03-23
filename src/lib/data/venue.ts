@@ -16,7 +16,7 @@ export const venueInfo: VenueInfo = {
 	},
 	website: 'https://stias.ac.za',
 	logisticsInfo: {
-		en: 'The DFG Programme Point Sud will cover transportation, accommodation, visa costs, catering and local transport for all participants. However, vaccinations, health insurance and meals during travel days to and from Stellenbosch cannot be covered.',
-		fr: "Le programme DFG Point Sud prendra en charge le transport, l'hébergement, les frais de visa, la restauration et le transport local pour tous les participants. Cependant, les vaccinations, l'assurance maladie et les repas pendant les jours de voyage vers et depuis Stellenbosch ne peuvent pas être couverts."
+		en: 'The DFG Programme Point Sud will cover transportation, accommodation, visa costs, catering and local transport for all selected participants. However, vaccinations, health insurance and meals during travel days to and from Stellenbosch cannot be covered.',
+		fr: "Le programme DFG Point Sud prendra en charge le transport, l'hébergement, les frais de visa, la restauration et le transport local pour tou·tes les participant·es sélectionné·es. Cependant, les vaccinations, l'assurance maladie et les repas pendant les jours de voyage vers et depuis Stellenbosch ne peuvent pas être couverts."
 	}
 };

@@ -210,8 +210,22 @@
 		</div>
 	</ScrollReveal>
 
-	<!-- Key Dates — Timeline style -->
+	<!-- Funding & Logistics -->
 	<ScrollReveal delay={7}>
+		<div>
+			<h2 class="text-2xl mb-4 text-surface-900 dark:text-surface-50">
+				{m.cfp_funding_label()}
+			</h2>
+			<p
+				class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg"
+			>
+				{m.cfp_funding_text()}
+			</p>
+		</div>
+	</ScrollReveal>
+
+	<!-- Key Dates — Timeline style -->
+	<ScrollReveal delay={8}>
 		<div>
 			<h2 class="text-2xl mb-8 text-surface-900 dark:text-surface-50">{m.key_dates()}</h2>
 			<div class="relative">
@@ -250,7 +264,7 @@
 
 	<!-- Submit button -->
 	{#if cfpInfo.submissionUrl}
-		<ScrollReveal delay={8}>
+		<ScrollReveal delay={9}>
 			<div class="text-center pt-4">
 				<a
 					href={cfpInfo.submissionUrl}

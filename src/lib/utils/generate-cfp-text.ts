@@ -94,6 +94,12 @@ export function generateCfpText(labels: CfpPdfLabels): void {
 	lines.push('');
 	lines.push(wrapLine(labels.selectionCriteria, W));
 
+	// Funding & Logistics
+	lines.push(sectionSeparator());
+	lines.push(labels.fundingLabel.toUpperCase());
+	lines.push('');
+	lines.push(wrapLine(labels.fundingText, W));
+
 	// Key Dates
 	lines.push(sectionSeparator());
 	lines.push(labels.keyDatesLabel.toUpperCase());
