@@ -42,7 +42,7 @@
     "@skeletonlabs/skeleton": "^4.12.1",
     "@skeletonlabs/skeleton-svelte": "^4.12.1",
     "@lucide/svelte": "^1.8.0",
-    "jspdf": "^4.2.0"
+    "jspdf": "^4.2.1"
   },
   "type": "module",
   "overrides": {
