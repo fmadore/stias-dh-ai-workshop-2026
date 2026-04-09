@@ -20,9 +20,9 @@
     "@sveltejs/vite-plugin-svelte": "^7.0.0",
     "@tailwindcss/vite": "^4.2.1",
     "@types/node": "^25.5.2",
-    "eslint": "^10.0.2",
+    "eslint": "^10.2.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-svelte": "^3.15.0",
+    "eslint-plugin-svelte": "^3.17.0",
     "globals": "^17.4.0",
     "prettier": "^3.8.1",
     "prettier-plugin-svelte": "^3.5.1",
@@ -32,7 +32,7 @@
     "svelte-check": "^4.4.4",
     "tailwindcss": "^4.2.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.56.1",
+    "typescript-eslint": "^8.58.1",
     "vite": "^8.0.8"
   },
   "dependencies": {
