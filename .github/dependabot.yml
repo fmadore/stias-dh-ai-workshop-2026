@@ -40,7 +40,7 @@ updates:
         patterns:
           - '@iconify/*'
           - '@iconify-json/*'
-          - 'lucide-*'
+          - '@lucide/*'
       eslint:
         patterns:
           - 'eslint'

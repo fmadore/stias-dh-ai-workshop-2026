@@ -7,7 +7,7 @@
 	import { t } from '$lib/utils/i18n';
 	import * as m from '$lib/paraglide/messages';
 	import { getLocale } from '$lib/paraglide/runtime';
-	import { Send, ExternalLink } from 'lucide-svelte';
+	import { Send, ExternalLink } from '@lucide/svelte';
 	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
 
 	const JDHASA_NAME = 'Journal of the Digital Humanities Association of Southern Africa (JDHASA)';

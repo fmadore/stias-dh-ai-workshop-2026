@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages';
-	import { Calendar, MapPin, Users } from 'lucide-svelte';
+	import { Calendar, MapPin, Users } from '@lucide/svelte';
 	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
 
 	const keyItems = $derived([

@@ -6,7 +6,7 @@
 	import PageHeader from '$lib/components/layout/PageHeader.svelte';
 	import CFPSection from '$lib/components/cfp/CFPSection.svelte';
 	import DownloadCFPButton from '$lib/components/cfp/DownloadCFPButton.svelte';
-	import { MapPin, Calendar } from 'lucide-svelte';
+	import { MapPin, Calendar } from '@lucide/svelte';
 </script>
 
 <SEO title="{m.nav_cfp()} | {siteConfig.shortTitle}" description={m.seo_cfp_description()} />

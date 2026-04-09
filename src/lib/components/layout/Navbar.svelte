@@ -5,7 +5,7 @@
 	import * as m from '$lib/paraglide/messages';
 	import { localePath } from '$lib/utils/i18n';
 	import LanguageSwitcher from './LanguageSwitcher.svelte';
-	import { Menu, X, Sun, Moon } from 'lucide-svelte';
+	import { Menu, X, Sun, Moon } from '@lucide/svelte';
 
 	let mobileMenuOpen = $state(false);
 	let darkMode = $state(

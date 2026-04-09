@@ -8,7 +8,7 @@
 	import * as m from '$lib/paraglide/messages';
 	import { getLocale } from '$lib/paraglide/runtime';
 	import { base } from '$app/paths';
-	import { FileText, Loader2 } from 'lucide-svelte';
+	import { FileText, Loader2 } from '@lucide/svelte';
 	import type { CfpPdfLabels } from '$lib/utils/generate-cfp-pdf';
 
 	interface Props {

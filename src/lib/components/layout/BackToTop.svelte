@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages';
-	import { ArrowUp } from 'lucide-svelte';
+	import { ArrowUp } from '@lucide/svelte';
 
 	let visible = $state(false);
 

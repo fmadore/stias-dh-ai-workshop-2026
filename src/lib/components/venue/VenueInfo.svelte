@@ -2,7 +2,7 @@
 	import { venueInfo } from '$lib/data/venue';
 	import { t } from '$lib/utils/i18n';
 	import * as m from '$lib/paraglide/messages';
-	import { ExternalLink } from 'lucide-svelte';
+	import { ExternalLink } from '@lucide/svelte';
 </script>
 
 <div class="space-y-8">

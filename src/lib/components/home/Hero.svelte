@@ -3,7 +3,7 @@
 	import { siteConfig } from '$lib/data/site-config';
 	import { t } from '$lib/utils/i18n';
 	import Countdown from './Countdown.svelte';
-	import { MapPin, Calendar } from 'lucide-svelte';
+	import { MapPin, Calendar } from '@lucide/svelte';
 </script>
 
 <section

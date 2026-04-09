@@ -3,7 +3,7 @@
 	import { t } from '$lib/utils/i18n';
 	import * as m from '$lib/paraglide/messages';
 	import { base } from '$app/paths';
-	import { ExternalLink } from 'lucide-svelte';
+	import { ExternalLink } from '@lucide/svelte';
 	import Icon from '@iconify/svelte';
 
 	let { organizer }: { organizer: Organizer } = $props();

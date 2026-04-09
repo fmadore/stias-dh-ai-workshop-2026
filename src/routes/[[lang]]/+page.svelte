@@ -8,7 +8,7 @@
 	import ThematicAxis from '$lib/components/about/ThematicAxis.svelte';
 	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
 	import { thematicAxes } from '$lib/data/thematic-axes';
-	import { ArrowRight } from 'lucide-svelte';
+	import { ArrowRight } from '@lucide/svelte';
 
 	const quickLinks = $derived([
 		{ href: localePath('/call-for-papers'), title: m.section_cfp() },

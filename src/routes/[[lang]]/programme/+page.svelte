@@ -6,7 +6,7 @@
 	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
 	import { programme } from '$lib/data/programme';
 	import ScheduleDay from '$lib/components/programme/ScheduleDay.svelte';
-	import { Calendar } from 'lucide-svelte';
+	import { Calendar } from '@lucide/svelte';
 </script>
 
 <SEO
