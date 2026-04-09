@@ -5,7 +5,7 @@
 	const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - 0.01}%2C${lat - 0.005}%2C${lng + 0.01}%2C${lat + 0.005}&layer=mapnik&marker=${lat}%2C${lng}`;
 </script>
 
-<div class="rounded-xl overflow-hidden border border-surface-200 dark:border-surface-700 shadow-sm">
+<div class="border-surface-200 dark:border-surface-700 overflow-hidden rounded-xl border shadow-sm">
 	<iframe
 		title="STIAS Location Map"
 		width="100%"

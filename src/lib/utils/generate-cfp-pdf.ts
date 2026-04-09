@@ -117,8 +117,7 @@ async function loadImageAsDataUrl(url: string): Promise<LoadedImage> {
 			const h = img.naturalHeight || 100;
 			URL.revokeObjectURL(objectUrl);
 			const reader = new FileReader();
-			reader.onloadend = () =>
-				resolve({ dataUrl: reader.result as string, width: w, height: h });
+			reader.onloadend = () => resolve({ dataUrl: reader.result as string, width: w, height: h });
 			reader.onerror = reject;
 			reader.readAsDataURL(blob);
 		};
@@ -149,9 +148,7 @@ export async function generateCfpPdf(labels: CfpPdfLabels, basePath: string): Pr
 	const [regularBuf, semiBoldBuf, ...logoResults] = await Promise.all([
 		fetch(`${basePath}/fonts/Outfit-Regular.ttf`).then((r) => r.arrayBuffer()),
 		fetch(`${basePath}/fonts/Outfit-SemiBold.ttf`).then((r) => r.arrayBuffer()),
-		...logoFiles.map((logo) =>
-			loadImageAsDataUrl(`${basePath}${logo.path}`).catch(() => null)
-		)
+		...logoFiles.map((logo) => loadImageAsDataUrl(`${basePath}${logo.path}`).catch(() => null))
 	]);
 
 	const logos = logoResults.filter((r): r is LoadedImage => r !== null);

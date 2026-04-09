@@ -42,15 +42,15 @@
 	];
 </script>
 
-<footer class="relative bg-primary-900 dark:bg-surface-950 text-white mt-auto overflow-hidden">
+<footer class="bg-primary-900 dark:bg-surface-950 relative mt-auto overflow-hidden text-white">
 	<!-- Subtle grain -->
 	<div class="grain absolute inset-0"></div>
 
-	<div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+	<div class="relative z-10 mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
 		<!-- Institutional Logos -->
 		<div>
 			<p
-				class="text-center text-sm font-sans font-light text-primary-200/60 dark:text-surface-500 uppercase tracking-widest mb-8"
+				class="text-primary-200/60 dark:text-surface-500 mb-8 text-center font-sans text-sm font-light tracking-widest uppercase"
 			>
 				{m.footer_supported_by()}
 			</p>
@@ -60,7 +60,7 @@
 						href={logo.url}
 						target="_blank"
 						rel="noopener noreferrer"
-						class="opacity-70 hover:opacity-100 transition-opacity bg-white/95 rounded-lg px-4 py-2"
+						class="rounded-lg bg-white/95 px-4 py-2 opacity-70 transition-opacity hover:opacity-100"
 					>
 						<img src={logo.src} alt={logo.alt} class="h-10 w-auto object-contain" />
 					</a>
@@ -68,8 +68,8 @@
 			</div>
 		</div>
 
-		<div class="mt-10 pt-8 border-t border-primary-800/50 dark:border-surface-800 text-center">
-			<p class="text-sm text-primary-300/60 dark:text-surface-500 font-light">
+		<div class="border-primary-800/50 dark:border-surface-800 mt-10 border-t pt-8 text-center">
+			<p class="text-primary-300/60 dark:text-surface-500 text-sm font-light">
 				&copy; {new Date().getFullYear()}
 				{organizers.map((o) => o.name).join(', ')}. {m.footer_rights()}
 			</p>

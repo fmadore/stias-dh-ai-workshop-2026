@@ -15,25 +15,25 @@
 	};
 </script>
 
-<div class="flex gap-4 py-4 border-b border-surface-200 dark:border-surface-700 last:border-b-0">
-	<div class="flex-shrink-0 w-24 text-sm font-mono text-surface-500 dark:text-surface-400 pt-1">
+<div class="border-surface-200 dark:border-surface-700 flex gap-4 border-b py-4 last:border-b-0">
+	<div class="text-surface-500 dark:text-surface-400 w-24 flex-shrink-0 pt-1 font-mono text-sm">
 		{session.time}
 	</div>
 	<div class="flex-1">
-		<div class="flex items-center gap-2 mb-1">
+		<div class="mb-1 flex items-center gap-2">
 			<span
-				class="text-xs px-2 py-0.5 rounded-full border font-medium {typeColors[session.type] ||
+				class="rounded-full border px-2 py-0.5 text-xs font-medium {typeColors[session.type] ||
 					typeColors.panel}"
 			>
 				{session.type}
 			</span>
 			{#if session.room}
-				<span class="text-xs text-surface-400">{session.room}</span>
+				<span class="text-surface-400 text-xs">{session.room}</span>
 			{/if}
 		</div>
 		<h4 class="font-semibold">{t(session.title)}</h4>
 		{#if session.description}
-			<p class="text-sm text-surface-600 dark:text-surface-300 mt-1">{t(session.description)}</p>
+			<p class="text-surface-600 dark:text-surface-300 mt-1 text-sm">{t(session.description)}</p>
 		{/if}
 	</div>
 </div>

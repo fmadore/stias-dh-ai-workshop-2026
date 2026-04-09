@@ -26,7 +26,7 @@
 </script>
 
 <div
-	class="min-h-screen flex flex-col bg-surface-50 dark:bg-surface-900 text-surface-900 dark:text-surface-50"
+	class="bg-surface-50 dark:bg-surface-900 text-surface-900 dark:text-surface-50 flex min-h-screen flex-col"
 >
 	<Navbar />
 	<main class="flex-1 pt-16">

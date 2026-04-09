@@ -18,7 +18,7 @@
 	<PageHeader title={m.section_programme()} subtitle={m.hero_dates()} />
 
 	<div class="pb-16 sm:pb-20">
-		<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+		<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
 			{#if programme.length > 0}
 				<div class="space-y-10">
 					{#each programme as day, i}
@@ -30,10 +30,10 @@
 			{:else}
 				<ScrollReveal>
 					<div
-						class="bg-white dark:bg-surface-800/80 rounded-xl p-14 text-center border border-surface-200/50 dark:border-surface-700/50"
+						class="dark:bg-surface-800/80 border-surface-200/50 dark:border-surface-700/50 rounded-xl border bg-white p-14 text-center"
 					>
-						<Calendar size={48} class="mx-auto text-surface-300 dark:text-surface-600 mb-4" />
-						<p class="text-lg text-surface-400 dark:text-surface-500 font-sans font-light">
+						<Calendar size={48} class="text-surface-300 dark:text-surface-600 mx-auto mb-4" />
+						<p class="text-surface-400 dark:text-surface-500 font-sans text-lg font-light">
 							{m.programme_tba()}
 						</p>
 					</div>

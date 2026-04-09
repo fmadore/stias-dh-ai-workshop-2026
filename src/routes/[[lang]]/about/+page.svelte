@@ -16,10 +16,10 @@
 
 	<AbstractSection />
 
-	<section class="py-16 sm:py-20 bg-white dark:bg-surface-800/50">
-		<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+	<section class="dark:bg-surface-800/50 bg-white py-16 sm:py-20">
+		<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
 			<ScrollReveal>
-				<h2 class="text-2xl sm:text-3xl mb-10 text-surface-900 dark:text-surface-50">
+				<h2 class="text-surface-900 dark:text-surface-50 mb-10 text-2xl sm:text-3xl">
 					{m.section_thematic_axes()}
 				</h2>
 			</ScrollReveal>

@@ -19,7 +19,7 @@
 	<button
 		onclick={scrollToTop}
 		aria-label={m.back_to_top()}
-		class="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-primary-600 hover:bg-primary-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer opacity-0 animate-fade-in"
+		class="bg-primary-600 hover:bg-primary-700 animate-fade-in fixed right-6 bottom-6 z-50 cursor-pointer rounded-full p-3 text-white opacity-0 shadow-lg transition-all duration-300 hover:shadow-xl"
 	>
 		<ArrowUp size={20} />
 	</button>

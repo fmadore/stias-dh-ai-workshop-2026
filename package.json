@@ -1,49 +1,51 @@
 {
-	"name": "stias-dh-ai-workshop-2026",
-	"version": "1.0.0",
-	"private": true,
-	"scripts": {
-		"dev": "vite dev",
-		"build": "vite build",
-		"preview": "vite preview",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"lint": "eslint .",
-		"format": "prettier --write .",
-		"format:check": "prettier --check ."
-	},
-	"devDependencies": {
-		"@eslint/js": "^10.0.1",
-		"@sveltejs/adapter-static": "^3.0.10",
-		"@sveltejs/kit": "^2.55.0",
-		"@sveltejs/vite-plugin-svelte": "^7.0.0",
-		"@tailwindcss/vite": "^4.2.1",
-		"@types/node": "^22.19.13",
-		"eslint": "^10.0.2",
-		"eslint-plugin-svelte": "^3.15.0",
-		"globals": "^17.3.0",
-		"prettier": "^3.8.1",
-		"prettier-plugin-svelte": "^3.5.0",
-		"sharp": "^0.34.5",
-		"svelte": "^5.53.5",
-		"svelte-check": "^4.4.4",
-		"tailwindcss": "^4.2.1",
-		"typescript": "^5.9.3",
-		"typescript-eslint": "^8.56.1",
-		"vite": "^8.0.0"
-	},
-	"dependencies": {
-		"@iconify-json/academicons": "^1.2.4",
-		"@iconify/svelte": "^5.2.1",
-		"@inlang/paraglide-js": "^2.13.0",
-		"@skeletonlabs/skeleton": "^4.12.1",
-		"@skeletonlabs/skeleton-svelte": "^4.12.1",
-		"jspdf": "^4.2.0",
-		"lucide-svelte": "^0.575.0"
-	},
-	"type": "module",
-	"overrides": {
-		"@tailwindcss/vite": {
-			"vite": "$vite"
-		}
-	}
+  "name": "stias-dh-ai-workshop-2026",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@sveltejs/adapter-static": "^3.0.10",
+    "@sveltejs/kit": "^2.55.0",
+    "@sveltejs/vite-plugin-svelte": "^7.0.0",
+    "@tailwindcss/vite": "^4.2.1",
+    "@types/node": "^22.19.13",
+    "eslint": "^10.0.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-svelte": "^3.15.0",
+    "globals": "^17.3.0",
+    "prettier": "^3.8.1",
+    "prettier-plugin-svelte": "^3.5.0",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "sharp": "^0.34.5",
+    "svelte": "^5.53.5",
+    "svelte-check": "^4.4.4",
+    "tailwindcss": "^4.2.1",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.56.1",
+    "vite": "^8.0.0"
+  },
+  "dependencies": {
+    "@iconify-json/academicons": "^1.2.4",
+    "@iconify/svelte": "^5.2.1",
+    "@inlang/paraglide-js": "^2.13.0",
+    "@skeletonlabs/skeleton": "^4.12.1",
+    "@skeletonlabs/skeleton-svelte": "^4.12.1",
+    "jspdf": "^4.2.0",
+    "lucide-svelte": "^0.575.0"
+  },
+  "type": "module",
+  "overrides": {
+    "@tailwindcss/vite": {
+      "vite": "$vite"
+    }
+  }
 }

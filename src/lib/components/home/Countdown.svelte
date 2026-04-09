@@ -34,27 +34,27 @@
 </script>
 
 {#if status === 'ended'}
-	<p class="text-lg font-sans font-light text-surface-400">
+	<p class="text-surface-400 font-sans text-lg font-light">
 		{m.countdown_event_ended()}
 	</p>
 {:else if status === 'started'}
-	<p class="text-lg font-sans font-medium text-secondary-400">
+	<p class="text-secondary-400 font-sans text-lg font-medium">
 		{m.countdown_event_started()}
 	</p>
 {:else}
 	<div class="flex items-center justify-center gap-3 sm:gap-5">
 		{#each units as unit, i}
 			{#if i > 0}
-				<div class="text-xl text-white/20 font-light select-none pb-5">:</div>
+				<div class="pb-5 text-xl font-light text-white/20 select-none">:</div>
 			{/if}
-			<div class="text-center min-w-[3.5rem]">
+			<div class="min-w-[3.5rem] text-center">
 				<div
-					class="text-3xl sm:text-4xl font-sans font-semibold text-white tabular-nums tracking-tight"
+					class="font-sans text-3xl font-semibold tracking-tight text-white tabular-nums sm:text-4xl"
 				>
 					{String(unit.value).padStart(2, '0')}
 				</div>
 				<div
-					class="text-[11px] sm:text-xs text-white/40 mt-1.5 uppercase tracking-wider font-sans font-light"
+					class="mt-1.5 font-sans text-[11px] font-light tracking-wider text-white/40 uppercase sm:text-xs"
 				>
 					{unit.label}
 				</div>

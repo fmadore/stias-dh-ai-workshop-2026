@@ -5,3 +5,11 @@ node_modules/
 package-lock.json
 src/lib/paraglide/
 src/paraglide/
+
+# Local Claude Code config
+.claude/
+
+# Environment
+.env
+.env.*
+!.env.example

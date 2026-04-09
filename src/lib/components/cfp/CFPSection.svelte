@@ -60,11 +60,11 @@
 	<!-- Rationale -->
 	<ScrollReveal>
 		<div>
-			<h2 class="text-2xl mb-4 text-surface-900 dark:text-surface-50">
+			<h2 class="text-surface-900 dark:text-surface-50 mb-4 text-2xl">
 				{m.cfp_rationale_label()}
 			</h2>
 			<p
-				class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg"
+				class="text-surface-600 dark:text-surface-300 font-sans text-base leading-relaxed font-light sm:text-lg"
 			>
 				{t(cfpInfo.rationale)}
 			</p>
@@ -74,17 +74,17 @@
 	<!-- Convenors -->
 	<ScrollReveal delay={1}>
 		<div>
-			<h2 class="text-2xl mb-4 text-surface-900 dark:text-surface-50">
+			<h2 class="text-surface-900 dark:text-surface-50 mb-4 text-2xl">
 				{m.cfp_convenors_label()}
 			</h2>
 			<ul class="space-y-2">
 				{#each organizers as organizer}
 					<li
-						class="flex items-start gap-3 text-surface-600 dark:text-surface-300 font-sans font-light"
+						class="text-surface-600 dark:text-surface-300 flex items-start gap-3 font-sans font-light"
 					>
-						<span class="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-secondary-400 mt-2.5"></span>
+						<span class="bg-secondary-400 mt-2.5 h-1.5 w-1.5 flex-shrink-0 rounded-full"></span>
 						<span class="leading-relaxed">
-							<span class="font-medium text-surface-800 dark:text-surface-100"
+							<span class="text-surface-800 dark:text-surface-100 font-medium"
 								>{organizer.name}</span
 							>, {t(organizer.affiliation)}
 						</span>
@@ -97,29 +97,29 @@
 	<!-- Thematic Axes reference -->
 	<ScrollReveal delay={2}>
 		<div>
-			<h2 class="text-2xl mb-4 text-surface-900 dark:text-surface-50">
+			<h2 class="text-surface-900 dark:text-surface-50 mb-4 text-2xl">
 				{m.section_thematic_axes()}
 			</h2>
 			<p
-				class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg mb-6"
+				class="text-surface-600 dark:text-surface-300 mb-6 font-sans text-base leading-relaxed font-light sm:text-lg"
 			>
 				{m.thematic_axes_reference()}
 			</p>
 			<div class="space-y-8">
 				{#each thematicAxes as axis}
 					<div>
-						<div class="flex items-start gap-4 mb-3">
+						<div class="mb-3 flex items-start gap-4">
 							<span
-								class="flex-shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-secondary-400 to-secondary-500 text-white text-sm font-medium flex items-center justify-center mt-0.5"
+								class="from-secondary-400 to-secondary-500 mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-sm font-medium text-white"
 							>
 								{axis.number}
 							</span>
-							<h3 class="font-medium text-surface-800 dark:text-surface-100 leading-relaxed">
+							<h3 class="text-surface-800 dark:text-surface-100 leading-relaxed font-medium">
 								{t(axis.title)}
 							</h3>
 						</div>
 						<p
-							class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg pl-11"
+							class="text-surface-600 dark:text-surface-300 pl-11 font-sans text-base leading-relaxed font-light sm:text-lg"
 						>
 							{t(axis.description)}
 						</p>
@@ -132,11 +132,11 @@
 	<!-- Workshop Format & Language Policy -->
 	<ScrollReveal delay={3}>
 		<div>
-			<h2 class="text-2xl mb-4 text-surface-900 dark:text-surface-50">
+			<h2 class="text-surface-900 dark:text-surface-50 mb-4 text-2xl">
 				{m.workshop_format_label()}
 			</h2>
 			<p
-				class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg"
+				class="text-surface-600 dark:text-surface-300 font-sans text-base leading-relaxed font-light sm:text-lg"
 			>
 				{t(cfpInfo.workshopFormat)}
 			</p>
@@ -146,14 +146,14 @@
 	<!-- Guidelines -->
 	<ScrollReveal delay={4}>
 		<div>
-			<h2 class="text-2xl mb-4 text-surface-900 dark:text-surface-50">{m.guidelines()}</h2>
+			<h2 class="text-surface-900 dark:text-surface-50 mb-4 text-2xl">{m.guidelines()}</h2>
 			<p
-				class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg mb-4"
+				class="text-surface-600 dark:text-surface-300 mb-4 font-sans text-base leading-relaxed font-light sm:text-lg"
 			>
 				{t(cfpInfo.guidelines)}
 			</p>
 			<p
-				class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg mb-4"
+				class="text-surface-600 dark:text-surface-300 mb-4 font-sans text-base leading-relaxed font-light sm:text-lg"
 			>
 				{m.cfp_contact_text()}
 			</p>
@@ -162,9 +162,9 @@
 					{@const email = contactEmails[organizer.id]}
 					{#if email}
 						<li class="flex items-start gap-3 font-sans font-light">
-							<span class="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-secondary-400 mt-2.5"></span>
+							<span class="bg-secondary-400 mt-2.5 h-1.5 w-1.5 flex-shrink-0 rounded-full"></span>
 							<span class="leading-relaxed">
-								<span class="font-medium text-surface-800 dark:text-surface-100"
+								<span class="text-surface-800 dark:text-surface-100 font-medium"
 									>{organizer.name}</span
 								>:
 								<a href="mailto:{email}" class="text-primary-500 hover:text-primary-600">{email}</a>
@@ -179,18 +179,18 @@
 	<!-- Publication -->
 	<ScrollReveal delay={5}>
 		<div>
-			<h2 class="text-2xl mb-4 text-surface-900 dark:text-surface-50">
+			<h2 class="text-surface-900 dark:text-surface-50 mb-4 text-2xl">
 				{m.cfp_publication_label()}
 			</h2>
 			<p
-				class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg"
+				class="text-surface-600 dark:text-surface-300 font-sans text-base leading-relaxed font-light sm:text-lg"
 			>
 				{publicationParts.before}<a
 					href={JDHASA_URL}
 					target="_blank"
 					rel="noopener noreferrer"
-					class="italic text-primary-500 hover:text-primary-600 inline-items-center"
-					>{JDHASA_NAME}<ExternalLink size={14} class="inline ml-1 -mt-0.5" /></a
+					class="text-primary-500 hover:text-primary-600 inline-items-center italic"
+					>{JDHASA_NAME}<ExternalLink size={14} class="-mt-0.5 ml-1 inline" /></a
 				>{publicationParts.after}
 			</p>
 		</div>
@@ -199,11 +199,11 @@
 	<!-- Selection Criteria & Inclusivity -->
 	<ScrollReveal delay={6}>
 		<div>
-			<h2 class="text-2xl mb-4 text-surface-900 dark:text-surface-50">
+			<h2 class="text-surface-900 dark:text-surface-50 mb-4 text-2xl">
 				{m.cfp_selection_label()}
 			</h2>
 			<p
-				class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg"
+				class="text-surface-600 dark:text-surface-300 font-sans text-base leading-relaxed font-light sm:text-lg"
 			>
 				{t(cfpInfo.selectionCriteria)}
 			</p>
@@ -213,11 +213,11 @@
 	<!-- Funding & Logistics -->
 	<ScrollReveal delay={7}>
 		<div>
-			<h2 class="text-2xl mb-4 text-surface-900 dark:text-surface-50">
+			<h2 class="text-surface-900 dark:text-surface-50 mb-4 text-2xl">
 				{m.cfp_funding_label()}
 			</h2>
 			<p
-				class="text-surface-600 dark:text-surface-300 leading-relaxed font-sans font-light text-base sm:text-lg"
+				class="text-surface-600 dark:text-surface-300 font-sans text-base leading-relaxed font-light sm:text-lg"
 			>
 				{m.cfp_funding_text()}
 			</p>
@@ -227,11 +227,11 @@
 	<!-- Key Dates — Timeline style -->
 	<ScrollReveal delay={8}>
 		<div>
-			<h2 class="text-2xl mb-8 text-surface-900 dark:text-surface-50">{m.key_dates()}</h2>
+			<h2 class="text-surface-900 dark:text-surface-50 mb-8 text-2xl">{m.key_dates()}</h2>
 			<div class="relative">
 				<!-- Connecting line -->
 				<div
-					class="absolute left-[11px] top-2 bottom-2 w-px bg-gradient-to-b from-secondary-400 via-secondary-300 to-primary-400 hidden sm:block"
+					class="from-secondary-400 via-secondary-300 to-primary-400 absolute top-2 bottom-2 left-[11px] hidden w-px bg-gradient-to-b sm:block"
 				></div>
 
 				<div class="space-y-6">
@@ -239,19 +239,19 @@
 						<div class="flex items-start gap-5">
 							<!-- Timeline dot -->
 							<div
-								class="flex-shrink-0 relative z-10 w-6 h-6 rounded-full bg-white dark:bg-surface-800 border-2 border-secondary-400 mt-0.5 hidden sm:flex items-center justify-center"
+								class="dark:bg-surface-800 border-secondary-400 relative z-10 mt-0.5 hidden h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border-2 bg-white sm:flex"
 							>
-								<div class="w-2 h-2 rounded-full bg-secondary-400"></div>
+								<div class="bg-secondary-400 h-2 w-2 rounded-full"></div>
 							</div>
 							<div
-								class="flex-1 bg-white dark:bg-surface-800/80 rounded-xl p-5 border border-surface-200/50 dark:border-surface-700/50"
+								class="dark:bg-surface-800/80 border-surface-200/50 dark:border-surface-700/50 flex-1 rounded-xl border bg-white p-5"
 							>
 								<p
-									class="text-sm font-sans font-medium text-surface-400 dark:text-surface-500 uppercase tracking-wider mb-1"
+									class="text-surface-400 dark:text-surface-500 mb-1 font-sans text-sm font-medium tracking-wider uppercase"
 								>
 									{dateItem.label}
 								</p>
-								<p class="text-lg font-sans font-semibold text-surface-900 dark:text-surface-50">
+								<p class="text-surface-900 dark:text-surface-50 font-sans text-lg font-semibold">
 									{dateItem.value}
 								</p>
 							</div>
@@ -265,12 +265,12 @@
 	<!-- Submit button -->
 	{#if cfpInfo.submissionUrl}
 		<ScrollReveal delay={9}>
-			<div class="text-center pt-4">
+			<div class="pt-4 text-center">
 				<a
 					href={cfpInfo.submissionUrl}
 					target="_blank"
 					rel="noopener noreferrer"
-					class="inline-flex items-center gap-2 px-8 py-3.5 bg-primary-600 hover:bg-primary-700 text-white font-sans font-medium rounded-xl transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
+					class="bg-primary-600 hover:bg-primary-700 inline-flex items-center gap-2 rounded-xl px-8 py-3.5 font-sans font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
 				>
 					<Send size={18} />
 					{m.submit_proposal()}

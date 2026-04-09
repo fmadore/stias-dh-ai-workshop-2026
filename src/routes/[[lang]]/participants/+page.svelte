@@ -19,10 +19,10 @@
 	<PageHeader title={m.section_organisers()} />
 
 	<div class="pb-16 sm:pb-20">
-		<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+		<div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
 			<!-- Organisers -->
 			<section class="mb-16">
-				<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+				<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
 					{#each organizers as organizer, i}
 						<ScrollReveal delay={i}>
 							<OrganizerCard {organizer} />
@@ -35,7 +35,7 @@
 			{#if participants.length > 0}
 				<section>
 					<ScrollReveal>
-						<h2 class="text-2xl sm:text-3xl mb-8 text-surface-900 dark:text-surface-50">
+						<h2 class="text-surface-900 dark:text-surface-50 mb-8 text-2xl sm:text-3xl">
 							{m.section_participants()}
 						</h2>
 					</ScrollReveal>

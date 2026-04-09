@@ -23,16 +23,16 @@
 <KeyInfo />
 
 <!-- Thematic Axes Preview -->
-<section class="py-16 sm:py-24 bg-white dark:bg-surface-900">
-	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="dark:bg-surface-900 bg-white py-16 sm:py-24">
+	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<ScrollReveal>
-			<div class="text-center mb-14">
-				<h2 class="text-2xl sm:text-3xl mb-4 text-surface-900 dark:text-surface-50">
+			<div class="mb-14 text-center">
+				<h2 class="text-surface-900 dark:text-surface-50 mb-4 text-2xl sm:text-3xl">
 					{m.section_thematic_axes()}
 				</h2>
 			</div>
 		</ScrollReveal>
-		<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+		<div class="grid grid-cols-1 gap-6 md:grid-cols-3">
 			{#each thematicAxes as axis, i}
 				<ScrollReveal delay={i}>
 					<ThematicAxis {axis} compact={true} />
@@ -40,13 +40,13 @@
 			{/each}
 		</div>
 		<ScrollReveal delay={3}>
-			<div class="text-center mt-10">
+			<div class="mt-10 text-center">
 				<a
 					href={localePath('/about')}
-					class="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-sans font-medium transition-colors group"
+					class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 group inline-flex items-center gap-2 font-sans font-medium transition-colors"
 				>
 					{m.learn_more()}
-					<ArrowRight size={16} class="group-hover:translate-x-1 transition-transform" />
+					<ArrowRight size={16} class="transition-transform group-hover:translate-x-1" />
 				</a>
 			</div>
 		</ScrollReveal>
@@ -54,30 +54,30 @@
 </section>
 
 <!-- Quick Links -->
-<section class="py-16 sm:py-20 bg-cream-dark">
-	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+<section class="bg-cream-dark py-16 sm:py-20">
+	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+		<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
 			{#each quickLinks as link, i}
 				<ScrollReveal delay={i}>
 					<a
 						href={link.href}
-						class="group relative block rounded-xl p-7 bg-white dark:bg-surface-800/80 overflow-hidden border border-surface-200/50 dark:border-surface-700/50 hover:border-transparent transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
+						class="group dark:bg-surface-800/80 border-surface-200/50 dark:border-surface-700/50 relative block overflow-hidden rounded-xl border bg-white p-7 transition-all duration-300 hover:-translate-y-0.5 hover:border-transparent hover:shadow-lg"
 					>
 						<!-- Hover gradient fill -->
 						<div
-							class="absolute inset-0 bg-gradient-to-br from-primary-500 to-primary-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"
+							class="from-primary-500 to-primary-700 absolute inset-0 rounded-xl bg-gradient-to-br opacity-0 transition-opacity duration-300 group-hover:opacity-100"
 						></div>
 						<div class="relative z-10">
 							<h3
-								class="text-lg mb-2 text-surface-900 dark:text-surface-50 group-hover:text-white transition-colors font-serif"
+								class="text-surface-900 dark:text-surface-50 mb-2 font-serif text-lg transition-colors group-hover:text-white"
 							>
 								{link.title}
 							</h3>
 							<p
-								class="text-sm font-sans text-surface-400 dark:text-surface-500 group-hover:text-white/70 transition-colors flex items-center gap-1"
+								class="text-surface-400 dark:text-surface-500 flex items-center gap-1 font-sans text-sm transition-colors group-hover:text-white/70"
 							>
 								{m.learn_more()}
-								<ArrowRight size={14} class="group-hover:translate-x-1 transition-transform" />
+								<ArrowRight size={14} class="transition-transform group-hover:translate-x-1" />
 							</p>
 						</div>
 					</a>

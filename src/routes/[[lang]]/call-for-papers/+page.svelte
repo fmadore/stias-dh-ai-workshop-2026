@@ -16,21 +16,21 @@
 
 	<!-- Workshop identity block -->
 	<div class="pb-10 sm:pb-14">
-		<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+		<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
 			<div
-				class="bg-white dark:bg-surface-800/80 rounded-2xl p-8 sm:p-10 border border-surface-200/50 dark:border-surface-700/50"
+				class="dark:bg-surface-800/80 border-surface-200/50 dark:border-surface-700/50 rounded-2xl border bg-white p-8 sm:p-10"
 			>
 				<p
-					class="text-sm font-sans font-medium text-secondary-500 dark:text-secondary-400 uppercase tracking-wider mb-3"
+					class="text-secondary-500 dark:text-secondary-400 mb-3 font-sans text-sm font-medium tracking-wider uppercase"
 				>
 					{m.hero_subtitle()}
 				</p>
 				<h2
-					class="text-2xl sm:text-3xl font-normal tracking-tight text-surface-900 dark:text-surface-50 mb-6"
+					class="text-surface-900 dark:text-surface-50 mb-6 text-2xl font-normal tracking-tight sm:text-3xl"
 				>
 					{t(siteConfig.title)}
 				</h2>
-				<div class="flex flex-col sm:flex-row gap-4 text-surface-600 dark:text-surface-300 mb-6">
+				<div class="text-surface-600 dark:text-surface-300 mb-6 flex flex-col gap-4 sm:flex-row">
 					<span class="inline-flex items-center gap-2 font-sans font-light">
 						<Calendar size={18} class="text-primary-500" />
 						{m.hero_dates()}
@@ -46,7 +46,7 @@
 	</div>
 
 	<div class="pb-16 sm:pb-20">
-		<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+		<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
 			<CFPSection />
 		</div>
 	</div>

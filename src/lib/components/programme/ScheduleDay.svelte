@@ -7,10 +7,10 @@
 </script>
 
 <div>
-	<h3 class="text-xl font-bold mb-1">{t(day.dayLabel)}</h3>
-	<p class="text-sm text-surface-500 dark:text-surface-400 mb-4">{t(day.title)}</p>
+	<h3 class="mb-1 text-xl font-bold">{t(day.dayLabel)}</h3>
+	<p class="text-surface-500 dark:text-surface-400 mb-4 text-sm">{t(day.title)}</p>
 	<div
-		class="bg-white dark:bg-surface-800 rounded-xl p-4 sm:p-6 border border-surface-200 dark:border-surface-700"
+		class="dark:bg-surface-800 border-surface-200 dark:border-surface-700 rounded-xl border bg-white p-4 sm:p-6"
 	>
 		{#each day.sessions as session}
 			<SessionCard {session} />

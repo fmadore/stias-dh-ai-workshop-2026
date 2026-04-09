@@ -159,8 +159,8 @@
 	</svg>
 {/snippet}
 
-<span class="inline-flex items-center gap-2 flex-wrap">
-	<span class="text-sm font-sans font-medium text-surface-500 dark:text-surface-400">
+<span class="inline-flex flex-wrap items-center gap-2">
+	<span class="text-surface-500 dark:text-surface-400 font-sans text-sm font-medium">
 		{m.download_cfp()}:
 	</span>
 	{#if variant === 'primary'}
@@ -168,7 +168,7 @@
 			<button
 				onclick={handleDownloadPdf}
 				disabled={loadingPdf}
-				class="inline-flex items-center gap-1.5 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:opacity-60 text-white font-sans font-medium rounded-lg transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 disabled:hover:translate-y-0 disabled:hover:shadow-none cursor-pointer disabled:cursor-wait text-sm"
+				class="bg-primary-600 hover:bg-primary-700 inline-flex cursor-pointer items-center gap-1.5 rounded-lg px-4 py-2 font-sans text-sm font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md disabled:cursor-wait disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:shadow-none"
 			>
 				{#if loadingPdf}
 					<Loader2 size={16} class="animate-spin" />
@@ -180,7 +180,7 @@
 			<button
 				onclick={handleDownloadText}
 				disabled={loadingText}
-				class="inline-flex items-center gap-1.5 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:opacity-60 text-white font-sans font-medium rounded-lg transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 disabled:hover:translate-y-0 disabled:hover:shadow-none cursor-pointer disabled:cursor-wait text-sm"
+				class="bg-primary-600 hover:bg-primary-700 inline-flex cursor-pointer items-center gap-1.5 rounded-lg px-4 py-2 font-sans text-sm font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md disabled:cursor-wait disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:shadow-none"
 			>
 				{#if loadingText}
 					<Loader2 size={16} class="animate-spin" />
@@ -195,7 +195,7 @@
 			<button
 				onclick={handleDownloadPdf}
 				disabled={loadingPdf}
-				class="inline-flex items-center gap-1.5 px-4 py-2 border-2 border-primary-500 text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 disabled:opacity-60 font-sans font-medium rounded-lg transition-all duration-200 cursor-pointer disabled:cursor-wait text-sm"
+				class="border-primary-500 text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 inline-flex cursor-pointer items-center gap-1.5 rounded-lg border-2 px-4 py-2 font-sans text-sm font-medium transition-all duration-200 disabled:cursor-wait disabled:opacity-60"
 			>
 				{#if loadingPdf}
 					<Loader2 size={16} class="animate-spin" />
@@ -207,7 +207,7 @@
 			<button
 				onclick={handleDownloadText}
 				disabled={loadingText}
-				class="inline-flex items-center gap-1.5 px-4 py-2 border-2 border-primary-500 text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 disabled:opacity-60 font-sans font-medium rounded-lg transition-all duration-200 cursor-pointer disabled:cursor-wait text-sm"
+				class="border-primary-500 text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 inline-flex cursor-pointer items-center gap-1.5 rounded-lg border-2 px-4 py-2 font-sans text-sm font-medium transition-all duration-200 disabled:cursor-wait disabled:opacity-60"
 			>
 				{#if loadingText}
 					<Loader2 size={16} class="animate-spin" />

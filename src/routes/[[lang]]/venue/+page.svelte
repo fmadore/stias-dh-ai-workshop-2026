@@ -14,8 +14,8 @@
 	<PageHeader title={m.section_venue()} />
 
 	<div class="pb-16 sm:pb-20">
-		<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-			<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+		<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+			<div class="mb-10 grid grid-cols-1 gap-8 lg:grid-cols-2">
 				<ScrollReveal>
 					<VenueInfo />
 				</ScrollReveal>
