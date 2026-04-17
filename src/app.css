@@ -4,16 +4,17 @@
 @import '@skeletonlabs/skeleton-svelte';
 @import '@skeletonlabs/skeleton/themes/cerberus';
 
-/* ========================================
-   Design System: Refined Editorial
-   ======================================== */
-
-:root {
+/* ============================================================
+   DESIGN TOKENS — via @theme so they also generate utilities
+   (text-primary-500, bg-cream, font-display, etc.)
+   ============================================================ */
+@theme {
 	/* --- Typography --- */
 	--font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
-	--font-body: 'Outfit', system-ui, -apple-system, sans-serif;
+	--font-sans: 'Outfit', system-ui, -apple-system, sans-serif;
+	--font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
-	/* --- Teal palette --- */
+	/* --- Brand: teal --- */
 	--color-primary-50: #e6f5f5;
 	--color-primary-100: #b3e0e1;
 	--color-primary-200: #80cccd;
@@ -24,8 +25,9 @@
 	--color-primary-700: #094e50;
 	--color-primary-800: #063b3c;
 	--color-primary-900: #042828;
+	--color-primary-950: #021616;
 
-	/* --- Gold palette --- */
+	/* --- Brand: gold --- */
 	--color-secondary-50: #faf5e6;
 	--color-secondary-100: #f0e3b8;
 	--color-secondary-200: #e6d08a;
@@ -37,29 +39,68 @@
 	--color-secondary-800: #644c15;
 	--color-secondary-900: #44340e;
 
-	/* --- Ambient surface colors --- */
+	/* --- Semantic surfaces & ink --- */
 	--color-cream: #fdfbf7;
-	--color-cream-dark: #f7f3eb;
-	--color-surface-warm: #faf8f4;
-	--color-surface-warm-dark: #1a1917;
-	--color-surface-deep: #141413;
+	--color-cream-dark: #f6f1e5;
+	--color-ink: #1d1a16;
+	--color-ink-muted: #56514a;
+	--color-paper: #ffffff;
+	--color-paper-dark: #1a1815;
+	--color-deep: #0e0d0b;
+	--color-orcid: #a6ce39;
+	--color-orcid-hover: #8aab2d;
+
+	/* --- Radii --- */
+	--radius-xs: 0.25rem;
+	--radius-sm: 0.375rem;
+	--radius-md: 0.5rem;
+	--radius-lg: 0.75rem;
+	--radius-xl: 1rem;
+	--radius-2xl: 1.25rem;
+	--radius-3xl: 1.75rem;
+	--radius-full: 9999px;
+
+	/* --- Warm shadows (tinted with primary-900) --- */
+	--shadow-xs: 0 1px 2px 0 rgb(4 40 40 / 0.05);
+	--shadow-sm: 0 1px 3px 0 rgb(4 40 40 / 0.06), 0 1px 2px -1px rgb(4 40 40 / 0.04);
+	--shadow-md: 0 4px 8px -2px rgb(4 40 40 / 0.08), 0 2px 4px -2px rgb(4 40 40 / 0.04);
+	--shadow-lg: 0 12px 20px -4px rgb(4 40 40 / 0.09), 0 4px 8px -4px rgb(4 40 40 / 0.04);
+	--shadow-xl: 0 24px 36px -8px rgb(4 40 40 / 0.12), 0 8px 12px -6px rgb(4 40 40 / 0.05);
+
+	/* --- Motion --- */
+	--ease-standard: cubic-bezier(0.32, 0.72, 0, 1);
+	--ease-expressive: cubic-bezier(0.22, 1, 0.36, 1);
+	--ease-entrance: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+	--duration-fast: 150ms;
+	--duration-base: 220ms;
+	--duration-slow: 360ms;
+	--duration-reveal: 520ms;
+
+	--default-transition-duration: 220ms;
+	--default-transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-/* ========================================
-   Base Typography
-   ======================================== */
+/* ============================================================
+   BASE
+   ============================================================ */
+html {
+	-webkit-text-size-adjust: 100%;
+	text-rendering: optimizeLegibility;
+}
 
 body {
-	font-family: var(--font-body);
+	font-family: var(--font-sans);
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	background-color: var(--color-cream);
-	color: #1a1a1a;
+	color: var(--color-ink);
+	font-feature-settings: 'ss01', 'cv11';
 }
 
-.dark body,
-body:where(.dark *) {
-	background-color: var(--color-surface-deep);
+.dark body {
+	background-color: var(--color-deep);
+	color: var(--color-surface-200);
 }
 
 h1,
@@ -68,37 +109,368 @@ h3,
 h4,
 h5,
 h6,
-.font-serif {
+.font-display {
 	font-family: var(--font-display);
+	font-weight: 400;
 }
-
-.font-sans {
-	font-family: var(--font-body);
-}
-
-/* ========================================
-   Type Scale
-   ======================================== */
 
 h1 {
-	letter-spacing: -0.02em;
-	line-height: 1.1;
+	letter-spacing: -0.025em;
+	line-height: 1.04;
 }
-
 h2 {
-	letter-spacing: -0.015em;
+	letter-spacing: -0.018em;
+	line-height: 1.12;
+}
+h3 {
+	letter-spacing: -0.012em;
 	line-height: 1.2;
 }
 
-h3 {
-	letter-spacing: -0.01em;
-	line-height: 1.3;
+::selection {
+	background-color: color-mix(in oklab, var(--color-secondary-400) 40%, transparent);
+	color: var(--color-ink);
+}
+.dark ::selection {
+	background-color: color-mix(in oklab, var(--color-secondary-500) 60%, transparent);
+	color: var(--color-cream);
 }
 
-/* ========================================
-   Grain / Noise Texture Utility
-   ======================================== */
+/* ============================================================
+   FOCUS — branded, consistent
+   ============================================================ */
+:focus-visible {
+	outline: 2px solid var(--color-primary-500);
+	outline-offset: 3px;
+	border-radius: var(--radius-xs);
+}
 
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+::-webkit-scrollbar-thumb {
+	background-color: color-mix(in oklab, var(--color-primary-500) 25%, transparent);
+	border-radius: var(--radius-full);
+	border: 2px solid transparent;
+	background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+	background-color: color-mix(in oklab, var(--color-primary-500) 45%, transparent);
+}
+html {
+	scrollbar-color: color-mix(in oklab, var(--color-primary-500) 30%, transparent) transparent;
+}
+
+/* ============================================================
+   COMPONENT + TYPOGRAPHY CLASSES (plain CSS, Tailwind-safe)
+   ============================================================ */
+
+/* --- Typography utilities --- */
+.text-eyebrow {
+	font-family: var(--font-sans);
+	font-size: 0.75rem;
+	font-weight: 500;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--color-secondary-600);
+}
+.dark .text-eyebrow {
+	color: var(--color-secondary-400);
+}
+
+.text-meta {
+	font-family: var(--font-sans);
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: var(--color-ink-muted);
+}
+.dark .text-meta {
+	color: var(--color-surface-400);
+}
+
+.text-display {
+	font-family: var(--font-display);
+	font-weight: 400;
+	font-size: clamp(2.5rem, 6.5vw, 5rem);
+	line-height: 1.04;
+	letter-spacing: -0.025em;
+}
+
+.text-page-title {
+	font-family: var(--font-display);
+	font-weight: 400;
+	font-size: clamp(2.25rem, 4.5vw, 3.25rem);
+	line-height: 1.08;
+	letter-spacing: -0.022em;
+}
+
+.text-section {
+	font-family: var(--font-display);
+	font-weight: 400;
+	font-size: clamp(1.5rem, 2.4vw, 2rem);
+	line-height: 1.15;
+	letter-spacing: -0.018em;
+}
+
+.text-card-title {
+	font-family: var(--font-display);
+	font-weight: 400;
+	font-size: 1.25rem;
+	line-height: 1.25;
+	letter-spacing: -0.012em;
+}
+
+.text-lede {
+	font-family: var(--font-sans);
+	font-weight: 300;
+	font-size: 1.0625rem;
+	line-height: 1.65;
+	color: var(--color-ink-muted);
+}
+.dark .text-lede {
+	color: var(--color-surface-300);
+}
+
+.text-prose {
+	font-family: var(--font-sans);
+	font-weight: 300;
+	font-size: 1rem;
+	line-height: 1.72;
+}
+@media (min-width: 640px) {
+	.text-prose {
+		font-size: 1.0625rem;
+	}
+}
+
+/* --- Containers --- */
+.container-page,
+.container-wide,
+.container-readable,
+.container-prose {
+	margin-inline: auto;
+	width: 100%;
+	padding-inline: 1rem;
+}
+.container-page {
+	max-width: 80rem;
+}
+.container-wide {
+	max-width: 72rem;
+}
+.container-readable {
+	max-width: 56rem;
+}
+.container-prose {
+	max-width: 44rem;
+}
+@media (min-width: 640px) {
+	.container-page,
+	.container-wide,
+	.container-readable,
+	.container-prose {
+		padding-inline: 1.5rem;
+	}
+}
+@media (min-width: 1024px) {
+	.container-page,
+	.container-wide,
+	.container-readable {
+		padding-inline: 2rem;
+	}
+}
+
+/* --- Section rhythm --- */
+.section-pad {
+	padding-block: clamp(4rem, 8vw, 6rem);
+}
+.section-pad-lg {
+	padding-block: clamp(5rem, 10vw, 8rem);
+}
+
+/* --- Surfaces --- */
+.card {
+	position: relative;
+	background-color: var(--color-paper);
+	border-radius: var(--radius-xl);
+	box-shadow: var(--shadow-sm);
+	transition:
+		box-shadow var(--duration-base) var(--ease-standard),
+		transform var(--duration-base) var(--ease-standard),
+		border-color var(--duration-base) var(--ease-standard);
+}
+.dark .card {
+	background-color: color-mix(in oklab, var(--color-surface-800) 85%, transparent);
+}
+
+.card-hover {
+	position: relative;
+	background-color: var(--color-paper);
+	border-radius: var(--radius-xl);
+	box-shadow: var(--shadow-sm);
+	transition:
+		box-shadow var(--duration-base) var(--ease-standard),
+		transform var(--duration-base) var(--ease-standard),
+		border-color var(--duration-base) var(--ease-standard);
+}
+.card-hover:hover {
+	box-shadow: var(--shadow-lg);
+	transform: translateY(-2px);
+}
+.dark .card-hover {
+	background-color: color-mix(in oklab, var(--color-surface-800) 85%, transparent);
+}
+
+/* --- Buttons --- */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	font-family: var(--font-sans);
+	font-weight: 500;
+	font-size: 0.9375rem;
+	line-height: 1;
+	border-radius: var(--radius-lg);
+	padding: 0.75rem 1.25rem;
+	cursor: pointer;
+	white-space: nowrap;
+	transition:
+		background-color var(--duration-base) var(--ease-standard),
+		color var(--duration-base) var(--ease-standard),
+		border-color var(--duration-base) var(--ease-standard),
+		box-shadow var(--duration-base) var(--ease-standard),
+		transform var(--duration-base) var(--ease-standard);
+}
+.btn:disabled {
+	opacity: 0.55;
+	cursor: not-allowed;
+	transform: none !important;
+	box-shadow: none !important;
+}
+
+.btn-sm {
+	font-size: 0.875rem;
+	padding: 0.5rem 0.875rem;
+	border-radius: var(--radius-md);
+}
+
+.btn-primary {
+	background-color: var(--color-primary-600);
+	color: #fff;
+	box-shadow: var(--shadow-xs);
+}
+.btn-primary:hover:not(:disabled) {
+	background-color: var(--color-primary-700);
+	box-shadow: var(--shadow-md);
+	transform: translateY(-1px);
+}
+
+.btn-secondary {
+	background-color: transparent;
+	color: var(--color-primary-700);
+	border: 1.5px solid var(--color-primary-500);
+}
+.dark .btn-secondary {
+	color: var(--color-primary-300);
+}
+.btn-secondary:hover:not(:disabled) {
+	background-color: color-mix(in oklab, var(--color-primary-500) 10%, transparent);
+	border-color: var(--color-primary-600);
+}
+.dark .btn-secondary:hover:not(:disabled) {
+	background-color: color-mix(in oklab, var(--color-primary-400) 14%, transparent);
+}
+
+.btn-ghost {
+	background-color: transparent;
+	color: var(--color-ink-muted);
+	border-radius: var(--radius-full);
+	padding: 0.5rem;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition:
+		background-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard);
+}
+.dark .btn-ghost {
+	color: var(--color-surface-400);
+}
+.btn-ghost:hover:not(:disabled) {
+	background-color: color-mix(in oklab, var(--color-ink) 6%, transparent);
+	color: var(--color-ink);
+}
+.dark .btn-ghost:hover:not(:disabled) {
+	background-color: color-mix(in oklab, var(--color-surface-100) 8%, transparent);
+	color: var(--color-surface-100);
+}
+
+/* --- Links --- */
+.link-inline {
+	color: var(--color-primary-600);
+	transition: color var(--duration-fast) var(--ease-standard);
+	text-decoration: underline;
+	text-decoration-color: color-mix(in oklab, var(--color-primary-600) 30%, transparent);
+	text-decoration-thickness: 1px;
+	text-underline-offset: 0.2em;
+}
+.dark .link-inline {
+	color: var(--color-primary-300);
+	text-decoration-color: color-mix(in oklab, var(--color-primary-300) 35%, transparent);
+}
+.link-inline:hover {
+	color: var(--color-primary-700);
+	text-decoration-color: currentColor;
+}
+.dark .link-inline:hover {
+	color: var(--color-primary-200);
+}
+
+.link-arrow {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.375rem;
+	font-family: var(--font-sans);
+	font-weight: 500;
+	color: var(--color-primary-700);
+	transition: color var(--duration-fast) var(--ease-standard);
+}
+.dark .link-arrow {
+	color: var(--color-primary-300);
+}
+.link-arrow:hover {
+	color: var(--color-primary-500);
+}
+.link-arrow svg {
+	transition: transform var(--duration-base) var(--ease-standard);
+}
+.link-arrow:hover svg {
+	transform: translateX(3px);
+}
+
+/* --- Accent rule — replaces multi-color gradient bars --- */
+.accent-rule {
+	display: block;
+	width: 2.75rem;
+	height: 2px;
+	background-color: var(--color-secondary-500);
+	border-radius: var(--radius-full);
+}
+
+/* ============================================================
+   GRAIN / NOISE TEXTURE
+   ============================================================ */
 .grain::before {
 	content: '';
 	position: absolute;
@@ -110,96 +482,102 @@ h3 {
 	background-size: 256px 256px;
 	z-index: 1;
 }
-
 .dark .grain::before {
 	opacity: 0.06;
 }
 
-/* ========================================
-   Scroll Reveal Animations
-   ======================================== */
-
+/* ============================================================
+   SCROLL REVEAL — respects reduced motion
+   ============================================================ */
 .scroll-reveal {
 	opacity: 0;
-	transform: translateY(24px);
+	transform: translateY(16px);
 	transition:
-		opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-		transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+		opacity var(--duration-reveal) var(--ease-expressive),
+		transform var(--duration-reveal) var(--ease-expressive);
+	will-change: opacity, transform;
 }
-
 .scroll-reveal.from-left {
-	transform: translateX(-24px);
+	transform: translateX(-16px);
 }
-
 .scroll-reveal.from-right {
-	transform: translateX(24px);
+	transform: translateX(16px);
 }
-
 .scroll-reveal.visible {
 	opacity: 1;
 	transform: translate(0, 0);
 }
 
-/* ========================================
-   Drop Cap
-   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+	.scroll-reveal,
+	.scroll-reveal.from-left,
+	.scroll-reveal.from-right {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
 
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.001ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.001ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* ============================================================
+   FADE-IN RISE (BackToTop, tooltips…)
+   ============================================================ */
+@keyframes fade-rise {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+.animate-fade-rise {
+	animation: fade-rise var(--duration-slow) var(--ease-expressive) forwards;
+}
+
+/* ============================================================
+   DROP CAP
+   ============================================================ */
 .drop-cap::first-letter {
 	font-family: var(--font-display);
 	float: left;
-	font-size: 3.5em;
-	line-height: 0.8;
-	margin-right: 0.08em;
-	margin-top: 0.05em;
-	color: var(--color-primary-500);
+	font-size: 3em;
+	line-height: 0.9;
+	margin-right: 0.1em;
+	margin-top: 0.1em;
+	color: var(--color-primary-600);
+	font-feature-settings: 'ss01';
+}
+.dark .drop-cap::first-letter {
+	color: var(--color-secondary-400);
 }
 
-/* ========================================
-   Custom Scrollbar (subtle)
-   ======================================== */
-
-::-webkit-scrollbar {
-	width: 8px;
+/* ============================================================
+   NUMERIC + LEGACY
+   ============================================================ */
+.tabular-nums {
+	font-variant-numeric: tabular-nums;
+	font-feature-settings: 'tnum';
 }
-
-::-webkit-scrollbar-track {
-	background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-	background-color: rgba(13, 115, 119, 0.2);
-	border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-	background-color: rgba(13, 115, 119, 0.35);
-}
-
-/* ========================================
-   Warm backgrounds (light/dark)
-   ======================================== */
 
 .bg-cream {
 	background-color: var(--color-cream);
 }
-
 .bg-cream-dark {
 	background-color: var(--color-cream-dark);
 }
-
 .dark .bg-cream {
-	background-color: var(--color-surface-deep);
+	background-color: var(--color-deep);
 }
-
 .dark .bg-cream-dark {
-	background-color: var(--color-surface-warm-dark);
-}
-
-/* ========================================
-   Tabular numbers for countdown
-   ======================================== */
-
-.tabular-nums {
-	font-variant-numeric: tabular-nums;
-	font-feature-settings: 'tnum';
+	background-color: var(--color-paper-dark);
 }

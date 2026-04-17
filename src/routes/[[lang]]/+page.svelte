@@ -23,16 +23,17 @@
 <KeyInfo />
 
 <!-- Thematic Axes Preview -->
-<section class="dark:bg-surface-900 bg-white py-16 sm:py-24">
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<section class="section-pad-lg bg-paper dark:bg-paper-dark">
+	<div class="container-page">
 		<ScrollReveal>
-			<div class="mb-14 text-center">
-				<h2 class="text-surface-900 dark:text-surface-50 mb-4 text-2xl sm:text-3xl">
+			<div class="mx-auto mb-12 max-w-xl text-center">
+				<span class="text-eyebrow mb-3 inline-block">{m.nav_about()}</span>
+				<h2 class="text-section text-ink dark:text-surface-50">
 					{m.section_thematic_axes()}
 				</h2>
 			</div>
 		</ScrollReveal>
-		<div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+		<div class="grid grid-cols-1 gap-5 md:grid-cols-3">
 			{#each thematicAxes as axis, i}
 				<ScrollReveal delay={i}>
 					<ThematicAxis {axis} compact={true} />
@@ -41,45 +42,37 @@
 		</div>
 		<ScrollReveal delay={3}>
 			<div class="mt-10 text-center">
-				<a
-					href={localePath('/about')}
-					class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 group inline-flex items-center gap-2 font-sans font-medium transition-colors"
-				>
+				<a href={localePath('/about')} class="link-arrow">
 					{m.learn_more()}
-					<ArrowRight size={16} class="transition-transform group-hover:translate-x-1" />
+					<ArrowRight size={16} strokeWidth={1.75} aria-hidden="true" />
 				</a>
 			</div>
 		</ScrollReveal>
 	</div>
 </section>
 
-<!-- Quick Links -->
-<section class="bg-cream-dark py-16 sm:py-20">
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<!-- Quick Links — editorial style, no gradient fills -->
+<section class="section-pad bg-cream-dark">
+	<div class="container-page">
 		<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
 			{#each quickLinks as link, i}
 				<ScrollReveal delay={i}>
 					<a
 						href={link.href}
-						class="group dark:bg-surface-800/80 border-surface-200/50 dark:border-surface-700/50 relative block overflow-hidden rounded-xl border bg-white p-7 transition-all duration-300 hover:-translate-y-0.5 hover:border-transparent hover:shadow-lg"
+						class="card-hover border-surface-200/60 dark:border-surface-700/50 group block border-t-2 border-transparent p-7 hover:border-t-[var(--color-secondary-500)]"
 					>
-						<!-- Hover gradient fill -->
-						<div
-							class="from-primary-500 to-primary-700 absolute inset-0 rounded-xl bg-gradient-to-br opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-						></div>
-						<div class="relative z-10">
-							<h3
-								class="text-surface-900 dark:text-surface-50 mb-2 font-serif text-lg transition-colors group-hover:text-white"
-							>
-								{link.title}
-							</h3>
-							<p
-								class="text-surface-400 dark:text-surface-500 flex items-center gap-1 font-sans text-sm transition-colors group-hover:text-white/70"
-							>
-								{m.learn_more()}
-								<ArrowRight size={14} class="transition-transform group-hover:translate-x-1" />
-							</p>
-						</div>
+						<h3 class="text-card-title text-ink dark:text-surface-50 mb-3">
+							{link.title}
+						</h3>
+						<p class="text-ink-muted dark:text-surface-400 inline-flex items-center gap-1.5 text-sm">
+							{m.learn_more()}
+							<ArrowRight
+								size={14}
+								strokeWidth={1.75}
+								class="transition-transform duration-[var(--duration-base)] group-hover:translate-x-1"
+								aria-hidden="true"
+							/>
+						</p>
 					</a>
 				</ScrollReveal>
 			{/each}

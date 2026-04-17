@@ -19,25 +19,8 @@
 	<button
 		onclick={scrollToTop}
 		aria-label={m.back_to_top()}
-		class="bg-primary-600 hover:bg-primary-700 animate-fade-in fixed right-6 bottom-6 z-50 cursor-pointer rounded-full p-3 text-white opacity-0 shadow-lg transition-all duration-300 hover:shadow-xl"
+		class="bg-primary-600 hover:bg-primary-700 animate-fade-rise fixed right-5 bottom-5 z-50 cursor-pointer rounded-full p-3 text-white shadow-[var(--shadow-lg)] transition-[background-color,box-shadow,transform] duration-[var(--duration-base)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-xl)] sm:right-6 sm:bottom-6"
 	>
 		<ArrowUp size={20} />
 	</button>
 {/if}
-
-<style>
-	@keyframes fade-in {
-		from {
-			opacity: 0;
-			transform: translateY(8px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-
-	.animate-fade-in {
-		animation: fade-in 0.3s ease-out forwards;
-	}
-</style>

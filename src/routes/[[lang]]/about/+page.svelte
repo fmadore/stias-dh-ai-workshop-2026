@@ -11,25 +11,26 @@
 
 <SEO title="{m.nav_about()} | {siteConfig.shortTitle}" description={m.seo_about_description()} />
 
-<div class="bg-cream">
-	<PageHeader title={m.nav_about()} />
+<PageHeader title={m.nav_about()} />
 
-	<AbstractSection />
+<AbstractSection />
 
-	<section class="dark:bg-surface-800/50 bg-white py-16 sm:py-20">
-		<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-			<ScrollReveal>
-				<h2 class="text-surface-900 dark:text-surface-50 mb-10 text-2xl sm:text-3xl">
+<section class="section-pad bg-paper dark:bg-paper-dark">
+	<div class="container-readable">
+		<ScrollReveal>
+			<div class="mb-10">
+				<span class="text-eyebrow mb-3 inline-block">{m.section_thematic_axes()}</span>
+				<h2 class="text-section text-ink dark:text-surface-50">
 					{m.section_thematic_axes()}
 				</h2>
-			</ScrollReveal>
-			<div class="space-y-6">
-				{#each thematicAxes as axis, i}
-					<ScrollReveal delay={i}>
-						<ThematicAxis {axis} compact={false} />
-					</ScrollReveal>
-				{/each}
 			</div>
+		</ScrollReveal>
+		<div class="space-y-5">
+			{#each thematicAxes as axis, i}
+				<ScrollReveal delay={i}>
+					<ThematicAxis {axis} compact={false} />
+				</ScrollReveal>
+			{/each}
 		</div>
-	</section>
-</div>
+	</div>
+</section>

@@ -10,21 +10,19 @@
 
 <SEO title="{m.nav_venue()} | {siteConfig.shortTitle}" description={m.seo_venue_description()} />
 
-<div class="bg-cream">
-	<PageHeader title={m.section_venue()} />
+<PageHeader title={m.section_venue()} />
 
-	<div class="pb-16 sm:pb-20">
-		<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-			<div class="mb-10 grid grid-cols-1 gap-8 lg:grid-cols-2">
-				<ScrollReveal>
-					<VenueInfo />
-				</ScrollReveal>
-				<ScrollReveal delay={1}>
-					<div class="lg:pt-10">
-						<MapEmbed />
-					</div>
-				</ScrollReveal>
-			</div>
+<div class="pb-20">
+	<div class="container-readable">
+		<div class="grid grid-cols-1 gap-10 lg:grid-cols-[1.1fr_1fr]">
+			<ScrollReveal>
+				<VenueInfo />
+			</ScrollReveal>
+			<ScrollReveal delay={1}>
+				<div class="lg:pt-16">
+					<MapEmbed />
+				</div>
+			</ScrollReveal>
 		</div>
 	</div>
 </div>

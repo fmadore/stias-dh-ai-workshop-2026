@@ -10,30 +10,24 @@
 	]);
 </script>
 
-<section class="bg-cream py-16 sm:py-20">
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<section class="section-pad bg-cream">
+	<div class="container-page">
 		<ScrollReveal>
-			<h2 class="text-surface-900 dark:text-surface-50 mb-12 text-center text-2xl sm:text-3xl">
+			<h2 class="text-section text-ink dark:text-surface-50 mb-10 text-center">
 				{m.section_key_info()}
 			</h2>
 		</ScrollReveal>
-		<div class="grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-8">
+		<div class="grid grid-cols-1 gap-5 sm:grid-cols-3 sm:gap-6">
 			{#each keyItems as item, i}
 				<ScrollReveal delay={i}>
-					<div
-						class="dark:bg-surface-800/80 border-l-secondary-400 relative rounded-xl border-t-0 border-r-0 border-b-0 border-l-4 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
-					>
+					<div class="card border-secondary-500/70 border-l-[3px] p-6">
 						<div class="flex items-start gap-4">
-							<div class="text-primary-500 dark:text-primary-400 mt-0.5 flex-shrink-0">
-								<item.icon size={22} />
+							<div class="text-primary-600 dark:text-primary-400 mt-0.5 flex-shrink-0">
+								<item.icon size={20} strokeWidth={1.75} />
 							</div>
 							<div>
-								<h3
-									class="text-surface-400 dark:text-surface-500 mb-1 font-sans text-sm font-semibold tracking-wider uppercase"
-								>
-									{item.label}
-								</h3>
-								<p class="text-surface-800 dark:text-surface-200 font-sans">{item.value}</p>
+								<h3 class="text-meta mb-1">{item.label}</h3>
+								<p class="text-ink dark:text-surface-100 font-sans">{item.value}</p>
 							</div>
 						</div>
 					</div>

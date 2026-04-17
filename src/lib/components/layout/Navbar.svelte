@@ -45,19 +45,17 @@
 </script>
 
 <header
-	class="dark:bg-surface-900/90 border-surface-200/60 dark:border-surface-700/60 fixed top-0 right-0 left-0 z-50 border-b bg-white/85 backdrop-blur-md"
+	class="border-surface-200/60 dark:border-surface-700/60 dark:bg-surface-900/85 fixed top-0 right-0 left-0 z-50 border-b bg-[color-mix(in_oklab,var(--color-cream)_88%,transparent)] backdrop-blur-md"
 >
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<div class="flex h-18 items-center justify-between">
-			<!-- Logo / Title -->
+	<div class="container-page">
+		<div class="flex h-[4.5rem] items-center justify-between">
+			<!-- Brand -->
 			<a
 				href={localePath('/')}
-				class="text-primary-700 dark:text-primary-400 flex items-center gap-2 font-serif text-xl tracking-tight"
+				class="text-primary-700 dark:text-primary-300 font-display flex items-center gap-2 text-xl tracking-tight"
 			>
-				DH & AI <span
-					class="text-surface-400 dark:text-surface-500 font-sans text-sm font-light tracking-wider uppercase"
-					>African Studies</span
-				>
+				DH &amp; AI
+				<span class="text-eyebrow hidden sm:inline">African Studies</span>
 			</a>
 
 			<!-- Desktop Navigation -->
@@ -65,13 +63,14 @@
 				{#each navLinks as link}
 					<a
 						href={link.href}
-						class="relative px-3 py-2 text-sm font-medium transition-colors {isActive(link.href)
-							? 'text-primary-600 dark:text-primary-400'
-							: 'text-surface-500 dark:text-surface-400 hover:text-surface-900 dark:hover:text-surface-100'}"
+						class="relative px-3 py-2 text-sm font-medium {isActive(link.href)
+							? 'text-primary-700 dark:text-primary-300'
+							: 'text-ink-muted dark:text-surface-400 hover:text-ink dark:hover:text-surface-100'}"
+						style="transition: color var(--duration-fast) var(--ease-standard);"
 					>
 						{link.label}
 						{#if isActive(link.href)}
-							<span class="bg-secondary-400 absolute right-3 bottom-0 left-3 h-0.5 rounded-full"
+							<span class="bg-secondary-500 absolute right-3 bottom-1 left-3 h-px rounded-full"
 							></span>
 						{/if}
 					</a>
@@ -81,11 +80,7 @@
 			<!-- Right side: Language + Dark mode + Mobile toggle -->
 			<div class="flex items-center gap-1">
 				<LanguageSwitcher />
-				<button
-					onclick={toggleDarkMode}
-					class="text-surface-400 dark:text-surface-500 hover:text-surface-700 dark:hover:text-surface-200 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-full p-2 transition-colors"
-					aria-label={m.dark_mode()}
-				>
+				<button onclick={toggleDarkMode} class="btn-ghost" aria-label={m.dark_mode()}>
 					{#if darkMode}
 						<Sun size={18} />
 					{:else}
@@ -94,8 +89,9 @@
 				</button>
 				<button
 					onclick={() => (mobileMenuOpen = !mobileMenuOpen)}
-					class="text-surface-400 dark:text-surface-500 hover:text-surface-700 dark:hover:text-surface-200 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-full p-2 transition-colors md:hidden"
+					class="btn-ghost md:hidden"
 					aria-label={mobileMenuOpen ? m.menu_close() : m.menu_open()}
+					aria-expanded={mobileMenuOpen}
 				>
 					{#if mobileMenuOpen}
 						<X size={20} />
@@ -106,11 +102,10 @@
 			</div>
 		</div>
 
-		<!-- Mobile Navigation with smooth transition -->
+		<!-- Mobile Navigation -->
 		<nav
-			class="overflow-hidden transition-all duration-300 ease-in-out md:hidden {mobileMenuOpen
-				? 'max-h-96 pb-4 opacity-100'
-				: 'max-h-0 opacity-0'}"
+			class="overflow-hidden md:hidden {mobileMenuOpen ? 'max-h-96 pb-4' : 'max-h-0'}"
+			style="transition: max-height var(--duration-slow) var(--ease-standard);"
 			aria-label="Mobile navigation"
 		>
 			<div class="border-surface-200/60 dark:border-surface-700/60 border-t pt-3">
@@ -118,9 +113,9 @@
 					<a
 						href={link.href}
 						onclick={() => (mobileMenuOpen = false)}
-						class="block px-3 py-2.5 text-sm font-medium transition-colors {isActive(link.href)
-							? 'text-primary-600 dark:text-primary-400 border-secondary-400 border-l-2 pl-4'
-							: 'text-surface-500 dark:text-surface-400 hover:text-surface-900 dark:hover:text-surface-100'}"
+						class="block px-3 py-2.5 text-sm font-medium {isActive(link.href)
+							? 'text-primary-700 dark:text-primary-300 border-secondary-500 border-l-2 pl-4'
+							: 'text-ink-muted dark:text-surface-400 hover:text-ink dark:hover:text-surface-100'}"
 					>
 						{link.label}
 					</a>

@@ -7,10 +7,10 @@
 </script>
 
 <section
-	class="from-primary-800 via-primary-700 to-primary-900 grain relative overflow-hidden bg-gradient-to-br text-white"
+	class="from-primary-900 via-primary-800 to-primary-950 grain relative overflow-hidden bg-gradient-to-br text-white"
 >
 	<!-- SVG noise texture overlay -->
-	<div class="absolute inset-0 opacity-[0.04]" aria-hidden="true">
+	<div class="absolute inset-0 opacity-[0.05]" aria-hidden="true">
 		<svg class="h-full w-full" xmlns="http://www.w3.org/2000/svg">
 			<filter id="heroNoise">
 				<feTurbulence
@@ -25,43 +25,41 @@
 		</svg>
 	</div>
 
-	<!-- Warm gradient accent at bottom -->
+	<!-- Single soft radial accent -->
 	<div
-		class="from-primary-900/40 absolute right-0 bottom-0 left-0 h-32 bg-gradient-to-t to-transparent"
+		class="pointer-events-none absolute -top-1/3 -right-1/4 h-[140%] w-[70%] rounded-full opacity-[0.18]"
+		style="background: radial-gradient(closest-side, var(--color-secondary-500), transparent 70%);"
+		aria-hidden="true"
 	></div>
 
-	<div class="relative z-10 mx-auto max-w-6xl px-4 py-28 sm:px-6 sm:py-36 lg:px-8 lg:py-44">
+	<div
+		class="container-wide relative z-10 py-[clamp(5rem,11vw,10rem)] sm:py-[clamp(6rem,12vw,12rem)]"
+	>
 		<div class="mx-auto max-w-4xl text-center">
-			<!-- Subtitle / Eyebrow -->
-			<p
-				class="text-primary-200/80 mb-6 font-sans text-sm font-light tracking-[0.25em] uppercase sm:text-base"
-			>
+			<p class="text-primary-100/80 text-eyebrow mb-6 !text-[color:var(--color-primary-200)]">
 				{m.hero_subtitle()}
 			</p>
 
-			<!-- Main title — big serif -->
-			<h1 class="mb-8 text-4xl leading-[1.05] font-normal tracking-tight sm:text-5xl lg:text-7xl">
+			<h1 class="text-display mb-8 text-balance text-white">
 				{t(siteConfig.title)}
 			</h1>
 
-			<!-- Date & Location -->
 			<div
-				class="text-primary-100/70 mb-14 flex flex-col items-center justify-center gap-4 font-sans text-sm font-light sm:flex-row sm:text-base"
+				class="text-primary-100/80 mb-14 flex flex-col items-center justify-center gap-3 text-sm font-light sm:flex-row sm:gap-6 sm:text-base"
 			>
-				<span class="flex items-center gap-2">
+				<span class="inline-flex items-center gap-2">
 					<Calendar size={16} class="text-secondary-400" />
 					{m.hero_dates()}
 				</span>
-				<span class="text-primary-400/40 hidden sm:inline">&#x2022;</span>
-				<span class="flex items-center gap-2">
+				<span class="text-primary-300/40 hidden sm:inline" aria-hidden="true">·</span>
+				<span class="inline-flex items-center gap-2">
 					<MapPin size={16} class="text-secondary-400" />
 					{m.hero_location()}
 				</span>
 			</div>
 
-			<!-- Countdown glass card -->
 			<div
-				class="inline-block rounded-2xl border border-white/[0.08] bg-white/[0.07] px-8 py-6 backdrop-blur-sm sm:px-10 sm:py-8"
+				class="inline-block rounded-2xl border border-white/[0.08] bg-white/[0.06] px-8 py-6 backdrop-blur-[2px] sm:px-10 sm:py-8"
 			>
 				<Countdown />
 			</div>

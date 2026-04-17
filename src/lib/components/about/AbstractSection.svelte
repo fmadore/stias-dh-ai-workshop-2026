@@ -5,21 +5,21 @@
 	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
 </script>
 
-<section class="py-16 sm:py-20">
-	<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+<section class="section-pad">
+	<div class="container-readable">
 		<ScrollReveal>
-			<h2 class="text-surface-900 dark:text-surface-50 mb-8 text-2xl sm:text-3xl">
-				{m.section_about()}
-			</h2>
+			<div class="mb-10">
+				<span class="text-eyebrow mb-3 inline-block">{m.nav_about()}</span>
+				<h2 class="text-section text-ink dark:text-surface-50">
+					{m.section_about()}
+				</h2>
+			</div>
 		</ScrollReveal>
-		<div class="space-y-4">
+		<div class="space-y-5">
 			{#each topicObjectives as paragraph, i}
 				<ScrollReveal delay={i}>
 					<p
-						class="text-surface-700 dark:text-surface-300 font-sans text-base leading-relaxed font-light sm:text-lg {i ===
-						0
-							? 'drop-cap'
-							: ''}"
+						class="text-prose text-ink-muted dark:text-surface-300 {i === 0 ? 'drop-cap' : ''}"
 					>
 						{t(paragraph)}
 					</p>

@@ -17,54 +17,62 @@
 </script>
 
 {#if compact}
-	<!-- Compact card for home page -->
-	<div
-		class="group dark:bg-surface-800/80 relative overflow-hidden rounded-xl bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-	>
-		<!-- Top accent gradient bar -->
-		<div class="from-secondary-400 via-secondary-500 to-primary-500 h-1 bg-gradient-to-r"></div>
-		<div class="p-6">
+	<!-- Compact card for home page: numbered, minimal -->
+	<article class="card-hover group h-full p-7">
+		<div class="flex items-start justify-between gap-4">
 			<div
-				class="bg-primary-500/8 dark:bg-primary-400/10 text-primary-600 dark:text-primary-400 mb-4 flex h-14 w-14 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110"
+				class="bg-primary-50 dark:bg-primary-500/12 text-primary-700 dark:text-primary-300 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg"
 			>
 				{#if IconComponent}
-					<IconComponent size={28} />
+					<IconComponent size={22} strokeWidth={1.75} />
 				{/if}
 			</div>
-			<div class="text-secondary-500 mb-2 font-sans text-xs font-semibold tracking-wider uppercase">
-				Axis {axis.number}
-			</div>
-			<h3 class="text-surface-900 dark:text-surface-50 text-lg leading-snug">{t(axis.title)}</h3>
+			<span
+				class="text-secondary-600 dark:text-secondary-400 font-display text-3xl leading-none opacity-80"
+				aria-hidden="true"
+			>
+				0{axis.number}
+			</span>
 		</div>
-	</div>
+		<h3 class="text-card-title text-ink dark:text-surface-50 mt-6">
+			{t(axis.title)}
+		</h3>
+	</article>
 {:else}
 	<!-- Full card for about page -->
-	<div
-		class="group dark:bg-surface-800/80 hover:border-l-secondary-400 relative overflow-hidden rounded-xl border-l-4 border-l-transparent bg-white shadow-sm transition-all duration-300 hover:shadow-lg"
+	<article
+		class="card border-surface-200/60 dark:border-surface-700/50 group overflow-hidden border p-8 transition-colors hover:border-[color-mix(in_oklab,var(--color-secondary-500)_45%,transparent)]"
 	>
-		<div class="p-8">
-			<div class="flex items-start gap-5">
+		<div class="flex items-start gap-6">
+			<div class="flex-shrink-0">
 				<div
-					class="bg-secondary-400/10 text-secondary-500 group-hover:bg-secondary-400/20 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-xl transition-colors"
+					class="text-secondary-600 dark:text-secondary-400 font-display text-[2.75rem] leading-none"
+					aria-hidden="true"
 				>
-					{#if IconComponent}
-						<IconComponent size={28} />
-					{/if}
+					0{axis.number}
 				</div>
-				<div class="flex-1">
+				<div
+					class="bg-secondary-500/70 dark:bg-secondary-400/70 mt-3 h-px w-10"
+					aria-hidden="true"
+				></div>
+			</div>
+			<div class="flex-1">
+				<div class="mb-3 flex items-center gap-2">
 					<div
-						class="text-secondary-500 mb-1 font-sans text-xs font-semibold tracking-wider uppercase"
+						class="bg-primary-50 dark:bg-primary-500/12 text-primary-700 dark:text-primary-300 flex h-10 w-10 items-center justify-center rounded-lg"
 					>
-						Axis {axis.number}
+						{#if IconComponent}
+							<IconComponent size={20} strokeWidth={1.75} />
+						{/if}
 					</div>
-					<h3 class="text-surface-900 dark:text-surface-50 mb-3 text-xl leading-snug">
-						{t(axis.title)}
-					</h3>
-					<p class="text-surface-600 dark:text-surface-300 font-sans leading-relaxed font-light">
-						{t(axis.description)}
-					</p>
 				</div>
+				<h3 class="text-ink dark:text-surface-50 mb-4 text-[1.375rem] leading-snug">
+					{t(axis.title)}
+				</h3>
+				<p class="text-prose text-ink-muted dark:text-surface-300">
+					{t(axis.description)}
+				</p>
 			</div>
 		</div>
-	</div>
+	</article>
 {/if}

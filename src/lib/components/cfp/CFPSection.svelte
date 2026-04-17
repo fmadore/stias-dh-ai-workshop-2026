@@ -59,207 +59,186 @@
 <div class="space-y-14">
 	<!-- Rationale -->
 	<ScrollReveal>
-		<div>
-			<h2 class="text-surface-900 dark:text-surface-50 mb-4 text-2xl">
+		<section>
+			<h2 class="text-section text-ink dark:text-surface-50 mb-5">
 				{m.cfp_rationale_label()}
 			</h2>
-			<p
-				class="text-surface-600 dark:text-surface-300 font-sans text-base leading-relaxed font-light sm:text-lg"
-			>
+			<p class="text-prose text-ink-muted dark:text-surface-300">
 				{t(cfpInfo.rationale)}
 			</p>
-		</div>
+		</section>
 	</ScrollReveal>
 
 	<!-- Convenors -->
 	<ScrollReveal delay={1}>
-		<div>
-			<h2 class="text-surface-900 dark:text-surface-50 mb-4 text-2xl">
+		<section>
+			<h2 class="text-section text-ink dark:text-surface-50 mb-5">
 				{m.cfp_convenors_label()}
 			</h2>
-			<ul class="space-y-2">
+			<ul class="space-y-2.5">
 				{#each organizers as organizer}
-					<li
-						class="text-surface-600 dark:text-surface-300 flex items-start gap-3 font-sans font-light"
-					>
-						<span class="bg-secondary-400 mt-2.5 h-1.5 w-1.5 flex-shrink-0 rounded-full"></span>
+					<li class="text-ink-muted dark:text-surface-300 flex items-start gap-3 font-light">
+						<span
+							class="bg-secondary-500 mt-2.5 h-1.5 w-1.5 flex-shrink-0 rounded-full"
+							aria-hidden="true"
+						></span>
 						<span class="leading-relaxed">
-							<span class="text-surface-800 dark:text-surface-100 font-medium"
-								>{organizer.name}</span
-							>, {t(organizer.affiliation)}
+							<span class="text-ink dark:text-surface-100 font-medium">{organizer.name}</span>, {t(
+								organizer.affiliation
+							)}
 						</span>
 					</li>
 				{/each}
 			</ul>
-		</div>
+		</section>
 	</ScrollReveal>
 
 	<!-- Thematic Axes reference -->
 	<ScrollReveal delay={2}>
-		<div>
-			<h2 class="text-surface-900 dark:text-surface-50 mb-4 text-2xl">
+		<section>
+			<h2 class="text-section text-ink dark:text-surface-50 mb-5">
 				{m.section_thematic_axes()}
 			</h2>
-			<p
-				class="text-surface-600 dark:text-surface-300 mb-6 font-sans text-base leading-relaxed font-light sm:text-lg"
-			>
+			<p class="text-prose text-ink-muted dark:text-surface-300 mb-8">
 				{m.thematic_axes_reference()}
 			</p>
 			<div class="space-y-8">
 				{#each thematicAxes as axis}
 					<div>
-						<div class="mb-3 flex items-start gap-4">
+						<div class="mb-3 flex items-baseline gap-4">
 							<span
-								class="from-secondary-400 to-secondary-500 mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-sm font-medium text-white"
+								class="text-secondary-600 dark:text-secondary-400 font-display w-8 flex-shrink-0 text-2xl leading-none"
+								aria-hidden="true"
 							>
-								{axis.number}
+								0{axis.number}
 							</span>
-							<h3 class="text-surface-800 dark:text-surface-100 leading-relaxed font-medium">
+							<h3 class="text-ink dark:text-surface-100 font-sans text-base font-medium leading-snug sm:text-lg">
 								{t(axis.title)}
 							</h3>
 						</div>
-						<p
-							class="text-surface-600 dark:text-surface-300 pl-11 font-sans text-base leading-relaxed font-light sm:text-lg"
-						>
+						<p class="text-prose text-ink-muted dark:text-surface-300 pl-12">
 							{t(axis.description)}
 						</p>
 					</div>
 				{/each}
 			</div>
-		</div>
+		</section>
 	</ScrollReveal>
 
 	<!-- Workshop Format & Language Policy -->
 	<ScrollReveal delay={3}>
-		<div>
-			<h2 class="text-surface-900 dark:text-surface-50 mb-4 text-2xl">
+		<section>
+			<h2 class="text-section text-ink dark:text-surface-50 mb-5">
 				{m.workshop_format_label()}
 			</h2>
-			<p
-				class="text-surface-600 dark:text-surface-300 font-sans text-base leading-relaxed font-light sm:text-lg"
-			>
+			<p class="text-prose text-ink-muted dark:text-surface-300">
 				{t(cfpInfo.workshopFormat)}
 			</p>
-		</div>
+		</section>
 	</ScrollReveal>
 
 	<!-- Guidelines -->
 	<ScrollReveal delay={4}>
-		<div>
-			<h2 class="text-surface-900 dark:text-surface-50 mb-4 text-2xl">{m.guidelines()}</h2>
-			<p
-				class="text-surface-600 dark:text-surface-300 mb-4 font-sans text-base leading-relaxed font-light sm:text-lg"
-			>
+		<section>
+			<h2 class="text-section text-ink dark:text-surface-50 mb-5">{m.guidelines()}</h2>
+			<p class="text-prose text-ink-muted dark:text-surface-300 mb-5">
 				{t(cfpInfo.guidelines)}
 			</p>
-			<p
-				class="text-surface-600 dark:text-surface-300 mb-4 font-sans text-base leading-relaxed font-light sm:text-lg"
-			>
+			<p class="text-prose text-ink-muted dark:text-surface-300 mb-5">
 				{m.cfp_contact_text()}
 			</p>
-			<ul class="space-y-2">
+			<ul class="space-y-2.5">
 				{#each organizers as organizer}
 					{@const email = contactEmails[organizer.id]}
 					{#if email}
-						<li class="flex items-start gap-3 font-sans font-light">
-							<span class="bg-secondary-400 mt-2.5 h-1.5 w-1.5 flex-shrink-0 rounded-full"></span>
+						<li class="flex items-start gap-3 font-light">
+							<span
+								class="bg-secondary-500 mt-2.5 h-1.5 w-1.5 flex-shrink-0 rounded-full"
+								aria-hidden="true"
+							></span>
 							<span class="leading-relaxed">
-								<span class="text-surface-800 dark:text-surface-100 font-medium"
-									>{organizer.name}</span
-								>:
-								<a href="mailto:{email}" class="text-primary-500 hover:text-primary-600">{email}</a>
+								<span class="text-ink dark:text-surface-100 font-medium">{organizer.name}</span>:
+								<a href="mailto:{email}" class="link-inline">{email}</a>
 							</span>
 						</li>
 					{/if}
 				{/each}
 			</ul>
-		</div>
+		</section>
 	</ScrollReveal>
 
 	<!-- Publication -->
 	<ScrollReveal delay={5}>
-		<div>
-			<h2 class="text-surface-900 dark:text-surface-50 mb-4 text-2xl">
+		<section>
+			<h2 class="text-section text-ink dark:text-surface-50 mb-5">
 				{m.cfp_publication_label()}
 			</h2>
-			<p
-				class="text-surface-600 dark:text-surface-300 font-sans text-base leading-relaxed font-light sm:text-lg"
-			>
+			<p class="text-prose text-ink-muted dark:text-surface-300">
 				{publicationParts.before}<a
 					href={JDHASA_URL}
 					target="_blank"
 					rel="noopener noreferrer"
-					class="text-primary-500 hover:text-primary-600 inline-items-center italic"
-					>{JDHASA_NAME}<ExternalLink size={14} class="-mt-0.5 ml-1 inline" /></a
+					class="link-inline italic"
+					>{JDHASA_NAME}<ExternalLink size={13} class="-mt-0.5 ml-1 inline" aria-hidden="true" /></a
 				>{publicationParts.after}
 			</p>
-		</div>
+		</section>
 	</ScrollReveal>
 
-	<!-- Selection Criteria & Inclusivity -->
+	<!-- Selection Criteria -->
 	<ScrollReveal delay={6}>
-		<div>
-			<h2 class="text-surface-900 dark:text-surface-50 mb-4 text-2xl">
+		<section>
+			<h2 class="text-section text-ink dark:text-surface-50 mb-5">
 				{m.cfp_selection_label()}
 			</h2>
-			<p
-				class="text-surface-600 dark:text-surface-300 font-sans text-base leading-relaxed font-light sm:text-lg"
-			>
+			<p class="text-prose text-ink-muted dark:text-surface-300">
 				{t(cfpInfo.selectionCriteria)}
 			</p>
-		</div>
+		</section>
 	</ScrollReveal>
 
-	<!-- Funding & Logistics -->
+	<!-- Funding -->
 	<ScrollReveal delay={7}>
-		<div>
-			<h2 class="text-surface-900 dark:text-surface-50 mb-4 text-2xl">
+		<section>
+			<h2 class="text-section text-ink dark:text-surface-50 mb-5">
 				{m.cfp_funding_label()}
 			</h2>
-			<p
-				class="text-surface-600 dark:text-surface-300 font-sans text-base leading-relaxed font-light sm:text-lg"
-			>
+			<p class="text-prose text-ink-muted dark:text-surface-300">
 				{m.cfp_funding_text()}
 			</p>
-		</div>
+		</section>
 	</ScrollReveal>
 
-	<!-- Key Dates — Timeline style -->
+	<!-- Key Dates — refined timeline -->
 	<ScrollReveal delay={8}>
-		<div>
-			<h2 class="text-surface-900 dark:text-surface-50 mb-8 text-2xl">{m.key_dates()}</h2>
-			<div class="relative">
-				<!-- Connecting line -->
-				<div
-					class="from-secondary-400 via-secondary-300 to-primary-400 absolute top-2 bottom-2 left-[11px] hidden w-px bg-gradient-to-b sm:block"
-				></div>
-
-				<div class="space-y-6">
+		<section>
+			<h2 class="text-section text-ink dark:text-surface-50 mb-8">{m.key_dates()}</h2>
+			<ol class="relative">
+				<!-- vertical rule -->
+				<span
+					class="bg-secondary-500/40 dark:bg-secondary-400/30 absolute top-2 bottom-2 left-[5px] hidden w-px sm:block"
+					aria-hidden="true"
+				></span>
+				<div class="space-y-5">
 					{#each keyDates as dateItem}
-						<div class="flex items-start gap-5">
-							<!-- Timeline dot -->
+						<li class="flex items-start gap-5">
+							<span
+								class="bg-secondary-500 border-cream dark:border-deep relative z-10 mt-1.5 hidden h-[11px] w-[11px] flex-shrink-0 rounded-full border-2 sm:block"
+								aria-hidden="true"
+							></span>
 							<div
-								class="dark:bg-surface-800 border-secondary-400 relative z-10 mt-0.5 hidden h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border-2 bg-white sm:flex"
+								class="card border-surface-200/60 dark:border-surface-700/50 flex-1 border p-5"
 							>
-								<div class="bg-secondary-400 h-2 w-2 rounded-full"></div>
-							</div>
-							<div
-								class="dark:bg-surface-800/80 border-surface-200/50 dark:border-surface-700/50 flex-1 rounded-xl border bg-white p-5"
-							>
-								<p
-									class="text-surface-400 dark:text-surface-500 mb-1 font-sans text-sm font-medium tracking-wider uppercase"
-								>
-									{dateItem.label}
-								</p>
-								<p class="text-surface-900 dark:text-surface-50 font-sans text-lg font-semibold">
+								<p class="text-meta mb-1">{dateItem.label}</p>
+								<p class="text-ink dark:text-surface-50 font-sans text-lg font-medium">
 									{dateItem.value}
 								</p>
 							</div>
-						</div>
+						</li>
 					{/each}
 				</div>
-			</div>
-		</div>
+			</ol>
+		</section>
 	</ScrollReveal>
 
 	<!-- Submit button -->
@@ -270,9 +249,9 @@
 					href={cfpInfo.submissionUrl}
 					target="_blank"
 					rel="noopener noreferrer"
-					class="bg-primary-600 hover:bg-primary-700 inline-flex items-center gap-2 rounded-xl px-8 py-3.5 font-sans font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+					class="btn btn-primary px-7 py-3.5 text-[0.9375rem]"
 				>
-					<Send size={18} />
+					<Send size={17} strokeWidth={1.75} />
 					{m.submit_proposal()}
 				</a>
 			</div>

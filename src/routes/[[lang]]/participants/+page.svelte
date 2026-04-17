@@ -15,35 +15,31 @@
 	description={m.seo_participants_description()}
 />
 
-<div class="bg-cream">
-	<PageHeader title={m.section_organisers()} />
+<PageHeader title={m.section_organisers()} />
 
-	<div class="pb-16 sm:pb-20">
-		<div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-			<!-- Organisers -->
-			<section class="mb-16">
-				<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-					{#each organizers as organizer, i}
-						<ScrollReveal delay={i}>
-							<OrganizerCard {organizer} />
-						</ScrollReveal>
-					{/each}
-				</div>
+<div class="pb-20">
+	<div class="container-readable max-w-5xl">
+		<section class="mb-16">
+			<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+				{#each organizers as organizer, i}
+					<ScrollReveal delay={i}>
+						<OrganizerCard {organizer} />
+					</ScrollReveal>
+				{/each}
+			</div>
+		</section>
+
+		{#if participants.length > 0}
+			<section>
+				<ScrollReveal>
+					<h2 class="text-section text-ink dark:text-surface-50 mb-8">
+						{m.section_participants()}
+					</h2>
+				</ScrollReveal>
+				<ScrollReveal delay={1}>
+					<ParticipantGrid {participants} />
+				</ScrollReveal>
 			</section>
-
-			<!-- Participants -->
-			{#if participants.length > 0}
-				<section>
-					<ScrollReveal>
-						<h2 class="text-surface-900 dark:text-surface-50 mb-8 text-2xl sm:text-3xl">
-							{m.section_participants()}
-						</h2>
-					</ScrollReveal>
-					<ScrollReveal delay={1}>
-						<ParticipantGrid {participants} />
-					</ScrollReveal>
-				</section>
-			{/if}
-		</div>
+		{/if}
 	</div>
 </div>
