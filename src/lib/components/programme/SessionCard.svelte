@@ -9,16 +9,15 @@
 			'bg-secondary-500/12 text-secondary-700 dark:text-secondary-300 border-secondary-500/30',
 		panel: 'bg-primary-500/10 text-primary-700 dark:text-primary-300 border-primary-500/25',
 		workshop: 'bg-primary-500/5 text-primary-800 dark:text-primary-200 border-primary-500/20',
-		break: 'bg-surface-200/60 text-surface-600 dark:bg-surface-700/50 dark:text-surface-400 border-surface-300/40',
+		break:
+			'bg-surface-200/60 text-surface-600 dark:bg-surface-700/50 dark:text-surface-400 border-surface-300/40',
 		social: 'bg-secondary-500/8 text-secondary-800 dark:text-secondary-200 border-secondary-500/20'
 	};
 </script>
 
-<div
-	class="border-surface-200 dark:border-surface-700/70 flex gap-4 border-b py-4 last:border-b-0"
->
+<div class="border-surface-200 dark:border-surface-700/70 flex gap-4 border-b py-4 last:border-b-0">
 	<div
-		class="text-ink-muted dark:text-surface-400 font-mono w-20 flex-shrink-0 pt-0.5 text-[0.8125rem] tabular-nums sm:w-24"
+		class="text-ink-muted dark:text-surface-400 w-20 flex-shrink-0 pt-0.5 font-mono text-[0.8125rem] tabular-nums sm:w-24"
 	>
 		{session.time}
 	</div>

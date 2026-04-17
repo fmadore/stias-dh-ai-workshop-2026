@@ -64,7 +64,9 @@
 						<h3 class="text-card-title text-ink dark:text-surface-50 mb-3">
 							{link.title}
 						</h3>
-						<p class="text-ink-muted dark:text-surface-400 inline-flex items-center gap-1.5 text-sm">
+						<p
+							class="text-ink-muted dark:text-surface-400 inline-flex items-center gap-1.5 text-sm"
+						>
 							{m.learn_more()}
 							<ArrowRight
 								size={14}

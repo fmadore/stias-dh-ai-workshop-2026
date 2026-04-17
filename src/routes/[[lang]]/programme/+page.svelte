@@ -28,9 +28,7 @@
 			</div>
 		{:else}
 			<ScrollReveal>
-				<div
-					class="card border-surface-200/60 dark:border-surface-700/50 border p-14 text-center"
-				>
+				<div class="card border-surface-200/60 dark:border-surface-700/50 border p-14 text-center">
 					<Calendar
 						size={44}
 						strokeWidth={1.25}

@@ -52,7 +52,9 @@
 				<span class="bg-secondary-500/50 mx-auto mb-4 block h-px w-8 sm:mx-0" aria-hidden="true"
 				></span>
 
-				<p class="text-ink-muted dark:text-surface-300 mb-4 text-[0.9375rem] leading-relaxed font-light">
+				<p
+					class="text-ink-muted dark:text-surface-300 mb-4 text-[0.9375rem] leading-relaxed font-light"
+				>
 					{t(organizer.bio)}
 				</p>
 				<div class="flex items-center justify-center gap-4 sm:justify-start">

@@ -21,7 +21,9 @@
 			<h2 class="text-page-title text-ink dark:text-surface-50 mb-6">
 				{t(siteConfig.title)}
 			</h2>
-			<div class="text-ink-muted dark:text-surface-300 mb-8 flex flex-col gap-3 sm:flex-row sm:gap-6">
+			<div
+				class="text-ink-muted dark:text-surface-300 mb-8 flex flex-col gap-3 sm:flex-row sm:gap-6"
+			>
 				<span class="inline-flex items-center gap-2 text-[0.9375rem] font-light">
 					<Calendar size={17} strokeWidth={1.75} class="text-primary-600" aria-hidden="true" />
 					{m.hero_dates()}

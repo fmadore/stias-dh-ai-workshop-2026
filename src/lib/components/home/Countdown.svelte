@@ -45,12 +45,7 @@
 	<div class="flex items-center justify-center gap-4 sm:gap-7">
 		{#each units as unit, i}
 			{#if i > 0}
-				<div
-					class="pb-5 text-xl font-light text-white/15 select-none"
-					aria-hidden="true"
-				>
-					·
-				</div>
+				<div class="pb-5 text-xl font-light text-white/15 select-none" aria-hidden="true">·</div>
 			{/if}
 			<div class="min-w-[3.25rem] text-center">
 				<div class="text-3xl font-semibold tracking-tight text-white tabular-nums sm:text-4xl">

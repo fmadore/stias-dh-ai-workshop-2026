@@ -18,9 +18,7 @@
 		<div class="space-y-5">
 			{#each topicObjectives as paragraph, i}
 				<ScrollReveal delay={i}>
-					<p
-						class="text-prose text-ink-muted dark:text-surface-300 {i === 0 ? 'drop-cap' : ''}"
-					>
+					<p class="text-prose text-ink-muted dark:text-surface-300 {i === 0 ? 'drop-cap' : ''}">
 						{t(paragraph)}
 					</p>
 				</ScrollReveal>
