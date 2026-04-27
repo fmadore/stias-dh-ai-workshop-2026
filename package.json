@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@inlang/paraglide-js": "^2.15.3",
-    "@lucide/svelte": "^1.8.0",
+    "@lucide/svelte": "^1.11.0",
     "@skeletonlabs/skeleton": "^4.15.1",
     "@skeletonlabs/skeleton-svelte": "^4.15.1",
     "jspdf": "^4.2.1"
