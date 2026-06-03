@@ -1,5 +1,13 @@
 # Dependabot configuration
 # Docs: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+#
+# Noise-reduction strategy:
+#   * MINOR + PATCH updates are bundled into a single PR per ecosystem.
+#   * npm MAJOR bumps stay ungrouped so each lands in its own PR for review
+#     (they can carry breaking changes).
+#   * GitHub Actions are pinned to major tags (@v6, @v4, …), so their updates are
+#     almost always "major" bumps — grouping them all keeps that to one PR.
+#   * Checks run monthly. Security updates are unaffected and still arrive immediately.
 version: 2
 
 updates:
@@ -7,8 +15,7 @@ updates:
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
-      interval: 'weekly'
-      day: 'monday'
+      interval: 'monthly'
       time: '06:00'
       timezone: 'Europe/Berlin'
     open-pull-requests-limit: 10
@@ -20,48 +27,19 @@ updates:
       prefix-development: 'chore'
       include: 'scope'
     groups:
-      svelte:
+      # All low-risk updates in one PR; major bumps come separately.
+      npm-minor-and-patch:
         patterns:
-          - 'svelte'
-          - 'svelte-*'
-          - '@sveltejs/*'
-      tailwind:
-        patterns:
-          - 'tailwindcss'
-          - '@tailwindcss/*'
-          - 'prettier-plugin-tailwindcss'
-      skeleton:
-        patterns:
-          - '@skeletonlabs/*'
-      paraglide:
-        patterns:
-          - '@inlang/*'
-      icons:
-        patterns:
-          - '@iconify/*'
-          - '@iconify-json/*'
-          - '@lucide/*'
-      eslint:
-        patterns:
-          - 'eslint'
-          - 'eslint-*'
-          - '@eslint/*'
-          - 'typescript-eslint'
-      prettier:
-        patterns:
-          - 'prettier'
-          - 'prettier-*'
-          - 'eslint-config-prettier'
-      types:
-        patterns:
-          - '@types/*'
+          - '*'
+        update-types:
+          - 'minor'
+          - 'patch'
 
   # GitHub Actions used in workflows
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
-      interval: 'weekly'
-      day: 'monday'
+      interval: 'monthly'
       time: '06:00'
       timezone: 'Europe/Berlin'
     open-pull-requests-limit: 5
@@ -72,6 +50,6 @@ updates:
       prefix: 'chore'
       include: 'scope'
     groups:
-      actions:
+      github-actions:
         patterns:
           - '*'
