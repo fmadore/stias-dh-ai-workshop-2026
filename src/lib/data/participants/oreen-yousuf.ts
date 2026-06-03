@@ -9,7 +9,7 @@ const participant: Participant = {
 	},
 	country: 'Sweden',
 	coordinates: { lat: 59.8586, lng: 17.6389 },
-	image: '/images/participants/Oreen-Yousuf.jpg',
+	image: '/images/participants/Oreen-Yousuf.webp',
 	presentationId: 'ajami-nlp-infrastructure',
 	bio: 'Oreen Yousuf is a PhD student in natural language processing at Uppsala University, Sweden. His focus is on NLP for low-resource languages, particularly for Ajami manuscripts/languages. Outside of his PhD he works on various language technology projects with a focus on African languages, such as machine translation. He is also an associate researcher for Unicode, specializing in African scripts.'
 };

@@ -9,7 +9,7 @@ const participant: Participant = {
 	},
 	country: 'Cameroon',
 	coordinates: { lat: 3.8612, lng: 11.4984 },
-	image: '/images/participants/Eliette-Ngo-Tjomb-Assembe.jpg',
+	image: '/images/participants/Eliette-Ngo-Tjomb-Assembe.webp',
 	presentationId: 'french-ewondo-rbmt'
 };
 
