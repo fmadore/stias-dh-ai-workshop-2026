@@ -118,12 +118,18 @@
 			align-items: center;
 			flex-wrap: wrap;
 		}
+
+		.filter-search {
+			/* In the row layout, flex-basis sizes the width. In the mobile
+			   column layout it would size the *height* (256px), leaving the
+			   search icon floating in an empty gap — so scope it to ≥640px. */
+			flex: 1 1 16rem;
+			min-width: 0;
+		}
 	}
 
 	.filter-search {
 		position: relative;
-		flex: 1 1 16rem;
-		min-width: 0;
 	}
 
 	:global(.filter-search-icon) {
