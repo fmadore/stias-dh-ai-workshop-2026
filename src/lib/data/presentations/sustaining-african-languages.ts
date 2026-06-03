@@ -1,0 +1,12 @@
+import type { Presentation } from '$lib/types';
+
+const presentation: Presentation = {
+	id: 'sustaining-african-languages',
+	language: 'fr',
+	authors: ['evelyne-amana'],
+	title:
+		'Recherche en sciences sociales et pérennisation des langues africaines à l’ère du numérique',
+	abstract: `L’Afrique est un continent naturellement riche par sa diversité naturelle et culturelle. Elle se caractérise aussi par des regroupements ethniques qui utilisent des langues vernaculaires précises. Le Cameroun, appelé Afrique en miniature par sa diversité linguistique, comprend environ 300 langues vernaculaires dont les plus répandues sont : l’ewondo, le bassa, le fufulde, le ghomala ou le bamoun, etc. Avec l’avènement de la colonisation, les langues étrangères ont été imposées aux peuples africains. Le pays contexte de cette étude a adopté deux langues officielles pour l’enseignement-apprentissage et le service administratif, avec deux autres qui sont dites secondes. Dans le cadre de la recherche, deux langues dominent : le français et l’anglais. Les langues locales sont ainsi discriminées et victimes des préjugés. Le manque de données numériques et des faibles ressources en langues africaines renforcent le fossé dans le cadre de la recherche. Cette situation a suscité la prise de conscience des chercheurs qui œuvrent actuellement pour leur intégration dans les numériques à l’ère où elles sont ignorées par l’Intelligence artificielle. La question de recherche est la suivante : comment la recherche en sciences sociales doit-elle contribuer à la pérennisation des langues africaines à l’ère du numérique ? L’hypothèse de travail est ainsi formulée : par l’adaptation des algorithmes linguistiques et la traduction de proximité, la recherche en sciences sociales contribue à pérenniser les langues locales. L’objectif de l’étude est d’examiner les stratégies par lesquelles la recherche scientifique par les africains contribue à la survie des langues vernaculaires à l’ère de l’Intelligence artificielle. Les théories issues de l’ingénierie informatique permettent d’expliquer la problématique développée et de proposer des stratégies. La recherche est mixte avec recours aux entretiens et questionnaires adressés aux chercheurs des disciplines variées. L’échantillon obtenu par choix raisonné est constitué de linguistes, informaticiens et psychologues. Les résultats attendus : conception des architectures algorithmiques adaptées pour la numérisation, l’archivage et l’enregistrement multimodaux.`
+};
+
+export default presentation;

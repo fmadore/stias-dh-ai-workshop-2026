@@ -35,6 +35,14 @@
   "learn_more": "Learn more",
   "visit_website": "Visit website",
   "view_orcid": "View ORCID profile",
+  "participants_search_placeholder": "Search by name, affiliation, paper…",
+  "participants_filter_country_all": "All countries",
+  "participants_filter_language_all": "All languages",
+  "participants_filter_count": "Showing {visible} of {total}",
+  "participants_filter_no_results": "No participants match your search.",
+  "participants_filter_clear": "Clear filters",
+  "paper_back_to_papers": "Back to papers",
+  "paper_presented_by": "Presented by",
   "date_label": "Date",
   "location_label": "Location",
   "format_label": "Format",
@@ -63,5 +71,10 @@
   "menu_close": "Close menu",
   "back_to_top": "Back to top",
   "cfp_funding_label": "Funding & Logistics",
-  "cfp_funding_text": "The DFG Programme Point Sud will cover transportation, accommodation, visa costs, catering and local transport for all selected participants. However, vaccinations, health insurance and meals during travel days to and from Stellenbosch cannot be covered."
+  "cfp_funding_text": "The DFG Programme Point Sud will cover transportation, accommodation, visa costs, catering and local transport for all selected participants. However, vaccinations, health insurance and meals during travel days to and from Stellenbosch cannot be covered.",
+  "nav_papers": "Papers",
+  "seo_papers_description": "Browse the papers and abstracts of the DH & AI in African Studies workshop at STIAS.",
+  "papers_page_subtitle": "Abstracts of the contributions to the workshop.",
+  "papers_search_placeholder": "Search by title, author, keyword…",
+  "papers_filter_no_results": "No papers match your search."
 }

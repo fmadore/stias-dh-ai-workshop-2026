@@ -12,7 +12,8 @@ const config = {
 			precompress: false
 		}),
 		paths: {
-			base: process.argv.includes('dev') ? '' : '/stias-dh-ai-workshop-2026'
+			base: process.argv.includes('dev') ? '' : '/stias-dh-ai-workshop-2026',
+			relative: false
 		}
 	}
 };

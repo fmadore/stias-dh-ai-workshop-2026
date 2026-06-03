@@ -8,6 +8,14 @@
 	import { participants } from '$lib/data/participants';
 	import OrganizerCard from '$lib/components/participants/OrganizerCard.svelte';
 	import ParticipantGrid from '$lib/components/participants/ParticipantGrid.svelte';
+	import ParticipantFilter from '$lib/components/participants/ParticipantFilter.svelte';
+	import { filterParticipants } from '$lib/utils/participant-filter';
+
+	let query = $state('');
+	let country = $state<string | null>(null);
+	let language = $state<'en' | 'fr' | null>(null);
+
+	const filtered = $derived(filterParticipants(participants, { query, country, language }));
 </script>
 
 <SEO
@@ -37,8 +45,23 @@
 					</h2>
 				</ScrollReveal>
 				<ScrollReveal delay={1}>
-					<ParticipantGrid {participants} />
+					<div class="mb-8">
+						<ParticipantFilter
+							{participants}
+							visibleCount={filtered.length}
+							bind:query
+							bind:country
+							bind:language
+						/>
+					</div>
 				</ScrollReveal>
+				{#if filtered.length > 0}
+					<ParticipantGrid participants={filtered} />
+				{:else}
+					<p class="text-ink-muted dark:text-surface-400 py-12 text-center text-sm">
+						{m.participants_filter_no_results()}
+					</p>
+				{/if}
 			</section>
 		{/if}
 	</div>

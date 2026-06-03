@@ -24,7 +24,17 @@ export interface Participant {
 	coordinates: { lat: number; lng: number };
 	image?: string;
 	website?: string;
-	presentationTitle?: LocalizedString;
+	orcid?: string;
+	bio?: string;
+	presentationId?: string | string[];
+}
+
+export interface Presentation {
+	id: string;
+	title: string;
+	abstract?: string;
+	language: 'en' | 'fr';
+	authors?: string[];
 }
 
 export interface ThematicAxis {

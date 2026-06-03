@@ -11,16 +11,27 @@
 		type?: 'website' | 'article';
 		image?: string;
 		noindex?: boolean;
+		canonicalPath?: string;
+		additionalSchema?: object | object[];
 	}
 
-	let { title, description, type = 'website', image, noindex = false }: Props = $props();
+	let {
+		title,
+		description,
+		type = 'website',
+		image,
+		noindex = false,
+		canonicalPath,
+		additionalSchema
+	}: Props = $props();
 
 	const locale = $derived(getLocale());
 	const ogLocale = $derived(locale === 'en' ? 'en_US' : 'fr_FR');
 	const ogAltLocale = $derived(locale === 'en' ? 'fr_FR' : 'en_US');
 
-	// Extract route path from page.route.id (e.g., '/[[lang]]/about' → '/about')
-	const routePath = $derived((page.route.id ?? '/').replace('/[[lang]]', '') || '/');
+	const routePath = $derived(
+		canonicalPath ?? ((page.route.id ?? '/').replace('/[[lang]]', '') || '/')
+	);
 	const enUrl = $derived(`${siteConfig.url}${routePath}`);
 	const frUrl = $derived(`${siteConfig.url}/fr${routePath}`);
 	const canonicalUrl = $derived(locale === 'en' ? enUrl : frUrl);
@@ -114,6 +125,14 @@
 			}
 		})
 	);
+
+	const extraSchemas = $derived(
+		additionalSchema
+			? Array.isArray(additionalSchema)
+				? additionalSchema
+				: [additionalSchema]
+			: []
+	);
 </script>
 
 <svelte:head>
@@ -149,4 +168,9 @@
 	<!-- JSON-LD Structured Data -->
 	<!-- eslint-disable-next-line svelte/no-at-html-tags, no-useless-escape -->
 	{@html '<script type="application/ld+json">' + jsonLd + '<\/script>'}
+
+	{#each extraSchemas as schema}
+		<!-- eslint-disable-next-line svelte/no-at-html-tags, no-useless-escape -->
+		{@html '<script type="application/ld+json">' + JSON.stringify(schema) + '<\/script>'}
+	{/each}
 </svelte:head>

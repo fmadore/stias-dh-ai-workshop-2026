@@ -17,6 +17,7 @@
 		{ href: localePath('/about'), label: m.nav_about() },
 		{ href: localePath('/programme'), label: m.nav_programme() },
 		{ href: localePath('/participants'), label: m.nav_participants() },
+		{ href: localePath('/papers'), label: m.nav_papers() },
 		{ href: localePath('/venue'), label: m.nav_venue() },
 		{ href: localePath('/call-for-papers'), label: m.nav_cfp() }
 	]);
