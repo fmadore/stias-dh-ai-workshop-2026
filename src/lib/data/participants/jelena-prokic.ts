@@ -9,6 +9,7 @@ const participant: Participant = {
 	},
 	country: 'Netherlands',
 	coordinates: { lat: 52.1571, lng: 4.4854 },
+	image: '/images/participants/Jelena-Prokic.webp',
 	presentationId: 'computational-ethnography-fulani',
 	bio: 'Jelena Prokic is a computational linguist at the Leiden University Centre for Digital Humanities (LUCDH) and a member of the Nomadesahel research team (funded by NWO, 406.21.SW.009), based between the LUCDH and the Institute for History.'
 };
