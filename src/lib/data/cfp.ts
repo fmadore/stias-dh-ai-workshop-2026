@@ -3,7 +3,7 @@ import type { CFPInfo } from '$lib/types';
 export const cfpInfo: CFPInfo = {
 	deadline: '2026-04-30',
 	notificationDate: '2026-05-15',
-	fullPapersDeadline: '2026-08-15',
+	fullPapersDeadline: '2026-08-31',
 	submissionUrl: undefined,
 	rationale: {
 		en: 'The integration of digital humanities (DH) and artificial intelligence (AI) is transforming the production of knowledge in African Studies, offering new opportunities for innovative analysis, dynamic visualisation and cross-cultural research. Yet this shift raises urgent questions regarding equitable access, the representation of African languages, and the suitability of methodologies. Current large language models underrepresent African languages, digital scholarly infrastructures remain optimised for English, and digitisation pipelines that produce AI-ready data are themselves shaped by political choices about what to digitise, how to describe it, and who controls access. While recent initiatives on digital sovereignty in Africa have centred on policy and regulation, this workshop shifts attention to methodological practice. It asks how DH methods and AI transform research in African Studies, and how we can design, evaluate, and sustain these methods under African conditions. By bringing together scholars, independent researchers and practitioners from Africa, Europe, and beyond, the event will foster North\u2013South and South\u2013South dialogue at the intersection of African epistemologies and digital methods, moving from description to design.',
