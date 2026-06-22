@@ -172,132 +172,140 @@ html {
    COMPONENT + TYPOGRAPHY CLASSES (plain CSS, Tailwind-safe)
    ============================================================ */
 
-/* --- Typography utilities --- */
-.text-eyebrow {
-	font-family: var(--font-sans);
-	font-size: 0.75rem;
-	font-weight: 500;
-	letter-spacing: 0.18em;
-	text-transform: uppercase;
-	color: var(--color-secondary-600);
-}
-.dark .text-eyebrow {
-	color: var(--color-secondary-400);
-}
-
-.text-meta {
-	font-family: var(--font-sans);
-	font-size: 0.75rem;
-	font-weight: 600;
-	letter-spacing: 0.16em;
-	text-transform: uppercase;
-	color: var(--color-ink-muted);
-}
-.dark .text-meta {
-	color: var(--color-surface-400);
-}
-
-.text-display {
-	font-family: var(--font-display);
-	font-weight: 400;
-	font-size: clamp(2.5rem, 6.5vw, 5rem);
-	line-height: 1.04;
-	letter-spacing: -0.025em;
-}
-
-.text-page-title {
-	font-family: var(--font-display);
-	font-weight: 400;
-	font-size: clamp(2.25rem, 4.5vw, 3.25rem);
-	line-height: 1.08;
-	letter-spacing: -0.022em;
-}
-
-.text-section {
-	font-family: var(--font-display);
-	font-weight: 400;
-	font-size: clamp(1.5rem, 2.4vw, 2rem);
-	line-height: 1.15;
-	letter-spacing: -0.018em;
-}
-
-.text-card-title {
-	font-family: var(--font-display);
-	font-weight: 400;
-	font-size: 1.25rem;
-	line-height: 1.25;
-	letter-spacing: -0.012em;
-}
-
-.text-lede {
-	font-family: var(--font-sans);
-	font-weight: 300;
-	font-size: 1.0625rem;
-	line-height: 1.65;
-	color: var(--color-ink-muted);
-}
-.dark .text-lede {
-	color: var(--color-surface-300);
-}
-
-.text-prose {
-	font-family: var(--font-sans);
-	font-weight: 300;
-	font-size: 1rem;
-	line-height: 1.72;
-}
-@media (min-width: 640px) {
-	.text-prose {
-		font-size: 1.0625rem;
+/* Component classes live in @layer components so Tailwind utilities (in the
+   later `utilities` layer) always win over them - e.g. `md:hidden` beats a
+   component's own `display`. EXCEPTIONS stay UNLAYERED (see below): .btn /
+   .btn-sm / .card / .card-hover must outrank Skeleton's same-named @utility,
+   and .bg-cream* must override the theme-generated color utility in dark mode. */
+@layer components {
+	/* --- Typography utilities --- */
+	.text-eyebrow {
+		font-family: var(--font-sans);
+		font-size: 0.75rem;
+		font-weight: 500;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		color: var(--color-secondary-600);
 	}
-}
+	.dark .text-eyebrow {
+		color: var(--color-secondary-400);
+	}
 
-/* --- Containers --- */
-.container-page,
-.container-wide,
-.container-readable,
-.container-prose {
-	margin-inline: auto;
-	width: 100%;
-	padding-inline: 1rem;
-}
-.container-page {
-	max-width: 80rem;
-}
-.container-wide {
-	max-width: 72rem;
-}
-.container-readable {
-	max-width: 56rem;
-}
-.container-prose {
-	max-width: 44rem;
-}
-@media (min-width: 640px) {
+	.text-meta {
+		font-family: var(--font-sans);
+		font-size: 0.75rem;
+		font-weight: 600;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--color-ink-muted);
+	}
+	.dark .text-meta {
+		color: var(--color-surface-400);
+	}
+
+	.text-display {
+		font-family: var(--font-display);
+		font-weight: 400;
+		font-size: clamp(2.5rem, 6.5vw, 5rem);
+		line-height: 1.04;
+		letter-spacing: -0.025em;
+	}
+
+	.text-page-title {
+		font-family: var(--font-display);
+		font-weight: 400;
+		font-size: clamp(2.25rem, 4.5vw, 3.25rem);
+		line-height: 1.08;
+		letter-spacing: -0.022em;
+	}
+
+	.text-section {
+		font-family: var(--font-display);
+		font-weight: 400;
+		font-size: clamp(1.5rem, 2.4vw, 2rem);
+		line-height: 1.15;
+		letter-spacing: -0.018em;
+	}
+
+	.text-card-title {
+		font-family: var(--font-display);
+		font-weight: 400;
+		font-size: 1.25rem;
+		line-height: 1.25;
+		letter-spacing: -0.012em;
+	}
+
+	.text-lede {
+		font-family: var(--font-sans);
+		font-weight: 300;
+		font-size: 1.0625rem;
+		line-height: 1.65;
+		color: var(--color-ink-muted);
+	}
+	.dark .text-lede {
+		color: var(--color-surface-300);
+	}
+
+	.text-prose {
+		font-family: var(--font-sans);
+		font-weight: 300;
+		font-size: 1rem;
+		line-height: 1.72;
+	}
+	@media (min-width: 640px) {
+		.text-prose {
+			font-size: 1.0625rem;
+		}
+	}
+
+	/* --- Containers --- */
 	.container-page,
 	.container-wide,
 	.container-readable,
 	.container-prose {
-		padding-inline: 1.5rem;
+		margin-inline: auto;
+		width: 100%;
+		padding-inline: 1rem;
 	}
-}
-@media (min-width: 1024px) {
-	.container-page,
-	.container-wide,
+	.container-page {
+		max-width: 80rem;
+	}
+	.container-wide {
+		max-width: 72rem;
+	}
 	.container-readable {
-		padding-inline: 2rem;
+		max-width: 56rem;
+	}
+	.container-prose {
+		max-width: 44rem;
+	}
+	@media (min-width: 640px) {
+		.container-page,
+		.container-wide,
+		.container-readable,
+		.container-prose {
+			padding-inline: 1.5rem;
+		}
+	}
+	@media (min-width: 1024px) {
+		.container-page,
+		.container-wide,
+		.container-readable {
+			padding-inline: 2rem;
+		}
+	}
+
+	/* --- Section rhythm --- */
+	.section-pad {
+		padding-block: clamp(4rem, 8vw, 6rem);
+	}
+	.section-pad-lg {
+		padding-block: clamp(5rem, 10vw, 8rem);
 	}
 }
+/* end @layer components */
 
-/* --- Section rhythm --- */
-.section-pad {
-	padding-block: clamp(4rem, 8vw, 6rem);
-}
-.section-pad-lg {
-	padding-block: clamp(5rem, 10vw, 8rem);
-}
-
-/* --- Surfaces --- */
+/* --- Surfaces (UNLAYERED: .card / .card-hover override Skeleton's @utility card) --- */
 .card {
 	position: relative;
 	background-color: var(--color-paper);
@@ -330,7 +338,7 @@ html {
 	background-color: color-mix(in oklab, var(--color-surface-800) 85%, transparent);
 }
 
-/* --- Buttons --- */
+/* --- Buttons (base .btn / .btn-sm stay UNLAYERED to override Skeleton's @utility; color variants are layered below) --- */
 .btn {
 	display: inline-flex;
 	align-items: center;
@@ -364,149 +372,152 @@ html {
 	border-radius: var(--radius-md);
 }
 
-.btn-primary {
-	background-color: var(--color-primary-600);
-	color: #fff;
-	box-shadow: var(--shadow-xs);
-}
-.btn-primary:hover:not(:disabled) {
-	background-color: var(--color-primary-700);
-	box-shadow: var(--shadow-md);
-	transform: translateY(-1px);
-}
+@layer components {
+	.btn-primary {
+		background-color: var(--color-primary-600);
+		color: #fff;
+		box-shadow: var(--shadow-xs);
+	}
+	.btn-primary:hover:not(:disabled) {
+		background-color: var(--color-primary-700);
+		box-shadow: var(--shadow-md);
+		transform: translateY(-1px);
+	}
 
-.btn-secondary {
-	background-color: transparent;
-	color: var(--color-primary-700);
-	border: 1.5px solid var(--color-primary-500);
-}
-.dark .btn-secondary {
-	color: var(--color-primary-300);
-}
-.btn-secondary:hover:not(:disabled) {
-	background-color: color-mix(in oklab, var(--color-primary-500) 10%, transparent);
-	border-color: var(--color-primary-600);
-}
-.dark .btn-secondary:hover:not(:disabled) {
-	background-color: color-mix(in oklab, var(--color-primary-400) 14%, transparent);
-}
+	.btn-secondary {
+		background-color: transparent;
+		color: var(--color-primary-700);
+		border: 1.5px solid var(--color-primary-500);
+	}
+	.dark .btn-secondary {
+		color: var(--color-primary-300);
+	}
+	.btn-secondary:hover:not(:disabled) {
+		background-color: color-mix(in oklab, var(--color-primary-500) 10%, transparent);
+		border-color: var(--color-primary-600);
+	}
+	.dark .btn-secondary:hover:not(:disabled) {
+		background-color: color-mix(in oklab, var(--color-primary-400) 14%, transparent);
+	}
 
-.btn-ghost {
-	background-color: transparent;
-	color: var(--color-ink-muted);
-	border-radius: var(--radius-full);
-	padding: 0.5rem;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	cursor: pointer;
-	transition:
-		background-color var(--duration-fast) var(--ease-standard),
-		color var(--duration-fast) var(--ease-standard);
-}
-.dark .btn-ghost {
-	color: var(--color-surface-400);
-}
-.btn-ghost:hover:not(:disabled) {
-	background-color: color-mix(in oklab, var(--color-ink) 6%, transparent);
-	color: var(--color-ink);
-}
-.dark .btn-ghost:hover:not(:disabled) {
-	background-color: color-mix(in oklab, var(--color-surface-100) 8%, transparent);
-	color: var(--color-surface-100);
-}
+	.btn-ghost {
+		background-color: transparent;
+		color: var(--color-ink-muted);
+		border-radius: var(--radius-full);
+		padding: 0.5rem;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		transition:
+			background-color var(--duration-fast) var(--ease-standard),
+			color var(--duration-fast) var(--ease-standard);
+	}
+	.dark .btn-ghost {
+		color: var(--color-surface-400);
+	}
+	.btn-ghost:hover:not(:disabled) {
+		background-color: color-mix(in oklab, var(--color-ink) 6%, transparent);
+		color: var(--color-ink);
+	}
+	.dark .btn-ghost:hover:not(:disabled) {
+		background-color: color-mix(in oklab, var(--color-surface-100) 8%, transparent);
+		color: var(--color-surface-100);
+	}
 
-/* --- Links --- */
-.link-inline {
-	color: var(--color-primary-600);
-	transition: color var(--duration-fast) var(--ease-standard);
-	text-decoration: underline;
-	text-decoration-color: color-mix(in oklab, var(--color-primary-600) 30%, transparent);
-	text-decoration-thickness: 1px;
-	text-underline-offset: 0.2em;
-}
-.dark .link-inline {
-	color: var(--color-primary-300);
-	text-decoration-color: color-mix(in oklab, var(--color-primary-300) 35%, transparent);
-}
-.link-inline:hover {
-	color: var(--color-primary-700);
-	text-decoration-color: currentColor;
-}
-.dark .link-inline:hover {
-	color: var(--color-primary-200);
-}
+	/* --- Links --- */
+	.link-inline {
+		color: var(--color-primary-600);
+		transition: color var(--duration-fast) var(--ease-standard);
+		text-decoration: underline;
+		text-decoration-color: color-mix(in oklab, var(--color-primary-600) 30%, transparent);
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.2em;
+	}
+	.dark .link-inline {
+		color: var(--color-primary-300);
+		text-decoration-color: color-mix(in oklab, var(--color-primary-300) 35%, transparent);
+	}
+	.link-inline:hover {
+		color: var(--color-primary-700);
+		text-decoration-color: currentColor;
+	}
+	.dark .link-inline:hover {
+		color: var(--color-primary-200);
+	}
 
-.link-arrow {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.375rem;
-	font-family: var(--font-sans);
-	font-weight: 500;
-	color: var(--color-primary-700);
-	transition: color var(--duration-fast) var(--ease-standard);
-}
-.dark .link-arrow {
-	color: var(--color-primary-300);
-}
-.link-arrow:hover {
-	color: var(--color-primary-500);
-}
-.link-arrow svg {
-	transition: transform var(--duration-base) var(--ease-standard);
-}
-.link-arrow:hover svg {
-	transform: translateX(3px);
-}
+	.link-arrow {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
+		font-family: var(--font-sans);
+		font-weight: 500;
+		color: var(--color-primary-700);
+		transition: color var(--duration-fast) var(--ease-standard);
+	}
+	.dark .link-arrow {
+		color: var(--color-primary-300);
+	}
+	.link-arrow:hover {
+		color: var(--color-primary-500);
+	}
+	.link-arrow svg {
+		transition: transform var(--duration-base) var(--ease-standard);
+	}
+	.link-arrow:hover svg {
+		transform: translateX(3px);
+	}
 
-/* --- Accent rule — replaces multi-color gradient bars --- */
-.accent-rule {
-	display: block;
-	width: 2.75rem;
-	height: 2px;
-	background-color: var(--color-secondary-500);
-	border-radius: var(--radius-full);
-}
+	/* --- Accent rule — replaces multi-color gradient bars --- */
+	.accent-rule {
+		display: block;
+		width: 2.75rem;
+		height: 2px;
+		background-color: var(--color-secondary-500);
+		border-radius: var(--radius-full);
+	}
 
-/* ============================================================
+	/* ============================================================
    GRAIN / NOISE TEXTURE
    ============================================================ */
-.grain::before {
-	content: '';
-	position: absolute;
-	inset: 0;
-	opacity: 0.035;
-	pointer-events: none;
-	background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-	background-repeat: repeat;
-	background-size: 256px 256px;
-	z-index: 1;
-}
-.dark .grain::before {
-	opacity: 0.06;
-}
+	.grain::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		opacity: 0.035;
+		pointer-events: none;
+		background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+		background-repeat: repeat;
+		background-size: 256px 256px;
+		z-index: 1;
+	}
+	.dark .grain::before {
+		opacity: 0.06;
+	}
 
-/* ============================================================
+	/* ============================================================
    SCROLL REVEAL — respects reduced motion
    ============================================================ */
-.scroll-reveal {
-	opacity: 0;
-	transform: translateY(16px);
-	transition:
-		opacity var(--duration-reveal) var(--ease-expressive),
-		transform var(--duration-reveal) var(--ease-expressive);
-	will-change: opacity, transform;
+	.scroll-reveal {
+		opacity: 0;
+		transform: translateY(16px);
+		transition:
+			opacity var(--duration-reveal) var(--ease-expressive),
+			transform var(--duration-reveal) var(--ease-expressive);
+		will-change: opacity, transform;
+	}
+	.scroll-reveal.from-left {
+		transform: translateX(-16px);
+	}
+	.scroll-reveal.from-right {
+		transform: translateX(16px);
+	}
+	.scroll-reveal.visible {
+		opacity: 1;
+		transform: translate(0, 0);
+	}
 }
-.scroll-reveal.from-left {
-	transform: translateX(-16px);
-}
-.scroll-reveal.from-right {
-	transform: translateX(16px);
-}
-.scroll-reveal.visible {
-	opacity: 1;
-	transform: translate(0, 0);
-}
+/* end @layer components */
 
 @media (prefers-reduced-motion: reduce) {
 	.scroll-reveal,
@@ -540,26 +551,30 @@ html {
 		transform: translateY(0);
 	}
 }
-.animate-fade-rise {
-	animation: fade-rise var(--duration-slow) var(--ease-expressive) forwards;
-}
 
-/* ============================================================
+@layer components {
+	.animate-fade-rise {
+		animation: fade-rise var(--duration-slow) var(--ease-expressive) forwards;
+	}
+
+	/* ============================================================
    DROP CAP
    ============================================================ */
-.drop-cap::first-letter {
-	font-family: var(--font-display);
-	float: left;
-	font-size: 3em;
-	line-height: 0.9;
-	margin-right: 0.1em;
-	margin-top: 0.1em;
-	color: var(--color-primary-600);
-	font-feature-settings: 'ss01';
+	.drop-cap::first-letter {
+		font-family: var(--font-display);
+		float: left;
+		font-size: 3em;
+		line-height: 0.9;
+		margin-right: 0.1em;
+		margin-top: 0.1em;
+		color: var(--color-primary-600);
+		font-feature-settings: 'ss01';
+	}
+	.dark .drop-cap::first-letter {
+		color: var(--color-secondary-400);
+	}
 }
-.dark .drop-cap::first-letter {
-	color: var(--color-secondary-400);
-}
+/* end @layer components */
 
 /* ============================================================
    NUMERIC + LEGACY
@@ -569,6 +584,7 @@ html {
 	font-feature-settings: 'tnum';
 }
 
+/* UNLAYERED: .bg-cream* must outrank the theme-generated bg-cream utility so the .dark overrides below win in dark mode. */
 .bg-cream {
 	background-color: var(--color-cream);
 }
