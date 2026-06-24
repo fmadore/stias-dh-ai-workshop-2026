@@ -1,5 +1,6 @@
 import type { Participant, Presentation } from '$lib/types';
 import { participants } from '$lib/data/participants';
+import { getPerson, type Person } from '$lib/data/people';
 
 const modules = import.meta.glob<Presentation>(['./*.ts', '!./index.ts'], {
 	eager: true,
@@ -28,21 +29,17 @@ export function getParticipantPresentations(participant: Participant): Presentat
 }
 
 /**
- * Resolve the authors of a presentation, ordered by the presentation's `authors`
- * list when present and falling back to any participant that links to it via
- * `presentationId`. Shared by the paper detail page and the paper listing cards.
+ * Resolve the people who present a paper, ordered by the presentation's
+ * `authors` list when present and falling back to whoever links to it via
+ * `presentationId`. Authors may be participants or organizers, so resolution
+ * goes through the unified people registry. Shared by the paper pages, the
+ * paper filter, and the schedule.
  */
-export function getPresentationAuthors(presentation: Presentation): Participant[] {
-	const linked = participants.filter((p) =>
-		getParticipantPresentationIds(p).includes(presentation.id)
-	);
-	if (!presentation.authors) return linked;
-
-	const byParticipantId = new Map(linked.map((p) => [p.id, p]));
-	return [
-		...presentation.authors
-			.map((id) => byParticipantId.get(id))
-			.filter((p): p is Participant => p !== undefined),
-		...linked.filter((p) => !presentation.authors!.includes(p.id))
-	];
+export function getPresentationAuthors(presentation: Presentation): Person[] {
+	const linkedIds = participants
+		.filter((p) => getParticipantPresentationIds(p).includes(presentation.id))
+		.map((p) => p.id);
+	const order = presentation.authors ?? linkedIds;
+	const ids = [...order, ...linkedIds.filter((id) => !order.includes(id))];
+	return ids.map((id) => getPerson(id)).filter((p): p is Person => p !== undefined);
 }

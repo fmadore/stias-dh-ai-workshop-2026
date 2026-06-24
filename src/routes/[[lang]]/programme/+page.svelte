@@ -1,12 +1,18 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages';
+	import { getLocale } from '$lib/paraglide/runtime';
 	import { siteConfig } from '$lib/data/site-config';
 	import SEO from '$lib/components/SEO.svelte';
 	import PageHeader from '$lib/components/layout/PageHeader.svelte';
 	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
-	import { programme } from '$lib/data/programme';
+	import { programme, programmeLastUpdated } from '$lib/data/programme';
 	import ScheduleDay from '$lib/components/programme/ScheduleDay.svelte';
-	import { Calendar } from '@lucide/svelte';
+	import { Calendar, Info } from '@lucide/svelte';
+
+	const lastUpdated = new Date(`${programmeLastUpdated}T12:00:00`).toLocaleDateString(
+		getLocale() === 'fr' ? 'fr-FR' : 'en-GB',
+		{ day: 'numeric', month: 'long', year: 'numeric' }
+	);
 </script>
 
 <SEO
@@ -19,6 +25,26 @@
 <div class="pb-20">
 	<div class="container-readable">
 		{#if programme.length > 0}
+			<ScrollReveal>
+				<div
+					class="border-secondary-500/30 bg-secondary-500/5 mb-10 flex items-start gap-3 rounded-xl border p-4 sm:p-5"
+				>
+					<Info
+						size={18}
+						strokeWidth={1.75}
+						class="text-secondary-600 dark:text-secondary-400 mt-0.5 shrink-0"
+						aria-hidden="true"
+					/>
+					<div>
+						<p class="text-ink dark:text-surface-200 text-sm leading-relaxed">
+							{m.programme_preliminary()}
+						</p>
+						<p class="text-ink-muted dark:text-surface-400 mt-1 text-xs">
+							{m.programme_last_updated({ date: lastUpdated })}
+						</p>
+					</div>
+				</div>
+			</ScrollReveal>
 			<div class="space-y-12">
 				{#each programme as day, i}
 					<ScrollReveal delay={i}>

@@ -76,5 +76,16 @@
   "seo_papers_description": "Browse the papers and abstracts of the DH & AI in African Studies workshop at STIAS.",
   "papers_page_subtitle": "Abstracts of the contributions to the workshop.",
   "papers_search_placeholder": "Search by title, author, keyword…",
-  "papers_filter_no_results": "No papers match your search."
+  "papers_filter_no_results": "No papers match your search.",
+  "session_keynote": "Keynote",
+  "session_panel": "Panel",
+  "session_workshop": "Workshop",
+  "session_plenary": "Plenary",
+  "session_break": "Break",
+  "session_social": "Social",
+  "session_discussion": "Group discussion",
+  "session_chair": "Chair:",
+  "session_tbd": "To be determined",
+  "programme_preliminary": "This is a preliminary programme: the arrangement and timing of sessions may still change significantly.",
+  "programme_last_updated": "Last updated: {date}"
 }

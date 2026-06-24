@@ -76,5 +76,16 @@
   "seo_papers_description": "Parcourez les communications et résumés de l'atelier HN & IA en études africaines au STIAS.",
   "papers_page_subtitle": "Résumés des contributions à l'atelier.",
   "papers_search_placeholder": "Rechercher par titre, auteur·es, mot-clé…",
-  "papers_filter_no_results": "Aucune communication ne correspond à votre recherche."
+  "papers_filter_no_results": "Aucune communication ne correspond à votre recherche.",
+  "session_keynote": "Conférence",
+  "session_panel": "Panel",
+  "session_workshop": "Atelier",
+  "session_plenary": "Plénière",
+  "session_break": "Pause",
+  "session_social": "Activité",
+  "session_discussion": "Discussion de groupe",
+  "session_chair": "Présidence :",
+  "session_tbd": "À déterminer",
+  "programme_preliminary": "Ce programme est préliminaire : l’organisation et les horaires des sessions peuvent encore changer de façon importante.",
+  "programme_last_updated": "Dernière mise à jour : {date}"
 }

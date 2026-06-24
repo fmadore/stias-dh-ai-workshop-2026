@@ -48,17 +48,27 @@ export interface ThematicAxis {
 export interface Session {
 	id: string;
 	time: string;
-	title: LocalizedString;
-	type: 'keynote' | 'panel' | 'workshop' | 'break' | 'social';
-	speakers?: string[];
+	/** Drives the badge label and colour. */
+	type: 'keynote' | 'panel' | 'workshop' | 'plenary' | 'discussion' | 'break' | 'social';
+	/**
+	 * Display heading. Optional — a keynote can instead derive its heading from a
+	 * single referenced presentation (see `presentationIds`).
+	 */
+	title?: LocalizedString;
+	/** Theme blurb shown under the title (used by panels). */
 	description?: LocalizedString;
+	/** People ids (participants or organizers) — e.g. keynote speakers. */
+	speakers?: string[];
+	/** Presentation ids — the papers in a panel, or a keynote's referenced abstract. */
+	presentationIds?: string[];
+	/** Person id (participant or organizer) chairing the session. */
+	chair?: string;
 	room?: string;
 }
 
 export interface ProgrammeDay {
 	date: string;
 	dayLabel: LocalizedString;
-	title: LocalizedString;
 	sessions: Session[];
 }
 

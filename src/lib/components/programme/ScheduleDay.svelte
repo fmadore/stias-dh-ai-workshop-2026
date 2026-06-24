@@ -8,8 +8,7 @@
 
 <section>
 	<div class="mb-5">
-		<span class="text-eyebrow mb-2 inline-block">{t(day.dayLabel)}</span>
-		<h3 class="text-section text-ink dark:text-surface-50">{t(day.title)}</h3>
+		<h3 class="text-section text-ink dark:text-surface-50">{t(day.dayLabel)}</h3>
 	</div>
 	<div class="card p-4 sm:p-6">
 		{#each day.sessions as session}
