@@ -229,7 +229,7 @@ export const programme: ProgrammeDay[] = [
 				},
 				description: {
 					en: 'HTR for Ajami manuscripts, large language models reading historical codebooks and computational ethnography of Sahelian social media show what computation makes legible in African textual and social archives.',
-					fr: "HTR des manuscrits ajami, grands modèles de langue lisant des codebooks historiques et ethnographie computationnelle des réseaux sociaux sahéliens : ce que le calcul rend lisible dans les archives textuelles et sociales africaines."
+					fr: 'HTR des manuscrits ajami, grands modèles de langue lisant des codebooks historiques et ethnographie computationnelle des réseaux sociaux sahéliens : ce que le calcul rend lisible dans les archives textuelles et sociales africaines.'
 				},
 				presentationIds: [
 					'ajami-nlp-infrastructure',
@@ -310,7 +310,7 @@ export const programme: ProgrammeDay[] = [
 				title: { en: 'Concluding remarks & synthesis', fr: 'Remarques finales et synthèse' },
 				description: {
 					en: 'Closing discussion: shared takeaways, open questions, and next steps — including plans for the joint publication arising from the workshop.',
-					fr: "Discussion de clôture : acquis partagés, questions ouvertes et prochaines étapes — y compris les plans pour la publication collective issue de l’atelier."
+					fr: 'Discussion de clôture : acquis partagés, questions ouvertes et prochaines étapes — y compris les plans pour la publication collective issue de l’atelier.'
 				}
 			},
 			{

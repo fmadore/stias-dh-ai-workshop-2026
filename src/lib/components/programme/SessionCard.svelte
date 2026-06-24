@@ -116,7 +116,11 @@
 				{#each papers as paper (paper.id)}
 					{@const authors = getPresentationAuthors(paper)}
 					<li class="session-paper">
-						<a href={localePath(`/papers/${paper.id}`)} class="session-paper-link" lang={paper.language}>
+						<a
+							href={localePath(`/papers/${paper.id}`)}
+							class="session-paper-link"
+							lang={paper.language}
+						>
 							{paper.title}
 						</a>
 						<span class="session-lang" lang={paper.language}
