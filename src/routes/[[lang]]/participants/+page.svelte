@@ -8,13 +8,14 @@
 	import { participants } from '$lib/data/participants';
 	import OrganizerCard from '$lib/components/participants/OrganizerCard.svelte';
 	import ParticipantGrid from '$lib/components/participants/ParticipantGrid.svelte';
-	import ParticipantFilter from '$lib/components/participants/ParticipantFilter.svelte';
-	import { filterParticipants } from '$lib/utils/participant-filter';
+	import FilterBar from '$lib/components/shared/FilterBar.svelte';
+	import { filterParticipants, uniqueParticipantCountries } from '$lib/utils/filter';
 
 	let query = $state('');
 	let country = $state<string | null>(null);
 	let language = $state<'en' | 'fr' | null>(null);
 
+	const countries = uniqueParticipantCountries(participants);
 	const filtered = $derived(filterParticipants(participants, { query, country, language }));
 </script>
 
@@ -23,13 +24,18 @@
 	description={m.seo_participants_description()}
 />
 
-<PageHeader title={m.section_organisers()} />
+<PageHeader title={m.nav_participants()} />
 
 <div class="pb-20">
 	<div class="container-readable max-w-5xl">
 		<section class="mb-16">
+			<ScrollReveal>
+				<h2 class="text-section text-ink dark:text-surface-50 mb-8">
+					{m.section_organisers()}
+				</h2>
+			</ScrollReveal>
 			<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-				{#each organizers as organizer, i}
+				{#each organizers as organizer, i (organizer.id)}
 					<ScrollReveal delay={i}>
 						<OrganizerCard {organizer} />
 					</ScrollReveal>
@@ -46,9 +52,11 @@
 				</ScrollReveal>
 				<ScrollReveal delay={1}>
 					<div class="mb-8">
-						<ParticipantFilter
-							{participants}
+						<FilterBar
+							totalCount={participants.length}
 							visibleCount={filtered.length}
+							{countries}
+							searchPlaceholder={m.participants_search_placeholder()}
 							bind:query
 							bind:country
 							bind:language

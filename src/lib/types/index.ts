@@ -11,7 +11,6 @@ export interface Organizer {
 	bio: LocalizedString;
 	image: string;
 	country: string;
-	coordinates: { lat: number; lng: number };
 	website?: string;
 	orcid?: string;
 }
@@ -21,12 +20,14 @@ export interface Participant {
 	name: string;
 	affiliation: LocalizedString;
 	country: string;
-	coordinates: { lat: number; lng: number };
 	image?: string;
 	website?: string;
 	orcid?: string;
-	bio?: string;
-	presentationId?: string | string[];
+	/**
+	 * Bios are stored bilingually. Until a real translation exists the source
+	 * text is duplicated in both fields, so `t()` always has a defined branch.
+	 */
+	bio?: LocalizedString;
 }
 
 export interface Presentation {
@@ -34,7 +35,12 @@ export interface Presentation {
 	title: string;
 	abstract?: string;
 	language: 'en' | 'fr';
-	authors?: string[];
+	/**
+	 * Ordered person ids (participants or organizers). This is the single
+	 * source of truth for authorship — a participant's papers are derived
+	 * from it, never stored on the participant.
+	 */
+	authors: string[];
 }
 
 export interface ThematicAxis {
@@ -49,7 +55,7 @@ export interface Session {
 	id: string;
 	time: string;
 	/** Drives the badge label and colour. */
-	type: 'keynote' | 'panel' | 'workshop' | 'plenary' | 'discussion' | 'break' | 'social';
+	type: 'keynote' | 'panel' | 'plenary' | 'discussion' | 'break' | 'social';
 	/**
 	 * Display heading. Optional — a keynote can instead derive its heading from a
 	 * single referenced presentation (see `presentationIds`).
@@ -77,11 +83,20 @@ export interface VenueInfo {
 	fullName: LocalizedString;
 	address: string;
 	city: string;
+	postalCode: string;
 	country: string;
 	coordinates: { lat: number; lng: number };
 	description: LocalizedString;
 	website: string;
 	logisticsInfo: LocalizedString;
+}
+
+export interface Sponsor {
+	id: string;
+	name: string;
+	/** Path under static/, e.g. `/images/logos/….png`. */
+	logo: string;
+	url: string;
 }
 
 export interface CFPInfo {

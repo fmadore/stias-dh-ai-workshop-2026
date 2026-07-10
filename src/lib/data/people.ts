@@ -1,4 +1,4 @@
-import type { LocalizedString } from '$lib/types';
+import type { Organizer } from '$lib/types';
 import { organizers } from './organizers';
 import { participants } from './participants';
 
@@ -7,43 +7,17 @@ import { participants } from './participants';
  * the site (schedule, paper authorship, …) can resolve a person by id without
  * caring which list they live in.
  */
-export interface Person {
-	id: string;
-	name: string;
-	affiliation: LocalizedString;
-	country: string;
+export type Person = Pick<
+	Organizer,
+	'id' | 'name' | 'affiliation' | 'country' | 'website' | 'orcid'
+> & {
 	image?: string;
-	website?: string;
-	orcid?: string;
 	isOrganizer: boolean;
-}
-
-type PersonSource = {
-	id: string;
-	name: string;
-	affiliation: LocalizedString;
-	country: string;
-	image?: string;
-	website?: string;
-	orcid?: string;
 };
 
-function toPerson(p: PersonSource, isOrganizer: boolean): Person {
-	return {
-		id: p.id,
-		name: p.name,
-		affiliation: p.affiliation,
-		country: p.country,
-		image: p.image,
-		website: p.website,
-		orcid: p.orcid,
-		isOrganizer
-	};
-}
-
 export const people: Person[] = [
-	...organizers.map((o) => toPerson(o, true)),
-	...participants.map((p) => toPerson(p, false))
+	...organizers.map((o): Person => ({ ...o, isOrganizer: true })),
+	...participants.map((p): Person => ({ ...p, isOrganizer: false }))
 ];
 
 const byId = new Map(people.map((p) => [p.id, p]));

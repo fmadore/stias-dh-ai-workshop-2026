@@ -3,6 +3,7 @@ import type { Presentation } from '$lib/types';
 const presentation: Presentation = {
 	id: 'enriching-the-invisible',
 	language: 'en',
+	authors: ['sanjin-muftic'],
 	title:
 		'Enriching the Invisible: AI-Assisted Metadata Generation and the Findability of Southern African Heritage Collections',
 	abstract: `Heritage collections from the Global South face a compounding discovery problem. Sparse or inconsistent metadata limits findability, and the AI tools that could help address this gap are trained predominantly on Global North data, meaning the collections are the least well served by the tools available to describe them. This paper asks a practical question: how can AI-assisted metadata enrichment make Southern African heritage collections more findable, and what happens when we turn that question around, using these same collections to improve the tools that describe them?

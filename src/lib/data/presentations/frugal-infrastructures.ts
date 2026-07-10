@@ -3,6 +3,7 @@ import type { Presentation } from '$lib/types';
 const presentation: Presentation = {
 	id: 'frugal-infrastructures',
 	language: 'en',
+	authors: ['leonard-kirui'],
 	title:
 		'Frugal Infrastructures and South-South Ecologies for Sustainable Digital Research in African Humanities',
 	abstract: `For a decade, discourse on African research—from UNESCO's Open Science Recommendation to transformation strategies—has championed infrastructure, implementation gap remains: commitments rarely translate into capacity. Humanities and social sciences face three obstacles: (1) limited connectivity makes cloud-dependent workflows unreliable; (2) funding cycles prioritize pilots over maintenance; (3) scarce training data for African languages marginalizes non-English production. Partnership model reproduces dependency through Northern-controlled platforms, agendas, funding. Question: how can African humanities and social sciences build digital capacity using frugal, offline-first infrastructures, access protocols, curricula, and South-South funding instruments to circumvent dependency?

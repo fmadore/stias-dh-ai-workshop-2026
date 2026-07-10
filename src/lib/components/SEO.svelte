@@ -2,8 +2,6 @@
 	import { page } from '$app/state';
 	import { getLocale } from '$lib/paraglide/runtime';
 	import { siteConfig } from '$lib/data/site-config';
-	import { organizers } from '$lib/data/organizers';
-	import { t } from '$lib/utils/i18n';
 
 	interface Props {
 		title: string;
@@ -37,91 +35,21 @@
 	const canonicalUrl = $derived(locale === 'en' ? enUrl : frUrl);
 	const ogImage = $derived(image ?? `${siteConfig.url}/images/og-default.png`);
 
+	// Every page describes itself as a WebPage. The Event entity for the
+	// workshop is emitted once, on the home page, via `additionalSchema`
+	// (see $lib/data/event-schema.ts).
 	const jsonLd = $derived(
 		JSON.stringify({
 			'@context': 'https://schema.org',
-			'@type': 'Event',
+			'@type': 'WebPage',
 			name: title,
 			description: description,
-			startDate: siteConfig.dates.start,
-			endDate: siteConfig.dates.end,
-			eventAttendanceMode: 'https://schema.org/MixedEventAttendanceMode',
-			eventStatus: 'https://schema.org/EventScheduled',
-			location: [
-				{
-					'@type': 'Place',
-					name: 'STIAS — Stellenbosch Institute for Advanced Study',
-					address: {
-						'@type': 'PostalAddress',
-						streetAddress: '10 Marais Street',
-						addressLocality: 'Stellenbosch',
-						postalCode: '7600',
-						addressCountry: 'ZA'
-					}
-				},
-				{
-					'@type': 'VirtualLocation',
-					url: siteConfig.url
-				}
-			],
-			image: ogImage,
-			url: siteConfig.url,
-			organizer: organizers.map((o) => ({
-				'@type': 'Person',
-				name: o.name,
-				...(o.website ? { url: o.website } : {}),
-				affiliation: {
-					'@type': 'Organization',
-					name: t(o.affiliation)
-				}
-			})),
-			performer: organizers.map((o) => ({
-				'@type': 'Person',
-				name: o.name,
-				...(o.website ? { url: o.website } : {})
-			})),
-			funder: [
-				{
-					'@type': 'Organization',
-					name: 'Deutsche Forschungsgemeinschaft (DFG)',
-					url: 'https://www.dfg.de/en'
-				}
-			],
-			sponsor: [
-				{ '@type': 'Organization', name: 'Point Sud', url: 'https://www.pointsud.org' },
-				{
-					'@type': 'Organization',
-					name: 'STIAS — Stellenbosch Institute for Advanced Study',
-					url: 'https://stias.ac.za'
-				},
-				{
-					'@type': 'Organization',
-					name: 'Deutsche Forschungsgemeinschaft (DFG)',
-					url: 'https://www.dfg.de/en'
-				},
-				{
-					'@type': 'Organization',
-					name: 'Goethe University Frankfurt',
-					url: 'https://www.uni-frankfurt.de/en'
-				},
-				{
-					'@type': 'Organization',
-					name: 'University of Bayreuth / Africa Multiple',
-					url: 'https://www.africamultiple.uni-bayreuth.de/en/index.html'
-				},
-				{
-					'@type': 'Organization',
-					name: "King's College London",
-					url: 'https://www.kcl.ac.uk'
-				},
-				{ '@type': 'Organization', name: 'SADiLaR', url: 'https://sadilar.org' }
-			],
-			offers: {
-				'@type': 'Offer',
-				url: `${siteConfig.url}/call-for-papers`,
-				price: '0',
-				priceCurrency: 'ZAR',
-				availability: 'https://schema.org/InStock'
+			url: canonicalUrl,
+			inLanguage: locale,
+			isPartOf: {
+				'@type': 'WebSite',
+				name: siteConfig.shortTitle,
+				url: siteConfig.url
 			}
 		})
 	);
@@ -151,6 +79,11 @@
 	<meta property="og:type" content={type} />
 	<meta property="og:url" content={canonicalUrl} />
 	<meta property="og:image" content={ogImage} />
+	{#if !image}
+		<!-- Dimensions of the default og-default.png -->
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+	{/if}
 	<meta property="og:site_name" content={siteConfig.shortTitle} />
 	<meta property="og:locale" content={ogLocale} />
 	<meta property="og:locale:alternate" content={ogAltLocale} />

@@ -1,1 +1,1 @@
-export const entries = () => [{ lang: '' }, { lang: 'fr' }];
+export { langEntries as entries } from '$lib/utils/i18n';

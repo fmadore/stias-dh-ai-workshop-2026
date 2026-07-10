@@ -1,4 +1,5 @@
 import type jsPDF from 'jspdf';
+import { sponsors } from '$lib/data/sponsors';
 
 export interface CfpPdfLabels {
 	cfpLabel: string;
@@ -134,21 +135,11 @@ export async function generateCfpPdf(labels: CfpPdfLabels, basePath: string): Pr
 
 	const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
-	// Load fonts and logos in parallel
-	const logoFiles = [
-		{ path: '/images/logos/point-sud-logo.svg', alt: 'Point Sud' },
-		{ path: '/images/logos/STIAS.png', alt: 'STIAS' },
-		{ path: '/images/logos/dfg_logo.gif', alt: 'DFG' },
-		{ path: '/images/logos/Goethe-Logo.svg.png', alt: 'Goethe University Frankfurt' },
-		{ path: '/images/logos/uni-bayreuth-africa-multiple-logo.jpeg', alt: 'Africa Multiple' },
-		{ path: "/images/logos/King's_College_London_logo.svg", alt: "King's College London" },
-		{ path: '/images/logos/SADiLaR-1024x487.png', alt: 'SADiLaR' }
-	];
-
+	// Load fonts and logos (from the shared sponsors list) in parallel
 	const [regularBuf, semiBoldBuf, ...logoResults] = await Promise.all([
 		fetch(`${basePath}/fonts/Outfit-Regular.ttf`).then((r) => r.arrayBuffer()),
 		fetch(`${basePath}/fonts/Outfit-SemiBold.ttf`).then((r) => r.arrayBuffer()),
-		...logoFiles.map((logo) => loadImageAsDataUrl(`${basePath}${logo.path}`).catch(() => null))
+		...sponsors.map((s) => loadImageAsDataUrl(`${basePath}${s.logo}`).catch(() => null))
 	]);
 
 	const logos = logoResults.filter((r): r is LoadedImage => r !== null);

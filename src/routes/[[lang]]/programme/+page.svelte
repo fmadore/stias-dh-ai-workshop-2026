@@ -9,9 +9,11 @@
 	import ScheduleDay from '$lib/components/programme/ScheduleDay.svelte';
 	import { Calendar, Info } from '@lucide/svelte';
 
-	const lastUpdated = new Date(`${programmeLastUpdated}T12:00:00`).toLocaleDateString(
-		getLocale() === 'fr' ? 'fr-FR' : 'en-GB',
-		{ day: 'numeric', month: 'long', year: 'numeric' }
+	const lastUpdated = $derived(
+		new Date(`${programmeLastUpdated}T12:00:00`).toLocaleDateString(
+			getLocale() === 'fr' ? 'fr-FR' : 'en-GB',
+			{ day: 'numeric', month: 'long', year: 'numeric' }
+		)
 	);
 </script>
 

@@ -3,6 +3,7 @@ import type { Presentation } from '$lib/types';
 const presentation: Presentation = {
 	id: 'nigerian-town-question',
 	language: 'en',
+	authors: ['john-daniel'],
 	title:
 		'Digital Humanities and the “Town Question” in Nigerian History: Accessibility, Co-Production, and Sustainable Infrastructures from a Nigerian Perspective',
 	abstract: `Digital Humanities (DH) and Artificial Intelligence (AI) have globally ushered in new possibilities for data visualisation, archival preservation, and public engagement with cultural heritage. Yet, in the Nigerian context, these epistemological advancement are crippled by inequities in accessibility, infrastructural deficits, and a lack of genuine co-production between DH practitioners and the communities of study. Initiatives such as the Centre for Digital Humanities, University of Lagos, and Archivi.ng have made notable strides, however, their valorisation activities are heavily concentrated in urban centres, with indigenous communities with these histories disconnected from both digital resources and DH awareness. This paper critically interrogates the “town question” in Nigerian DH: how can DH research outputs be made accessible to indigenous communities who are often unaware of these materials, lack digital literacy, skills, and require information in indigenous languages?

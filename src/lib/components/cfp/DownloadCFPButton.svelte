@@ -2,9 +2,11 @@
 	import { cfpInfo } from '$lib/data/cfp';
 	import { siteConfig } from '$lib/data/site-config';
 	import { organizers } from '$lib/data/organizers';
+	import { venueInfo } from '$lib/data/venue';
 	import { thematicAxes } from '$lib/data/thematic-axes';
 	import { contactEmails } from '$lib/data/contacts';
 	import { t } from '$lib/utils/i18n';
+	import { getKeyDates } from '$lib/utils/key-dates';
 	import * as m from '$lib/paraglide/messages';
 	import { getLocale } from '$lib/paraglide/runtime';
 	import { base } from '$app/paths';
@@ -15,32 +17,12 @@
 		variant?: 'primary' | 'secondary';
 	}
 
-	const { variant = 'primary' }: Props = $props();
+	let { variant = 'primary' }: Props = $props();
 
 	let loadingPdf = $state(false);
 	let loadingText = $state(false);
 
 	const locale = $derived(getLocale());
-
-	function formatDate(isoDate: string): string {
-		return new Date(isoDate).toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-GB', {
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric'
-		});
-	}
-
-	function formatDateRange(startIso: string, endIso: string): string {
-		const start = new Date(startIso);
-		const end = new Date(endIso);
-		const loc = locale === 'fr' ? 'fr-FR' : 'en-GB';
-		if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
-			const month = start.toLocaleDateString(loc, { month: 'long' });
-			const year = start.getFullYear();
-			return `${start.getDate()}–${end.getDate()} ${month} ${year}`;
-		}
-		return `${formatDate(startIso)} – ${formatDate(endIso)}`;
-	}
 
 	function buildLabels(filename: string): CfpPdfLabels {
 		return {
@@ -79,20 +61,9 @@
 			selectionLabel: m.cfp_selection_label(),
 			selectionCriteria: t(cfpInfo.selectionCriteria),
 			fundingLabel: m.cfp_funding_label(),
-			fundingText: m.cfp_funding_text(),
+			fundingText: t(venueInfo.logisticsInfo),
 			keyDatesLabel: m.key_dates(),
-			keyDates: [
-				{ label: m.submission_deadline(), value: formatDate(cfpInfo.deadline) },
-				{ label: m.notification_date(), value: formatDate(cfpInfo.notificationDate) },
-				{
-					label: m.full_papers_deadline(),
-					value: formatDate(cfpInfo.fullPapersDeadline)
-				},
-				{
-					label: m.workshop_dates(),
-					value: formatDateRange(siteConfig.dates.start, siteConfig.dates.end)
-				}
-			],
+			keyDates: getKeyDates(),
 			supportedByLabel: m.footer_supported_by(),
 			siteUrl: siteConfig.url,
 			filename

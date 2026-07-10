@@ -3,6 +3,7 @@ import type { Presentation } from '$lib/types';
 const presentation: Presentation = {
 	id: 'precolonial-bead-trade',
 	language: 'en',
+	authors: ['lauren-coetzee'],
 	title:
 		'Beyond the Readable Archive: Historical Codebooks, Large Language Models, and the Precolonial African Bead Trade, 1500–1900',
 	abstract: `African history before colonialism is not absent from the archive — it is dispersed across thousands of pages of travel writing, missionary records, and merchant accounts. Yet, African-authored sources and oral histories still remain significantly harder to locate, access, and digitise for this period — a disparity that itself reflects the archival legacies of colonial knowledge production. Across this uneven landscape, the interpretive labour required to transform narrative prose into structured, analysable evidence has remained a barrier to systematic historical inquiry. The problem is not scarcity but scale, and the absence of computational methods capable of handling the cultural and historical specificity that African sources demand. Recovering dynamic, diachronic economic practices from historical written accounts is therefore not only a historiographical problem but a methodological one: the source base needed to challenge these narratives is too large for traditional close reading, yet too historically and culturally specific for off-the-shelf natural language processing pipelines trained predominantly on contemporary, non-African data.

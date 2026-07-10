@@ -45,23 +45,28 @@
 	}
 </script>
 
+<!-- The header goes fully opaque while the mobile menu is open so page
+     content doesn't bleed through the link list. -->
 <header
-	class="border-surface-200/60 dark:border-surface-700/60 dark:bg-surface-900/85 fixed top-0 right-0 left-0 z-50 border-b bg-[color-mix(in_oklab,var(--color-cream)_88%,transparent)] backdrop-blur-md"
+	class="border-surface-200/60 dark:border-surface-700/60 fixed top-0 right-0 left-0 z-50 border-b backdrop-blur-md {mobileMenuOpen
+		? 'bg-cream dark:bg-surface-900'
+		: 'dark:bg-surface-900/85 bg-[color-mix(in_oklab,var(--color-cream)_88%,transparent)]'}"
 >
 	<div class="container-page">
 		<div class="flex h-[4.5rem] items-center justify-between">
 			<!-- Brand -->
 			<a
 				href={localePath('/')}
-				class="text-primary-700 dark:text-primary-300 font-display flex items-center gap-2 text-xl tracking-tight"
+				class="text-primary-700 dark:text-primary-300 font-display flex items-center gap-2 text-xl tracking-tight whitespace-nowrap"
 			>
 				DH &amp; AI
-				<span class="text-eyebrow hidden sm:inline">African Studies</span>
+				<span class="text-eyebrow hidden whitespace-nowrap xl:inline">African Studies</span>
 			</a>
 
-			<!-- Desktop Navigation -->
-			<nav class="hidden items-center gap-1 md:flex" aria-label="Main navigation">
-				{#each navLinks as link}
+			<!-- Desktop Navigation (lg and up — seven items, and the longer
+			     French labels, don't fit at the md breakpoint) -->
+			<nav class="hidden items-center gap-1 lg:flex" aria-label="Main navigation">
+				{#each navLinks as link (link.href)}
 					<a
 						href={link.href}
 						class="relative px-3 py-2 text-sm font-medium {isActive(link.href)
@@ -81,7 +86,12 @@
 			<!-- Right side: Language + Dark mode + Mobile toggle -->
 			<div class="flex items-center gap-1">
 				<LanguageSwitcher />
-				<button onclick={toggleDarkMode} class="btn-ghost" aria-label={m.dark_mode()}>
+				<button
+					onclick={toggleDarkMode}
+					class="btn-ghost"
+					aria-label={m.dark_mode()}
+					aria-pressed={darkMode}
+				>
 					{#if darkMode}
 						<Sun size={18} />
 					{:else}
@@ -90,9 +100,10 @@
 				</button>
 				<button
 					onclick={() => (mobileMenuOpen = !mobileMenuOpen)}
-					class="btn-ghost md:hidden"
+					class="btn-ghost lg:hidden"
 					aria-label={mobileMenuOpen ? m.menu_close() : m.menu_open()}
 					aria-expanded={mobileMenuOpen}
+					aria-controls="mobile-navigation"
 				>
 					{#if mobileMenuOpen}
 						<X size={20} />
@@ -103,14 +114,18 @@
 			</div>
 		</div>
 
-		<!-- Mobile Navigation -->
+		<!-- Mobile Navigation. `inert` removes the collapsed menu from the tab
+		     order and accessibility tree — with only max-height:0 its links
+		     would remain keyboard-focusable while invisible. -->
 		<nav
-			class="overflow-hidden md:hidden {mobileMenuOpen ? 'max-h-96 pb-4' : 'max-h-0'}"
+			id="mobile-navigation"
+			class="overflow-hidden lg:hidden {mobileMenuOpen ? 'max-h-96 pb-4' : 'max-h-0'}"
 			style="transition: max-height var(--duration-slow) var(--ease-standard);"
 			aria-label="Mobile navigation"
+			inert={!mobileMenuOpen}
 		>
 			<div class="border-surface-200/60 dark:border-surface-700/60 border-t pt-3">
-				{#each navLinks as link}
+				{#each navLinks as link (link.href)}
 					<a
 						href={link.href}
 						onclick={() => (mobileMenuOpen = false)}

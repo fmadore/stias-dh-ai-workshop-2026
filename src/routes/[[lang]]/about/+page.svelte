@@ -19,7 +19,6 @@
 	<div class="container-readable">
 		<ScrollReveal>
 			<div class="mb-10">
-				<span class="text-eyebrow mb-3 inline-block">{m.section_thematic_axes()}</span>
 				<h2 class="text-section text-ink dark:text-surface-50">
 					{m.section_thematic_axes()}
 				</h2>

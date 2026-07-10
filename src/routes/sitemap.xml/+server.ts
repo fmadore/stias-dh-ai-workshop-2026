@@ -25,6 +25,8 @@ const escapeXml = (s: string) =>
 
 export const GET: RequestHandler = () => {
 	const base = siteConfig.url.replace(/\/$/, '');
+	// The sitemap is prerendered, so this is the build/deploy date.
+	const lastmod = new Date().toISOString().slice(0, 10);
 
 	const paperEntries: Entry[] = presentations.map((p) => ({
 		path: `/papers/${p.id}`,
@@ -44,6 +46,7 @@ export const GET: RequestHandler = () => {
     <xhtml:link rel="alternate" hreflang="en" href="${escapeXml(enAlt)}" />
     <xhtml:link rel="alternate" hreflang="fr" href="${escapeXml(frAlt)}" />
     <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(enAlt)}" />
+    <lastmod>${lastmod}</lastmod>
     <priority>${e.priority.toFixed(1)}</priority>
   </url>`;
 		return [block(enLoc), block(frLoc)].join('\n');

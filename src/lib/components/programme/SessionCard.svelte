@@ -11,10 +11,9 @@
 		keynote:
 			'bg-secondary-500/12 text-secondary-700 dark:text-secondary-300 border-secondary-500/30',
 		panel: 'bg-primary-500/10 text-primary-700 dark:text-primary-300 border-primary-500/25',
-		workshop: 'bg-primary-500/5 text-primary-800 dark:text-primary-200 border-primary-500/20',
 		plenary: 'bg-primary-500/5 text-primary-800 dark:text-primary-200 border-primary-500/20',
 		break:
-			'bg-surface-200/60 text-surface-600 dark:bg-surface-700/50 dark:text-surface-400 border-surface-300/40',
+			'bg-surface-200/60 text-surface-700 dark:bg-surface-700/50 dark:text-surface-300 border-surface-300/40',
 		social: 'bg-secondary-500/8 text-secondary-800 dark:text-secondary-200 border-secondary-500/20',
 		discussion: 'bg-primary-500/8 text-primary-700 dark:text-primary-300 border-primary-500/25'
 	};
@@ -22,7 +21,6 @@
 	const typeLabels: Record<Session['type'], string> = {
 		keynote: m.session_keynote(),
 		panel: m.session_panel(),
-		workshop: m.session_workshop(),
 		plenary: m.session_plenary(),
 		break: m.session_break(),
 		social: m.session_social(),
@@ -80,13 +78,13 @@
 		</div>
 
 		{#if heading}
-			<h4 class="text-ink dark:text-surface-100 font-display text-[1.0625rem] leading-snug">
+			<h3 class="text-ink dark:text-surface-100 font-display text-[1.0625rem] leading-snug">
 				{#if headingHref}
 					<a href={headingHref} class="session-link" lang={featuredPaper?.language}>{heading}</a>
 				{:else}
 					{heading}
 				{/if}
-			</h4>
+			</h3>
 		{/if}
 
 		{#if (isKeynote || isDiscussion) && speakers.length > 0}

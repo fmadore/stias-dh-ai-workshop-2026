@@ -1,3 +1,5 @@
+> **Historical document** — this was the original build plan and is no longer kept up to date (e.g. it references Skeleton UI v3; the codebase has since moved on). See the repository README for current setup instructions.
+
 # Implementation Plan: STIAS DH+AI Workshop 2026 Website
 
 **Repository:** `stias-dh-ai-workshop-2026`

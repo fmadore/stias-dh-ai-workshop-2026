@@ -1,8 +1,14 @@
 @import 'tailwindcss';
 @custom-variant dark (&:where(.dark, .dark *));
-@import '@skeletonlabs/skeleton';
-@import '@skeletonlabs/skeleton-svelte';
-@import '@skeletonlabs/skeleton/themes/cerberus';
+
+/* Self-hosted fonts (unicode-range subset per file, font-display: swap) */
+@import '@fontsource/outfit/300.css';
+@import '@fontsource/outfit/400.css';
+@import '@fontsource/outfit/500.css';
+@import '@fontsource/outfit/600.css';
+@import '@fontsource/outfit/700.css';
+@import '@fontsource/instrument-serif/400.css';
+@import '@fontsource/instrument-serif/400-italic.css';
 
 /* ============================================================
    DESIGN TOKENS — via @theme so they also generate utilities
@@ -38,6 +44,20 @@
 	--color-secondary-700: #84641b;
 	--color-secondary-800: #644c15;
 	--color-secondary-900: #44340e;
+
+	/* --- Neutral surface scale (values from Skeleton's cerberus theme,
+	       inlined when the Skeleton dependency was removed) --- */
+	--color-surface-50: oklch(0.99 0 0);
+	--color-surface-100: oklch(0.91 0 0);
+	--color-surface-200: oklch(0.81 0 0);
+	--color-surface-300: oklch(0.72 0 0);
+	--color-surface-400: oklch(0.62 0 0);
+	--color-surface-500: oklch(0.51 0 0);
+	--color-surface-600: oklch(0.45 0 0);
+	--color-surface-700: oklch(0.39 0 0);
+	--color-surface-800: oklch(0.32 0 0);
+	--color-surface-900: oklch(0.25 0 0);
+	--color-surface-950: oklch(0.18 0 0);
 
 	/* --- Semantic surfaces & ink --- */
 	--color-cream: #fdfbf7;
@@ -174,9 +194,8 @@ html {
 
 /* Component classes live in @layer components so Tailwind utilities (in the
    later `utilities` layer) always win over them - e.g. `md:hidden` beats a
-   component's own `display`. EXCEPTIONS stay UNLAYERED (see below): .btn /
-   .btn-sm / .card / .card-hover must outrank Skeleton's same-named @utility,
-   and .bg-cream* must override the theme-generated color utility in dark mode. */
+   component's own `display`. EXCEPTION: .bg-cream* stays UNLAYERED (see below)
+   so its .dark overrides outrank the theme-generated color utility. */
 @layer components {
 	/* --- Typography utilities --- */
 	.text-eyebrow {
@@ -185,7 +204,8 @@ html {
 		font-weight: 500;
 		letter-spacing: 0.18em;
 		text-transform: uppercase;
-		color: var(--color-secondary-600);
+		/* secondary-700 — secondary-600 on cream is ~3.7:1, below WCAG AA */
+		color: var(--color-secondary-700);
 	}
 	.dark .text-eyebrow {
 		color: var(--color-secondary-400);
@@ -302,77 +322,100 @@ html {
 	.section-pad-lg {
 		padding-block: clamp(5rem, 10vw, 8rem);
 	}
-}
-/* end @layer components */
 
-/* --- Surfaces (UNLAYERED: .card / .card-hover override Skeleton's @utility card) --- */
-.card {
-	position: relative;
-	background-color: var(--color-paper);
-	border-radius: var(--radius-xl);
-	box-shadow: var(--shadow-sm);
-	transition:
-		box-shadow var(--duration-base) var(--ease-standard),
-		transform var(--duration-base) var(--ease-standard),
-		border-color var(--duration-base) var(--ease-standard);
-}
-.dark .card {
-	background-color: color-mix(in oklab, var(--color-surface-800) 85%, transparent);
-}
+	/* --- Typography helpers shared by cards --- */
+	.text-bio {
+		font-size: 0.9375rem;
+		line-height: 1.625;
+		font-weight: 300;
+	}
 
-.card-hover {
-	position: relative;
-	background-color: var(--color-paper);
-	border-radius: var(--radius-xl);
-	box-shadow: var(--shadow-sm);
-	transition:
-		box-shadow var(--duration-base) var(--ease-standard),
-		transform var(--duration-base) var(--ease-standard),
-		border-color var(--duration-base) var(--ease-standard);
-}
-.card-hover:hover {
-	box-shadow: var(--shadow-lg);
-	transform: translateY(-2px);
-}
-.dark .card-hover {
-	background-color: color-mix(in oklab, var(--color-surface-800) 85%, transparent);
-}
+	/* --- Language badge (paper cards + paper detail page) --- */
+	.language-badge {
+		display: inline-flex;
+		align-items: center;
+		font-family: var(--font-sans);
+		font-size: 0.6875rem;
+		font-weight: 600;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--color-primary-700);
+		background-color: color-mix(in oklab, var(--color-primary-500) 10%, transparent);
+		padding: 0.3rem 0.625rem;
+		border-radius: var(--radius-full);
+	}
+	.dark .language-badge {
+		color: var(--color-primary-200);
+		background-color: color-mix(in oklab, var(--color-primary-500) 18%, transparent);
+	}
 
-/* --- Buttons (base .btn / .btn-sm stay UNLAYERED to override Skeleton's @utility; color variants are layered below) --- */
-.btn {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	gap: 0.5rem;
-	font-family: var(--font-sans);
-	font-weight: 500;
-	font-size: 0.9375rem;
-	line-height: 1;
-	border-radius: var(--radius-lg);
-	padding: 0.75rem 1.25rem;
-	cursor: pointer;
-	white-space: nowrap;
-	transition:
-		background-color var(--duration-base) var(--ease-standard),
-		color var(--duration-base) var(--ease-standard),
-		border-color var(--duration-base) var(--ease-standard),
-		box-shadow var(--duration-base) var(--ease-standard),
-		transform var(--duration-base) var(--ease-standard);
-}
-.btn:disabled {
-	opacity: 0.55;
-	cursor: not-allowed;
-	transform: none !important;
-	box-shadow: none !important;
-}
+	/* --- Surfaces --- */
+	.card {
+		position: relative;
+		background-color: var(--color-paper);
+		border-radius: var(--radius-xl);
+		box-shadow: var(--shadow-sm);
+		transition:
+			box-shadow var(--duration-base) var(--ease-standard),
+			transform var(--duration-base) var(--ease-standard),
+			border-color var(--duration-base) var(--ease-standard);
+	}
+	.dark .card {
+		background-color: color-mix(in oklab, var(--color-surface-800) 85%, transparent);
+	}
 
-.btn-sm {
-	font-size: 0.875rem;
-	padding: 0.5rem 0.875rem;
-	border-radius: var(--radius-md);
-}
+	.card-hover {
+		position: relative;
+		background-color: var(--color-paper);
+		border-radius: var(--radius-xl);
+		box-shadow: var(--shadow-sm);
+		transition:
+			box-shadow var(--duration-base) var(--ease-standard),
+			transform var(--duration-base) var(--ease-standard),
+			border-color var(--duration-base) var(--ease-standard);
+	}
+	.card-hover:hover {
+		box-shadow: var(--shadow-lg);
+		transform: translateY(-2px);
+	}
+	.dark .card-hover {
+		background-color: color-mix(in oklab, var(--color-surface-800) 85%, transparent);
+	}
 
-@layer components {
+	/* --- Buttons --- */
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		font-family: var(--font-sans);
+		font-weight: 500;
+		font-size: 0.9375rem;
+		line-height: 1;
+		border-radius: var(--radius-lg);
+		padding: 0.75rem 1.25rem;
+		cursor: pointer;
+		white-space: nowrap;
+		transition:
+			background-color var(--duration-base) var(--ease-standard),
+			color var(--duration-base) var(--ease-standard),
+			border-color var(--duration-base) var(--ease-standard),
+			box-shadow var(--duration-base) var(--ease-standard),
+			transform var(--duration-base) var(--ease-standard);
+	}
+	.btn:disabled {
+		opacity: 0.55;
+		cursor: not-allowed;
+		transform: none !important;
+		box-shadow: none !important;
+	}
+
+	.btn-sm {
+		font-size: 0.875rem;
+		padding: 0.5rem 0.875rem;
+		border-radius: var(--radius-md);
+	}
+
 	.btn-primary {
 		background-color: var(--color-primary-600);
 		color: #fff;
@@ -496,9 +539,12 @@ html {
 	}
 
 	/* ============================================================
-   SCROLL REVEAL — respects reduced motion
+   SCROLL REVEAL — respects reduced motion.
+   The hidden initial state only applies once the inline script in
+   app.html has swapped .no-js for .js on <html>: without JavaScript
+   the IntersectionObserver never fires, so content must stay visible.
    ============================================================ */
-	.scroll-reveal {
+	.js .scroll-reveal {
 		opacity: 0;
 		transform: translateY(16px);
 		transition:
@@ -506,13 +552,13 @@ html {
 			transform var(--duration-reveal) var(--ease-expressive);
 		will-change: opacity, transform;
 	}
-	.scroll-reveal.from-left {
+	.js .scroll-reveal.from-left {
 		transform: translateX(-16px);
 	}
-	.scroll-reveal.from-right {
+	.js .scroll-reveal.from-right {
 		transform: translateX(16px);
 	}
-	.scroll-reveal.visible {
+	.js .scroll-reveal.visible {
 		opacity: 1;
 		transform: translate(0, 0);
 	}
@@ -520,9 +566,9 @@ html {
 /* end @layer components */
 
 @media (prefers-reduced-motion: reduce) {
-	.scroll-reveal,
-	.scroll-reveal.from-left,
-	.scroll-reveal.from-right {
+	.js .scroll-reveal,
+	.js .scroll-reveal.from-left,
+	.js .scroll-reveal.from-right {
 		opacity: 1;
 		transform: none;
 		transition: none;
