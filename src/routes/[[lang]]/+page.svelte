@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages';
 	import { siteConfig } from '$lib/data/site-config';
+	import { buildEventSchema } from '$lib/data/event-schema';
 	import { t, localePath } from '$lib/utils/i18n';
 	import SEO from '$lib/components/SEO.svelte';
 	import Hero from '$lib/components/home/Hero.svelte';
@@ -17,7 +18,11 @@
 	]);
 </script>
 
-<SEO title={siteConfig.shortTitle} description={t(siteConfig.description)} />
+<SEO
+	title={siteConfig.shortTitle}
+	description={t(siteConfig.description)}
+	additionalSchema={buildEventSchema(`${siteConfig.url}/images/og-default.png`)}
+/>
 
 <Hero />
 <KeyInfo />

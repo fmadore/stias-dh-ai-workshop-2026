@@ -1,19 +1,17 @@
 <script lang="ts">
 	import { cfpInfo } from '$lib/data/cfp';
-	import { siteConfig } from '$lib/data/site-config';
 	import { organizers } from '$lib/data/organizers';
+	import { venueInfo } from '$lib/data/venue';
 	import { thematicAxes } from '$lib/data/thematic-axes';
 	import { contactEmails } from '$lib/data/contacts';
 	import { t } from '$lib/utils/i18n';
+	import { getKeyDates } from '$lib/utils/key-dates';
 	import * as m from '$lib/paraglide/messages';
-	import { getLocale } from '$lib/paraglide/runtime';
 	import { Send, ExternalLink } from '@lucide/svelte';
 	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
 
 	const JDHASA_NAME = 'Journal of the Digital Humanities Association of Southern Africa (JDHASA)';
 	const JDHASA_URL = 'https://upjournals.up.ac.za/index.php/dhasa';
-
-	const locale = $derived(getLocale());
 
 	const publicationParts = $derived.by(() => {
 		const full = t(cfpInfo.publication);
@@ -25,35 +23,7 @@
 		};
 	});
 
-	const keyDates = $derived([
-		{ label: m.submission_deadline(), value: formatDate(cfpInfo.deadline) },
-		{ label: m.notification_date(), value: formatDate(cfpInfo.notificationDate) },
-		{ label: m.full_papers_deadline(), value: formatDate(cfpInfo.fullPapersDeadline) },
-		{
-			label: m.workshop_dates(),
-			value: formatDateRange(siteConfig.dates.start, siteConfig.dates.end)
-		}
-	]);
-
-	function formatDate(isoDate: string): string {
-		return new Date(isoDate).toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-GB', {
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric'
-		});
-	}
-
-	function formatDateRange(startIso: string, endIso: string): string {
-		const start = new Date(startIso);
-		const end = new Date(endIso);
-		const loc = locale === 'fr' ? 'fr-FR' : 'en-GB';
-		if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
-			const month = start.toLocaleDateString(loc, { month: 'long' });
-			const year = start.getFullYear();
-			return `${start.getDate()}–${end.getDate()} ${month} ${year}`;
-		}
-		return `${formatDate(startIso)} – ${formatDate(endIso)}`;
-	}
+	const keyDates = $derived(getKeyDates());
 </script>
 
 <div class="space-y-14">
@@ -205,8 +175,9 @@
 			<h2 class="text-section text-ink dark:text-surface-50 mb-5">
 				{m.cfp_funding_label()}
 			</h2>
+			<!-- The funding paragraph is the venue's logistics info — one source of truth. -->
 			<p class="text-prose text-ink-muted dark:text-surface-300">
-				{m.cfp_funding_text()}
+				{t(venueInfo.logisticsInfo)}
 			</p>
 		</section>
 	</ScrollReveal>

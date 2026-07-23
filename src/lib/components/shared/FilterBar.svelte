@@ -1,27 +1,27 @@
 <script lang="ts">
-	import type { Participant } from '$lib/types';
 	import * as m from '$lib/paraglide/messages';
 	import { Search, X } from '@lucide/svelte';
-	import { uniqueCountries } from '$lib/utils/participant-filter';
 
 	type Props = {
-		participants: Participant[];
+		totalCount: number;
 		visibleCount: number;
+		countries: string[];
+		searchPlaceholder: string;
 		query?: string;
 		country?: string | null;
 		language?: 'en' | 'fr' | null;
 	};
 
 	let {
-		participants,
+		totalCount,
 		visibleCount,
+		countries,
+		searchPlaceholder,
 		query = $bindable(''),
 		country = $bindable(null),
 		language = $bindable(null)
 	}: Props = $props();
 
-	const countries = $derived(uniqueCountries(participants));
-	const totalCount = $derived(participants.length);
 	const hasActiveFilter = $derived(query.trim() !== '' || country !== null || language !== null);
 
 	function reset() {
@@ -31,31 +31,27 @@
 	}
 </script>
 
-<div class="participant-filter">
+<div class="filter-bar">
 	<div class="filter-controls">
 		<div class="filter-search">
 			<Search size={16} strokeWidth={1.75} class="filter-search-icon" aria-hidden="true" />
 			<input
 				type="search"
 				bind:value={query}
-				placeholder={m.participants_search_placeholder()}
+				placeholder={searchPlaceholder}
 				class="filter-input"
-				aria-label={m.participants_search_placeholder()}
+				aria-label={searchPlaceholder}
 			/>
 		</div>
 
-		<select
-			bind:value={country}
-			class="filter-select"
-			aria-label={m.participants_filter_country_all()}
-		>
-			<option value={null}>{m.participants_filter_country_all()}</option>
-			{#each countries as c}
+		<select bind:value={country} class="filter-select" aria-label={m.filter_country_all()}>
+			<option value={null}>{m.filter_country_all()}</option>
+			{#each countries as c (c)}
 				<option value={c}>{c}</option>
 			{/each}
 		</select>
 
-		<div class="filter-pills" role="group" aria-label={m.participants_filter_language_all()}>
+		<div class="filter-pills" role="group" aria-label={m.filter_language_all()}>
 			<button
 				type="button"
 				class="filter-pill"
@@ -63,7 +59,7 @@
 				onclick={() => (language = null)}
 				aria-pressed={language === null}
 			>
-				{m.participants_filter_language_all()}
+				{m.filter_language_all()}
 			</button>
 			<button
 				type="button"
@@ -87,20 +83,20 @@
 	</div>
 
 	<div class="filter-meta">
-		<span class="filter-count">
-			{m.participants_filter_count({ visible: visibleCount, total: totalCount })}
+		<span class="filter-count" role="status" aria-live="polite" aria-atomic="true">
+			{m.filter_count({ visible: visibleCount, total: totalCount })}
 		</span>
 		{#if hasActiveFilter}
 			<button type="button" class="filter-reset" onclick={reset}>
 				<X size={14} strokeWidth={1.75} aria-hidden="true" />
-				{m.participants_filter_clear()}
+				{m.filter_clear()}
 			</button>
 		{/if}
 	</div>
 </div>
 
 <style>
-	.participant-filter {
+	.filter-bar {
 		display: flex;
 		flex-direction: column;
 		gap: 0.75rem;

@@ -5,19 +5,11 @@
 	import { siteConfig } from '$lib/data/site-config';
 	import SEO from '$lib/components/SEO.svelte';
 	import PageHeader from '$lib/components/layout/PageHeader.svelte';
-	import { renderAbstract, abstractToPlainText, truncate } from '$lib/utils/abstract';
 
 	let { data } = $props();
 
 	const presentation = $derived(data.presentation);
 	const authors = $derived(data.authors);
-
-	const html = $derived(presentation.abstract ? renderAbstract(presentation.abstract) : '');
-	const description = $derived(
-		presentation.abstract
-			? truncate(abstractToPlainText(presentation.abstract))
-			: presentation.title
-	);
 	const canonicalPath = $derived(`/papers/${presentation.id}`);
 
 	const schema = $derived({
@@ -25,7 +17,7 @@
 		'@type': 'ScholarlyArticle',
 		headline: presentation.title,
 		name: presentation.title,
-		abstract: presentation.abstract ? abstractToPlainText(presentation.abstract) : undefined,
+		abstract: data.abstractText || undefined,
 		inLanguage: presentation.language,
 		isPartOf: {
 			'@type': 'Event',
@@ -43,7 +35,7 @@
 
 <SEO
 	title="{presentation.title} | {siteConfig.shortTitle}"
-	{description}
+	description={data.description}
 	type="article"
 	{canonicalPath}
 	additionalSchema={schema}
@@ -67,7 +59,7 @@
 			<section class="mb-10">
 				<h2 class="text-eyebrow mb-4">{m.paper_presented_by()}</h2>
 				<ul class="authors">
-					{#each authors as author}
+					{#each authors as author (author.id)}
 						<li class="author">
 							<div class="font-display text-ink dark:text-surface-50 text-lg">
 								{author.name}
@@ -81,35 +73,16 @@
 			</section>
 		{/if}
 
-		{#if presentation.abstract}
+		{#if data.abstractHtml}
 			<article class="abstract" lang={presentation.language}>
 				<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-				{@html html}
+				{@html data.abstractHtml}
 			</article>
 		{/if}
 	</div>
 </div>
 
 <style>
-	.language-badge {
-		display: inline-flex;
-		align-items: center;
-		font-family: var(--font-sans);
-		font-size: 0.6875rem;
-		font-weight: 600;
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
-		color: var(--color-primary-700);
-		background-color: color-mix(in oklab, var(--color-primary-500) 10%, transparent);
-		padding: 0.3rem 0.625rem;
-		border-radius: var(--radius-full);
-	}
-
-	:global(.dark) .language-badge {
-		color: var(--color-primary-200);
-		background-color: color-mix(in oklab, var(--color-primary-500) 18%, transparent);
-	}
-
 	.authors {
 		display: grid;
 		gap: 0.875rem 1.5rem;

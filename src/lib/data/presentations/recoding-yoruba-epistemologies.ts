@@ -3,6 +3,7 @@ import type { Presentation } from '$lib/types';
 const presentation: Presentation = {
 	id: 'recoding-yoruba-epistemologies',
 	language: 'en',
+	authors: ['hammed-olalekan-lawal'],
 	title:
 		'Re-coding the Yorùbá Epistemologies in the Era of Artificial Intelligence: A Relational Ethnography of AI-Generated Videos of Ìtàn Ìjàpá, its Creator and Viewers on Facebook and TikTok',
 	abstract: `The integration of Artificial Intelligence (AI) into African Studies offers transformative potential for cultural preservation (Olukoya et al., 2025; Ndede, 2026), yet it risks the “flattening” of indigenous epistemologies and authenticities (Moatemsu & Nigamananda, 2026). This study investigates the re-mediation of *Ìtàn Ìjàpá* (Yorùbá tortoise folktales) through AI-generated videos. It explores the relational dynamics between the AI-content creators and digital audiences on TikTok and Facebook. Historically, *Ìjàpá* has served as a pedagogical and performative tool for negotiating Yorùbá morality and identity (Taiwo, 2019). However, as creators “re-code” these oral traditions into AI-generated videos, the figure of the trickster (*Ìjàpá*) becomes a site of tension between what is presented through our ancestral orature versus the modern day algorithmic AI architecture.

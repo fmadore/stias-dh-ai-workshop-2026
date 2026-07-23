@@ -8,10 +8,11 @@ const participant: Participant = {
 		fr: 'Université du Witwatersrand'
 	},
 	country: 'South Africa',
-	coordinates: { lat: -26.1929, lng: 28.0305 },
 	image: '/images/participants/Christine-Mataranyika.webp',
-	presentationId: 'decolonising-citations',
-	bio: 'Christine Mataranyika recently completed her MSc in Artificial Intelligence at the University of the Witwatersrand. Her research interests include machine learning, natural language processing, multimodal AI, trustworthy AI, and the broader challenges of building safe and socially beneficial intelligent systems.'
+	bio: {
+		en: 'Christine Mataranyika recently completed her MSc in Artificial Intelligence at the University of the Witwatersrand. Her research interests include machine learning, natural language processing, multimodal AI, trustworthy AI, and the broader challenges of building safe and socially beneficial intelligent systems.',
+		fr: 'Christine Mataranyika recently completed her MSc in Artificial Intelligence at the University of the Witwatersrand. Her research interests include machine learning, natural language processing, multimodal AI, trustworthy AI, and the broader challenges of building safe and socially beneficial intelligent systems.'
+	}
 };
 
 export default participant;

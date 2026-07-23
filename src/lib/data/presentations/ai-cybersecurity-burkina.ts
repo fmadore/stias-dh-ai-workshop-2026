@@ -3,6 +3,7 @@ import type { Presentation } from '$lib/types';
 const presentation: Presentation = {
 	id: 'ai-cybersecurity-burkina',
 	language: 'fr',
+	authors: ['mohamadou-konate'],
 	title:
 		'L’IA générique face aux réalités africaines : défis structurels et voies alternatives pour la recherche en cybersécurité au Burkina Faso',
 	abstract: `Lorsqu’un chercheur burkinabè en cybersécurité cherche des données sur les incidents cyber touchant les infrastructures critiques de son pays, il ne trouve pratiquement rien. Les bases de données de référence internationales comme KDD Cup 99, CICIDS 2017 et UNSW-NB15 se basent principalement sur des environnements réseau nord-américains ou occidentaux. Les modèles d’IA produits à partir de ces données sont souvent présentés comme universels, mais appliqués au contexte africain, ils reposent sur des hypothèses qui ne reflètent pas la réalité locale. Cette communication, basée sur une recherche doctorale sur la cybersécurité des infrastructures critiques au Burkina Faso, identifie trois défis structurels et propose des voies alternatives.

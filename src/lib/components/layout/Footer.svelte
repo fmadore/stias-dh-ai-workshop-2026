@@ -2,44 +2,7 @@
 	import { base } from '$app/paths';
 	import * as m from '$lib/paraglide/messages';
 	import { organizers } from '$lib/data/organizers';
-
-	const logos = [
-		{
-			src: `${base}/images/logos/point-sud-logo.svg`,
-			alt: 'Point Sud',
-			url: 'https://www.pointsud.org'
-		},
-		{
-			src: `${base}/images/logos/STIAS.png`,
-			alt: 'STIAS — Stellenbosch Institute for Advanced Study',
-			url: 'https://stias.ac.za'
-		},
-		{
-			src: `${base}/images/logos/dfg_logo.gif`,
-			alt: 'Deutsche Forschungsgemeinschaft (DFG)',
-			url: 'https://www.dfg.de/en'
-		},
-		{
-			src: `${base}/images/logos/Goethe-Logo.svg.png`,
-			alt: 'Goethe University Frankfurt',
-			url: 'https://www.uni-frankfurt.de/en'
-		},
-		{
-			src: `${base}/images/logos/uni-bayreuth-africa-multiple-logo.jpeg`,
-			alt: 'University of Bayreuth / Africa Multiple',
-			url: 'https://www.africamultiple.uni-bayreuth.de/en/index.html'
-		},
-		{
-			src: `${base}/images/logos/King's_College_London_logo.svg`,
-			alt: "King's College London",
-			url: 'https://www.kcl.ac.uk'
-		},
-		{
-			src: `${base}/images/logos/SADiLaR-1024x487.png`,
-			alt: 'SADiLaR',
-			url: 'https://sadilar.org'
-		}
-	];
+	import { sponsors } from '$lib/data/sponsors';
 </script>
 
 <footer class="bg-primary-900 dark:bg-surface-950 relative mt-auto overflow-hidden text-white">
@@ -53,14 +16,20 @@
 				{m.footer_supported_by()}
 			</p>
 			<div class="flex flex-wrap items-center justify-center gap-5 sm:gap-6">
-				{#each logos as logo}
+				{#each sponsors as sponsor (sponsor.id)}
 					<a
-						href={logo.url}
+						href={sponsor.url}
 						target="_blank"
 						rel="noopener noreferrer"
 						class="bg-paper rounded-md px-4 py-2 opacity-75 transition-opacity duration-300 ease-out hover:opacity-100"
 					>
-						<img src={logo.src} alt={logo.alt} class="h-10 w-auto object-contain" />
+						<img
+							src="{base}{sponsor.logo}"
+							alt={sponsor.name}
+							class="h-10 w-auto object-contain"
+							loading="lazy"
+							decoding="async"
+						/>
 					</a>
 				{/each}
 			</div>

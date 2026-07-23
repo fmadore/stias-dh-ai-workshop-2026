@@ -6,8 +6,8 @@
 	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
 	import { presentations } from '$lib/data/presentations';
 	import PaperGrid from '$lib/components/papers/PaperGrid.svelte';
-	import PaperFilter from '$lib/components/papers/PaperFilter.svelte';
-	import { filterPresentations } from '$lib/utils/paper-filter';
+	import FilterBar from '$lib/components/shared/FilterBar.svelte';
+	import { filterPresentations, uniquePaperCountries } from '$lib/utils/filter';
 
 	const sorted = [...presentations].sort((a, b) =>
 		a.title.localeCompare(b.title, undefined, { sensitivity: 'base' })
@@ -17,6 +17,7 @@
 	let country = $state<string | null>(null);
 	let language = $state<'en' | 'fr' | null>(null);
 
+	const countries = uniquePaperCountries(sorted);
 	const filtered = $derived(filterPresentations(sorted, { query, country, language }));
 </script>
 
@@ -29,9 +30,11 @@
 		{#if sorted.length > 0}
 			<ScrollReveal>
 				<div class="mb-8">
-					<PaperFilter
-						presentations={sorted}
+					<FilterBar
+						totalCount={sorted.length}
 						visibleCount={filtered.length}
+						{countries}
+						searchPlaceholder={m.papers_search_placeholder()}
 						bind:query
 						bind:country
 						bind:language

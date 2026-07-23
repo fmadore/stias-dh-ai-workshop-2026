@@ -1,11 +1,15 @@
-import { marked } from 'marked';
+/** Plain-text helpers shared by cards and SEO descriptions (no heavy deps). */
 
-marked.setOptions({ gfm: true, breaks: false });
-
-export function renderAbstract(markdown: string): string {
-	return marked.parse(markdown, { async: false }) as string;
+export function getInitials(name: string): string {
+	return name
+		.split(' ')
+		.map((n) => n[0])
+		.join('')
+		.toUpperCase()
+		.slice(0, 2);
 }
 
+/** Strip the small Markdown subset used in abstracts (bold, italic, links). */
 export function abstractToPlainText(markdown: string): string {
 	return markdown
 		.replace(/\*\*([^*]+)\*\*/g, '$1')

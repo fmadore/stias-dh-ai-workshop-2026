@@ -8,6 +8,7 @@ export const venueInfo: VenueInfo = {
 	},
 	address: '10 Marais Street, Stellenbosch',
 	city: 'Stellenbosch',
+	postalCode: '7600',
 	country: 'South Africa',
 	coordinates: { lat: -33.9321, lng: 18.8602 },
 	description: {

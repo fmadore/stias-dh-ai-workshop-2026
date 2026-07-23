@@ -3,10 +3,12 @@
 	import { siteConfig } from '$lib/data/site-config';
 
 	let now = $state(Date.now());
-	let interval: ReturnType<typeof setInterval> | undefined;
 
-	const startDate = new Date(siteConfig.dates.start + 'T09:00:00').getTime();
-	const endDate = new Date(siteConfig.dates.end + 'T18:00:00').getTime();
+	// The workshop runs on South African Standard Time (UTC+2, no DST), so pin
+	// the offset — an offset-less ISO string would be parsed in the visitor's
+	// own timezone and shift the countdown by up to a day.
+	const startDate = new Date(siteConfig.dates.start + 'T09:00:00+02:00').getTime();
+	const endDate = new Date(siteConfig.dates.end + 'T18:00:00+02:00').getTime();
 
 	const status = $derived(now >= endDate ? 'ended' : now >= startDate ? 'started' : 'upcoming');
 
@@ -24,12 +26,10 @@
 	]);
 
 	$effect(() => {
-		interval = setInterval(() => {
+		const interval = setInterval(() => {
 			now = Date.now();
 		}, 1000);
-		return () => {
-			if (interval) clearInterval(interval);
-		};
+		return () => clearInterval(interval);
 	});
 </script>
 
@@ -52,7 +52,7 @@
 					{String(unit.value).padStart(2, '0')}
 				</div>
 				<div
-					class="mt-1.5 text-[11px] font-medium tracking-[0.16em] text-white/50 uppercase sm:text-xs"
+					class="mt-1.5 text-[11px] font-medium tracking-[0.16em] text-white/70 uppercase sm:text-xs"
 				>
 					{unit.label}
 				</div>

@@ -12,3 +12,9 @@ export function localePath(path: string): string {
 	const prefix = locale === baseLocale ? '' : `/${locale}`;
 	return `${base}${prefix}${path}`;
 }
+
+/**
+ * Prerender entries for the optional `[[lang]]` segment — every localized
+ * page re-exports this so both `/…` and `/fr/…` are generated.
+ */
+export const langEntries = () => [{ lang: '' }, { lang: 'fr' }];

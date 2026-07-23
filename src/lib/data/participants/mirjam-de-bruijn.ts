@@ -8,10 +8,11 @@ const participant: Participant = {
 		fr: 'Université de Leyde'
 	},
 	country: 'Netherlands',
-	coordinates: { lat: 52.1571, lng: 4.4854 },
 	image: '/images/participants/Mirjam-de-Bruijn.webp',
-	presentationId: 'computational-ethnography-fulani',
-	bio: 'Mirjam de Bruijn is a professor of anthropology and history at Leiden University and a member of the Nomadesahel research team (funded by NWO, 406.21.SW.009), based between the Institute for History and the Leiden University Centre for Digital Humanities (LUCDH).'
+	bio: {
+		en: 'Mirjam de Bruijn is a professor of anthropology and history at Leiden University and a member of the Nomadesahel research team (funded by NWO, 406.21.SW.009), based between the Institute for History and the Leiden University Centre for Digital Humanities (LUCDH).',
+		fr: 'Mirjam de Bruijn is a professor of anthropology and history at Leiden University and a member of the Nomadesahel research team (funded by NWO, 406.21.SW.009), based between the Institute for History and the Leiden University Centre for Digital Humanities (LUCDH).'
+	}
 };
 
 export default participant;

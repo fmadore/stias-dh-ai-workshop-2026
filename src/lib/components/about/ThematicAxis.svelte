@@ -66,7 +66,7 @@
 						{/if}
 					</div>
 				</div>
-				<h3 class="text-ink dark:text-surface-50 mb-4 text-[1.375rem] leading-snug">
+				<h3 class="text-card-title text-ink dark:text-surface-50 mb-4">
 					{t(axis.title)}
 				</h3>
 				<p class="text-prose text-ink-muted dark:text-surface-300">

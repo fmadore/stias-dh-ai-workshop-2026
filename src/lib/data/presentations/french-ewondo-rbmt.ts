@@ -3,6 +3,7 @@ import type { Presentation } from '$lib/types';
 const presentation: Presentation = {
 	id: 'french-ewondo-rbmt',
 	language: 'fr',
+	authors: ['eliette-ngo-tjomb'],
 	title:
 		'Traduire sans équivalence : enjeux épistémologiques du transfert linguistique dans un système de traduction automatique à base de règles pour la paire français-ewondo',
 	abstract: `La traduction automatique des langues africaines peu dotées fait face à des défis qui dépassent largement l’ingénierie linguistique. Cet article s’appuie sur le développement d’un système de traduction automatique à base de règles (RBMT) construit dans une architecture FLEx/FlexTrans/Apertium et testé sur un corpus parallèle de 124 paires de phrases alignées, pour la paire français-ewondo, une langue bantoue du Cameroun.

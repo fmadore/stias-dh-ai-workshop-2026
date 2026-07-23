@@ -36,7 +36,7 @@
 		class="container-wide relative z-10 py-[clamp(5rem,11vw,10rem)] sm:py-[clamp(6rem,12vw,12rem)]"
 	>
 		<div class="mx-auto max-w-4xl text-center">
-			<p class="text-primary-100/80 text-eyebrow mb-6 !text-[color:var(--color-primary-200)]">
+			<p class="text-eyebrow mb-6" style="color: var(--color-primary-200);">
 				{m.hero_subtitle()}
 			</p>
 

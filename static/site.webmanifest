@@ -1,0 +1,21 @@
+{
+	"name": "Digital Humanities and AI in African Studies — STIAS 2026",
+	"short_name": "DH & AI 2026",
+	"start_url": "/stias-dh-ai-workshop-2026/",
+	"scope": "/stias-dh-ai-workshop-2026/",
+	"display": "browser",
+	"background_color": "#fdfbf7",
+	"theme_color": "#0d7377",
+	"icons": [
+		{
+			"src": "/stias-dh-ai-workshop-2026/icons/icon-192.png",
+			"sizes": "192x192",
+			"type": "image/png"
+		},
+		{
+			"src": "/stias-dh-ai-workshop-2026/icons/icon-512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		}
+	]
+}

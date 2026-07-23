@@ -7,7 +7,7 @@
 
 {#if participants.length > 0}
 	<div class="flex flex-col gap-6">
-		{#each participants as participant}
+		{#each participants as participant (participant.id)}
 			<ParticipantCard {participant} />
 		{/each}
 	</div>
