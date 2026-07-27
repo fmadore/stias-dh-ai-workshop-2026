@@ -33,7 +33,8 @@ export const organizers: Organizer[] = [
 		image: '/images/organizers/vincent-hiribarren.webp',
 		country: 'United Kingdom',
 		website: 'https://www.vincenthiribarren.com',
-		orcid: '0000-0002-8742-9576'
+		orcid: '0000-0002-8742-9576',
+		online: true
 	},
 	{
 		id: 'ngue-um',

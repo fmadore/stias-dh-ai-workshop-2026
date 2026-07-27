@@ -84,6 +84,8 @@
   "session_discussion": "Group discussion",
   "session_chair": "Chair:",
   "session_tbd": "To be determined",
+  "session_online": "Online",
+  "session_online_title": "Taking part online",
   "programme_preliminary": "This is a preliminary programme: the arrangement and timing of sessions may still change significantly.",
   "programme_last_updated": "Last updated: {date}",
   "error_404_title": "Page not found",

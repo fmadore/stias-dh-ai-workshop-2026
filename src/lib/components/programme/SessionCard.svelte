@@ -4,6 +4,7 @@
 	import * as m from '$lib/paraglide/messages';
 	import { getPeople } from '$lib/data/people';
 	import { getPresentation, getPresentationAuthors } from '$lib/data/presentations';
+	import { Video } from '@lucide/svelte';
 
 	let { session }: { session: Session } = $props();
 
@@ -55,6 +56,17 @@
 	);
 </script>
 
+<!--
+	Marks a person taking part remotely. Rendered right after their name, so a
+	panel with both on-site and online authors stays unambiguous.
+-->
+{#snippet onlineBadge()}
+	<span class="online-badge" title={m.session_online_title()}>
+		<Video size={11} strokeWidth={2.25} aria-hidden="true" />
+		{m.session_online()}
+	</span>
+{/snippet}
+
 <div
 	class="border-surface-200 dark:border-surface-700/70 flex gap-4 border-b py-4 last:border-b-0 sm:gap-5"
 >
@@ -89,7 +101,8 @@
 
 		{#if (isKeynote || isDiscussion) && speakers.length > 0}
 			<p class="text-ink dark:text-surface-200 mt-1 text-sm font-medium">
-				{speakers.map((s) => s.name).join(', ')}
+				<!-- prettier-ignore -->
+				{#each speakers as speaker, i (speaker.id)}{i > 0 ? ', ' : ''}{speaker.name}{#if speaker.online}{@render onlineBadge()}{/if}{/each}
 			</p>
 			<p class="text-ink-muted dark:text-surface-400 text-sm">
 				{Array.from(new Set(speakers.map((s) => t(s.affiliation)))).join(' · ')}
@@ -99,7 +112,8 @@
 		{#if showChair}
 			<p class="text-ink-muted dark:text-surface-400 mt-2 text-xs">
 				<span class="font-medium">{m.session_chair()}</span>
-				{chairPerson ? chairPerson.name : m.session_tbd()}
+				<!-- prettier-ignore -->
+				{chairPerson ? chairPerson.name : m.session_tbd()}{#if chairPerson?.online}{@render onlineBadge()}{/if}
 			</p>
 		{/if}
 
@@ -126,7 +140,8 @@
 						>
 						{#if authors.length > 0}
 							<span class="text-ink-muted dark:text-surface-400 mt-0.5 block text-xs">
-								{authors.map((a) => a.name).join(', ')}
+								<!-- prettier-ignore -->
+								{#each authors as author, i (author.id)}{i > 0 ? ', ' : ''}{author.name}{#if author.online}{@render onlineBadge()}{/if}{/each}
 							</span>
 						{/if}
 					</li>
@@ -179,5 +194,29 @@
 	}
 	:global(.dark) .session-lang {
 		color: var(--color-primary-300);
+	}
+
+	.online-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.2rem;
+		margin-left: 0.4rem;
+		padding: 0.05rem 0.4rem;
+		border: 1px solid color-mix(in oklab, var(--color-secondary-500) 35%, transparent);
+		border-radius: 9999px;
+		background-color: color-mix(in oklab, var(--color-secondary-500) 10%, transparent);
+		font-size: 0.625rem;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		line-height: 1.5;
+		white-space: nowrap;
+		vertical-align: 0.05em;
+		color: var(--color-secondary-700);
+	}
+	:global(.dark) .online-badge {
+		border-color: color-mix(in oklab, var(--color-secondary-400) 35%, transparent);
+		background-color: color-mix(in oklab, var(--color-secondary-400) 14%, transparent);
+		color: var(--color-secondary-300);
 	}
 </style>

@@ -13,6 +13,8 @@ export interface Organizer {
 	country: string;
 	website?: string;
 	orcid?: string;
+	/** Taking part remotely — flags the person in the schedule. */
+	online?: boolean;
 }
 
 export interface Participant {
@@ -23,6 +25,8 @@ export interface Participant {
 	image?: string;
 	website?: string;
 	orcid?: string;
+	/** Taking part remotely — flags the person in the schedule. */
+	online?: boolean;
 	/**
 	 * Bios are stored bilingually. Until a real translation exists the source
 	 * text is duplicated in both fields, so `t()` always has a defined branch.

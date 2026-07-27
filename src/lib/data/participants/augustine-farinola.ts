@@ -7,7 +7,8 @@ const participant: Participant = {
 		en: 'University of Alberta',
 		fr: 'Université de l’Alberta'
 	},
-	country: 'Canada'
+	country: 'Canada',
+	online: true
 };
 
 export default participant;

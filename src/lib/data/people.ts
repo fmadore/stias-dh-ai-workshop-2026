@@ -9,7 +9,7 @@ import { participants } from './participants';
  */
 export type Person = Pick<
 	Organizer,
-	'id' | 'name' | 'affiliation' | 'country' | 'website' | 'orcid'
+	'id' | 'name' | 'affiliation' | 'country' | 'website' | 'orcid' | 'online'
 > & {
 	image?: string;
 	isOrganizer: boolean;
