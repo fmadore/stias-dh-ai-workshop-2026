@@ -4,7 +4,7 @@ import type { ProgrammeDay } from '$lib/types';
  * Date the programme was last revised (ISO `yyyy-mm-dd`). Bump this whenever you
  * change the sessions below — it is shown as "Last updated" on the page.
  */
-export const programmeLastUpdated = '2026-06-24';
+export const programmeLastUpdated = '2026-07-28';
 
 /**
  * Workshop programme — STIAS, Stellenbosch, 21–24 September 2026.
@@ -16,12 +16,37 @@ export const programmeLastUpdated = '2026-06-24';
  *
  * Panels are grouped by theme and language-mixed (each of the five French
  * papers sits in a different panel, so no panel is French-only).
+ *
+ * TIMINGS ARE LOCKED TO THE STIAS WEEKDAY GRID (08:00–17:30). STIAS runs several
+ * events at once and its staff prepare and serve every group at the same time,
+ * so breaks must line up exactly — do not drift these when editing:
+ *
+ *   09:00 – 10:30  session      10:30 – 11:00  coffee break
+ *   11:00 – 12:30  session      12:30 – 14:00  lunch
+ *   14:00 – 15:30  session      15:30 – 16:00  coffee break
+ *   16:00 – 17:30  session
+ *
+ * Sessions therefore cap at 90 minutes (panels = 3 papers × 30 min), no comfort
+ * breaks are allowed mid-session, and anything past 17:30 is billed at R1200/h.
+ * STIAS caters two coffee breaks only on full days on site (Days 1 and 4); Days
+ * 2 and 3 break for an excursion after the 14:00–15:30 block, so they get one.
+ * After-hours functions (dinners) start at 17:30.
  */
 export const programme: ProgrammeDay[] = [
 	{
 		date: '2026-09-21',
 		dayLabel: { en: 'Day 1 · Monday 21 September', fr: 'Jour 1 · Lundi 21 septembre' },
 		sessions: [
+			{
+				id: 'd1-registration',
+				time: '08:30 – 09:00',
+				type: 'break',
+				title: { en: 'Arrival & registration', fr: 'Accueil et inscription' },
+				description: {
+					en: 'Registration desk open, with coffee, tea and refreshments served on arrival.',
+					fr: "Ouverture du bureau d'accueil, avec café, thé et rafraîchissements à l'arrivée."
+				}
+			},
 			{
 				id: 'd1-welcome',
 				time: '09:00 – 09:15',
@@ -34,7 +59,7 @@ export const programme: ProgrammeDay[] = [
 			},
 			{
 				id: 'd1-icebreaker',
-				time: '09:15 – 10:00',
+				time: '09:15 – 10:30',
 				type: 'plenary',
 				title: { en: 'Ice-breaker', fr: 'Brise-glace' },
 				description: {
@@ -43,8 +68,14 @@ export const programme: ProgrammeDay[] = [
 				}
 			},
 			{
+				id: 'd1-coffee-1',
+				time: '10:30 – 11:00',
+				type: 'break',
+				title: { en: 'Coffee break', fr: 'Pause-café' }
+			},
+			{
 				id: 'd1-panel-a',
-				time: '10:00 – 11:45',
+				time: '11:00 – 12:30',
 				type: 'panel',
 				title: {
 					en: 'Panel 1 · Centring African Knowledge Systems',
@@ -61,27 +92,27 @@ export const programme: ProgrammeDay[] = [
 				]
 			},
 			{
-				id: 'd1-coffee-1',
-				time: '11:45 – 12:15',
+				id: 'd1-lunch',
+				time: '12:30 – 14:00',
 				type: 'break',
-				title: { en: 'Coffee break', fr: 'Pause-café' }
+				title: { en: 'Lunch', fr: 'Déjeuner' }
 			},
 			{
 				id: 'd1-keynote',
-				time: '12:15 – 13:15',
+				time: '14:00 – 15:30',
 				type: 'keynote',
 				speakers: ['sarah-oberbichler'],
 				presentationIds: ['sustainable-responsible-ai-history']
 			},
 			{
-				id: 'd1-lunch',
-				time: '13:15 – 14:30',
+				id: 'd1-coffee-2',
+				time: '15:30 – 16:00',
 				type: 'break',
-				title: { en: 'Lunch', fr: 'Déjeuner' }
+				title: { en: 'Coffee break', fr: 'Pause-café' }
 			},
 			{
 				id: 'd1-panel-b',
-				time: '14:30 – 16:15',
+				time: '16:00 – 17:30',
 				type: 'panel',
 				title: {
 					en: 'Panel 2 · Decolonial Methods & Epistemic Justice',
@@ -95,7 +126,7 @@ export const programme: ProgrammeDay[] = [
 			},
 			{
 				id: 'd1-dinner',
-				time: '18:00',
+				time: '17:30',
 				type: 'social',
 				title: { en: 'Welcome dinner', fr: "Dîner d'ouverture" }
 			}
@@ -107,7 +138,7 @@ export const programme: ProgrammeDay[] = [
 		sessions: [
 			{
 				id: 'd2-panel-c',
-				time: '09:00 – 10:45',
+				time: '09:00 – 10:30',
 				type: 'panel',
 				title: {
 					en: 'Panel 3 · Digital Archives, Metadata & Discovery',
@@ -125,13 +156,13 @@ export const programme: ProgrammeDay[] = [
 			},
 			{
 				id: 'd2-coffee-1',
-				time: '10:45 – 11:15',
+				time: '10:30 – 11:00',
 				type: 'break',
 				title: { en: 'Coffee break', fr: 'Pause-café' }
 			},
 			{
 				id: 'd2-panel-d',
-				time: '11:15 – 13:00',
+				time: '11:00 – 12:30',
 				type: 'panel',
 				title: {
 					en: 'Panel 4 · Language AI: Translation & Learning',
@@ -149,20 +180,20 @@ export const programme: ProgrammeDay[] = [
 			},
 			{
 				id: 'd2-lunch',
-				time: '13:00 – 14:15',
+				time: '12:30 – 14:00',
 				type: 'break',
 				title: { en: 'Lunch', fr: 'Déjeuner' }
 			},
 			{
 				id: 'd2-discussion',
-				time: '14:15 – 15:15',
+				time: '14:00 – 15:00',
 				type: 'discussion',
 				speakers: ['van-zaanen'],
 				presentationIds: ['networking-strategies']
 			},
 			{
 				id: 'd2-visit-a',
-				time: '15:15 – 19:00',
+				time: '15:00 – 19:00',
 				type: 'social',
 				title: { en: 'Visit A', fr: 'Visite A' },
 				description: { en: 'Destination to be determined.', fr: 'Destination à déterminer.' }
@@ -181,7 +212,7 @@ export const programme: ProgrammeDay[] = [
 		sessions: [
 			{
 				id: 'd3-keynote',
-				time: '09:00 – 10:00',
+				time: '09:30 – 10:30',
 				type: 'keynote',
 				speakers: ['ngue-um'],
 				title: {
@@ -191,13 +222,13 @@ export const programme: ProgrammeDay[] = [
 			},
 			{
 				id: 'd3-coffee-1',
-				time: '10:00 – 10:30',
+				time: '10:30 – 11:00',
 				type: 'break',
 				title: { en: 'Coffee break', fr: 'Pause-café' }
 			},
 			{
 				id: 'd3-panel-e',
-				time: '10:30 – 12:15',
+				time: '11:00 – 12:30',
 				type: 'panel',
 				title: {
 					en: 'Panel 5 · Documenting & Sustaining African Languages',
@@ -215,13 +246,13 @@ export const programme: ProgrammeDay[] = [
 			},
 			{
 				id: 'd3-lunch',
-				time: '12:15 – 13:30',
+				time: '12:30 – 14:00',
 				type: 'break',
 				title: { en: 'Lunch', fr: 'Déjeuner' }
 			},
 			{
 				id: 'd3-panel-f',
-				time: '13:30 – 15:15',
+				time: '14:00 – 15:30',
 				type: 'panel',
 				title: {
 					en: 'Panel 6 · Manuscripts, Histories & Computational Methods',
@@ -274,7 +305,7 @@ export const programme: ProgrammeDay[] = [
 			},
 			{
 				id: 'd4-panel-g',
-				time: '11:00 – 12:45',
+				time: '11:00 – 12:30',
 				type: 'panel',
 				title: {
 					en: 'Panel 7 · Sustainable Infrastructures & Frugal Innovation',
@@ -292,20 +323,26 @@ export const programme: ProgrammeDay[] = [
 			},
 			{
 				id: 'd4-lunch',
-				time: '12:45 – 14:00',
+				time: '12:30 – 14:00',
 				type: 'break',
 				title: { en: 'Lunch', fr: 'Déjeuner' }
 			},
 			{
 				id: 'd4-discussion',
-				time: '14:00 – 15:00',
+				time: '14:00 – 15:30',
 				type: 'discussion',
 				speakers: ['hiribarren'],
 				presentationIds: ['teaching-digital-methods-african-histories']
 			},
 			{
+				id: 'd4-coffee-2',
+				time: '15:30 – 16:00',
+				type: 'break',
+				title: { en: 'Coffee break', fr: 'Pause-café' }
+			},
+			{
 				id: 'd4-concluding',
-				time: '15:00 – 16:00',
+				time: '16:00 – 17:00',
 				type: 'plenary',
 				title: { en: 'Concluding remarks & synthesis', fr: 'Remarques finales et synthèse' },
 				description: {
@@ -315,7 +352,7 @@ export const programme: ProgrammeDay[] = [
 			},
 			{
 				id: 'd4-evening',
-				time: 'From 16:00',
+				time: 'From 17:00',
 				type: 'social',
 				title: { en: 'Free evening', fr: 'Soirée libre' }
 			}

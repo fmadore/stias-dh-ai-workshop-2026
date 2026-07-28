@@ -16,8 +16,8 @@ export function buildEventSchema(ogImage: string): object {
 		name: t(siteConfig.title),
 		description: t(siteConfig.description),
 		// SAST is UTC+2 year-round.
-		startDate: `${siteConfig.dates.start}T09:00:00+02:00`,
-		endDate: `${siteConfig.dates.end}T18:00:00+02:00`,
+		startDate: `${siteConfig.dates.start}T08:30:00+02:00`,
+		endDate: `${siteConfig.dates.end}T17:00:00+02:00`,
 		// The workshop runs hybrid: in person at STIAS with remote access.
 		eventAttendanceMode: 'https://schema.org/MixedEventAttendanceMode',
 		eventStatus: 'https://schema.org/EventScheduled',
