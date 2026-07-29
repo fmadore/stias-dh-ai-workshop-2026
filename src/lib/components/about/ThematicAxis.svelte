@@ -26,14 +26,14 @@
 	<article class="card card-hover group h-full p-7">
 		<div class="flex items-start justify-between gap-4">
 			<div
-				class="bg-primary-50 dark:bg-primary-500/12 text-primary-700 dark:text-primary-300 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg"
+				class="bg-primary-50 dark:bg-primary-500/12 text-link flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg"
 			>
 				{#if IconComponent}
 					<IconComponent size={22} strokeWidth={1.75} />
 				{/if}
 			</div>
 			<span
-				class="text-secondary-600 dark:text-secondary-400 font-display text-3xl leading-none opacity-80"
+				class="text-accent-ink font-display text-3xl leading-none opacity-80"
 				aria-hidden="true"
 			>
 				0{axis.number}
@@ -64,7 +64,7 @@
 			<div class="flex-1">
 				<div class="mb-3 flex items-center gap-2">
 					<div
-						class="bg-primary-50 dark:bg-primary-500/12 text-primary-700 dark:text-primary-300 flex h-10 w-10 items-center justify-center rounded-lg"
+						class="bg-primary-50 dark:bg-primary-500/12 text-link flex h-10 w-10 items-center justify-center rounded-lg"
 					>
 						{#if IconComponent}
 							<IconComponent size={20} strokeWidth={1.75} />

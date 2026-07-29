@@ -82,9 +82,7 @@
 			<!-- Two stacked lines, so the qualifier is present at every width
 			     instead of appearing only at xl. "DH & AI" alone is cryptic. -->
 			<a href={localePath('/')} class="flex min-w-0 flex-col leading-none">
-				<span class="text-primary-700 dark:text-primary-300 font-display text-xl tracking-tight">
-					DH &amp; AI
-				</span>
+				<span class="text-link font-display text-xl tracking-tight"> DH &amp; AI </span>
 				<span class="text-meta mt-1 truncate text-[0.625rem] tracking-[0.14em]">
 					{m.brand_qualifier()}
 				</span>
@@ -97,7 +95,7 @@
 						href={link.href}
 						aria-current={isActive(link.href) ? 'page' : undefined}
 						class="relative px-3 py-2 text-sm {isActive(link.href)
-							? 'text-primary-700 dark:text-primary-300 font-semibold'
+							? 'text-link font-semibold'
 							: 'text-muted hover:text-strong font-medium'}"
 						style="transition: color var(--duration-fast) var(--ease-standard);"
 					>
@@ -169,7 +167,7 @@
 						onclick={() => (mobileMenuOpen = false)}
 						aria-current={isActive(link.href) ? 'page' : undefined}
 						class="block px-3 py-2.5 text-sm {isActive(link.href)
-							? 'text-primary-700 dark:text-primary-300 border-secondary-500 border-l-2 pl-4 font-semibold'
+							? 'text-link border-secondary-500 border-l-2 pl-4 font-semibold'
 							: 'text-muted hover:text-strong font-medium'}"
 					>
 						{link.label}

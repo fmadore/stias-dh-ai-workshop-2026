@@ -28,7 +28,7 @@
 			onclick={() => switchLocale(locale)}
 			class="rounded-[var(--radius-sm)] px-1.5 py-1 text-[11px] font-semibold tracking-[0.12em] transition-colors duration-[var(--duration-fast)] {currentLocale ===
 			locale
-				? 'text-primary-700 dark:text-primary-300'
+				? 'text-link'
 				: 'text-ink-muted/70 dark:text-surface-500 hover:text-ink dark:hover:text-surface-200'}"
 			aria-current={currentLocale === locale ? 'true' : undefined}
 		>

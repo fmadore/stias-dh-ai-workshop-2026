@@ -30,10 +30,10 @@
 	<!-- Rationale -->
 	<ScrollReveal>
 		<section>
-			<h2 class="text-section text-ink dark:text-surface-50 mb-5">
+			<h2 class="text-section text-strong mb-5">
 				{m.cfp_rationale_label()}
 			</h2>
-			<p class="text-prose text-ink-muted dark:text-surface-300">
+			<p class="text-prose text-body">
 				{t(cfpInfo.rationale)}
 			</p>
 		</section>
@@ -42,18 +42,18 @@
 	<!-- Convenors -->
 	<ScrollReveal delay={1}>
 		<section>
-			<h2 class="text-section text-ink dark:text-surface-50 mb-5">
+			<h2 class="text-section text-strong mb-5">
 				{m.cfp_convenors_label()}
 			</h2>
 			<ul class="space-y-2.5">
 				{#each organizers as organizer}
-					<li class="text-ink-muted dark:text-surface-300 flex items-start gap-3 font-light">
+					<li class="text-body flex items-start gap-3 font-light">
 						<span
 							class="bg-secondary-500 mt-2.5 h-1.5 w-1.5 flex-shrink-0 rounded-full"
 							aria-hidden="true"
 						></span>
 						<span class="leading-relaxed">
-							<span class="text-ink dark:text-surface-100 font-medium">{organizer.name}</span>, {t(
+							<span class="text-strong font-medium">{organizer.name}</span>, {t(
 								organizer.affiliation
 							)}
 						</span>
@@ -66,10 +66,10 @@
 	<!-- Thematic Axes reference -->
 	<ScrollReveal delay={2}>
 		<section>
-			<h2 class="text-section text-ink dark:text-surface-50 mb-5">
+			<h2 class="text-section text-strong mb-5">
 				{m.section_thematic_axes()}
 			</h2>
-			<p class="text-prose text-ink-muted dark:text-surface-300 mb-8">
+			<p class="text-prose text-body mb-8">
 				{m.thematic_axes_reference()}
 			</p>
 			<div class="space-y-8">
@@ -77,18 +77,16 @@
 					<div>
 						<div class="mb-3 flex items-baseline gap-4">
 							<span
-								class="text-secondary-600 dark:text-secondary-400 font-display w-8 flex-shrink-0 text-2xl leading-none"
+								class="text-accent-ink font-display w-8 flex-shrink-0 text-2xl leading-none"
 								aria-hidden="true"
 							>
 								0{axis.number}
 							</span>
-							<h3
-								class="text-ink dark:text-surface-100 font-sans text-base leading-snug font-medium sm:text-lg"
-							>
+							<h3 class="text-strong font-sans text-base leading-snug font-medium sm:text-lg">
 								{t(axis.title)}
 							</h3>
 						</div>
-						<p class="text-prose text-ink-muted dark:text-surface-300 pl-12">
+						<p class="text-prose text-body pl-12">
 							{t(axis.description)}
 						</p>
 					</div>
@@ -100,10 +98,10 @@
 	<!-- Workshop Format & Language Policy -->
 	<ScrollReveal delay={3}>
 		<section>
-			<h2 class="text-section text-ink dark:text-surface-50 mb-5">
+			<h2 class="text-section text-strong mb-5">
 				{m.workshop_format_label()}
 			</h2>
-			<p class="text-prose text-ink-muted dark:text-surface-300">
+			<p class="text-prose text-body">
 				{t(cfpInfo.workshopFormat)}
 			</p>
 		</section>
@@ -112,11 +110,11 @@
 	<!-- Guidelines -->
 	<ScrollReveal delay={4}>
 		<section>
-			<h2 class="text-section text-ink dark:text-surface-50 mb-5">{m.guidelines()}</h2>
-			<p class="text-prose text-ink-muted dark:text-surface-300 mb-5">
+			<h2 class="text-section text-strong mb-5">{m.guidelines()}</h2>
+			<p class="text-prose text-body mb-5">
 				{t(cfpInfo.guidelines)}
 			</p>
-			<p class="text-prose text-ink-muted dark:text-surface-300 mb-5">
+			<p class="text-prose text-body mb-5">
 				{m.cfp_contact_text()}
 			</p>
 			<ul class="space-y-2.5">
@@ -129,7 +127,7 @@
 								aria-hidden="true"
 							></span>
 							<span class="leading-relaxed">
-								<span class="text-ink dark:text-surface-100 font-medium">{organizer.name}</span>:
+								<span class="text-strong font-medium">{organizer.name}</span>:
 								<a href="mailto:{email}" class="link-inline">{email}</a>
 							</span>
 						</li>
@@ -142,10 +140,10 @@
 	<!-- Publication -->
 	<ScrollReveal delay={5}>
 		<section>
-			<h2 class="text-section text-ink dark:text-surface-50 mb-5">
+			<h2 class="text-section text-strong mb-5">
 				{m.cfp_publication_label()}
 			</h2>
-			<p class="text-prose text-ink-muted dark:text-surface-300">
+			<p class="text-prose text-body">
 				{publicationParts.before}<a
 					href={JDHASA_URL}
 					target="_blank"
@@ -160,10 +158,10 @@
 	<!-- Selection Criteria -->
 	<ScrollReveal delay={6}>
 		<section>
-			<h2 class="text-section text-ink dark:text-surface-50 mb-5">
+			<h2 class="text-section text-strong mb-5">
 				{m.cfp_selection_label()}
 			</h2>
-			<p class="text-prose text-ink-muted dark:text-surface-300">
+			<p class="text-prose text-body">
 				{t(cfpInfo.selectionCriteria)}
 			</p>
 		</section>
@@ -172,11 +170,11 @@
 	<!-- Funding -->
 	<ScrollReveal delay={7}>
 		<section>
-			<h2 class="text-section text-ink dark:text-surface-50 mb-5">
+			<h2 class="text-section text-strong mb-5">
 				{m.cfp_funding_label()}
 			</h2>
 			<!-- The funding paragraph is the venue's logistics info — one source of truth. -->
-			<p class="text-prose text-ink-muted dark:text-surface-300">
+			<p class="text-prose text-body">
 				{t(venueInfo.logisticsInfo)}
 			</p>
 		</section>
@@ -185,7 +183,7 @@
 	<!-- Key Dates — refined timeline -->
 	<ScrollReveal delay={8}>
 		<section>
-			<h2 class="text-section text-ink dark:text-surface-50 mb-8">{m.key_dates()}</h2>
+			<h2 class="text-section text-strong mb-8">{m.key_dates()}</h2>
 			<ol class="relative">
 				<!-- vertical rule -->
 				<span
@@ -201,7 +199,7 @@
 							></span>
 							<div class="card flex-1 p-5">
 								<p class="text-meta mb-1">{dateItem.label}</p>
-								<p class="text-ink dark:text-surface-50 font-sans text-lg font-medium">
+								<p class="text-strong font-sans text-lg font-medium">
 									{dateItem.value}
 								</p>
 							</div>

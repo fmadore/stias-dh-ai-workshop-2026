@@ -21,7 +21,7 @@
 						{organizer.name}
 					</a>
 				</h3>
-				<p class="text-primary-700 dark:text-primary-300 mt-1 text-sm font-medium">
+				<p class="text-link mt-1 text-sm font-medium">
 					{t(organizer.role)}
 				</p>
 				<p class="text-muted mb-4 text-sm">

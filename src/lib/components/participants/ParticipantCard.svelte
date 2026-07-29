@@ -34,7 +34,7 @@
 	{#each presentations as presentation (presentation.id)}
 		{@const placement = placements.get(presentation.id)}
 		<p
-			class="border-accent/55 text-primary-700 dark:text-primary-300 text-caption mt-3 border-l-2 pl-2.5 leading-snug"
+			class="border-accent/55 text-link text-caption mt-3 border-l-2 pl-2.5 leading-snug"
 			lang={presentation.language}
 		>
 			{presentation.title}

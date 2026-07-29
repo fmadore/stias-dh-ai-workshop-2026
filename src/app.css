@@ -232,6 +232,7 @@ html {
 	--color-hairline: var(--border-strong);
 	--color-accent: var(--accent);
 	--color-accent-ink: var(--accent-ink);
+	--color-link: var(--link);
 }
 
 body {

@@ -23,7 +23,7 @@
 <AtAGlance />
 
 <!-- Thematic Axes Preview -->
-<section class="section-pad-lg bg-paper dark:bg-paper-dark">
+<section class="section-pad-lg bg-raised">
 	<div class="container-page">
 		<!-- One reveal per section container, never one per child: three cards
 		     each waiting their turn is friction, not delight. -->

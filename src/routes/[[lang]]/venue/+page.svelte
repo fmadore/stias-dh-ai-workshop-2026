@@ -10,9 +10,13 @@
 
 <SEO title="{m.nav_venue()} | {siteConfig.shortTitle}" description={m.seo_venue_description()} />
 
-<PageHeader title={m.section_venue()} />
+<PageHeader
+	title={m.section_venue()}
+	subtitle={m.seo_venue_description()}
+	meta={[m.hero_dates(), m.hero_location()]}
+/>
 
-<div class="page-end">
+<div class="page-end pt-14">
 	<div class="container-readable">
 		<div class="grid grid-cols-1 gap-10 lg:grid-cols-[1.1fr_1fr]">
 			<ScrollReveal>

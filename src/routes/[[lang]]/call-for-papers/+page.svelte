@@ -6,39 +6,25 @@
 	import PageHeader from '$lib/components/layout/PageHeader.svelte';
 	import CFPSection from '$lib/components/cfp/CFPSection.svelte';
 	import DownloadCFPButton from '$lib/components/cfp/DownloadCFPButton.svelte';
-	import { MapPin, Calendar } from '@lucide/svelte';
 </script>
 
 <SEO title="{m.nav_cfp()} | {siteConfig.shortTitle}" description={m.seo_cfp_description()} />
 
-<PageHeader title={m.section_cfp()} />
+<!-- The downloads live in the header band rather than in a card below it,
+     and the workshop title is the header's subtitle instead of a second h2
+     repeating what the page already says. -->
+<PageHeader
+	title={m.section_cfp()}
+	eyebrow={m.hero_subtitle()}
+	subtitle={t(siteConfig.title)}
+	meta={[m.hero_dates(), m.hero_location(), m.hero_format()]}
+>
+	{#snippet actions()}
+		<DownloadCFPButton variant="primary" />
+	{/snippet}
+</PageHeader>
 
-<!-- Workshop identity block -->
-<div class="pb-12">
-	<div class="container-readable">
-		<div class="card p-8 sm:p-10">
-			<span class="text-eyebrow mb-4 inline-block">{m.hero_subtitle()}</span>
-			<h2 class="text-page-title text-ink dark:text-surface-50 mb-6">
-				{t(siteConfig.title)}
-			</h2>
-			<div
-				class="text-ink-muted dark:text-surface-300 mb-8 flex flex-col gap-3 sm:flex-row sm:gap-6"
-			>
-				<span class="text-ui inline-flex items-center gap-2 font-light">
-					<Calendar size={17} strokeWidth={1.75} class="text-primary-600" aria-hidden="true" />
-					{m.hero_dates()}
-				</span>
-				<span class="text-ui inline-flex items-center gap-2 font-light">
-					<MapPin size={17} strokeWidth={1.75} class="text-primary-600" aria-hidden="true" />
-					{m.hero_location()}
-				</span>
-			</div>
-			<DownloadCFPButton variant="primary" />
-		</div>
-	</div>
-</div>
-
-<div class="page-end">
+<div class="page-end pt-14">
 	<div class="container-readable">
 		<CFPSection />
 	</div>

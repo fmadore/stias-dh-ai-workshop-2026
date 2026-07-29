@@ -11,25 +11,29 @@
 
 <SEO title="{m.nav_about()} | {siteConfig.shortTitle}" description={m.seo_about_description()} />
 
-<PageHeader title={m.nav_about()} />
+<PageHeader
+	title={m.nav_about()}
+	subtitle={m.seo_about_description()}
+	meta={[m.hero_dates(), m.hero_location(), m.hero_format()]}
+/>
 
 <AbstractSection />
 
-<section class="section-pad bg-paper dark:bg-paper-dark">
+<section class="section-pad bg-raised">
 	<div class="container-readable">
 		<ScrollReveal>
 			<div class="mb-10">
-				<h2 class="text-section text-ink dark:text-surface-50">
+				<h2 class="text-section text-strong">
 					{m.section_thematic_axes()}
 				</h2>
 			</div>
 		</ScrollReveal>
-		<div class="space-y-5">
-			{#each thematicAxes as axis, i}
-				<ScrollReveal delay={i}>
+		<ScrollReveal>
+			<div class="space-y-5">
+				{#each thematicAxes as axis (axis.id)}
 					<ThematicAxis {axis} compact={false} />
-				</ScrollReveal>
-			{/each}
-		</div>
+				{/each}
+			</div>
+		</ScrollReveal>
 	</div>
 </section>

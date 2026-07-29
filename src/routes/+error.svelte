@@ -13,7 +13,7 @@
 <div class="section-pad-lg">
 	<div class="container-readable text-center">
 		<p class="text-eyebrow mb-4">{page.status}</p>
-		<h1 class="text-page-title text-ink dark:text-surface-50 mb-5">
+		<h1 class="text-page-title text-strong mb-5">
 			{page.status === 404 ? m.error_404_title() : m.error_generic_title()}
 		</h1>
 		{#if page.status === 404}
