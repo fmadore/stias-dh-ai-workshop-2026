@@ -268,6 +268,16 @@ h3 {
 	line-height: 1.2;
 }
 
+/* Tailwind v4's preflight sets `cursor: default` on buttons, so a button
+   only gets the pointer if its own class declares one — which .btn, .btn-ghost
+   and the pill classes all do, and raw-utility buttons (the language switcher)
+   silently did not. Restore it once, here, so every clickable control agrees.
+   `:not(:disabled)` leaves .btn:disabled's `not-allowed` intact. */
+button:not(:disabled),
+[role='button']:not(:disabled) {
+	cursor: pointer;
+}
+
 ::selection {
 	background-color: color-mix(in oklab, var(--color-secondary-400) 40%, transparent);
 	color: var(--color-ink);
