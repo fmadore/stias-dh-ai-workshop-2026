@@ -230,6 +230,7 @@ html {
 
 	--color-subtle: var(--border-subtle);
 	--color-hairline: var(--border-strong);
+	--color-accent: var(--accent);
 	--color-accent-ink: var(--accent-ink);
 }
 
@@ -632,6 +633,42 @@ html {
 		background-color: var(--color-primary-700);
 		box-shadow: var(--shadow-md);
 		transform: translateY(-1px);
+	}
+
+	/* Solid gold. The second brand colour only ever appeared as a hairline or
+	   a 5–12% wash, so the palette read as teal-plus-cream with a hint; this
+	   is the one place per page where it is a colour. Gold is a light tone,
+	   so the label is ink rather than white. */
+	.btn-accent {
+		background-color: var(--color-secondary-500);
+		color: var(--color-ink);
+		box-shadow: var(--shadow-xs);
+	}
+	.btn-accent:hover:not(:disabled) {
+		background-color: var(--color-secondary-400);
+		box-shadow: var(--shadow-md);
+		transform: translateY(-1px);
+	}
+
+	/* Outline and text buttons for use on the dark hero, where the teal
+	   .btn-secondary has nothing to sit against. */
+	.btn-on-dark {
+		background-color: transparent;
+		color: var(--color-primary-50);
+		border: 1.5px solid color-mix(in oklab, var(--color-primary-100) 40%, transparent);
+	}
+	.btn-on-dark:hover:not(:disabled) {
+		background-color: color-mix(in oklab, var(--color-primary-100) 12%, transparent);
+		border-color: color-mix(in oklab, var(--color-primary-100) 65%, transparent);
+	}
+
+	.btn-quiet-on-dark {
+		background-color: transparent;
+		color: color-mix(in oklab, var(--color-primary-100) 82%, transparent);
+		padding-inline: 0.375rem;
+	}
+	.btn-quiet-on-dark:hover:not(:disabled) {
+		color: #fff;
 	}
 
 	.btn-secondary {

@@ -15,6 +15,11 @@
 
 	let element: HTMLElement | undefined = $state();
 
+	// Cap the stagger at three steps. Reveal section containers, not their
+	// children — an unbounded delay={i} over a list means the last item lands
+	// most of a second after the reader has already arrived at it.
+	const steps = $derived(Math.min(Math.max(delay, 0), 3));
+
 	$effect(() => {
 		if (!element) return;
 
@@ -24,7 +29,7 @@
 					if (entry.isIntersecting) {
 						setTimeout(() => {
 							entry.target.classList.add('visible');
-						}, delay * 120);
+						}, steps * 120);
 						observer.unobserve(entry.target);
 					}
 				}

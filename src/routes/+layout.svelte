@@ -6,6 +6,7 @@
 	import '../app.css';
 	import Navbar from '$lib/components/layout/Navbar.svelte';
 	import Footer from '$lib/components/layout/Footer.svelte';
+	import WhatNext from '$lib/components/layout/WhatNext.svelte';
 	import BackToTop from '$lib/components/layout/BackToTop.svelte';
 
 	let { children } = $props();
@@ -40,6 +41,7 @@
 	<main id="main" class="flex-1 pt-[var(--nav-height)]">
 		{@render children()}
 	</main>
+	<WhatNext />
 	<Footer />
 	<BackToTop />
 </div>

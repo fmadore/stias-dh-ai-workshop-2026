@@ -14,6 +14,11 @@
 	type IconKey = keyof typeof iconMap;
 
 	const IconComponent = $derived(iconMap[axis.icon as IconKey]);
+
+	// A bare title plus an icon and a big "01" made three cards that all
+	// looked the same and said almost nothing. The opening sentence of the
+	// description is already written — surface it.
+	const summary = $derived(t(axis.description).split(/(?<=[.?!])\s+/)[0] ?? '');
 </script>
 
 {#if compact}
@@ -34,9 +39,12 @@
 				0{axis.number}
 			</span>
 		</div>
-		<h3 class="text-card-title text-ink dark:text-surface-50 mt-6">
+		<h3 class="text-card-title text-strong mt-6">
 			{t(axis.title)}
 		</h3>
+		{#if summary}
+			<p class="text-muted text-caption mt-3 leading-relaxed">{summary}</p>
+		{/if}
 	</article>
 {:else}
 	<!-- Full card for about page -->
@@ -63,10 +71,10 @@
 						{/if}
 					</div>
 				</div>
-				<h3 class="text-card-title text-ink dark:text-surface-50 mb-4">
+				<h3 class="text-card-title text-strong mb-4">
 					{t(axis.title)}
 				</h3>
-				<p class="text-prose text-ink-muted dark:text-surface-300">
+				<p class="text-prose">
 					{t(axis.description)}
 				</p>
 			</div>
