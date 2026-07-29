@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
+	import * as m from '$lib/paraglide/messages';
 	import '../app.css';
 	import Navbar from '$lib/components/layout/Navbar.svelte';
 	import Footer from '$lib/components/layout/Footer.svelte';
@@ -32,9 +33,11 @@
 	});
 </script>
 
+<a class="skip-link" href="#main">{m.skip_to_content()}</a>
+
 <div class="bg-cream flex min-h-screen flex-col">
 	<Navbar />
-	<main class="flex-1 pt-[4.5rem]">
+	<main id="main" class="flex-1 pt-[var(--nav-height)]">
 		{@render children()}
 	</main>
 	<Footer />

@@ -9,21 +9,8 @@
 <section
 	class="from-primary-900 via-primary-800 to-primary-950 grain relative overflow-hidden bg-gradient-to-br text-white"
 >
-	<!-- SVG noise texture overlay -->
-	<div class="absolute inset-0 opacity-[0.05]" aria-hidden="true">
-		<svg class="h-full w-full" xmlns="http://www.w3.org/2000/svg">
-			<filter id="heroNoise">
-				<feTurbulence
-					type="fractalNoise"
-					baseFrequency="0.65"
-					numOctaves="3"
-					stitchTiles="stitch"
-				/>
-				<feColorMatrix type="saturate" values="0" />
-			</filter>
-			<rect width="100%" height="100%" filter="url(#heroNoise)" opacity="1" />
-		</svg>
-	</div>
+	<!-- Texture comes from the .grain class above; a second inline feTurbulence
+	     layer only stacked more noise for another rasterised filter pass. -->
 
 	<!-- Single soft radial accent -->
 	<div

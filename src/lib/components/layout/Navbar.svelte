@@ -53,7 +53,7 @@
 		: 'dark:bg-surface-900/85 bg-[color-mix(in_oklab,var(--color-cream)_88%,transparent)]'}"
 >
 	<div class="container-page">
-		<div class="flex h-[4.5rem] items-center justify-between">
+		<div class="flex h-[var(--nav-height)] items-center justify-between">
 			<!-- Brand -->
 			<a
 				href={localePath('/')}

@@ -107,6 +107,26 @@
 html {
 	-webkit-text-size-adjust: 100%;
 	text-rendering: optimizeLegibility;
+	/* Anchors (a programme session, a participant) must land below the
+	   fixed header rather than underneath it. */
+	scroll-padding-top: calc(var(--nav-height) + 1rem);
+}
+
+:root {
+	/* Tell the browser which scheme the native UI should adopt — without this,
+	   <select> dropdown lists, the input[type=search] clear button, form
+	   autofill and Firefox scrollbars all stay light while the page is dark. */
+	color-scheme: light;
+
+	/* One source of truth for the fixed header height. Consumed by Navbar
+	   (its own height), +layout (main's padding-top) and scroll-padding-top
+	   above, so in-page anchors clear the bar instead of landing under it.
+	   Deliberately outside @theme: it needs no utility, and theme variables
+	   are tree-shaken unless a generated utility references them. */
+	--nav-height: 4.5rem;
+}
+.dark {
+	color-scheme: dark;
 }
 
 body {
@@ -163,6 +183,29 @@ h3 {
 	outline: 2px solid var(--color-primary-500);
 	outline-offset: 3px;
 	border-radius: var(--radius-xs);
+}
+
+/* ============================================================
+   SKIP LINK — first focusable element in the layout, so keyboard
+   visitors don't tab through seven nav items, two language buttons
+   and a theme toggle on every page before reaching content.
+   ============================================================ */
+.skip-link {
+	position: fixed;
+	inset-inline-start: 1rem;
+	top: -4rem;
+	z-index: 100;
+	padding: 0.7rem 1.1rem;
+	background-color: var(--color-primary-700);
+	color: #fff;
+	border-radius: var(--radius-md);
+	font-family: var(--font-sans);
+	font-size: 0.875rem;
+	font-weight: 500;
+	transition: top var(--duration-base) var(--ease-standard);
+}
+.skip-link:focus-visible {
+	top: 1rem;
 }
 
 /* ============================================================
@@ -642,4 +685,78 @@ html {
 }
 .dark .bg-cream-dark {
 	background-color: var(--color-paper-dark);
+}
+
+/* ============================================================
+   PRINT
+   The Call for Papers is the page most likely to be printed and
+   circulated, so paper output is a real output target here.
+   ============================================================ */
+@media print {
+	/* Without this, anything the reader has not scrolled past prints blank:
+	   the hidden state is only ever cleared by the IntersectionObserver. */
+	.js .scroll-reveal,
+	.js .scroll-reveal.from-left,
+	.js .scroll-reveal.from-right {
+		opacity: 1 !important;
+		transform: none !important;
+	}
+
+	/* Print on white regardless of the theme the reader is browsing in. */
+	:root,
+	.dark {
+		color-scheme: light;
+		--color-cream: #fff;
+		--color-cream-dark: #fff;
+		--color-paper: #fff;
+		--color-paper-dark: #fff;
+		--color-deep: #fff;
+	}
+	.dark body {
+		background-color: #fff;
+		color: var(--color-ink);
+	}
+
+	/* Screen-only chrome. */
+	header[class*='fixed'],
+	.skip-link,
+	.back-to-top,
+	nav[aria-label='Language'],
+	nav[aria-label='Mobile navigation'] {
+		display: none !important;
+	}
+
+	main {
+		padding-top: 0 !important;
+	}
+	.grain::before {
+		display: none !important;
+	}
+
+	.card,
+	.card-hover {
+		box-shadow: none !important;
+		border: 1px solid #d8d2c6 !important;
+	}
+	.card,
+	.card-hover,
+	li,
+	.session-paper,
+	figure {
+		break-inside: avoid;
+	}
+	h1,
+	h2,
+	h3 {
+		break-after: avoid;
+	}
+
+	/* Abstracts and the CFP are read on paper — surface the URLs. */
+	.text-prose a[href^='http']::after,
+	.prose a[href^='http']::after,
+	.abstract a[href^='http']::after {
+		content: ' (' attr(href) ')';
+		font-size: 0.75em;
+		word-break: break-all;
+	}
 }
