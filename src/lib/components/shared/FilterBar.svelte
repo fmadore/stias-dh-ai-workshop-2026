@@ -7,6 +7,13 @@
 		visibleCount: number;
 		countries: string[];
 		searchPlaceholder: string;
+		/**
+		 * What the EN/FR group actually filters on. It sits inches from the
+		 * site's own EN/FR switcher and reads as a duplicate control without a
+		 * label — and on the participants page it silently means "presents a
+		 * paper in", which nobody would guess.
+		 */
+		languageLabel?: string;
 		query?: string;
 		country?: string | null;
 		language?: 'en' | 'fr' | null;
@@ -17,6 +24,7 @@
 		visibleCount,
 		countries,
 		searchPlaceholder,
+		languageLabel = m.filter_language_label(),
 		query = $bindable(''),
 		country = $bindable(null),
 		language = $bindable(null)
@@ -51,34 +59,37 @@
 			{/each}
 		</select>
 
-		<div class="filter-pills" role="group" aria-label={m.filter_language_all()}>
-			<button
-				type="button"
-				class="filter-pill"
-				class:is-active={language === null}
-				onclick={() => (language = null)}
-				aria-pressed={language === null}
-			>
-				{m.filter_language_all()}
-			</button>
-			<button
-				type="button"
-				class="filter-pill"
-				class:is-active={language === 'en'}
-				onclick={() => (language = 'en')}
-				aria-pressed={language === 'en'}
-			>
-				EN
-			</button>
-			<button
-				type="button"
-				class="filter-pill"
-				class:is-active={language === 'fr'}
-				onclick={() => (language = 'fr')}
-				aria-pressed={language === 'fr'}
-			>
-				FR
-			</button>
+		<div class="filter-language">
+			<span class="filter-language-label" id="filter-language-label">{languageLabel}</span>
+			<div class="filter-pills" role="group" aria-labelledby="filter-language-label">
+				<button
+					type="button"
+					class="filter-pill"
+					class:is-active={language === null}
+					onclick={() => (language = null)}
+					aria-pressed={language === null}
+				>
+					{m.filter_language_all()}
+				</button>
+				<button
+					type="button"
+					class="filter-pill"
+					class:is-active={language === 'en'}
+					onclick={() => (language = 'en')}
+					aria-pressed={language === 'en'}
+				>
+					EN
+				</button>
+				<button
+					type="button"
+					class="filter-pill"
+					class:is-active={language === 'fr'}
+					onclick={() => (language = 'fr')}
+					aria-pressed={language === 'fr'}
+				>
+					FR
+				</button>
+			</div>
 		</div>
 	</div>
 
@@ -111,7 +122,9 @@
 	@media (min-width: 640px) {
 		.filter-controls {
 			flex-direction: row;
-			align-items: center;
+			/* flex-end, not center: the language group carries a label above its
+			   pills, so the controls line up on their baselines. */
+			align-items: flex-end;
 			flex-wrap: wrap;
 		}
 
@@ -195,6 +208,21 @@
 
 	:global(.dark) .filter-select {
 		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%23a1a1aa' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M3 4.5l3 3 3-3'/%3E%3C/svg%3E");
+	}
+
+	.filter-language {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3rem;
+	}
+
+	.filter-language-label {
+		font-family: var(--font-sans);
+		font-size: var(--text-badge);
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--ink-subtle);
 	}
 
 	.filter-pills {

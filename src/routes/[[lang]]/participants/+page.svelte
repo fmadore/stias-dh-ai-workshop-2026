@@ -3,7 +3,6 @@
 	import { siteConfig } from '$lib/data/site-config';
 	import SEO from '$lib/components/SEO.svelte';
 	import PageHeader from '$lib/components/layout/PageHeader.svelte';
-	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
 	import { organizers } from '$lib/data/organizers';
 	import { participants } from '$lib/data/participants';
 	import OrganizerCard from '$lib/components/participants/OrganizerCard.svelte';
@@ -24,49 +23,52 @@
 	description={m.seo_participants_description()}
 />
 
-<PageHeader title={m.nav_participants()} />
+<PageHeader
+	title={m.nav_participants()}
+	width="page"
+	meta={[
+		`${participants.length} ${m.glance_participants()}`,
+		`${organizers.length} ${m.section_organisers()}`,
+		`${countries.length} ${m.glance_countries()}`
+	]}
+/>
 
-<div class="page-end">
-	<div class="container-readable max-w-5xl">
+<div class="page-end pt-14">
+	<div class="container-page">
+		<!-- The convenors keep the editorial two-column card: four people whose
+		     only distinction used to be one teal role line on an identical card. -->
 		<section class="mb-16">
-			<ScrollReveal>
-				<h2 class="text-section text-ink dark:text-surface-50 mb-8">
-					{m.section_organisers()}
-				</h2>
-			</ScrollReveal>
+			<h2 class="text-section text-strong mb-8">
+				{m.section_organisers()}
+			</h2>
 			<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-				{#each organizers as organizer, i (organizer.id)}
-					<ScrollReveal delay={i}>
-						<OrganizerCard {organizer} />
-					</ScrollReveal>
+				{#each organizers as organizer (organizer.id)}
+					<OrganizerCard {organizer} />
 				{/each}
 			</div>
 		</section>
 
 		{#if participants.length > 0}
 			<section>
-				<ScrollReveal>
-					<h2 class="text-section text-ink dark:text-surface-50 mb-8">
-						{m.section_participants()}
-					</h2>
-				</ScrollReveal>
-				<ScrollReveal delay={1}>
-					<div class="mb-8">
-						<FilterBar
-							totalCount={participants.length}
-							visibleCount={filtered.length}
-							{countries}
-							searchPlaceholder={m.participants_search_placeholder()}
-							bind:query
-							bind:country
-							bind:language
-						/>
-					</div>
-				</ScrollReveal>
+				<h2 class="text-section text-strong mb-8">
+					{m.section_participants()}
+				</h2>
+				<div class="mb-8">
+					<FilterBar
+						totalCount={participants.length}
+						visibleCount={filtered.length}
+						{countries}
+						searchPlaceholder={m.participants_search_placeholder()}
+						languageLabel={m.filter_language_label_participants()}
+						bind:query
+						bind:country
+						bind:language
+					/>
+				</div>
 				{#if filtered.length > 0}
 					<ParticipantGrid participants={filtered} />
 				{:else}
-					<p class="text-ink-muted dark:text-surface-400 py-12 text-center text-sm">
+					<p class="text-muted py-12 text-center text-sm">
 						{m.participants_filter_no_results()}
 					</p>
 				{/if}

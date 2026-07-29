@@ -4,20 +4,18 @@
 	import * as m from '$lib/paraglide/messages';
 	import { getPeople } from '$lib/data/people';
 	import { getPresentation, getPresentationAuthors } from '$lib/data/presentations';
-	import { Video } from '@lucide/svelte';
+	import { sessionAnchor } from '$lib/utils/placement';
+	import { Video, Link as LinkIcon } from '@lucide/svelte';
 
-	let { session }: { session: Session } = $props();
+	let { session, panelNumber }: { session: Session; panelNumber?: number } = $props();
 
-	const typeStyles: Record<Session['type'], string> = {
-		keynote:
-			'bg-secondary-500/12 text-secondary-700 dark:text-secondary-300 border-secondary-500/30',
-		panel: 'bg-primary-500/10 text-primary-700 dark:text-primary-300 border-primary-500/25',
-		plenary: 'bg-primary-500/5 text-primary-800 dark:text-primary-200 border-primary-500/20',
-		break:
-			'bg-surface-200/60 text-surface-700 dark:bg-surface-700/50 dark:text-surface-300 border-surface-300/40',
-		social: 'bg-secondary-500/8 text-secondary-800 dark:text-secondary-200 border-secondary-500/20',
-		discussion: 'bg-primary-500/8 text-primary-700 dark:text-primary-300 border-primary-500/25'
-	};
+	// Three treatments, not six tinted badges. Keynote gold, panel teal-10,
+	// plenary teal-5, discussion teal-8 and social gold-8 were three
+	// near-identical teals nobody was going to decode; meanwhile a tea break
+	// carried the same border, padding and badge grammar as a keynote.
+	const treatment = $derived(
+		session.type === 'break' ? 'interlude' : session.type === 'social' ? 'social' : 'session'
+	);
 
 	const typeLabels: Record<Session['type'], string> = {
 		keynote: m.session_keynote(),
@@ -27,6 +25,12 @@
 		social: m.session_social(),
 		discussion: m.session_discussion()
 	};
+
+	const typeLabel = $derived(
+		session.type === 'panel' && panelNumber
+			? `${typeLabels.panel} ${panelNumber}`
+			: typeLabels[session.type]
+	);
 
 	const speakers = $derived(getPeople(session.speakers));
 	const papers = $derived(
@@ -54,6 +58,9 @@
 	const headingHref = $derived(
 		featuredPaper ? localePath(`/papers/${featuredPaper.id}`) : undefined
 	);
+
+	const anchor = $derived(sessionAnchor(session.id));
+	const times = $derived(session.time.split(/\s*[–—-]\s*/));
 </script>
 
 <!--
@@ -67,89 +74,113 @@
 	</span>
 {/snippet}
 
-<div
-	class="border-surface-200 dark:border-surface-700/70 flex gap-4 border-b py-4 last:border-b-0 sm:gap-5"
->
+{#if treatment === 'interlude'}
+	<!-- A break is a quiet dashed rule: no badge, no card, no serif. -->
+	<div id={anchor} class="border-subtle flex items-baseline gap-4 border-y border-dashed py-2.5">
+		<span class="text-muted text-caption w-20 flex-shrink-0 font-mono tabular-nums sm:w-28">
+			{times[0]}
+		</span>
+		<span class="text-muted text-caption">
+			{session.title ? t(session.title) : typeLabel}
+		</span>
+	</div>
+{:else}
 	<div
-		class="text-ink-muted dark:text-surface-400 text-caption w-20 flex-shrink-0 pt-1 font-mono leading-snug tabular-nums sm:w-28"
+		id={anchor}
+		class="border-subtle group scroll-mt-28 border-b py-5 last:border-b-0 {treatment === 'social'
+			? 'opacity-90'
+			: ''}"
 	>
-		{session.time}
-	</div>
-	<div class="min-w-0 flex-1">
-		<div class="mb-1.5 flex flex-wrap items-center gap-2">
-			<span
-				class="text-badge rounded-full border px-2 py-0.5 font-medium tracking-wide uppercase {typeStyles[
-					session.type
-				]}"
-			>
-				{typeLabels[session.type]}
-			</span>
-			{#if session.room}
-				<span class="text-ink-muted dark:text-surface-500 text-xs">{session.room}</span>
-			{/if}
-		</div>
-
-		{#if heading}
-			<h3 class="text-ink dark:text-surface-100 font-display text-reading leading-snug">
-				{#if headingHref}
-					<a href={headingHref} class="session-link" lang={featuredPaper?.language}>{heading}</a>
-				{:else}
-					{heading}
+		<div class="flex gap-4 sm:gap-5">
+			<!-- Start time leads, end time recedes. -->
+			<div class="border-subtle w-20 flex-shrink-0 border-r pr-4 sm:w-28">
+				<div class="text-strong font-mono text-sm tabular-nums">{times[0]}</div>
+				{#if times[1]}
+					<div class="text-muted font-mono text-xs tabular-nums">{times[1]}</div>
 				{/if}
-			</h3>
-		{/if}
+			</div>
 
-		{#if (isKeynote || isDiscussion) && speakers.length > 0}
-			<p class="text-ink dark:text-surface-200 mt-1 text-sm font-medium">
-				<!-- prettier-ignore -->
-				{#each speakers as speaker, i (speaker.id)}{i > 0 ? ', ' : ''}{speaker.name}{#if speaker.online}{@render onlineBadge()}{/if}{/each}
-			</p>
-			<p class="text-ink-muted dark:text-surface-400 text-sm">
-				{Array.from(new Set(speakers.map((s) => t(s.affiliation)))).join(' · ')}
-			</p>
-		{/if}
+			<div class="min-w-0 flex-1">
+				<div class="mb-1.5 flex flex-wrap items-center gap-x-2.5 gap-y-1">
+					<span class={treatment === 'social' ? 'text-meta' : 'text-eyebrow'}>{typeLabel}</span>
+					{#if session.room}
+						<span class="text-muted text-xs">{session.room}</span>
+					{/if}
+					<!-- Per-session anchor: until now you could not send anyone a
+					     link to Tuesday's panel. -->
+					<a
+						href="#{anchor}"
+						class="text-primary-600/50 hover:text-primary-600 text-xs opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
+						aria-label={m.session_anchor_label()}
+					>
+						<LinkIcon size={12} strokeWidth={2} aria-hidden="true" />
+					</a>
+				</div>
 
-		{#if showChair}
-			<p class="text-ink-muted dark:text-surface-400 mt-2 text-xs">
-				<span class="font-medium">{m.session_chair()}</span>
-				<!-- prettier-ignore -->
-				{chairPerson ? chairPerson.name : m.session_tbd()}{#if chairPerson?.online}{@render onlineBadge()}{/if}
-			</p>
-		{/if}
-
-		{#if session.description}
-			<p class="text-ink-muted dark:text-surface-300 mt-1.5 text-sm leading-relaxed font-light">
-				{t(session.description)}
-			</p>
-		{/if}
-
-		{#if isPanel && papers.length > 0}
-			<ul class="mt-3 space-y-2.5">
-				{#each papers as paper (paper.id)}
-					{@const authors = getPresentationAuthors(paper)}
-					<li class="session-paper">
-						<a
-							href={localePath(`/papers/${paper.id}`)}
-							class="session-paper-link"
-							lang={paper.language}
-						>
-							{paper.title}
-						</a>
-						<span class="session-lang" lang={paper.language}
-							>{paper.language === 'fr' ? 'FR' : 'EN'}</span
-						>
-						{#if authors.length > 0}
-							<span class="text-ink-muted dark:text-surface-400 mt-0.5 block text-xs">
-								<!-- prettier-ignore -->
-								{#each authors as author, i (author.id)}{i > 0 ? ', ' : ''}{author.name}{#if author.online}{@render onlineBadge()}{/if}{/each}
-							</span>
+				{#if heading}
+					<h3 class="text-strong font-display text-reading leading-snug">
+						{#if headingHref}
+							<a href={headingHref} class="session-link" lang={featuredPaper?.language}>{heading}</a
+							>
+						{:else}
+							{heading}
 						{/if}
-					</li>
-				{/each}
-			</ul>
-		{/if}
+					</h3>
+				{/if}
+
+				{#if (isKeynote || isDiscussion) && speakers.length > 0}
+					<p class="text-strong mt-1 text-sm font-medium">
+						<!-- prettier-ignore -->
+						{#each speakers as speaker, i (speaker.id)}{i > 0 ? ', ' : ''}<a href={localePath(`/participants/${speaker.id}`)} class="session-link">{speaker.name}</a>{#if speaker.online}{@render onlineBadge()}{/if}{/each}
+					</p>
+					<p class="text-muted text-sm">
+						{Array.from(new Set(speakers.map((s) => t(s.affiliation)))).join(' · ')}
+					</p>
+				{/if}
+
+				{#if showChair}
+					<p class="text-muted mt-2 text-xs">
+						<span class="font-medium">{m.session_chair()}</span>
+						<!-- prettier-ignore -->
+						{chairPerson ? chairPerson.name : m.session_tbd()}{#if chairPerson?.online}{@render onlineBadge()}{/if}
+					</p>
+				{/if}
+
+				{#if session.description}
+					<p class="text-muted mt-1.5 text-sm leading-relaxed">
+						{t(session.description)}
+					</p>
+				{/if}
+
+				{#if isPanel && papers.length > 0}
+					<ul class="mt-3 space-y-2.5">
+						{#each papers as paper (paper.id)}
+							{@const authors = getPresentationAuthors(paper)}
+							<li class="session-paper">
+								<a
+									href={localePath(`/papers/${paper.id}`)}
+									class="session-paper-link"
+									lang={paper.language}
+								>
+									{paper.title}
+								</a>
+								<span class="session-lang" lang={paper.language}
+									>{paper.language === 'fr' ? 'FR' : 'EN'}</span
+								>
+								{#if authors.length > 0}
+									<span class="text-muted mt-0.5 block text-xs">
+										<!-- prettier-ignore -->
+										{#each authors as author, i (author.id)}{i > 0 ? ', ' : ''}<a href={localePath(`/participants/${author.id}`)} class="session-link">{author.name}</a>{#if author.online}{@render onlineBadge()}{/if}{/each}
+									</span>
+								{/if}
+							</li>
+						{/each}
+					</ul>
+				{/if}
+			</div>
+		</div>
 	</div>
-</div>
+{/if}
 
 <style>
 	.session-link,
@@ -173,13 +204,10 @@
 
 	.session-paper-link {
 		font-family: var(--font-sans);
-		font-size: 0.9375rem;
+		font-size: var(--text-ui);
 		font-weight: 500;
 		line-height: 1.4;
-		color: var(--color-ink);
-	}
-	:global(.dark) .session-paper-link {
-		color: var(--color-surface-100);
+		color: var(--ink-strong);
 	}
 
 	.session-lang {
@@ -202,9 +230,9 @@
 		gap: 0.2rem;
 		margin-left: 0.4rem;
 		padding: 0.05rem 0.4rem;
-		border: 1px solid color-mix(in oklab, var(--color-secondary-500) 35%, transparent);
+		border: 1px solid var(--border-accent);
 		border-radius: 9999px;
-		background-color: color-mix(in oklab, var(--color-secondary-500) 10%, transparent);
+		background-color: color-mix(in oklab, var(--accent) 10%, transparent);
 		font-size: 0.625rem;
 		font-weight: 600;
 		letter-spacing: 0.06em;
@@ -212,11 +240,6 @@
 		line-height: 1.5;
 		white-space: nowrap;
 		vertical-align: 0.05em;
-		color: var(--color-secondary-700);
-	}
-	:global(.dark) .online-badge {
-		border-color: color-mix(in oklab, var(--color-secondary-400) 35%, transparent);
-		background-color: color-mix(in oklab, var(--color-secondary-400) 14%, transparent);
-		color: var(--color-secondary-300);
+		color: var(--accent-ink);
 	}
 </style>

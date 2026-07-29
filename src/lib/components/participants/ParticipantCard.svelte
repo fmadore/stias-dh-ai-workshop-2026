@@ -1,91 +1,59 @@
 <script lang="ts">
 	import type { Participant } from '$lib/types';
 	import { t, localePath } from '$lib/utils/i18n';
-	import * as m from '$lib/paraglide/messages';
 	import { getParticipantPresentations } from '$lib/data/presentations';
-	import Avatar from '$lib/components/shared/Avatar.svelte';
-	import PersonLinks from '$lib/components/shared/PersonLinks.svelte';
+	import { getPlacements } from '$lib/utils/placement';
+	import AvatarSmall from '$lib/components/shared/AvatarSmall.svelte';
 
-	let { participant }: { participant: Participant } = $props();
+	let {
+		participant,
+		placements = getPlacements()
+	}: { participant: Participant; placements?: ReturnType<typeof getPlacements> } = $props();
 
 	const presentations = $derived(getParticipantPresentations(participant));
-
-	const bio = $derived(participant.bio ? t(participant.bio) : '');
-	// Long bios collapse to a few lines with a toggle so the page stays scannable.
-	const isLongBio = $derived(bio.length > 480);
-	let expanded = $state(false);
+	const href = $derived(localePath(`/participants/${participant.id}`));
 </script>
 
-<article class="card overflow-hidden">
-	<div class="p-6 sm:p-7">
-		<div class="flex flex-col items-center gap-5 sm:flex-row sm:items-start">
-			<div class="flex-shrink-0">
-				<Avatar name={participant.name} image={participant.image} />
-			</div>
+<!--
+	A directory card, not an editorial one. The bio moved to the individual
+	page: 32 full-width rows with a 900px-wide bio beside a 112px portrait was
+	roughly seven screens of scrolling with no rhythm and nothing to scan by.
+	What the card carries now is what people scan for — name, place, paper, slot.
+-->
+<article class="card card-hover flex h-full flex-col p-5">
+	<AvatarSmall name={participant.name} image={participant.image} />
 
-			<div class="flex-1 text-center sm:text-left">
-				<h3 class="text-card-title text-ink dark:text-surface-50">{participant.name}</h3>
-				{#each presentations as p (p.id)}
-					<p class="mt-1 text-sm font-medium italic">
-						<a href={localePath(`/papers/${p.id}`)} class="paper-link" lang={p.language}>
-							{p.language === 'fr' ? '« ' : '“'}{p.title}{p.language === 'fr' ? ' »' : '”'}
-						</a>
-					</p>
-				{/each}
-				<p class="text-ink-muted dark:text-surface-400 mb-4 text-sm">
-					{t(participant.affiliation)}
-				</p>
+	<h3 class="text-card-title text-strong mt-3.5 leading-tight">
+		<a {href} class="card-link participant-link">{participant.name}</a>
+	</h3>
 
-				{#if bio}
-					<span class="bg-secondary-500/50 mx-auto mb-4 block h-px w-8 sm:mx-0" aria-hidden="true"
-					></span>
+	<p class="text-muted text-caption mt-1 leading-snug">
+		{t(participant.affiliation)} · {participant.country}
+	</p>
 
-					<p
-						class="text-bio text-ink-muted dark:text-surface-300 mb-2"
-						class:line-clamp-4={isLongBio && !expanded}
-					>
-						{bio}
-					</p>
-					{#if isLongBio}
-						<button
-							type="button"
-							class="text-primary-700 dark:text-primary-300 hover:text-primary-500 mb-4 cursor-pointer text-sm font-medium"
-							aria-expanded={expanded}
-							onclick={() => (expanded = !expanded)}
-						>
-							{expanded ? m.show_less() : m.read_more()}
-						</button>
-					{/if}
-				{/if}
-
-				<PersonLinks website={participant.website} orcid={participant.orcid} />
-			</div>
-		</div>
-	</div>
+	{#each presentations as presentation (presentation.id)}
+		{@const placement = placements.get(presentation.id)}
+		<p
+			class="border-accent/55 text-primary-700 dark:text-primary-300 text-caption mt-3 border-l-2 pl-2.5 leading-snug"
+			lang={presentation.language}
+		>
+			{presentation.title}
+		</p>
+		{#if placement}
+			<p class="text-eyebrow mt-2">{placement.sessionLabel} · {placement.slotLabel}</p>
+		{/if}
+	{/each}
 </article>
 
 <style>
-	.paper-link {
+	.participant-link {
+		color: inherit;
+		transition: color var(--duration-fast) var(--ease-standard);
+	}
+	.participant-link:hover {
 		color: var(--color-primary-700);
-		background-image: linear-gradient(currentColor, currentColor);
-		background-position: 0 100%;
-		background-repeat: no-repeat;
-		background-size: 0% 1px;
-		transition:
-			color var(--duration-fast) var(--ease-standard),
-			background-size var(--duration-base) var(--ease-standard);
 	}
-
-	:global(.dark) .paper-link {
+	:global(.dark) .participant-link:hover {
 		color: var(--color-primary-300);
-	}
-
-	.paper-link:hover {
-		background-size: 100% 1px;
-		color: var(--color-primary-600);
-	}
-
-	:global(.dark) .paper-link:hover {
-		color: var(--color-primary-200);
 	}
 </style>

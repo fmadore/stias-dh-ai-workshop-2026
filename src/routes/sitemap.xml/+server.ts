@@ -1,5 +1,6 @@
 import type { RequestHandler } from './$types';
 import { presentations } from '$lib/data/presentations';
+import { people } from '$lib/data/people';
 import { siteConfig } from '$lib/data/site-config';
 
 export const prerender = true;
@@ -33,7 +34,13 @@ export const GET: RequestHandler = () => {
 		priority: 0.6
 	}));
 
-	const all = [...staticEntries, ...paperEntries];
+	// Every organiser and participant has a citable page of their own.
+	const personEntries: Entry[] = people.map((person) => ({
+		path: `/participants/${person.id}`,
+		priority: 0.5
+	}));
+
+	const all = [...staticEntries, ...paperEntries, ...personEntries];
 
 	const buildPair = (e: Entry) => {
 		const suffix = e.trailingSlash ? '/' : '';
