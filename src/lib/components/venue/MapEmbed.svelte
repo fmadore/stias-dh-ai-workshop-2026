@@ -6,7 +6,7 @@
 	const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - 0.01}%2C${lat - 0.005}%2C${lng + 0.01}%2C${lat + 0.005}&layer=mapnik&marker=${lat}%2C${lng}`;
 </script>
 
-<div class="card border-surface-200 dark:border-surface-700 overflow-hidden border">
+<div class="card overflow-hidden">
 	<iframe
 		title={m.map_title()}
 		width="100%"

@@ -20,7 +20,7 @@
 		<div class="grid grid-cols-1 gap-5 sm:grid-cols-3 sm:gap-6">
 			{#each keyItems as item, i}
 				<ScrollReveal delay={i}>
-					<div class="card border-secondary-500/70 border-l-[3px] p-6">
+					<div class="card card-accent p-6">
 						<div class="flex items-start gap-4">
 							<div class="text-primary-600 dark:text-primary-400 mt-0.5 flex-shrink-0">
 								<item.icon size={20} strokeWidth={1.75} />

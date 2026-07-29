@@ -19,7 +19,7 @@
 	const href = $derived(localePath(`/papers/${presentation.id}`));
 </script>
 
-<article class="card-hover flex h-full flex-col p-6 sm:p-7">
+<article class="card card-hover flex h-full flex-col p-6 sm:p-7">
 	<div class="mb-4">
 		<span class="language-badge" lang={presentation.language}>
 			{presentation.language === 'fr' ? 'Français' : 'English'}

@@ -43,7 +43,7 @@
 
 <PageHeader title={presentation.title} />
 
-<div class="pb-24">
+<div class="page-end">
 	<div class="container-readable max-w-4xl">
 		<div class="mb-8 flex flex-wrap items-center justify-between gap-3">
 			<span class="language-badge" lang={presentation.language}>
@@ -74,7 +74,7 @@
 		{/if}
 
 		{#if data.abstractHtml}
-			<article class="abstract" lang={presentation.language}>
+			<article class="prose" lang={presentation.language}>
 				<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 				{@html data.abstractHtml}
 			</article>
@@ -97,61 +97,7 @@
 		border-left: 2px solid color-mix(in oklab, var(--color-secondary-500) 60%, transparent);
 	}
 
-	.abstract {
-		font-family: var(--font-sans);
-		font-weight: 300;
-		font-size: 1rem;
-		line-height: 1.72;
-		color: var(--color-ink);
-		max-width: 42rem;
-	}
-
-	:global(.dark) .abstract {
-		color: var(--color-surface-200);
-	}
-
-	@media (min-width: 640px) {
-		.abstract {
-			font-size: 1.0625rem;
-		}
-	}
-
-	.abstract :global(p) {
-		margin-block: 0 1.1em;
-	}
-
-	.abstract :global(p:last-child) {
-		margin-bottom: 0;
-	}
-
-	.abstract :global(strong) {
-		font-weight: 600;
-		color: var(--color-ink);
-	}
-
-	:global(.dark) .abstract :global(strong) {
-		color: var(--color-surface-50);
-	}
-
-	.abstract :global(em) {
-		font-style: italic;
-	}
-
-	.abstract :global(a) {
-		color: var(--color-primary-600);
-		text-decoration: underline;
-		text-decoration-color: color-mix(in oklab, var(--color-primary-600) 30%, transparent);
-		text-decoration-thickness: 1px;
-		text-underline-offset: 0.2em;
-		transition: color var(--duration-fast) var(--ease-standard);
-	}
-
-	:global(.dark) .abstract :global(a) {
-		color: var(--color-primary-300);
-	}
-
-	.abstract :global(a:hover) {
-		color: var(--color-primary-700);
-		text-decoration-color: currentColor;
-	}
+	/* The abstract itself is styled by the shared .prose class in app.css —
+	   it used to re-implement .text-prose plus link styling in 60 lines of
+	   scoped CSS at the same sizes, weights and underline treatment. */
 </style>

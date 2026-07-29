@@ -26,7 +26,7 @@
 
 <PageHeader title={m.nav_participants()} />
 
-<div class="pb-20">
+<div class="page-end">
 	<div class="container-readable max-w-5xl">
 		<section class="mb-16">
 			<ScrollReveal>

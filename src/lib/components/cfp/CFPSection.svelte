@@ -199,7 +199,7 @@
 								class="bg-secondary-500 border-cream dark:border-deep relative z-10 mt-1.5 hidden h-[11px] w-[11px] flex-shrink-0 rounded-full border-2 sm:block"
 								aria-hidden="true"
 							></span>
-							<div class="card border-surface-200/60 dark:border-surface-700/50 flex-1 border p-5">
+							<div class="card flex-1 p-5">
 								<p class="text-meta mb-1">{dateItem.label}</p>
 								<p class="text-ink dark:text-surface-50 font-sans text-lg font-medium">
 									{dateItem.value}
@@ -220,7 +220,7 @@
 					href={cfpInfo.submissionUrl}
 					target="_blank"
 					rel="noopener noreferrer"
-					class="btn btn-primary px-7 py-3.5 text-[0.9375rem]"
+					class="btn btn-primary text-ui px-7 py-3.5"
 				>
 					<Send size={17} strokeWidth={1.75} />
 					{m.submit_proposal()}

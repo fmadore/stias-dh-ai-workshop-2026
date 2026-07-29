@@ -24,7 +24,7 @@
 
 <PageHeader title={m.section_programme()} subtitle={m.hero_dates()} />
 
-<div class="pb-20">
+<div class="page-end">
 	<div class="container-readable">
 		{#if programme.length > 0}
 			<ScrollReveal>
@@ -56,7 +56,7 @@
 			</div>
 		{:else}
 			<ScrollReveal>
-				<div class="card border-surface-200/60 dark:border-surface-700/50 border p-14 text-center">
+				<div class="card p-14 text-center">
 					<Calendar
 						size={44}
 						strokeWidth={1.25}

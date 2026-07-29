@@ -18,7 +18,7 @@
 
 {#if compact}
 	<!-- Compact card for home page: numbered, minimal -->
-	<article class="card-hover group h-full p-7">
+	<article class="card card-hover group h-full p-7">
 		<div class="flex items-start justify-between gap-4">
 			<div
 				class="bg-primary-50 dark:bg-primary-500/12 text-primary-700 dark:text-primary-300 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg"
@@ -41,14 +41,11 @@
 {:else}
 	<!-- Full card for about page -->
 	<article
-		class="card border-surface-200/60 dark:border-surface-700/50 group overflow-hidden border p-8 transition-colors hover:border-[color-mix(in_oklab,var(--color-secondary-500)_45%,transparent)]"
+		class="card group overflow-hidden p-8 transition-colors hover:border-[var(--border-accent)]"
 	>
 		<div class="flex items-start gap-6">
 			<div class="flex-shrink-0">
-				<div
-					class="text-secondary-600 dark:text-secondary-400 font-display text-[2.75rem] leading-none"
-					aria-hidden="true"
-				>
+				<div class="text-accent-ink font-display text-[2.75rem] leading-none" aria-hidden="true">
 					0{axis.number}
 				</div>
 				<div

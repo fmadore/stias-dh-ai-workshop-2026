@@ -71,14 +71,14 @@
 	class="border-surface-200 dark:border-surface-700/70 flex gap-4 border-b py-4 last:border-b-0 sm:gap-5"
 >
 	<div
-		class="text-ink-muted dark:text-surface-400 w-20 flex-shrink-0 pt-1 font-mono text-[0.8125rem] leading-snug tabular-nums sm:w-28"
+		class="text-ink-muted dark:text-surface-400 text-caption w-20 flex-shrink-0 pt-1 font-mono leading-snug tabular-nums sm:w-28"
 	>
 		{session.time}
 	</div>
 	<div class="min-w-0 flex-1">
 		<div class="mb-1.5 flex flex-wrap items-center gap-2">
 			<span
-				class="rounded-full border px-2 py-0.5 text-[0.6875rem] font-medium tracking-wide uppercase {typeStyles[
+				class="text-badge rounded-full border px-2 py-0.5 font-medium tracking-wide uppercase {typeStyles[
 					session.type
 				]}"
 			>
@@ -90,7 +90,7 @@
 		</div>
 
 		{#if heading}
-			<h3 class="text-ink dark:text-surface-100 font-display text-[1.0625rem] leading-snug">
+			<h3 class="text-ink dark:text-surface-100 font-display text-reading leading-snug">
 				{#if headingHref}
 					<a href={headingHref} class="session-link" lang={featuredPaper?.language}>{heading}</a>
 				{:else}

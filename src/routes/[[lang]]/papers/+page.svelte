@@ -25,7 +25,7 @@
 
 <PageHeader title={m.nav_papers()} subtitle={m.papers_page_subtitle()} />
 
-<div class="pb-20">
+<div class="page-end">
 	<div class="container-readable max-w-5xl">
 		{#if sorted.length > 0}
 			<ScrollReveal>

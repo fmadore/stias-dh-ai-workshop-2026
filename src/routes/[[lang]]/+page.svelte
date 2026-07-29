@@ -64,7 +64,7 @@
 				<ScrollReveal delay={i}>
 					<a
 						href={link.href}
-						class="card-hover border-surface-200/60 dark:border-surface-700/50 group block border-t-2 border-transparent p-7 hover:border-t-[var(--color-secondary-500)]"
+						class="card card-hover group block border-t-2 border-t-transparent p-7 hover:border-t-[var(--accent)]"
 					>
 						<h3 class="text-card-title text-ink dark:text-surface-50 mb-3">
 							{link.title}

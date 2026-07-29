@@ -12,7 +12,7 @@
 
 <PageHeader title={m.section_venue()} />
 
-<div class="pb-20">
+<div class="page-end">
 	<div class="container-readable">
 		<div class="grid grid-cols-1 gap-10 lg:grid-cols-[1.1fr_1fr]">
 			<ScrollReveal>
