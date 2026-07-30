@@ -4,7 +4,7 @@ import type { ProgrammeDay } from '$lib/types';
  * Date the programme was last revised (ISO `yyyy-mm-dd`). Bump this whenever you
  * change the sessions below — it is shown as "Last updated" on the page.
  */
-export const programmeLastUpdated = '2026-07-28';
+export const programmeLastUpdated = '2026-07-30';
 
 /**
  * Workshop programme — STIAS, Stellenbosch, 21–24 September 2026.
@@ -29,7 +29,8 @@ export const programmeLastUpdated = '2026-07-28';
  * Sessions therefore cap at 90 minutes (panels = 3 papers × 30 min), no comfort
  * breaks are allowed mid-session, and anything past 17:30 is billed at R1200/h.
  * STIAS caters two coffee breaks only on full days on site (Days 1 and 4); Days
- * 2 and 3 break for an excursion after the 14:00–15:30 block, so they get one.
+ * 2 and 3 leave for an excursion in the afternoon (Day 3 straight after lunch,
+ * so both its panels sit in the morning), and get the 10:30 break only.
  * After-hours functions (dinners) start at 17:30.
  */
 export const programme: ProgrammeDay[] = [
@@ -211,24 +212,8 @@ export const programme: ProgrammeDay[] = [
 		dayLabel: { en: 'Day 3 · Wednesday 23 September', fr: 'Jour 3 · Mercredi 23 septembre' },
 		sessions: [
 			{
-				id: 'd3-keynote',
-				time: '09:30 – 10:30',
-				type: 'keynote',
-				speakers: ['ngue-um'],
-				title: {
-					en: 'African Languages and Large Language Models',
-					fr: 'Langues africaines et grands modèles de langue'
-				}
-			},
-			{
-				id: 'd3-coffee-1',
-				time: '10:30 – 11:00',
-				type: 'break',
-				title: { en: 'Coffee break', fr: 'Pause-café' }
-			},
-			{
 				id: 'd3-panel-e',
-				time: '11:00 – 12:30',
+				time: '09:00 – 10:30',
 				type: 'panel',
 				title: {
 					en: 'Panel 5 · Documenting & Sustaining African Languages',
@@ -245,14 +230,14 @@ export const programme: ProgrammeDay[] = [
 				]
 			},
 			{
-				id: 'd3-lunch',
-				time: '12:30 – 14:00',
+				id: 'd3-coffee-1',
+				time: '10:30 – 11:00',
 				type: 'break',
-				title: { en: 'Lunch', fr: 'Déjeuner' }
+				title: { en: 'Coffee break', fr: 'Pause-café' }
 			},
 			{
 				id: 'd3-panel-f',
-				time: '14:00 – 15:30',
+				time: '11:00 – 12:30',
 				type: 'panel',
 				title: {
 					en: 'Panel 6 · Manuscripts, Histories & Computational Methods',
@@ -269,8 +254,14 @@ export const programme: ProgrammeDay[] = [
 				]
 			},
 			{
+				id: 'd3-lunch',
+				time: '12:30 – 14:00',
+				type: 'break',
+				title: { en: 'Lunch', fr: 'Déjeuner' }
+			},
+			{
 				id: 'd3-visit-b',
-				time: 'From 15:30',
+				time: '14:00 – 18:00',
 				type: 'social',
 				title: { en: 'Visit B', fr: 'Visite B' },
 				description: { en: 'Destination to be determined.', fr: 'Destination à déterminer.' }
