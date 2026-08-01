@@ -7,13 +7,14 @@
 	import PaperGrid from '$lib/components/papers/PaperGrid.svelte';
 	import FilterBar from '$lib/components/shared/FilterBar.svelte';
 	import { filterPresentations, uniquePaperCountries } from '$lib/utils/filter';
+	import type { CountryCode } from '$lib/types';
 
 	const sorted = [...presentations].sort((a, b) =>
 		a.title.localeCompare(b.title, undefined, { sensitivity: 'base' })
 	);
 
 	let query = $state('');
-	let country = $state<string | null>(null);
+	let country = $state<CountryCode | null>(null);
 	let language = $state<'en' | 'fr' | null>(null);
 
 	const countries = uniquePaperCountries(sorted);

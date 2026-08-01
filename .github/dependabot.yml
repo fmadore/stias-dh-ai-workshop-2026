@@ -5,8 +5,8 @@
 #   * MINOR + PATCH updates are bundled into a single PR per ecosystem.
 #   * npm MAJOR bumps stay ungrouped so each lands in its own PR for review
 #     (they can carry breaking changes).
-#   * GitHub Actions are pinned to major tags (@v6, @v4, …), so their updates are
-#     almost always "major" bumps — grouping them all keeps that to one PR.
+#   * GitHub Actions are pinned to immutable release SHAs; Dependabot updates
+#     the pins while inline comments preserve their human-readable versions.
 #   * Checks run monthly. Security updates are unaffected and still arrive immediately.
 version: 2
 
@@ -26,6 +26,11 @@ updates:
       prefix: 'chore'
       prefix-development: 'chore'
       include: 'scope'
+    # typescript-eslint 8 currently supports TypeScript <6.1. Avoid a known-red
+    # TypeScript 7 PR until that peer range is widened upstream.
+    ignore:
+      - dependency-name: 'typescript'
+        versions: ['7.x']
     groups:
       # All low-risk updates in one PR; major bumps come separately.
       npm-minor-and-patch:

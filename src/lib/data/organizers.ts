@@ -14,7 +14,7 @@ export const organizers: Organizer[] = [
 			fr: "Frédérick Madore est historien de l'islam en Afrique de l'Ouest francophone et Data Curator au sein du Cluster d'excellence « Africa Multiple » de l'Université de Bayreuth. Ses travaux actuels explorent comment l'IA et les méthodes numériques peuvent transformer l'étude de collections numériques africaines sous-dotées. Il développe l'Islam West Africa Collection (IWAC), une base de données en accès ouvert de plus de 14 500 documents construite sur Omeka S. À l'aide de pipelines alimentés par des LLM, il expérimente l'extraction de texte assistée par l'IA, la reconnaissance d'entités nommées et l'analyse de sentiments pour traiter de vastes collections documentaires — tout en examinant de manière critique les risques d'opacité algorithmique et de biais occidentalo-centrés. Il a été précédemment chercheur au Leibniz-Zentrum Moderner Orient (Berlin)."
 		},
 		image: '/images/organizers/frederick-madore.webp',
-		country: 'Germany',
+		country: 'DE',
 		website: 'https://www.frederickmadore.com',
 		orcid: '0000-0003-0959-2092'
 	},
@@ -31,7 +31,7 @@ export const organizers: Organizer[] = [
 			fr: "Vincent Hiribarren est historien de l'Afrique de l'Ouest et a travaillé sur plusieurs programmes de numérisation sur le continent africain. Il a récemment créé un module de licence en histoire numérique et s'intéresse aux relations entre les études africaines, les humanités numériques et l'IA."
 		},
 		image: '/images/organizers/vincent-hiribarren.webp',
-		country: 'United Kingdom',
+		country: 'GB',
 		website: 'https://www.vincenthiribarren.com',
 		orcid: '0000-0002-8742-9576',
 		online: true
@@ -49,7 +49,7 @@ export const organizers: Organizer[] = [
 			fr: "Emmanuel Ngue Um est maître de conférences en langues et linguistique africaines à l'Université de Yaoundé 1. Ses recherches actuelles portent sur le développement de technologies vocales et de services de traduction automatique pour soutenir l'enseignement et la revitalisation des langues autochtones d'Afrique. Il participe également au développement d'un écomusée visant à préserver et promouvoir un tronçon du chemin de fer colonial au Cameroun."
 		},
 		image: '/images/organizers/emmanuel-ngue-um.webp',
-		country: 'Cameroon',
+		country: 'CM',
 		orcid: '0000-0002-8467-5990'
 	},
 	{
@@ -65,7 +65,7 @@ export const organizers: Organizer[] = [
 			fr: "Menno van Zaanen est professeur en humanités numériques au South African Centre for Digital Language Resources. Il s'intéresse particulièrement à l'intégration des techniques computationnelles dans le domaine des humanités. Sa formation de recherche est en informatique et en linguistique computationnelle."
 		},
 		image: '/images/organizers/menno-van-zaanen.webp',
-		country: 'South Africa',
+		country: 'ZA',
 		website: 'https://menno.abstractcow.com/',
 		orcid: '0000-0003-1841-2444'
 	}

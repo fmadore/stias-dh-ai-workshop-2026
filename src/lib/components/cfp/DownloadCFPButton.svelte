@@ -1,17 +1,8 @@
 <script lang="ts">
-	import { cfpInfo } from '$lib/data/cfp';
-	import { siteConfig } from '$lib/data/site-config';
-	import { organizers } from '$lib/data/organizers';
-	import { venueInfo } from '$lib/data/venue';
-	import { thematicAxes } from '$lib/data/thematic-axes';
-	import { contactEmails } from '$lib/data/contacts';
-	import { t } from '$lib/utils/i18n';
-	import { getKeyDates } from '$lib/utils/key-dates';
+	import { base } from '$app/paths';
 	import * as m from '$lib/paraglide/messages';
 	import { getLocale } from '$lib/paraglide/runtime';
-	import { base } from '$app/paths';
-	import { FileText, Loader2 } from '@lucide/svelte';
-	import type { CfpPdfLabels } from '$lib/utils/generate-cfp-pdf';
+	import { FileText } from '@lucide/svelte';
 
 	interface Props {
 		variant?: 'primary' | 'secondary';
@@ -19,86 +10,12 @@
 
 	let { variant = 'primary' }: Props = $props();
 
-	let loadingPdf = $state(false);
-	let loadingText = $state(false);
-
-	const locale = $derived(getLocale());
-
-	function buildLabels(filename: string): CfpPdfLabels {
-		return {
-			cfpLabel: m.section_cfp(),
-			title: t(siteConfig.title),
-			heroSubtitle: m.hero_subtitle(),
-			heroDates: m.hero_dates(),
-			heroLocation: m.hero_location(),
-			rationaleLabel: m.cfp_rationale_label(),
-			rationale: t(cfpInfo.rationale),
-			convenorsLabel: m.cfp_convenors_label(),
-			convenors: organizers.map((o) => ({
-				name: o.name,
-				affiliation: t(o.affiliation)
-			})),
-			thematicAxesLabel: m.section_thematic_axes(),
-			thematicAxesIntro: m.thematic_axes_reference(),
-			axes: thematicAxes.map((a) => ({
-				number: a.number,
-				title: t(a.title),
-				description: t(a.description)
-			})),
-			workshopFormatLabel: m.workshop_format_label(),
-			workshopFormat: t(cfpInfo.workshopFormat),
-			guidelinesLabel: m.guidelines(),
-			guidelines: t(cfpInfo.guidelines),
-			contactText: m.cfp_contact_text(),
-			contacts: organizers
-				.filter((o) => contactEmails[o.id])
-				.map((o) => ({
-					name: o.name,
-					email: contactEmails[o.id]
-				})),
-			publicationLabel: m.cfp_publication_label(),
-			publication: t(cfpInfo.publication),
-			selectionLabel: m.cfp_selection_label(),
-			selectionCriteria: t(cfpInfo.selectionCriteria),
-			fundingLabel: m.cfp_funding_label(),
-			fundingText: t(venueInfo.logisticsInfo),
-			keyDatesLabel: m.key_dates(),
-			keyDates: getKeyDates(),
-			supportedByLabel: m.footer_supported_by(),
-			siteUrl: siteConfig.url,
-			filename
-		};
-	}
-
-	async function handleDownloadPdf() {
-		if (loadingPdf) return;
-		loadingPdf = true;
-		try {
-			const { generateCfpPdf } = await import('$lib/utils/generate-cfp-pdf');
-			const filename =
-				locale === 'fr' ? 'Appel-a-contributions-STIAS-2026.pdf' : 'Call-for-Papers-STIAS-2026.pdf';
-			await generateCfpPdf(buildLabels(filename), base);
-		} catch (err) {
-			console.error('PDF generation failed:', err);
-		} finally {
-			loadingPdf = false;
-		}
-	}
-
-	async function handleDownloadText() {
-		if (loadingText) return;
-		loadingText = true;
-		try {
-			const { generateCfpText } = await import('$lib/utils/generate-cfp-text');
-			const filename =
-				locale === 'fr' ? 'Appel-a-contributions-STIAS-2026.txt' : 'Call-for-Papers-STIAS-2026.txt';
-			generateCfpText(buildLabels(filename));
-		} catch (err) {
-			console.error('Text generation failed:', err);
-		} finally {
-			loadingText = false;
-		}
-	}
+	const stem = $derived(
+		getLocale() === 'fr' ? 'Appel-a-contributions-STIAS-2026' : 'Call-for-Papers-STIAS-2026'
+	);
+	const buttonClass = $derived(
+		variant === 'primary' ? 'btn btn-primary btn-sm' : 'btn btn-secondary btn-sm'
+	);
 </script>
 
 {#snippet pdfIcon()}
@@ -134,29 +51,13 @@
 		{m.download_cfp()}
 	</span>
 	<div class="flex flex-wrap items-center gap-2">
-		<button
-			onclick={handleDownloadPdf}
-			disabled={loadingPdf}
-			class={variant === 'primary' ? 'btn btn-primary btn-sm' : 'btn btn-secondary btn-sm'}
-		>
-			{#if loadingPdf}
-				<Loader2 size={15} class="animate-spin" aria-hidden="true" />
-			{:else}
-				{@render pdfIcon()}
-			{/if}
+		<a href={`${base}/downloads/${stem}.pdf`} download class={buttonClass}>
+			{@render pdfIcon()}
 			{m.download_cfp_pdf()}
-		</button>
-		<button
-			onclick={handleDownloadText}
-			disabled={loadingText}
-			class={variant === 'primary' ? 'btn btn-primary btn-sm' : 'btn btn-secondary btn-sm'}
-		>
-			{#if loadingText}
-				<Loader2 size={15} class="animate-spin" aria-hidden="true" />
-			{:else}
-				<FileText size={15} strokeWidth={1.75} aria-hidden="true" />
-			{/if}
+		</a>
+		<a href={`${base}/downloads/${stem}.txt`} download class={buttonClass}>
+			<FileText size={15} strokeWidth={1.75} aria-hidden="true" />
 			{m.download_cfp_text()}
-		</button>
+		</a>
 	</div>
 </div>

@@ -89,7 +89,7 @@
 			</a>
 
 			<!-- Desktop navigation (lg and up — the French labels don't fit at md) -->
-			<nav class="hidden items-center gap-0.5 lg:flex" aria-label="Main navigation">
+			<nav class="hidden items-center gap-0.5 lg:flex" aria-label={m.nav_main_label()}>
 				{#each navLinks as link (link.href)}
 					<a
 						href={link.href}
@@ -150,30 +150,46 @@
 			</div>
 		</div>
 
-		<!-- Mobile Navigation. `inert` removes the collapsed menu from the tab
-		     order and accessibility tree — with only max-height:0 its links
-		     would remain keyboard-focusable while invisible. -->
-		<nav
+		<!-- `inert` removes the collapsed disclosure from the tab order and
+		     accessibility tree while the grid-row transition closes it. -->
+		<div
 			id="mobile-navigation"
-			class="overflow-hidden lg:hidden {mobileMenuOpen ? 'max-h-96 pb-4' : 'max-h-0'}"
-			style="transition: max-height var(--duration-slow) var(--ease-standard);"
-			aria-label="Mobile navigation"
+			class="mobile-navigation lg:hidden"
+			class:is-open={mobileMenuOpen}
 			inert={!mobileMenuOpen}
 		>
-			<div class="border-subtle border-t pt-3">
+			<nav
+				class="border-subtle min-h-0 overflow-hidden border-t pt-3"
+				aria-label={m.nav_mobile_label()}
+			>
 				{#each allLinks as link (link.href)}
 					<a
 						href={link.href}
 						onclick={() => (mobileMenuOpen = false)}
 						aria-current={isActive(link.href) ? 'page' : undefined}
-						class="block px-3 py-2.5 text-sm {isActive(link.href)
+						class="block px-3 py-3 text-sm {isActive(link.href)
 							? 'text-link border-secondary-500 border-l-2 pl-4 font-semibold'
 							: 'text-muted hover:text-strong font-medium'}"
 					>
 						{link.label}
 					</a>
 				{/each}
-			</div>
-		</nav>
+			</nav>
+		</div>
 	</div>
 </header>
+
+<style>
+	.mobile-navigation {
+		display: grid;
+		grid-template-rows: 0fr;
+		transition:
+			grid-template-rows var(--duration-slow) var(--ease-standard),
+			padding-bottom var(--duration-slow) var(--ease-standard);
+	}
+
+	.mobile-navigation.is-open {
+		grid-template-rows: 1fr;
+		padding-bottom: 1rem;
+	}
+</style>

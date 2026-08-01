@@ -7,7 +7,7 @@ const participant: Participant = {
 		en: 'Unaffiliated scholar',
 		fr: 'Chercheuse indépendante'
 	},
-	country: 'Tunisia',
+	country: 'TN',
 	image: '/images/participants/Khaoula-Stiti.webp',
 	website: 'https://khaoulastiti.carrd.co',
 	orcid: '0000-0003-2732-2045',

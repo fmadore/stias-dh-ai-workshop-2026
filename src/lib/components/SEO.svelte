@@ -2,6 +2,7 @@
 	import { page } from '$app/state';
 	import { getLocale } from '$lib/paraglide/runtime';
 	import { siteConfig } from '$lib/data/site-config';
+	import { localizedAbsoluteUrl } from '$lib/utils/localized-paths';
 
 	interface Props {
 		title: string;
@@ -30,8 +31,8 @@
 	const routePath = $derived(
 		canonicalPath ?? ((page.route.id ?? '/').replace('/[[lang]]', '') || '/')
 	);
-	const enUrl = $derived(`${siteConfig.url}${routePath}`);
-	const frUrl = $derived(`${siteConfig.url}/fr${routePath}`);
+	const enUrl = $derived(localizedAbsoluteUrl(siteConfig.url, routePath, 'en'));
+	const frUrl = $derived(localizedAbsoluteUrl(siteConfig.url, routePath, 'fr'));
 	const canonicalUrl = $derived(locale === 'en' ? enUrl : frUrl);
 	const ogImage = $derived(image ?? `${siteConfig.url}/images/og-default.png`);
 

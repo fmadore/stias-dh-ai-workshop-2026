@@ -7,7 +7,7 @@ const participant: Participant = {
 		en: 'University of Alberta',
 		fr: 'Université de l’Alberta'
 	},
-	country: 'Canada',
+	country: 'CA',
 	image: '/images/participants/Augustine-Farinola.webp',
 	online: true,
 	bio: {

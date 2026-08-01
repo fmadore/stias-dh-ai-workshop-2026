@@ -1,10 +1,11 @@
-import type { Participant, Presentation } from '$lib/types';
+import type { CountryCode, Participant, Presentation } from '$lib/types';
 import { getParticipantPresentations, getPresentationAuthors } from '$lib/data/presentations';
+import { countrySearchTerms } from './country';
 
 /** Search/filter state shared by the participants and papers pages. */
 export interface FilterOptions {
 	query: string;
-	country: string | null;
+	country: CountryCode | null;
 	language: 'en' | 'fr' | null;
 }
 
@@ -16,7 +17,7 @@ function normalize(input: string): string {
 		.replace(/\p{Diacritic}/gu, '');
 }
 
-function sortedCountries(countries: Iterable<string>): string[] {
+function sortedCountries(countries: Iterable<CountryCode>): CountryCode[] {
 	return Array.from(new Set(countries)).sort((a, b) => a.localeCompare(b));
 }
 
@@ -40,7 +41,7 @@ export function filterParticipants(
 				p.name,
 				p.affiliation.en,
 				p.affiliation.fr,
-				p.country,
+				...countrySearchTerms(p.country),
 				p.bio?.en ?? '',
 				p.bio?.fr ?? '',
 				...papers.flatMap((pp) => [pp.title, pp.abstract ?? ''])
@@ -51,7 +52,7 @@ export function filterParticipants(
 	});
 }
 
-export function uniqueParticipantCountries(participants: Participant[]): string[] {
+export function uniqueParticipantCountries(participants: Participant[]): CountryCode[] {
 	return sortedCountries(participants.map((p) => p.country));
 }
 
@@ -82,7 +83,7 @@ export function filterPresentations(
 	});
 }
 
-export function uniquePaperCountries(presentations: Presentation[]): string[] {
+export function uniquePaperCountries(presentations: Presentation[]): CountryCode[] {
 	return sortedCountries(
 		presentations.flatMap((p) => getPresentationAuthors(p).map((a) => a.country))
 	);

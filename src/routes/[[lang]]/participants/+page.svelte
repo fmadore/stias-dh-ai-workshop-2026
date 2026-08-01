@@ -9,9 +9,10 @@
 	import ParticipantGrid from '$lib/components/participants/ParticipantGrid.svelte';
 	import FilterBar from '$lib/components/shared/FilterBar.svelte';
 	import { filterParticipants, uniqueParticipantCountries } from '$lib/utils/filter';
+	import type { CountryCode } from '$lib/types';
 
 	let query = $state('');
-	let country = $state<string | null>(null);
+	let country = $state<CountryCode | null>(null);
 	let language = $state<'en' | 'fr' | null>(null);
 
 	const countries = uniqueParticipantCountries(participants);

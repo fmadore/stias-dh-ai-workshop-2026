@@ -4,6 +4,8 @@
 	import { getParticipantPresentations } from '$lib/data/presentations';
 	import { getPlacements } from '$lib/utils/placement';
 	import AvatarSmall from '$lib/components/shared/AvatarSmall.svelte';
+	import { getLocale } from '$lib/paraglide/runtime';
+	import { countryName } from '$lib/utils/country';
 
 	let {
 		participant,
@@ -28,7 +30,7 @@
 	</h3>
 
 	<p class="text-muted text-caption mt-1 leading-snug">
-		{t(participant.affiliation)} · {participant.country}
+		{t(participant.affiliation)} · {countryName(participant.country, getLocale())}
 	</p>
 
 	{#each presentations as presentation (presentation.id)}

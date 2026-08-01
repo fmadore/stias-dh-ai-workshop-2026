@@ -3,6 +3,8 @@
 	import * as m from '$lib/paraglide/messages';
 	import ParticipantCard from './ParticipantCard.svelte';
 	import { getPlacements } from '$lib/utils/placement';
+	import { getLocale } from '$lib/paraglide/runtime';
+	import { countryName } from '$lib/utils/country';
 
 	let { participants }: { participants: Participant[] } = $props();
 
@@ -29,7 +31,8 @@
 		// mutable Map in a component, and this is a derived value, not state.
 		const keyed: Record<string, Participant[]> = {};
 		for (const participant of participants) {
-			const key = grouping === 'alpha' ? initial(participant) : participant.country;
+			const key =
+				grouping === 'alpha' ? initial(participant) : countryName(participant.country, getLocale());
 			(keyed[key] ??= []).push(participant);
 		}
 		return Object.entries(keyed)
@@ -86,7 +89,8 @@
 		background-color: var(--surface-raised);
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-full);
-		padding: 0.3rem 0.8rem;
+		min-height: 2.75rem;
+		padding: 0.45rem 0.9rem;
 		cursor: pointer;
 		transition:
 			background-color var(--duration-fast) var(--ease-standard),

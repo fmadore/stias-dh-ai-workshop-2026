@@ -20,9 +20,10 @@
 			<ol class="grid grid-cols-1 gap-px sm:grid-cols-2 lg:grid-cols-4">
 				{#each milestones as milestone (milestone.id)}
 					<li
-						class="bg-raised border-subtle relative flex flex-col gap-2 border p-6
+						class="border-subtle relative flex flex-col gap-2 border p-6
+							{milestone.past ? 'bg-sunken' : 'bg-raised'}
 							{milestone.next ? 'border-t-accent border-t-2' : ''}
-							{milestone.past ? 'opacity-65' : ''}"
+						"
 					>
 						<div class="flex h-5 items-center gap-1.5">
 							{#if milestone.past}

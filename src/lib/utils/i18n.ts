@@ -1,6 +1,7 @@
 import { base } from '$app/paths';
 import { getLocale, baseLocale } from '$lib/paraglide/runtime';
 import type { LocalizedString } from '$lib/types';
+import { localizedPath, type SupportedLocale } from './localized-paths';
 
 export function t(str: LocalizedString): string {
 	const locale = getLocale();
@@ -8,9 +9,7 @@ export function t(str: LocalizedString): string {
 }
 
 export function localePath(path: string): string {
-	const locale = getLocale();
-	const prefix = locale === baseLocale ? '' : `/${locale}`;
-	return `${base}${prefix}${path}`;
+	return localizedPath(path, getLocale() as SupportedLocale, base, baseLocale as SupportedLocale);
 }
 
 /**

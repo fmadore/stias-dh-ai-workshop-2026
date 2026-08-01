@@ -8,6 +8,7 @@
 	import Footer from '$lib/components/layout/Footer.svelte';
 	import WhatNext from '$lib/components/layout/WhatNext.svelte';
 	import BackToTop from '$lib/components/layout/BackToTop.svelte';
+	import { localizedPath } from '$lib/utils/localized-paths';
 
 	let { children } = $props();
 
@@ -18,7 +19,7 @@
 	});
 
 	onMount(() => {
-		// Auto-detect browser language on first visit (only if not already on a /fr/ page)
+		// Auto-detect browser language on first visit (only if not already on a French page).
 		const hasVisited = sessionStorage.getItem('locale_detected');
 		if (!hasVisited) {
 			sessionStorage.setItem('locale_detected', '1');
@@ -28,7 +29,7 @@
 				: window.location.pathname;
 			const isAlreadyFr = pathname.startsWith('/fr');
 			if (browserLang.startsWith('fr') && !isAlreadyFr) {
-				window.location.href = `${base}/fr${pathname}`;
+				window.location.href = localizedPath(pathname, 'fr', base);
 			}
 		}
 	});

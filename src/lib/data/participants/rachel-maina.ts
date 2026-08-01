@@ -7,7 +7,7 @@ const participant: Participant = {
 		en: 'University of Wisconsin–Madison',
 		fr: 'Université du Wisconsin–Madison'
 	},
-	country: 'United States',
+	country: 'US',
 	image: '/images/participants/Rachel-Maina.webp',
 	online: true,
 	bio: {

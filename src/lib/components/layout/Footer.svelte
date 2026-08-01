@@ -40,7 +40,7 @@
 				<p class="font-display mb-2 text-lg leading-snug text-white">
 					{siteConfig.shortTitle}
 				</p>
-				<p class="text-primary-200/60 text-sm leading-relaxed">
+				<p class="text-sm leading-relaxed text-white/75">
 					{m.hero_dates()}<br />{m.hero_location()}
 				</p>
 			</div>
@@ -55,7 +55,7 @@
 							<li>
 								<a
 									href={link.href}
-									class="text-primary-200/75 text-caption hover:text-white"
+									class="text-caption text-white/80 hover:text-white"
 									style="transition: color var(--duration-fast) var(--ease-standard);"
 								>
 									{link.label}
@@ -72,11 +72,9 @@
 				</h2>
 				<ul class="space-y-2">
 					{#each milestones as milestone (milestone.id)}
-						<li
-							class="text-caption {milestone.past ? 'text-primary-200/40' : 'text-primary-200/75'}"
-						>
+						<li class="text-caption text-white/75">
 							<span class="block">{milestone.label}</span>
-							<time datetime={milestone.datetime} class="text-primary-200/50">
+							<time datetime={milestone.datetime} class:line-through={milestone.past}>
 								{milestone.value}
 							</time>
 						</li>
@@ -112,7 +110,7 @@
 		</div>
 
 		<div class="border-primary-800/60 dark:border-surface-800 mt-10 border-t pt-8 text-center">
-			<p class="text-primary-200/60 dark:text-surface-500 text-sm font-light">
+			<p class="text-sm font-light text-white/75">
 				&copy; {new Date().getFullYear()}
 				{organizers.map((o) => o.name).join(', ')}. {m.footer_rights()}
 			</p>

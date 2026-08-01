@@ -3,6 +3,24 @@ export interface LocalizedString {
 	fr: string;
 }
 
+export type CountryCode =
+	| 'BF'
+	| 'CA'
+	| 'CM'
+	| 'DE'
+	| 'FI'
+	| 'GB'
+	| 'GM'
+	| 'KE'
+	| 'LU'
+	| 'NG'
+	| 'NL'
+	| 'SE'
+	| 'SN'
+	| 'TN'
+	| 'US'
+	| 'ZA';
+
 export interface Organizer {
 	id: string;
 	name: string;
@@ -10,7 +28,7 @@ export interface Organizer {
 	affiliation: LocalizedString;
 	bio: LocalizedString;
 	image: string;
-	country: string;
+	country: CountryCode;
 	website?: string;
 	orcid?: string;
 	/** Taking part remotely — flags the person in the schedule. */
@@ -21,7 +39,7 @@ export interface Participant {
 	id: string;
 	name: string;
 	affiliation: LocalizedString;
-	country: string;
+	country: CountryCode;
 	image?: string;
 	website?: string;
 	orcid?: string;
@@ -88,7 +106,7 @@ export interface VenueInfo {
 	address: string;
 	city: string;
 	postalCode: string;
-	country: string;
+	country: CountryCode;
 	coordinates: { lat: number; lng: number };
 	description: LocalizedString;
 	website: string;

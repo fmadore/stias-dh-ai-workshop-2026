@@ -7,7 +7,7 @@ const participant: Participant = {
 		en: 'Cheikh Anta Diop University',
 		fr: 'Université Cheikh Anta Diop de Dakar'
 	},
-	country: 'Senegal'
+	country: 'SN'
 };
 
 export default participant;

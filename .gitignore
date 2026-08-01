@@ -2,6 +2,10 @@ node_modules
 /build
 /.svelte-kit
 /src/lib/paraglide
+/static/downloads/
+/tmp/
+/test-results/
+/playwright-report/
 .env
 .env.*
 !.env.example

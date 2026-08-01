@@ -3,19 +3,19 @@
 	import { ArrowLeft, ArrowRight } from '@lucide/svelte';
 	import { t, localePath } from '$lib/utils/i18n';
 	import { siteConfig } from '$lib/data/site-config';
-	import { getParticipantPresentations } from '$lib/data/presentations';
-	import { getPlacements, sessionAnchor } from '$lib/utils/placement';
 	import SEO from '$lib/components/SEO.svelte';
 	import PageHeader from '$lib/components/layout/PageHeader.svelte';
 	import Avatar from '$lib/components/shared/Avatar.svelte';
 	import PersonLinks from '$lib/components/shared/PersonLinks.svelte';
+	import { getLocale } from '$lib/paraglide/runtime';
+	import { countryName } from '$lib/utils/country';
+	import { localizedAbsoluteUrl } from '$lib/utils/localized-paths';
 
 	let { data } = $props();
 
 	const person = $derived(data.person);
 	const bio = $derived(person.bio ? t(person.bio) : '');
-	const presentations = $derived(getParticipantPresentations(person));
-	const placements = $derived(getPlacements());
+	const presentationItems = $derived(data.presentationItems);
 	const canonicalPath = $derived(`/participants/${person.id}`);
 
 	const schema = $derived({
@@ -23,10 +23,31 @@
 		'@type': 'Person',
 		name: person.name,
 		affiliation: { '@type': 'Organization', name: t(person.affiliation) },
-		url: `${siteConfig.url}${canonicalPath}`,
+		url: localizedAbsoluteUrl(siteConfig.url, canonicalPath, getLocale()),
 		...(person.orcid ? { identifier: person.orcid } : {}),
 		...(person.website ? { sameAs: [person.website] } : {})
 	});
+
+	function placementLabel(placement: (typeof presentationItems)[number]['placement']): string {
+		if (!placement) return '';
+		const sessionLabel =
+			placement.sessionType === 'panel'
+				? `${m.session_panel()} ${placement.panelNumber}`
+				: placement.sessionType === 'keynote'
+					? m.session_keynote()
+					: placement.sessionType === 'discussion'
+						? m.session_discussion()
+						: placement.sessionType === 'plenary'
+							? m.session_plenary()
+							: placement.sessionType === 'social'
+								? m.session_social()
+								: m.session_break();
+		const day = new Date(`${placement.date}T12:00:00Z`).toLocaleDateString(
+			getLocale() === 'fr' ? 'fr-FR' : 'en-GB',
+			{ weekday: 'short', day: 'numeric', timeZone: 'UTC' }
+		);
+		return `${sessionLabel} · ${day} · ${placement.time.split(/[–—-]/)[0].trim()}`;
+	}
 </script>
 
 <SEO
@@ -40,7 +61,7 @@
 	title={person.name}
 	eyebrow={data.isOrganizer ? m.section_organisers() : m.nav_participants()}
 	subtitle={t(person.affiliation)}
-	meta={[person.country]}
+	meta={[countryName(person.country, getLocale())]}
 />
 
 <div class="page-end pt-12">
@@ -68,21 +89,22 @@
 			</div>
 		</div>
 
-		{#if presentations.length > 0}
+		{#if presentationItems.length > 0}
 			<section class="mt-14">
 				<h2 class="text-eyebrow mb-5">
-					{presentations.length === 1
+					{presentationItems.length === 1
 						? m.participant_papers_label()
 						: m.participant_papers_label_plural()}
 				</h2>
 				<ul class="space-y-4">
-					{#each presentations as presentation (presentation.id)}
-						{@const placement = placements.get(presentation.id)}
+					{#each presentationItems as item (item.presentation.id)}
+						{@const presentation = item.presentation}
+						{@const placement = item.placement}
 						<li>
 							<a href={localePath(`/papers/${presentation.id}`)} class="card card-hover block p-5">
 								{#if placement}
 									<span class="text-meta mb-2 block">
-										{placement.sessionLabel} · {placement.slotLabel}
+										{placementLabel(placement)}
 									</span>
 								{/if}
 								<span class="text-card-title text-strong block" lang={presentation.language}>
@@ -91,7 +113,7 @@
 							</a>
 							{#if placement}
 								<a
-									href="{localePath('/programme')}#{sessionAnchor(placement.session.id)}"
+									href="{localePath('/programme')}#session-{placement.sessionId}"
 									class="link-arrow mt-2 inline-flex text-sm"
 								>
 									{m.paper_in_programme()}

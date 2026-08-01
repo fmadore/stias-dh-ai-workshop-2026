@@ -3,6 +3,8 @@
 	import { t } from '$lib/utils/i18n';
 	import * as m from '$lib/paraglide/messages';
 	import { ExternalLink } from '@lucide/svelte';
+	import { getLocale } from '$lib/paraglide/runtime';
+	import { countryName } from '$lib/utils/country';
 </script>
 
 <div class="space-y-10">
@@ -16,7 +18,7 @@
 			{t(venueInfo.description)}
 		</p>
 		<p class="text-muted text-sm">
-			{venueInfo.address}, {venueInfo.city}, {venueInfo.country}
+			{venueInfo.address}, {venueInfo.city}, {countryName(venueInfo.country, getLocale())}
 		</p>
 		<a
 			href={venueInfo.website}

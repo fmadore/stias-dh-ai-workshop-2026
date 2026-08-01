@@ -7,7 +7,7 @@ const participant: Participant = {
 		en: 'University of the Witwatersrand',
 		fr: 'Université du Witwatersrand'
 	},
-	country: 'South Africa',
+	country: 'ZA',
 	image: '/images/participants/Karabo-Mohapeloa.webp',
 	bio: {
 		en: 'Karabo Mohapeloa is pursuing an MSc in Computer Science at the University of the Witwatersrand. His research interests include reinforcement learning, natural language processing, topic modelling, digital humanities, and the study of computational approaches to analyzing complex socio-political discourse, with a particular focus on controversy mapping.',

@@ -13,7 +13,7 @@
 		height="420"
 		src={mapUrl}
 		loading="lazy"
-		referrerpolicy="no-referrer-when-downgrade"
+		referrerpolicy="no-referrer"
 		class="block border-0"
 	></iframe>
 </div>

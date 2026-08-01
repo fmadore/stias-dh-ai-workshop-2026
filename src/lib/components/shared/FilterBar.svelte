@@ -1,11 +1,14 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages';
+	import { getLocale } from '$lib/paraglide/runtime';
+	import { countryName } from '$lib/utils/country';
+	import type { CountryCode } from '$lib/types';
 	import { Search, X } from '@lucide/svelte';
 
 	type Props = {
 		totalCount: number;
 		visibleCount: number;
-		countries: string[];
+		countries: CountryCode[];
 		searchPlaceholder: string;
 		/**
 		 * What the EN/FR group actually filters on. It sits inches from the
@@ -15,7 +18,7 @@
 		 */
 		languageLabel?: string;
 		query?: string;
-		country?: string | null;
+		country?: CountryCode | null;
 		language?: 'en' | 'fr' | null;
 	};
 
@@ -55,7 +58,7 @@
 		<select bind:value={country} class="filter-select" aria-label={m.filter_country_all()}>
 			<option value={null}>{m.filter_country_all()}</option>
 			{#each countries as c (c)}
-				<option value={c}>{c}</option>
+				<option value={c}>{countryName(c, getLocale())}</option>
 			{/each}
 		</select>
 
@@ -246,7 +249,8 @@
 		background: transparent;
 		border: 0;
 		border-radius: var(--radius-md);
-		padding: 0.375rem 0.75rem;
+		min-height: 2.75rem;
+		padding: 0.375rem 0.875rem;
 		cursor: pointer;
 		transition:
 			background-color var(--duration-fast) var(--ease-standard),
@@ -300,7 +304,8 @@
 		font-family: var(--font-sans);
 		font-size: 0.8125rem;
 		cursor: pointer;
-		padding: 0.25rem 0.5rem;
+		min-height: 2.75rem;
+		padding: 0.5rem 0.625rem;
 		border-radius: var(--radius-md);
 		transition: color var(--duration-fast) var(--ease-standard);
 	}

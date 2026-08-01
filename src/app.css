@@ -81,8 +81,10 @@
 	--color-paper: #ffffff;
 	--color-paper-dark: #1a1815;
 	--color-deep: #0e0d0b;
-	--color-orcid: #a6ce39;
-	--color-orcid-hover: #8aab2d;
+	/* ORCID's bright brand green is an icon colour, not accessible body text on
+	   cream. These darker variants preserve the hue while meeting text contrast. */
+	--color-orcid: #526b08;
+	--color-orcid-hover: #3d5104;
 
 	/* --- Radii --- */
 	--radius-xs: 0.25rem;
@@ -193,6 +195,8 @@ html {
 
 .dark {
 	color-scheme: dark;
+	--color-orcid: #a6ce39;
+	--color-orcid-hover: #c1e45e;
 
 	--surface-page: var(--color-deep);
 	--surface-raised: #221f1b; /* opaque — translucency over .grain goes muddy */
@@ -584,11 +588,6 @@ html {
 		outline-offset: 3px;
 	}
 
-	/* Replaces the ad-hoc gold left border on KeyInfo. */
-	.card-accent {
-		border-inline-start: 3px solid var(--accent);
-	}
-
 	/* Replaces the hand-rolled secondary-500/30 + /5 notice on the programme
 	   page. */
 	.callout {
@@ -631,7 +630,8 @@ html {
 
 	.btn-sm {
 		font-size: 0.875rem;
-		padding: 0.5rem 0.875rem;
+		min-height: 2.75rem;
+		padding: 0.625rem 0.875rem;
 		border-radius: var(--radius-md);
 	}
 
@@ -702,7 +702,9 @@ html {
 		background-color: transparent;
 		color: var(--color-ink-muted);
 		border-radius: var(--radius-full);
-		padding: 0.5rem;
+		width: 2.75rem;
+		height: 2.75rem;
+		padding: 0.625rem;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -816,6 +818,7 @@ html {
 	.js .scroll-reveal.visible {
 		opacity: 1;
 		transform: translate(0, 0);
+		will-change: auto;
 	}
 }
 /* end @layer components */
@@ -829,13 +832,30 @@ html {
 		transition: none;
 	}
 
-	*,
-	*::before,
-	*::after {
-		animation-duration: 0.001ms !important;
-		animation-iteration-count: 1 !important;
-		transition-duration: 0.001ms !important;
-		scroll-behavior: auto !important;
+	html {
+		scroll-behavior: auto;
+	}
+
+	.animate-spin {
+		animation: none;
+	}
+
+	.animate-fade-rise {
+		animation: none;
+	}
+
+	.card-hover:hover,
+	.btn:hover,
+	.link-arrow:hover svg {
+		transform: none;
+	}
+
+	.mobile-navigation,
+	.card,
+	.btn,
+	.btn-ghost,
+	.link-arrow svg {
+		transition-duration: 0.01ms;
 	}
 }
 

@@ -9,7 +9,7 @@ export const venueInfo: VenueInfo = {
 	address: '10 Marais Street, Stellenbosch',
 	city: 'Stellenbosch',
 	postalCode: '7600',
-	country: 'South Africa',
+	country: 'ZA',
 	coordinates: { lat: -33.9321, lng: 18.8602 },
 	description: {
 		en: 'STIAS is an independent institute of advanced study located on the Mostertsdrift estate in Stellenbosch, South Africa. It provides a space for leading researchers from across the world to engage in fundamental research and intellectual exchange across disciplines.',

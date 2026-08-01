@@ -184,13 +184,13 @@
 	<ScrollReveal delay={8}>
 		<section>
 			<h2 class="text-section text-strong mb-8">{m.key_dates()}</h2>
-			<ol class="relative">
+			<div class="relative">
 				<!-- vertical rule -->
 				<span
 					class="bg-secondary-500/40 dark:bg-secondary-400/30 absolute top-2 bottom-2 left-[5px] hidden w-px sm:block"
 					aria-hidden="true"
 				></span>
-				<div class="space-y-5">
+				<ol class="space-y-5">
 					{#each keyDates as dateItem}
 						<li class="flex items-start gap-5">
 							<span
@@ -205,8 +205,8 @@
 							</div>
 						</li>
 					{/each}
-				</div>
-			</ol>
+				</ol>
+			</div>
 		</section>
 	</ScrollReveal>
 

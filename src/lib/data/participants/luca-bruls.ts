@@ -7,7 +7,7 @@ const participant: Participant = {
 		en: 'Leiden University',
 		fr: 'Université de Leyde'
 	},
-	country: 'Netherlands',
+	country: 'NL',
 	image: '/images/participants/Luca-Bruls.webp',
 	bio: {
 		en: 'Luca Bruls is a PhD candidate in anthropology and history at Leiden University and a member of the Nomadesahel research team (funded by NWO, 406.21.SW.009), based between the Institute for History and the Leiden University Centre for Digital Humanities (LUCDH).',
