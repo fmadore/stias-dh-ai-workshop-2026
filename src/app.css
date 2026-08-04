@@ -324,26 +324,37 @@ button:not(:disabled),
 }
 
 /* ============================================================
-   SCROLLBAR
+   SCROLLBAR — pointing devices only.
+   Touch browsers draw an *overlay* scrollbar: it costs no layout width
+   and fades out when idle. But the moment a page styles
+   ::-webkit-scrollbar — or sets scrollbar-color to anything but `auto`
+   — Chromium swaps that for a classic scrollbar, which permanently
+   occupies ~10px of the viewport and paints its transparent track in
+   the page colour. On a phone that reads as a cream stripe running the
+   full height beside the dark hero, and the hover rule it exists for
+   can never fire. Scope the whole block to fine pointers so touch keeps
+   the native overlay.
    ============================================================ */
-::-webkit-scrollbar {
-	width: 10px;
-	height: 10px;
-}
-::-webkit-scrollbar-track {
-	background: transparent;
-}
-::-webkit-scrollbar-thumb {
-	background-color: color-mix(in oklab, var(--color-primary-500) 25%, transparent);
-	border-radius: var(--radius-full);
-	border: 2px solid transparent;
-	background-clip: padding-box;
-}
-::-webkit-scrollbar-thumb:hover {
-	background-color: color-mix(in oklab, var(--color-primary-500) 45%, transparent);
-}
-html {
-	scrollbar-color: color-mix(in oklab, var(--color-primary-500) 30%, transparent) transparent;
+@media (hover: hover) and (pointer: fine) {
+	::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+	}
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	::-webkit-scrollbar-thumb {
+		background-color: color-mix(in oklab, var(--color-primary-500) 25%, transparent);
+		border-radius: var(--radius-full);
+		border: 2px solid transparent;
+		background-clip: padding-box;
+	}
+	::-webkit-scrollbar-thumb:hover {
+		background-color: color-mix(in oklab, var(--color-primary-500) 45%, transparent);
+	}
+	html {
+		scrollbar-color: color-mix(in oklab, var(--color-primary-500) 30%, transparent) transparent;
+	}
 }
 
 /* ============================================================
