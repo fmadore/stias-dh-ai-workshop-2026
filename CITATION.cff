@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: >-
+  If you refer to this workshop or reuse material from its website,
+  please cite it as below.
+title: >-
+  Digital Humanities and Artificial Intelligence in African Studies:
+  Towards Sustainable and Equitable Practices (workshop website)
+abstract: >-
+  Website for the DFG Programme Point Sud workshop "Digital Humanities and
+  Artificial Intelligence in African Studies: Towards Sustainable and
+  Equitable Practices", held at the Stellenbosch Institute for Advanced Study
+  (STIAS), South Africa, 21-24 September 2026. The bilingual (English/French)
+  site publishes the call for papers, the programme, and the abstracts and
+  biographies of participants.
+type: software
+authors:
+  - family-names: Madore
+    given-names: Frédérick
+    orcid: 'https://orcid.org/0000-0003-0959-2092'
+    affiliation: University of Bayreuth
+    website: 'https://www.frederickmadore.com'
+repository-code: 'https://github.com/fmadore/stias-dh-ai-workshop-2026'
+url: 'https://fmadore.github.io/stias-dh-ai-workshop-2026/'
+license:
+  - MIT
+  - CC-BY-4.0
+version: 1.0.0
+date-released: '2026-08-05'
+keywords:
+  - digital humanities
+  - artificial intelligence
+  - African studies
+  - workshop
+  - open science
+  - multilingual

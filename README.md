@@ -45,9 +45,27 @@ complete). Both fail the build on problems and run in CI.
 - **Photos** — drop a `.jpg`/`.png` into `static/images/participants/` or
   `static/images/organizers/` and run `npm run images` to generate the
   256 px WebP used on the site.
+- **Share cards** — `npm run og` re-renders `static/images/og-default.png`
+  (the Open Graph card) and `.github/social-preview.png` (GitHub's social
+  preview) from the site's own tokens, fonts, and message catalogue. Run it
+  after changing the title, the dates, or the theme colours. The GitHub card
+  has to be uploaded by hand under Settings → General → Social preview;
+  there is no API for it.
 
 ## Deployment
 
 Pushes to `main` build and deploy via GitHub Actions
 (`.github/workflows/deploy.yml`). PRs run the same format/lint/type/build
 checks without deploying.
+
+## Citation
+
+Machine-readable metadata lives in [`CITATION.cff`](CITATION.cff); GitHub
+renders it as a "Cite this repository" button in the sidebar.
+
+## License
+
+- **Code** — [MIT](LICENSE).
+- **Content** — [CC BY 4.0](LICENSE-CONTENT), with exclusions: paper titles,
+  abstracts, and biographies belong to their authors; participant photographs
+  and funder logos are used by permission only.

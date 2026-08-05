@@ -10,6 +10,7 @@
     "postbuild": "tsx scripts/check-data.ts && node scripts/smoke-test.mjs && node scripts/check-links.mjs && node scripts/check-bundle-size.mjs",
     "preview": "vite preview",
     "images": "node scripts/optimize-images.mjs",
+    "og": "tsx scripts/generate-og.ts",
     "downloads": "tsx scripts/generate-cfp-downloads.ts",
     "messages": "paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide --strategy globalVariable baseLocale",
     "prepare": "npm run messages",
