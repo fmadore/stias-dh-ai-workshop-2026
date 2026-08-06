@@ -65,7 +65,9 @@ jobs:
     needs: build
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    # Must stay above actions/deploy-pages' own 10-minute timeout, otherwise a
+    # slow Pages queue cancels the job before the action can fail gracefully.
+    timeout-minutes: 15
     permissions:
       pages: write
       id-token: write
