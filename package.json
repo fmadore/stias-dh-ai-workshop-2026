@@ -25,6 +25,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
     "@eslint/js": "^10.0.1",
+    "@inlang/paraglide-js": "^2.23.0",
     "@inlang/plugin-message-format": "^4.4.0",
     "@pdf-lib/fontkit": "^1.1.1",
     "@playwright/test": "^1.62.1",
@@ -53,7 +54,6 @@
   "dependencies": {
     "@fontsource/instrument-serif": "^5.3.0",
     "@fontsource/outfit": "^5.3.0",
-    "@inlang/paraglide-js": "^2.23.0",
     "@lucide/svelte": "^1.28.0",
     "marked": "^18.0.7"
   },
