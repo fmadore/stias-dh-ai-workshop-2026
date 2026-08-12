@@ -4,7 +4,7 @@ import type { ProgrammeDay } from '$lib/types';
  * Date the programme was last revised (ISO `yyyy-mm-dd`). Bump this whenever you
  * change the sessions below — it is shown as "Last updated" on the page.
  */
-export const programmeLastUpdated = '2026-07-30';
+export const programmeLastUpdated = '2026-08-12';
 
 /**
  * Workshop programme — STIAS, Stellenbosch, 21–24 September 2026.
@@ -31,7 +31,7 @@ export const programmeLastUpdated = '2026-07-30';
  * STIAS caters two coffee breaks only on full days on site (Days 1 and 4); Days
  * 2 and 3 leave for an excursion in the afternoon (Day 3 straight after lunch,
  * so both its panels sit in the morning), and get the 10:30 break only.
- * After-hours functions (dinners) start at 17:30.
+ * After-hours functions (dinners) start at 19:00, off site.
  */
 export const programme: ProgrammeDay[] = [
 	{
@@ -127,9 +127,11 @@ export const programme: ProgrammeDay[] = [
 			},
 			{
 				id: 'd1-dinner',
-				time: '17:30',
+				time: '19:00',
 				type: 'social',
-				title: { en: 'Welcome dinner', fr: "Dîner d'ouverture" }
+				title: { en: 'Welcome dinner', fr: "Dîner d'ouverture" },
+				venue: 'Decameron',
+				venueUrl: 'https://dinestar.co.za/en/restaurants/226-decameron-stellenbosch'
 			}
 		]
 	},

@@ -5,7 +5,7 @@
 	import { getPeople } from '$lib/data/people';
 	import { getPresentation, getPresentationAuthors } from '$lib/data/presentations';
 	import { sessionAnchor } from '$lib/utils/placement';
-	import { Video, Link as LinkIcon } from '@lucide/svelte';
+	import { Video, Link as LinkIcon, ExternalLink } from '@lucide/svelte';
 
 	let { session, panelNumber }: { session: Session; panelNumber?: number } = $props();
 
@@ -105,6 +105,22 @@
 					<span class={treatment === 'social' ? 'text-meta' : 'text-eyebrow'}>{typeLabel}</span>
 					{#if session.room}
 						<span class="text-muted text-xs">{session.room}</span>
+					{/if}
+					{#if session.venue}
+						<span class="text-muted text-xs">
+							{#if session.venueUrl}
+								<a
+									href={session.venueUrl}
+									target="_blank"
+									rel="noopener noreferrer"
+									class="session-link inline-flex items-center gap-1"
+								>
+									{session.venue}<ExternalLink size={11} strokeWidth={2} aria-hidden="true" />
+								</a>
+							{:else}
+								{session.venue}
+							{/if}
+						</span>
 					{/if}
 					<!-- Per-session anchor: until now you could not send anyone a
 					     link to Tuesday's panel. -->

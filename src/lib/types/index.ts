@@ -92,6 +92,10 @@ export interface Session {
 	/** Person id (participant or organizer) chairing the session. */
 	chair?: string;
 	room?: string;
+	/** Off-site venue name, e.g. the restaurant hosting a dinner. */
+	venue?: string;
+	/** External page for `venue` — rendered as a link on the venue name. */
+	venueUrl?: string;
 }
 
 export interface ProgrammeDay {
