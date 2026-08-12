@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages';
 	import { getLocale } from '$lib/paraglide/runtime';
-	import { countryName } from '$lib/utils/country';
+	import { countryName, sortCountriesByName } from '$lib/utils/country';
 	import type { CountryCode } from '$lib/types';
 	import { Search, X } from '@lucide/svelte';
 
@@ -33,6 +33,12 @@
 		language = $bindable(null)
 	}: Props = $props();
 
+	const uid = $props.id();
+
+	// Sorted here rather than upstream: the order depends on the locale the
+	// names render in, which the data layer knows nothing about.
+	const sortedCountries = $derived(sortCountriesByName(countries, getLocale()));
+
 	const hasActiveFilter = $derived(query.trim() !== '' || country !== null || language !== null);
 
 	function reset() {
@@ -43,28 +49,37 @@
 </script>
 
 <div class="filter-bar">
-	<div class="filter-controls">
-		<div class="filter-search">
-			<Search size={16} strokeWidth={1.75} class="filter-search-icon" aria-hidden="true" />
-			<input
-				type="search"
-				bind:value={query}
-				placeholder={searchPlaceholder}
-				class="filter-input"
-				aria-label={searchPlaceholder}
-			/>
+	<!-- Every control carries its own label above it, so the three sit on a
+	     shared baseline at a shared height. Labelling only the pill group left
+	     it hanging above a row it no longer lined up with. -->
+	<div class="filter-fields">
+		<div class="filter-field filter-field--search">
+			<label class="filter-label" for="{uid}-search">{m.filter_search_label()}</label>
+			<div class="filter-search">
+				<Search size={16} strokeWidth={1.75} class="filter-search-icon" aria-hidden="true" />
+				<input
+					id="{uid}-search"
+					type="search"
+					bind:value={query}
+					placeholder={searchPlaceholder}
+					class="filter-input"
+				/>
+			</div>
 		</div>
 
-		<select bind:value={country} class="filter-select" aria-label={m.filter_country_all()}>
-			<option value={null}>{m.filter_country_all()}</option>
-			{#each countries as c (c)}
-				<option value={c}>{countryName(c, getLocale())}</option>
-			{/each}
-		</select>
+		<div class="filter-field">
+			<label class="filter-label" for="{uid}-country">{m.filter_country_label()}</label>
+			<select id="{uid}-country" bind:value={country} class="filter-select">
+				<option value={null}>{m.filter_country_all()}</option>
+				{#each sortedCountries as c (c)}
+					<option value={c}>{countryName(c, getLocale())}</option>
+				{/each}
+			</select>
+		</div>
 
-		<div class="filter-language">
-			<span class="filter-language-label" id="filter-language-label">{languageLabel}</span>
-			<div class="filter-pills" role="group" aria-labelledby="filter-language-label">
+		<div class="filter-field">
+			<span class="filter-label" id="{uid}-language">{languageLabel}</span>
+			<div class="filter-pills" role="group" aria-labelledby="{uid}-language">
 				<button
 					type="button"
 					class="filter-pill"
@@ -111,32 +126,54 @@
 
 <style>
 	.filter-bar {
+		/* One height for input, select and pill tray — the tray used to run
+		   12px taller than the fields beside it. Roomier while the controls are
+		   stacked and thumb-sized, tighter once they share a row. */
+		--control-h: 3rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.875rem;
+	}
+
+	.filter-fields {
 		display: flex;
 		flex-direction: column;
 		gap: 0.75rem;
 	}
 
-	.filter-controls {
+	.filter-field {
 		display: flex;
 		flex-direction: column;
-		gap: 0.625rem;
+		gap: 0.375rem;
+		min-width: 0;
+	}
+
+	.filter-label {
+		font-family: var(--font-sans);
+		font-size: var(--text-badge);
+		font-weight: 600;
+		line-height: 1.2;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--ink-subtle);
 	}
 
 	@media (min-width: 640px) {
-		.filter-controls {
-			flex-direction: row;
-			/* flex-end, not center: the language group carries a label above its
-			   pills, so the controls line up on their baselines. */
-			align-items: flex-end;
-			flex-wrap: wrap;
+		.filter-bar {
+			--control-h: 2.75rem;
 		}
 
-		.filter-search {
-			/* In the row layout, flex-basis sizes the width. In the mobile
-			   column layout it would size the *height* (256px), leaving the
-			   search icon floating in an empty gap — so scope it to ≥640px. */
-			flex: 1 1 16rem;
-			min-width: 0;
+		.filter-fields {
+			flex-direction: row;
+			flex-wrap: wrap;
+			/* Bottom edges, not centres: the labels differ in length and can
+			   wrap, so only the controls themselves are worth aligning. */
+			align-items: flex-end;
+			gap: 0.75rem 1rem;
+		}
+
+		.filter-field--search {
+			flex: 1 1 18rem;
 		}
 	}
 
@@ -149,7 +186,7 @@
 		left: 0.875rem;
 		top: 50%;
 		transform: translateY(-50%);
-		color: var(--color-ink-muted);
+		color: var(--ink-subtle);
 		pointer-events: none;
 	}
 
@@ -157,11 +194,12 @@
 	.filter-select {
 		font-family: var(--font-sans);
 		font-size: 0.9375rem;
-		color: var(--color-ink);
-		background-color: var(--color-paper);
-		border: 1px solid color-mix(in oklab, var(--color-ink) 12%, transparent);
+		color: var(--ink-strong);
+		background-color: var(--surface-raised);
+		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-lg);
-		padding: 0.625rem 1rem;
+		height: var(--control-h);
+		padding: 0 1rem;
 		width: 100%;
 		transition:
 			border-color var(--duration-fast) var(--ease-standard),
@@ -173,7 +211,7 @@
 	}
 
 	.filter-input::placeholder {
-		color: var(--color-ink-muted);
+		color: var(--ink-subtle);
 	}
 
 	.filter-select {
@@ -198,41 +236,18 @@
 		border-color: color-mix(in oklab, var(--color-primary-500) 50%, transparent);
 	}
 
-	:global(.dark) .filter-input,
-	:global(.dark) .filter-select {
-		background-color: color-mix(in oklab, var(--color-surface-800) 70%, transparent);
-		border-color: color-mix(in oklab, var(--color-surface-100) 14%, transparent);
-		color: var(--color-surface-100);
-	}
-
-	:global(.dark) .filter-input::placeholder {
-		color: var(--color-surface-400);
-	}
-
 	:global(.dark) .filter-select {
 		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%23a1a1aa' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M3 4.5l3 3 3-3'/%3E%3C/svg%3E");
 	}
 
-	.filter-language {
-		display: flex;
-		flex-direction: column;
-		gap: 0.3rem;
-	}
-
-	.filter-language-label {
-		font-family: var(--font-sans);
-		font-size: var(--text-badge);
-		font-weight: 600;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		color: var(--ink-subtle);
-	}
-
 	.filter-pills {
-		display: inline-flex;
+		display: flex;
+		align-items: stretch;
 		gap: 0.25rem;
+		height: var(--control-h);
 		padding: 0.25rem;
-		background-color: color-mix(in oklab, var(--color-ink) 4%, transparent);
+		background-color: color-mix(in oklab, var(--color-ink) 5%, transparent);
+		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-lg);
 	}
 
@@ -245,32 +260,37 @@
 		font-size: 0.8125rem;
 		font-weight: 500;
 		letter-spacing: 0.04em;
-		color: var(--color-ink-muted);
+		color: var(--ink-subtle);
 		background: transparent;
 		border: 0;
-		border-radius: var(--radius-md);
-		min-height: 2.75rem;
-		padding: 0.375rem 0.875rem;
+		border-radius: calc(var(--radius-lg) - 0.25rem);
+		/* Equal thirds while the tray is full-width on mobile; intrinsic
+		   widths once it shrinks to its content on desktop. */
+		flex: 1 1 auto;
+		padding: 0 0.875rem;
 		cursor: pointer;
 		transition:
 			background-color var(--duration-fast) var(--ease-standard),
 			color var(--duration-fast) var(--ease-standard);
 	}
 
-	:global(.dark) .filter-pill {
-		color: var(--color-surface-400);
+	@media (min-width: 640px) {
+		.filter-pills {
+			display: inline-flex;
+			align-self: flex-start;
+		}
+
+		.filter-pill {
+			flex: 0 0 auto;
+		}
 	}
 
 	.filter-pill:hover:not(.is-active) {
-		color: var(--color-ink);
-	}
-
-	:global(.dark) .filter-pill:hover:not(.is-active) {
-		color: var(--color-surface-100);
+		color: var(--ink-strong);
 	}
 
 	.filter-pill.is-active {
-		background-color: var(--color-paper);
+		background-color: var(--surface-raised);
 		color: var(--color-primary-700);
 		box-shadow: var(--shadow-xs);
 	}
@@ -285,13 +305,16 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: 0.75rem;
+		/* Reserved height: the reset button appears and disappears with the
+		   filters, and without this the grid below jumped 26px each time. */
+		min-height: 2.5rem;
 		font-family: var(--font-sans);
 		font-size: 0.8125rem;
-		color: var(--color-ink-muted);
+		color: var(--ink-subtle);
 	}
 
-	:global(.dark) .filter-meta {
-		color: var(--color-surface-400);
+	.filter-count {
+		font-variant-numeric: tabular-nums;
 	}
 
 	.filter-reset {
@@ -300,25 +323,18 @@
 		gap: 0.25rem;
 		background: transparent;
 		border: 0;
-		color: var(--color-ink-muted);
+		color: var(--ink-subtle);
 		font-family: var(--font-sans);
 		font-size: 0.8125rem;
 		cursor: pointer;
-		min-height: 2.75rem;
+		min-height: 2.5rem;
 		padding: 0.5rem 0.625rem;
+		margin-right: -0.625rem;
 		border-radius: var(--radius-md);
 		transition: color var(--duration-fast) var(--ease-standard);
 	}
 
-	:global(.dark) .filter-reset {
-		color: var(--color-surface-400);
-	}
-
 	.filter-reset:hover {
-		color: var(--color-primary-600);
-	}
-
-	:global(.dark) .filter-reset:hover {
-		color: var(--color-primary-300);
+		color: var(--link-hover);
 	}
 </style>

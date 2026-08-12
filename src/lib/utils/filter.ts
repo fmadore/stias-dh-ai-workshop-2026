@@ -17,8 +17,12 @@ function normalize(input: string): string {
 		.replace(/\p{Diacritic}/gu, '');
 }
 
-function sortedCountries(countries: Iterable<CountryCode>): CountryCode[] {
-	return Array.from(new Set(countries)).sort((a, b) => a.localeCompare(b));
+/**
+ * Codes only — display order is the FilterBar's job, since it depends on the
+ * locale the names are rendered in (see `sortCountriesByName`).
+ */
+function uniqueCountries(countries: Iterable<CountryCode>): CountryCode[] {
+	return Array.from(new Set(countries));
 }
 
 export function filterParticipants(
@@ -53,7 +57,7 @@ export function filterParticipants(
 }
 
 export function uniqueParticipantCountries(participants: Participant[]): CountryCode[] {
-	return sortedCountries(participants.map((p) => p.country));
+	return uniqueCountries(participants.map((p) => p.country));
 }
 
 export function filterPresentations(
@@ -84,7 +88,7 @@ export function filterPresentations(
 }
 
 export function uniquePaperCountries(presentations: Presentation[]): CountryCode[] {
-	return sortedCountries(
+	return uniqueCountries(
 		presentations.flatMap((p) => getPresentationAuthors(p).map((a) => a.country))
 	);
 }

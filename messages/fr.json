@@ -42,6 +42,8 @@
   "visit_website": "Visiter le site web",
   "view_orcid": "Voir le profil ORCID",
   "participants_search_placeholder": "Rechercher par nom, affiliation, contribution…",
+  "filter_search_label": "Rechercher",
+  "filter_country_label": "Pays",
   "filter_country_all": "Tous les pays",
   "filter_language_all": "Toutes les langues",
   "filter_count": "{visible} sur {total}",
