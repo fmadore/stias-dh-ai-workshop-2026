@@ -31,10 +31,12 @@ test('mobile navigation, theme and participant filtering remain functional', asy
 	await page.getByRole('button', { name: 'Toggle dark mode' }).click();
 	await expect(page.locator('html')).toHaveClass(/dark/);
 
-	await page
-		.getByRole('searchbox', { name: 'Search by name, affiliation, paper…' })
-		.fill('Tajuddeen');
-	await expect(page.getByRole('status')).toContainText('Showing 1 of 32');
+	// By label, not by placeholder: the field carries a real <label> now, and
+	// the placeholder is the kind of copy that gets reworded.
+	await page.getByRole('searchbox', { name: 'Search' }).fill('Tajuddeen');
+	// The total is deliberately loose — this test is about the filter narrowing
+	// to one result, and check-data.ts already guards the participant count.
+	await expect(page.getByRole('status')).toContainText(/Showing 1 of \d+/);
 	await expect(page.getByRole('link', { name: 'Tajuddeen Gwadabe' })).toBeVisible();
 });
 
