@@ -168,6 +168,21 @@
 					</p>
 				{/if}
 
+				{#if session.links && session.links.length > 0}
+					<p class="text-muted mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-xs">
+						{#each session.links as link (link.url)}
+							<a
+								href={link.url}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="session-link inline-flex items-center gap-1"
+							>
+								{link.label}<ExternalLink size={11} strokeWidth={2} aria-hidden="true" />
+							</a>
+						{/each}
+					</p>
+				{/if}
+
 				{#if isPanel && papers.length > 0}
 					<ul class="mt-3 space-y-2.5">
 						{#each papers as paper (paper.id)}

@@ -96,6 +96,12 @@ export interface Session {
 	venue?: string;
 	/** External page for `venue` — rendered as a link on the venue name. */
 	venueUrl?: string;
+	/**
+	 * External profile links for people named in `description` who have no page
+	 * on this site (e.g. hosts giving a welcome address). Labels are names, so
+	 * they are plain strings rather than `LocalizedString`.
+	 */
+	links?: { label: string; url: string }[];
 }
 
 export interface ProgrammeDay {
