@@ -3,7 +3,13 @@ import type { Presentation } from '$lib/types';
 const presentation: Presentation = {
 	id: 'decolonising-citations',
 	language: 'en',
-	authors: ['iginio-gagliardone', 'christine-mataranyika', 'max-milella', 'karabo-mohapeloa'],
+	authors: [
+		'iginio-gagliardone',
+		'christine-mataranyika',
+		'max-milella',
+		'karabo-mohapeloa',
+		'joshua-ward'
+	],
 	title:
 		'Electronic Theses and Dissertations (ETDs), Citation Practices, and the Empirical Measurement of Knowledge Decolonisation: A Computational Approach',
 	abstract: `Calls to decolonise knowledge have transformed the discursive landscape of African higher education over the past decade. Movements such as #RhodesMustFall and #FeesMustFall demanded structural change to institutional cultures and curricula, and advocated for a deeper epistemological challenge, insisting that the production and adoption of knowledge in African universities be refigured around African intellectual traditions, researchers, and institutions. Yet the gap between discursive commitment and measurable practice remains poorly understood. How can one assess, empirically and at scale, whether these demands have altered the actual conduct of research — the granular, everyday decisions about which scholars to cite, which frameworks to invoke, and whose intellectual labour to acknowledge?
