@@ -50,17 +50,21 @@ export const programme: ProgrammeDay[] = [
 			},
 			{
 				id: 'd1-welcome',
-				time: '09:00 – 09:15',
+				time: '09:00 – 09:30',
 				type: 'plenary',
 				title: { en: 'Welcome addresses', fr: 'Mots de bienvenue' },
 				description: {
-					en: 'Welcome addresses from STIAS and Point Sud, followed by a brief framing of the workshop: its goals, themes and practical information.',
-					fr: "Mots de bienvenue du STIAS et de Point Sud, suivis d'un cadrage de l'atelier : objectifs, thèmes et informations pratiques."
-				}
+					en: 'Short welcome addresses on behalf of STIAS — by Edward Kirumira, Director, or Christoff Pauw, Senior Programme Manager — and on behalf of the DFG programme Point Sud, by Issa Fofana (Point Sud, Bamako), followed by a brief framing of the workshop: its goals, themes and practical information.',
+					fr: "Brefs mots de bienvenue au nom du STIAS — par Edward Kirumira, directeur, ou Christoff Pauw, responsable principal des programmes — et au nom du programme DFG Point Sud, par Issa Fofana (Point Sud, Bamako), suivis d'un cadrage de l'atelier : objectifs, thèmes et informations pratiques."
+				},
+				links: [
+					{ label: 'Edward Kirumira', url: 'https://www.stias.ac.za/team/edward-k-kirumira/' },
+					{ label: 'Christoff Pauw', url: 'https://www.stias.ac.za/team/christoff-pauw/' }
+				]
 			},
 			{
 				id: 'd1-icebreaker',
-				time: '09:15 – 10:30',
+				time: '09:30 – 10:30',
 				type: 'plenary',
 				title: { en: 'Ice-breaker', fr: 'Brise-glace' },
 				description: {
