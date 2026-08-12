@@ -6,14 +6,24 @@
 	import { organizers } from '$lib/data/organizers';
 	import { participants } from '$lib/data/participants';
 	import OrganizerCard from '$lib/components/participants/OrganizerCard.svelte';
-	import ParticipantGrid from '$lib/components/participants/ParticipantGrid.svelte';
+	import ParticipantGrid, {
+		type Grouping
+	} from '$lib/components/participants/ParticipantGrid.svelte';
 	import FilterBar from '$lib/components/shared/FilterBar.svelte';
+	import SegmentedControl from '$lib/components/shared/SegmentedControl.svelte';
 	import { filterParticipants, uniqueParticipantCountries } from '$lib/utils/filter';
 	import type { CountryCode } from '$lib/types';
 
 	let query = $state('');
 	let country = $state<CountryCode | null>(null);
 	let language = $state<'en' | 'fr' | null>(null);
+	let grouping = $state<Grouping>('none');
+
+	const groupingOptions: Array<{ value: Grouping; label: string }> = $derived([
+		{ value: 'none', label: m.directory_no_group() },
+		{ value: 'alpha', label: m.directory_group_alpha() },
+		{ value: 'country', label: m.directory_group_country() }
+	]);
 
 	const countries = uniqueParticipantCountries(participants);
 	const filtered = $derived(filterParticipants(participants, { query, country, language }));
@@ -64,10 +74,18 @@
 						bind:query
 						bind:country
 						bind:language
-					/>
+					>
+						{#snippet trailing()}
+							<SegmentedControl
+								label={m.directory_group_label()}
+								options={groupingOptions}
+								bind:value={grouping}
+							/>
+						{/snippet}
+					</FilterBar>
 				</div>
 				{#if filtered.length > 0}
-					<ParticipantGrid participants={filtered} />
+					<ParticipantGrid participants={filtered} {grouping} />
 				{:else}
 					<p class="text-muted py-12 text-center text-sm">
 						{m.participants_filter_no_results()}

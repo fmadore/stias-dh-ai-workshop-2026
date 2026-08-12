@@ -3,6 +3,8 @@
 	import { getLocale } from '$lib/paraglide/runtime';
 	import { countryName, sortCountriesByName } from '$lib/utils/country';
 	import type { CountryCode } from '$lib/types';
+	import type { Snippet } from 'svelte';
+	import SegmentedControl from './SegmentedControl.svelte';
 	import { Search, X } from '@lucide/svelte';
 
 	type Props = {
@@ -20,6 +22,8 @@
 		query?: string;
 		country?: CountryCode | null;
 		language?: 'en' | 'fr' | null;
+		/** Extra field for the same row — the participants grouping switch. */
+		trailing?: Snippet;
 	};
 
 	let {
@@ -30,10 +34,17 @@
 		languageLabel = m.filter_language_label(),
 		query = $bindable(''),
 		country = $bindable(null),
-		language = $bindable(null)
+		language = $bindable(null),
+		trailing
 	}: Props = $props();
 
 	const uid = $props.id();
+
+	const languageOptions: Array<{ value: 'en' | 'fr' | null; label: string }> = $derived([
+		{ value: null, label: m.filter_language_all() },
+		{ value: 'en', label: 'EN' },
+		{ value: 'fr', label: 'FR' }
+	]);
 
 	// Sorted here rather than upstream: the order depends on the locale the
 	// names render in, which the data layer knows nothing about.
@@ -54,7 +65,7 @@
 	     it hanging above a row it no longer lined up with. -->
 	<div class="filter-fields">
 		<div class="filter-field filter-field--search">
-			<label class="filter-label" for="{uid}-search">{m.filter_search_label()}</label>
+			<label class="text-meta filter-label" for="{uid}-search">{m.filter_search_label()}</label>
 			<div class="filter-search">
 				<Search size={16} strokeWidth={1.75} class="filter-search-icon" aria-hidden="true" />
 				<input
@@ -68,7 +79,7 @@
 		</div>
 
 		<div class="filter-field">
-			<label class="filter-label" for="{uid}-country">{m.filter_country_label()}</label>
+			<label class="text-meta filter-label" for="{uid}-country">{m.filter_country_label()}</label>
 			<select id="{uid}-country" bind:value={country} class="filter-select">
 				<option value={null}>{m.filter_country_all()}</option>
 				{#each sortedCountries as c (c)}
@@ -77,38 +88,9 @@
 			</select>
 		</div>
 
-		<div class="filter-field">
-			<span class="filter-label" id="{uid}-language">{languageLabel}</span>
-			<div class="filter-pills" role="group" aria-labelledby="{uid}-language">
-				<button
-					type="button"
-					class="filter-pill"
-					class:is-active={language === null}
-					onclick={() => (language = null)}
-					aria-pressed={language === null}
-				>
-					{m.filter_language_all()}
-				</button>
-				<button
-					type="button"
-					class="filter-pill"
-					class:is-active={language === 'en'}
-					onclick={() => (language = 'en')}
-					aria-pressed={language === 'en'}
-				>
-					EN
-				</button>
-				<button
-					type="button"
-					class="filter-pill"
-					class:is-active={language === 'fr'}
-					onclick={() => (language = 'fr')}
-					aria-pressed={language === 'fr'}
-				>
-					FR
-				</button>
-			</div>
-		</div>
+		<SegmentedControl label={languageLabel} options={languageOptions} bind:value={language} />
+
+		{@render trailing?.()}
 	</div>
 
 	<div class="filter-meta">
@@ -148,14 +130,10 @@
 		min-width: 0;
 	}
 
+	/* .text-meta carries the type; SegmentedControl labels itself the same
+	   way, which is what lets the two components share a baseline. */
 	.filter-label {
-		font-family: var(--font-sans);
-		font-size: var(--text-badge);
-		font-weight: 600;
 		line-height: 1.2;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		color: var(--ink-subtle);
 	}
 
 	@media (min-width: 640px) {
@@ -238,66 +216,6 @@
 
 	:global(.dark) .filter-select {
 		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%23a1a1aa' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M3 4.5l3 3 3-3'/%3E%3C/svg%3E");
-	}
-
-	.filter-pills {
-		display: flex;
-		align-items: stretch;
-		gap: 0.25rem;
-		height: var(--control-h);
-		padding: 0.25rem;
-		background-color: color-mix(in oklab, var(--color-ink) 5%, transparent);
-		border: 1px solid var(--border-subtle);
-		border-radius: var(--radius-lg);
-	}
-
-	:global(.dark) .filter-pills {
-		background-color: color-mix(in oklab, var(--color-surface-100) 6%, transparent);
-	}
-
-	.filter-pill {
-		font-family: var(--font-sans);
-		font-size: 0.8125rem;
-		font-weight: 500;
-		letter-spacing: 0.04em;
-		color: var(--ink-subtle);
-		background: transparent;
-		border: 0;
-		border-radius: calc(var(--radius-lg) - 0.25rem);
-		/* Equal thirds while the tray is full-width on mobile; intrinsic
-		   widths once it shrinks to its content on desktop. */
-		flex: 1 1 auto;
-		padding: 0 0.875rem;
-		cursor: pointer;
-		transition:
-			background-color var(--duration-fast) var(--ease-standard),
-			color var(--duration-fast) var(--ease-standard);
-	}
-
-	@media (min-width: 640px) {
-		.filter-pills {
-			display: inline-flex;
-			align-self: flex-start;
-		}
-
-		.filter-pill {
-			flex: 0 0 auto;
-		}
-	}
-
-	.filter-pill:hover:not(.is-active) {
-		color: var(--ink-strong);
-	}
-
-	.filter-pill.is-active {
-		background-color: var(--surface-raised);
-		color: var(--color-primary-700);
-		box-shadow: var(--shadow-xs);
-	}
-
-	:global(.dark) .filter-pill.is-active {
-		background-color: color-mix(in oklab, var(--color-primary-500) 18%, transparent);
-		color: var(--color-primary-200);
 	}
 
 	.filter-meta {
