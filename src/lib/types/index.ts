@@ -13,6 +13,7 @@ export type CountryCode =
 	| 'GM'
 	| 'KE'
 	| 'LU'
+	| 'ML'
 	| 'NG'
 	| 'NL'
 	| 'SE'
@@ -33,6 +34,25 @@ export interface Organizer {
 	orcid?: string;
 	/** Taking part remotely — flags the person in the schedule. */
 	online?: boolean;
+}
+
+/**
+ * Someone speaking for the DFG programme Point Sud, which funds the workshop.
+ * They are neither convenors nor presenters, so they list like organizers —
+ * name, role, affiliation — but carry no bio or portrait unless one is supplied.
+ */
+export interface PointSudRepresentative {
+	id: string;
+	name: string;
+	role: LocalizedString;
+	affiliation: LocalizedString;
+	country: CountryCode;
+	image?: string;
+	website?: string;
+	orcid?: string;
+	/** Taking part remotely — flags the person in the schedule. */
+	online?: boolean;
+	bio?: LocalizedString;
 }
 
 export interface Participant {

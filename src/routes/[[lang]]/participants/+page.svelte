@@ -4,8 +4,10 @@
 	import SEO from '$lib/components/SEO.svelte';
 	import PageHeader from '$lib/components/layout/PageHeader.svelte';
 	import { organizers } from '$lib/data/organizers';
+	import { pointSud } from '$lib/data/point-sud';
 	import { participants } from '$lib/data/participants';
 	import OrganizerCard from '$lib/components/participants/OrganizerCard.svelte';
+	import PointSudCard from '$lib/components/participants/PointSudCard.svelte';
 	import ParticipantGrid, {
 		type Grouping
 	} from '$lib/components/participants/ParticipantGrid.svelte';
@@ -58,6 +60,22 @@
 				{/each}
 			</div>
 		</section>
+
+		{#if pointSud.length > 0}
+			<section class="mb-16">
+				<h2 class="text-section text-strong mb-2">
+					{m.section_point_sud()}
+				</h2>
+				<p class="text-muted mb-8 text-sm">
+					{m.section_point_sud_note()}
+				</p>
+				<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+					{#each pointSud as person (person.id)}
+						<PointSudCard {person} />
+					{/each}
+				</div>
+			</section>
+		{/if}
 
 		{#if participants.length > 0}
 			<section>

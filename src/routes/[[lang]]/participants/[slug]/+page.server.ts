@@ -2,7 +2,9 @@ import { error } from '@sveltejs/kit';
 import type { EntryGenerator, PageServerLoad } from './$types';
 import { participants } from '$lib/data/participants';
 import { organizers } from '$lib/data/organizers';
+import { pointSud } from '$lib/data/point-sud';
 import { getParticipantPresentations } from '$lib/data/presentations';
+import type { PersonGroup } from '$lib/data/people';
 import { programme } from '$lib/data/programme';
 
 export const prerender = true;
@@ -10,8 +12,10 @@ export const prerender = true;
 /**
  * Organizers get a page too — Frédérick Madore authors a paper but lives in
  * organizers.ts, so an author link that only covered participants would 404.
+ * Point Sud's representatives are listed on the directory page, so their cards
+ * need a destination as well.
  */
-const everyone = [...organizers, ...participants];
+const everyone = [...organizers, ...pointSud, ...participants];
 
 export const entries: EntryGenerator = () => {
 	const langs = ['', 'fr'];
@@ -25,7 +29,12 @@ export const load: PageServerLoad = ({ params }) => {
 		error(404, 'Participant not found');
 	}
 
-	const organizer = organizers.find((candidate) => candidate.id === person.id);
+	const titled = [...organizers, ...pointSud].find((candidate) => candidate.id === person.id);
+	const group: PersonGroup = organizers.some((candidate) => candidate.id === person.id)
+		? 'organizer'
+		: pointSud.some((candidate) => candidate.id === person.id)
+			? 'point-sud'
+			: 'participant';
 	const presentations = getParticipantPresentations(person);
 	let panelNumber = 0;
 	const placementByPresentation = new Map<
@@ -49,10 +58,10 @@ export const load: PageServerLoad = ({ params }) => {
 
 	return {
 		person,
-		isOrganizer: organizer !== undefined,
+		group,
 		// Surfaced here rather than narrowed in the template: `'role' in person`
 		// on the union widens the value to unknown.
-		role: organizer?.role,
+		role: titled?.role,
 		presentationItems: presentations.map((presentation) => ({
 			presentation,
 			placement: placementByPresentation.get(presentation.id)

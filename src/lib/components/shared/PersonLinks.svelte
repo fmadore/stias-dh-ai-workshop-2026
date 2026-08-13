@@ -2,11 +2,22 @@
 	import * as m from '$lib/paraglide/messages';
 	import { ExternalLink } from '@lucide/svelte';
 
-	let { website, orcid }: { website?: string; orcid?: string } = $props();
+	let {
+		website,
+		orcid,
+		// `responsive` centres on mobile, where the organizer card and the person
+		// page stack into a single column; `start` stays left-aligned throughout,
+		// for cards that keep their text column beside the avatar at every width.
+		align = 'responsive'
+	}: { website?: string; orcid?: string; align?: 'responsive' | 'start' } = $props();
 </script>
 
 {#if website || orcid}
-	<div class="flex items-center justify-center gap-4 sm:justify-start">
+	<div
+		class="flex items-center gap-4 {align === 'start'
+			? 'justify-start'
+			: 'justify-center sm:justify-start'}"
+	>
 		{#if website}
 			<a href={website} target="_blank" rel="noopener noreferrer" class="link-arrow text-sm">
 				<ExternalLink size={14} strokeWidth={1.75} aria-hidden="true" />

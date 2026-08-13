@@ -1,23 +1,27 @@
 import type { Organizer } from '$lib/types';
 import { organizers } from './organizers';
+import { pointSud } from './point-sud';
 import { participants } from './participants';
 
 /**
- * A unified, read-only view over organizers and participants so that any part of
- * the site (schedule, paper authorship, …) can resolve a person by id without
- * caring which list they live in.
+ * A unified, read-only view over organizers, Point Sud representatives and
+ * participants so that any part of the site (schedule, paper authorship, …)
+ * can resolve a person by id without caring which list they live in.
  */
+export type PersonGroup = 'organizer' | 'point-sud' | 'participant';
+
 export type Person = Pick<
 	Organizer,
 	'id' | 'name' | 'affiliation' | 'country' | 'website' | 'orcid' | 'online'
 > & {
 	image?: string;
-	isOrganizer: boolean;
+	group: PersonGroup;
 };
 
 export const people: Person[] = [
-	...organizers.map((o): Person => ({ ...o, isOrganizer: true })),
-	...participants.map((p): Person => ({ ...p, isOrganizer: false }))
+	...organizers.map((o): Person => ({ ...o, group: 'organizer' })),
+	...pointSud.map((p): Person => ({ ...p, group: 'point-sud' })),
+	...participants.map((p): Person => ({ ...p, group: 'participant' }))
 ];
 
 const byId = new Map(people.map((p) => [p.id, p]));

@@ -59,7 +59,11 @@
 
 <PageHeader
 	title={person.name}
-	eyebrow={data.isOrganizer ? m.section_organisers() : m.nav_participants()}
+	eyebrow={data.group === 'organizer'
+		? m.section_organisers()
+		: data.group === 'point-sud'
+			? m.section_point_sud()
+			: m.nav_participants()}
 	subtitle={t(person.affiliation)}
 	meta={[countryName(person.country, getLocale())]}
 />

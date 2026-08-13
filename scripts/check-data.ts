@@ -3,6 +3,7 @@ import { access, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { organizers } from '../src/lib/data/organizers.ts';
+import { pointSud } from '../src/lib/data/point-sud.ts';
 import { programme } from '../src/lib/data/programme.ts';
 import { sponsors } from '../src/lib/data/sponsors.ts';
 import type { Participant, Presentation } from '../src/lib/types/index.ts';
@@ -52,7 +53,7 @@ const participantModules = await loadDefaultModules<Participant>('src/lib/data/p
 const presentationModules = await loadDefaultModules<Presentation>('src/lib/data/presentations');
 const participants = participantModules.map(({ value }) => value);
 const presentations = presentationModules.map(({ value }) => value);
-const people = [...organizers, ...participants];
+const people = [...organizers, ...pointSud, ...participants];
 const peopleById = uniqueById(people, 'person');
 const presentationsById = uniqueById(presentations, 'presentation');
 
@@ -109,5 +110,5 @@ if (failures) {
 }
 
 console.log(
-	`check-data: OK (${participants.length} participants, ${organizers.length} organizers, ${presentations.length} presentations, ${sessionIds.size} sessions)`
+	`check-data: OK (${participants.length} participants, ${organizers.length} organizers, ${pointSud.length} Point Sud representatives, ${presentations.length} presentations, ${sessionIds.size} sessions)`
 );
