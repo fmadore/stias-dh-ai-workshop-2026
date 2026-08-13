@@ -13,6 +13,7 @@
 	} from '$lib/components/participants/ParticipantGrid.svelte';
 	import FilterBar from '$lib/components/shared/FilterBar.svelte';
 	import SegmentedControl from '$lib/components/shared/SegmentedControl.svelte';
+	import AffiliationMap from '$lib/components/participants/AffiliationMap.svelte';
 	import { filterParticipants, uniqueParticipantCountries } from '$lib/utils/filter';
 	import type { CountryCode } from '$lib/types';
 
@@ -78,6 +79,10 @@
 		{/if}
 
 		{#if participants.length > 0}
+			<section class="mb-16">
+				<AffiliationMap />
+			</section>
+
 			<section>
 				<h2 class="text-section text-strong mb-8">
 					{m.section_participants()}

@@ -3,6 +3,7 @@ import { access, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { organizers } from '../src/lib/data/organizers.ts';
+import { affiliationLocations } from '../src/lib/data/affiliations.ts';
 import { pointSud } from '../src/lib/data/point-sud.ts';
 import { programme } from '../src/lib/data/programme.ts';
 import { sponsors } from '../src/lib/data/sponsors.ts';
@@ -56,6 +57,33 @@ const presentations = presentationModules.map(({ value }) => value);
 const people = [...organizers, ...pointSud, ...participants];
 const peopleById = uniqueById(people, 'person');
 const presentationsById = uniqueById(presentations, 'presentation');
+uniqueById(affiliationLocations, 'affiliation');
+
+const participantIds = new Set(participants.map(({ id }) => id));
+const mappedParticipantIds = new Set<string>();
+for (const affiliation of affiliationLocations) {
+	if (!affiliation.name.en.trim() || !affiliation.name.fr.trim())
+		fail(`affiliation ${affiliation.id}: incomplete name`);
+	if (!affiliation.city.en.trim() || !affiliation.city.fr.trim())
+		fail(`affiliation ${affiliation.id}: incomplete city`);
+	if (
+		!Number.isFinite(affiliation.coordinates.lat) ||
+		!Number.isFinite(affiliation.coordinates.lng) ||
+		Math.abs(affiliation.coordinates.lat) > 90 ||
+		Math.abs(affiliation.coordinates.lng) > 180
+	)
+		fail(`affiliation ${affiliation.id}: invalid coordinates`);
+	if (!affiliation.participantIds.length)
+		fail(`affiliation ${affiliation.id}: empty participant list`);
+
+	for (const participantId of affiliation.participantIds) {
+		if (!participantIds.has(participantId))
+			fail(`affiliation ${affiliation.id}: unknown participant '${participantId}'`);
+		if (mappedParticipantIds.has(participantId))
+			fail(`affiliation ${affiliation.id}: participant '${participantId}' is mapped twice`);
+		mappedParticipantIds.add(participantId);
+	}
+}
 
 for (const person of people) {
 	if (!/^[A-Z]{2}$/.test(person.country))

@@ -72,6 +72,16 @@ export interface Participant {
 	bio?: LocalizedString;
 }
 
+/** A campus-based affiliation shown on the participants map. */
+export interface AffiliationLocation {
+	id: string;
+	name: LocalizedString;
+	city: LocalizedString;
+	country: CountryCode;
+	coordinates: { lat: number; lng: number };
+	participantIds: string[];
+}
+
 export interface Presentation {
 	id: string;
 	title: string;
