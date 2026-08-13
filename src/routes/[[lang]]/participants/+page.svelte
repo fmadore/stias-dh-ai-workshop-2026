@@ -80,10 +80,6 @@
 
 		{#if participants.length > 0}
 			<section class="mb-16">
-				<AffiliationMap />
-			</section>
-
-			<section>
 				<h2 class="text-section text-strong mb-8">
 					{m.section_participants()}
 				</h2>
@@ -114,6 +110,10 @@
 						{m.participants_filter_no_results()}
 					</p>
 				{/if}
+			</section>
+
+			<section>
+				<AffiliationMap />
 			</section>
 		{/if}
 	</div>

@@ -51,6 +51,7 @@
 	}
 
 	function setSelectedMarker(id: string | null) {
+		selectedId = id;
 		for (const entry of markers) {
 			entry.marker.getElement().classList.toggle('is-active', entry.id === id);
 		}
@@ -94,7 +95,6 @@
 		const location = locations.find((entry) => entry.id === id);
 		if (!location) return;
 
-		selectedId = id;
 		setSelectedMarker(id);
 		if (!map || !popup || !mapReady) return;
 
@@ -111,10 +111,13 @@
 			.setLngLat([location.coordinates.lng, location.coordinates.lat])
 			.setDOMContent(popupContent(location))
 			.addTo(map);
+
+		// Reassert the selection because moving an already-open shared popup
+		// emits `close` before MapLibre attaches it at the new location.
+		setSelectedMarker(id);
 	}
 
 	function showAllLocations(animate = true) {
-		selectedId = null;
 		setSelectedMarker(null);
 		popup?.remove();
 		if (!map || !bounds || !mapReady) return;
@@ -185,12 +188,27 @@
 						'CooperativeGesturesHandler.MobileHelpText': m.map_gesture_mobile()
 					}
 				});
+				map.setMissingStyleImageResolver((imageId) => {
+					if (imageId !== 'circle-11' || !map) return;
+
+					// OpenFreeMap's dark style references the legacy Maki name
+					// `circle-11`; its shared sprite contains the same icon as
+					// `circle_11_black`. Register an alias without replacing the
+					// externally maintained style or suppressing other image errors.
+					const fallback = map.getImage('circle_11_black');
+					if (!fallback || map.hasImage(imageId)) return;
+					map.addImage(imageId, fallback.data, {
+						pixelRatio: fallback.pixelRatio,
+						sdf: fallback.sdf
+					});
+				});
 				map.touchZoomRotate.disableRotation();
 				map.addControl(new maplibre.NavigationControl({ showCompass: false }), 'top-right');
 				map.addControl(new maplibre.ScaleControl({ maxWidth: 100, unit: 'metric' }), 'bottom-left');
 
 				popup = new maplibre.Popup({
 					className: 'affiliation-popup',
+					closeOnClick: true,
 					offset: 18,
 					maxWidth: '22rem',
 					focusAfterOpen: false
@@ -211,7 +229,12 @@
 						m.affiliations_select({ affiliation: location.label })
 					);
 					markerButton.title = location.label;
-					markerButton.addEventListener('click', () => selectLocation(location.id, false));
+					markerButton.addEventListener('click', (event) => {
+						// Otherwise the same click bubbles to MapLibre's map-level
+						// close handler and immediately dismisses the popup we just opened.
+						event.stopPropagation();
+						selectLocation(location.id, false);
+					});
 
 					const marker = new maplibre.Marker({ element: markerButton })
 						.setLngLat([location.coordinates.lng, location.coordinates.lat])
