@@ -9,8 +9,8 @@
 	import 'maplibre-gl/dist/maplibre-gl.css';
 	import * as m from '$lib/paraglide/messages';
 	import { affiliationLocations } from '$lib/data/affiliations';
-	import { participants } from '$lib/data/participants';
-	import type { AffiliationLocation, Participant } from '$lib/types';
+	import { getPeople, type Person } from '$lib/data/people';
+	import type { AffiliationLocation } from '$lib/types';
 	import { countryName } from '$lib/utils/country';
 	import { localePath, t } from '$lib/utils/i18n';
 	import { getLocale } from '$lib/paraglide/runtime';
@@ -18,21 +18,16 @@
 	type LocationView = AffiliationLocation & {
 		label: string;
 		place: string;
-		people: Participant[];
+		people: Person[];
 	};
 
-	const participantsById = Object.fromEntries(
-		participants.map((participant) => [participant.id, participant])
-	) as Record<string, Participant>;
 	const locale = getLocale();
 	const locations: LocationView[] = affiliationLocations
 		.map((location) => ({
 			...location,
 			label: t(location.name),
 			place: `${t(location.city)}, ${countryName(location.country, locale)}`,
-			people: location.participantIds
-				.map((id) => participantsById[id])
-				.filter((participant): participant is Participant => Boolean(participant))
+			people: getPeople(location.personIds)
 		}))
 		.filter((location) => location.people.length > 0)
 		.sort((a, b) => a.label.localeCompare(b.label, locale));
@@ -73,16 +68,16 @@
 
 		const peopleLabel = document.createElement('p');
 		peopleLabel.className = 'affiliation-popup-label';
-		peopleLabel.textContent = m.affiliations_popup_participants();
+		peopleLabel.textContent = m.affiliations_popup_people();
 		content.appendChild(peopleLabel);
 
 		const list = document.createElement('ul');
 		list.className = 'affiliation-popup-list';
-		for (const participant of location.people) {
+		for (const person of location.people) {
 			const item = document.createElement('li');
 			const link = document.createElement('a');
-			link.href = localePath(`/participants/${participant.id}`);
-			link.textContent = participant.name;
+			link.href = localePath(`/participants/${person.id}`);
+			link.textContent = person.name;
 			item.appendChild(link);
 			list.appendChild(item);
 		}

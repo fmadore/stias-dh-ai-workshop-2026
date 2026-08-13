@@ -3,6 +3,8 @@
 	import { t, localePath } from '$lib/utils/i18n';
 	import Avatar from '$lib/components/shared/Avatar.svelte';
 	import PersonLinks from '$lib/components/shared/PersonLinks.svelte';
+	import { getLocale } from '$lib/paraglide/runtime';
+	import { countryName } from '$lib/utils/country';
 
 	let { organizer }: { organizer: Organizer } = $props();
 </script>
@@ -25,7 +27,7 @@
 					{t(organizer.role)}
 				</p>
 				<p class="text-muted mb-4 text-sm">
-					{t(organizer.affiliation)}
+					{t(organizer.affiliation)} · {countryName(organizer.country, getLocale())}
 				</p>
 
 				<span class="bg-secondary-500/50 mx-auto mb-4 block h-px w-8 sm:mx-0" aria-hidden="true"

@@ -79,7 +79,11 @@ export interface AffiliationLocation {
 	city: LocalizedString;
 	country: CountryCode;
 	coordinates: { lat: number; lng: number };
-	participantIds: string[];
+	/**
+	 * Ids from the people registry — organizers as well as participants, since
+	 * the convenors work at campuses the map already pins.
+	 */
+	personIds: string[];
 }
 
 export interface Presentation {

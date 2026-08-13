@@ -59,8 +59,7 @@ const peopleById = uniqueById(people, 'person');
 const presentationsById = uniqueById(presentations, 'presentation');
 uniqueById(affiliationLocations, 'affiliation');
 
-const participantIds = new Set(participants.map(({ id }) => id));
-const mappedParticipantIds = new Set<string>();
+const mappedPersonIds = new Set<string>();
 for (const affiliation of affiliationLocations) {
 	if (!affiliation.name.en.trim() || !affiliation.name.fr.trim())
 		fail(`affiliation ${affiliation.id}: incomplete name`);
@@ -73,15 +72,14 @@ for (const affiliation of affiliationLocations) {
 		Math.abs(affiliation.coordinates.lng) > 180
 	)
 		fail(`affiliation ${affiliation.id}: invalid coordinates`);
-	if (!affiliation.participantIds.length)
-		fail(`affiliation ${affiliation.id}: empty participant list`);
+	if (!affiliation.personIds.length) fail(`affiliation ${affiliation.id}: empty person list`);
 
-	for (const participantId of affiliation.participantIds) {
-		if (!participantIds.has(participantId))
-			fail(`affiliation ${affiliation.id}: unknown participant '${participantId}'`);
-		if (mappedParticipantIds.has(participantId))
-			fail(`affiliation ${affiliation.id}: participant '${participantId}' is mapped twice`);
-		mappedParticipantIds.add(participantId);
+	for (const personId of affiliation.personIds) {
+		if (!peopleById.has(personId))
+			fail(`affiliation ${affiliation.id}: unknown person '${personId}'`);
+		if (mappedPersonIds.has(personId))
+			fail(`affiliation ${affiliation.id}: person '${personId}' is mapped twice`);
+		mappedPersonIds.add(personId);
 	}
 }
 

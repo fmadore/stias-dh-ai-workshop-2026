@@ -4,6 +4,10 @@ import type { AffiliationLocation } from '$lib/types';
  * Campus coordinates are stored with the content rather than geocoded in the
  * browser. This keeps the map deterministic, avoids sending visitor queries to
  * a geocoder, and lets distributed affiliations remain honestly unpinned.
+ *
+ * `personIds` covers organizers as well as participants — three of the four
+ * convenors work at campuses the map already pins, so leaving them off read as
+ * an omission rather than a distinction.
  */
 export const affiliationLocations: AffiliationLocation[] = [
 	{
@@ -12,7 +16,7 @@ export const affiliationLocations: AffiliationLocation[] = [
 		city: { en: 'Edmonton', fr: 'Edmonton' },
 		country: 'CA',
 		coordinates: { lat: 53.5232, lng: -113.5263 },
-		participantIds: ['augustine-farinola']
+		personIds: ['augustine-farinola']
 	},
 	{
 		id: 'university-of-helsinki',
@@ -20,7 +24,7 @@ export const affiliationLocations: AffiliationLocation[] = [
 		city: { en: 'Helsinki', fr: 'Helsinki' },
 		country: 'FI',
 		coordinates: { lat: 60.1697, lng: 24.9501 },
-		participantIds: ['friederike-lupke']
+		personIds: ['friederike-lupke']
 	},
 	{
 		id: 'cheikh-anta-diop-university',
@@ -28,7 +32,7 @@ export const affiliationLocations: AffiliationLocation[] = [
 		city: { en: 'Dakar', fr: 'Dakar' },
 		country: 'SN',
 		coordinates: { lat: 14.6928, lng: -17.4635 },
-		participantIds: ['aminata-kane', 'augustin-ndione']
+		personIds: ['aminata-kane', 'augustin-ndione']
 	},
 	{
 		id: 'university-of-yaounde-1',
@@ -36,7 +40,7 @@ export const affiliationLocations: AffiliationLocation[] = [
 		city: { en: 'Yaoundé', fr: 'Yaoundé' },
 		country: 'CM',
 		coordinates: { lat: 3.8669, lng: 11.5004 },
-		participantIds: ['eliette-ngo-tjomb', 'evelyne-amana']
+		personIds: ['eliette-ngo-tjomb', 'evelyne-amana', 'ngue-um']
 	},
 	{
 		id: 'university-of-ebolowa',
@@ -44,7 +48,7 @@ export const affiliationLocations: AffiliationLocation[] = [
 		city: { en: 'Ebolowa', fr: 'Ebolowa' },
 		country: 'CM',
 		coordinates: { lat: 2.914, lng: 11.153 },
-		participantIds: ['falimatou-pemgbou']
+		personIds: ['falimatou-pemgbou']
 	},
 	{
 		id: 'university-of-bayreuth',
@@ -52,7 +56,7 @@ export const affiliationLocations: AffiliationLocation[] = [
 		city: { en: 'Bayreuth', fr: 'Bayreuth' },
 		country: 'DE',
 		coordinates: { lat: 49.9282, lng: 11.5858 },
-		participantIds: ['durgesh-nandini', 'hammed-olalekan-lawal', 'jiayu-yang']
+		personIds: ['durgesh-nandini', 'hammed-olalekan-lawal', 'jiayu-yang', 'madore']
 	},
 	{
 		id: 'leiden-university',
@@ -60,7 +64,7 @@ export const affiliationLocations: AffiliationLocation[] = [
 		city: { en: 'Leiden', fr: 'Leyde' },
 		country: 'NL',
 		coordinates: { lat: 52.157, lng: 4.481 },
-		participantIds: [
+		personIds: [
 			'bruno-allahissem',
 			'jelena-prokic',
 			'luca-bruls',
@@ -74,7 +78,7 @@ export const affiliationLocations: AffiliationLocation[] = [
 		city: { en: 'Johannesburg', fr: 'Johannesbourg' },
 		country: 'ZA',
 		coordinates: { lat: -26.1929, lng: 28.0305 },
-		participantIds: [
+		personIds: [
 			'christine-mataranyika',
 			'iginio-gagliardone',
 			'joshua-ward',
@@ -91,7 +95,7 @@ export const affiliationLocations: AffiliationLocation[] = [
 		city: { en: 'Potchefstroom', fr: 'Potchefstroom' },
 		country: 'ZA',
 		coordinates: { lat: -26.7145, lng: 27.097 },
-		participantIds: ['benito-trollip']
+		personIds: ['benito-trollip', 'van-zaanen']
 	},
 	{
 		id: 'university-of-ibadan',
@@ -99,7 +103,7 @@ export const affiliationLocations: AffiliationLocation[] = [
 		city: { en: 'Ibadan', fr: 'Ibadan' },
 		country: 'NG',
 		coordinates: { lat: 7.4443, lng: 3.8994 },
-		participantIds: ['john-daniel']
+		personIds: ['john-daniel']
 	},
 	{
 		id: 'university-of-the-gambia',
@@ -107,7 +111,7 @@ export const affiliationLocations: AffiliationLocation[] = [
 		city: { en: 'Faraba Banta', fr: 'Faraba Banta' },
 		country: 'GM',
 		coordinates: { lat: 13.2811, lng: -16.5833 },
-		participantIds: ['jules-mansaly']
+		personIds: ['jules-mansaly']
 	},
 	{
 		id: 'moi-university',
@@ -115,7 +119,7 @@ export const affiliationLocations: AffiliationLocation[] = [
 		city: { en: 'Eldoret', fr: 'Eldoret' },
 		country: 'KE',
 		coordinates: { lat: 0.286, lng: 35.287 },
-		participantIds: ['leonard-kirui']
+		personIds: ['leonard-kirui']
 	},
 	{
 		id: 'university-of-luxembourg',
@@ -123,7 +127,7 @@ export const affiliationLocations: AffiliationLocation[] = [
 		city: { en: 'Esch-sur-Alzette', fr: 'Esch-sur-Alzette' },
 		country: 'LU',
 		coordinates: { lat: 49.5042, lng: 5.9485 },
-		participantIds: ['lauren-coetzee', 'sarah-oberbichler']
+		personIds: ['lauren-coetzee', 'sarah-oberbichler']
 	},
 	{
 		id: 'joseph-ki-zerbo-university',
@@ -131,7 +135,7 @@ export const affiliationLocations: AffiliationLocation[] = [
 		city: { en: 'Ouagadougou', fr: 'Ouagadougou' },
 		country: 'BF',
 		coordinates: { lat: 12.3808, lng: -1.4996 },
-		participantIds: ['mohamadou-konate']
+		personIds: ['mohamadou-konate']
 	},
 	{
 		id: 'university-of-wisconsin-madison',
@@ -139,7 +143,7 @@ export const affiliationLocations: AffiliationLocation[] = [
 		city: { en: 'Madison', fr: 'Madison' },
 		country: 'US',
 		coordinates: { lat: 43.0731, lng: -89.4012 },
-		participantIds: ['rachel-maina']
+		personIds: ['rachel-maina']
 	},
 	{
 		id: 'uppsala-university',
@@ -147,7 +151,7 @@ export const affiliationLocations: AffiliationLocation[] = [
 		city: { en: 'Uppsala', fr: 'Uppsala' },
 		country: 'SE',
 		coordinates: { lat: 59.8586, lng: 17.6389 },
-		participantIds: ['oreen-yousuf']
+		personIds: ['oreen-yousuf']
 	},
 	{
 		id: 'university-of-cape-town-libraries',
@@ -158,6 +162,14 @@ export const affiliationLocations: AffiliationLocation[] = [
 		city: { en: 'Cape Town', fr: 'Le Cap' },
 		country: 'ZA',
 		coordinates: { lat: -33.9577, lng: 18.4612 },
-		participantIds: ['sanjin-muftic']
+		personIds: ['sanjin-muftic']
+	},
+	{
+		id: 'kings-college-london',
+		name: { en: "King's College London", fr: "King's College London" },
+		city: { en: 'London', fr: 'Londres' },
+		country: 'GB',
+		coordinates: { lat: 51.5115, lng: -0.116 },
+		personIds: ['hiribarren']
 	}
 ];
