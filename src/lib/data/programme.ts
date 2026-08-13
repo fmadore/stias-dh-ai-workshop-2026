@@ -4,7 +4,7 @@ import type { ProgrammeDay } from '$lib/types';
  * Date the programme was last revised (ISO `yyyy-mm-dd`). Bump this whenever you
  * change the sessions below — it is shown as "Last updated" on the page.
  */
-export const programmeLastUpdated = '2026-08-12';
+export const programmeLastUpdated = '2026-08-13';
 
 /**
  * Workshop programme — STIAS, Stellenbosch, 21–24 September 2026.
@@ -31,7 +31,8 @@ export const programmeLastUpdated = '2026-08-12';
  * STIAS caters two coffee breaks only on full days on site (Days 1 and 4); Days
  * 2 and 3 leave for an excursion in the afternoon (Day 3 straight after lunch,
  * so both its panels sit in the morning), and get the 10:30 break only.
- * After-hours functions (dinners) start at 19:00, off site.
+ * After-hours functions (the welcome dinner on Day 1 and the farewell dinner on
+ * Day 4) start at 19:00, off site; Days 2 and 3 leave the evening free.
  */
 export const programme: ProgrammeDay[] = [
 	{
@@ -206,10 +207,10 @@ export const programme: ProgrammeDay[] = [
 				description: { en: 'Destination to be determined.', fr: 'Destination à déterminer.' }
 			},
 			{
-				id: 'd2-dinner',
+				id: 'd2-evening',
 				time: '19:00',
 				type: 'social',
-				title: { en: 'Joint dinner', fr: 'Dîner commun' }
+				title: { en: 'Free evening', fr: 'Soirée libre' }
 			}
 		]
 	},
@@ -348,10 +349,12 @@ export const programme: ProgrammeDay[] = [
 				}
 			},
 			{
-				id: 'd4-evening',
-				time: 'From 17:00',
+				id: 'd4-dinner',
+				time: '19:00',
 				type: 'social',
-				title: { en: 'Free evening', fr: 'Soirée libre' }
+				title: { en: 'Farewell dinner', fr: 'Dîner de clôture' },
+				venue: 'Oude Werf',
+				venueUrl: 'https://www.oudewerf.co.za/dine/'
 			}
 		]
 	}
