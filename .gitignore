@@ -14,3 +14,7 @@ vite.config.ts.timestamp-*
 
 # Claude Code local config
 .claude/
+
+# Impeccable live-mode runtime artifacts
+/.impeccable/live/inject-journal.json
+/.impeccable/config.local.json
