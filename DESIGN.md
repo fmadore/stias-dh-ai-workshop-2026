@@ -150,7 +150,7 @@ The system takes paper seriously in a literal sense too: there is a real print s
 - Brass used solidly once per page; everywhere else it is a hairline, rule, or wash
 - Shadows tinted warm with teal-black (rgb 4 40 40), never neutral
 - Semantic role tokens that flip once for dark mode instead of ~40 scattered `dark:` variants
-- Measure-capped prose (68ch) and ledes (46ch)
+- Measure-capped prose (30em ≈ 69 characters) and ledes (21em ≈ 48)
 - Motion is short, eased, and fully surrendered under `prefers-reduced-motion`
 
 ## Colors
@@ -205,19 +205,23 @@ Surface, ink, and border roles are defined once on `:root` and flipped once in `
 - **Page Title** (400, `clamp(2.125rem, 1.4rem + 3vw, 3.25rem)`, 1.08, -0.022em): the `PageHeader` h1 on every route.
 - **Section** (400, `clamp(1.5rem, 1.1rem + 1.6vw, 2rem)`, 1.15, -0.018em): section headings within a page.
 - **Card Title** (400, `clamp(1.1875rem, 1.05rem + 0.4vw, 1.4375rem)`, 1.25, -0.012em): paper titles, participant names, session names. Fluid rather than fixed, because at a fixed 1.25rem the step down from Section collapsed on wide screens.
-- **Lede** (300, 1.0625rem, 1.65, max 46ch): the standfirst paragraph under a page title, in muted ink.
-- **Prose** (400, 1rem rising to 1.0625rem at 640px, 1.72, max 68ch): all body copy and abstracts. 400 rather than 300 — Outfit Light reads washed out on cream at reading sizes.
+- **Lede** (300, 1.0625rem, 1.65, max 21em ≈ 48 characters): the standfirst paragraph under a page title, in muted ink.
+- **Prose** (400, 1rem rising to 1.0625rem at 640px, 1.72, max 30em ≈ 69 characters): all body copy and abstracts. 400 rather than 300 — Outfit Light reads washed out on cream at reading sizes.
 - **Eyebrow** (500, 0.75rem, 0.18em, uppercase, brass ink): the small label above a heading.
 - **Meta** (600, 0.75rem, 0.16em, uppercase, muted ink): field labels, session times, card metadata.
 - **Badge** (600, 0.6875rem, 0.16em, uppercase): the EN/FR language chip and session-type labels.
 
+Beneath the eight roles sit five **functional size steps** in `@theme`, for the small dense work that has no role of its own. They are named, not improvised, and nothing typographic should introduce a sixth: `--text-badge` 0.6875rem (11px, the floor — no text on this site is smaller), `--text-caption` 0.8125rem (13px: filter meta, session times, captions), `--text-ui-sm` 0.875rem (14px: `.btn-sm`, the skip link, map popup links), `--text-ui` 0.9375rem (15px: buttons, inputs, card meta), `--text-reading` 1.0625rem (17px: prose). They deliberately avoid the names `--text-body` / `--text-meta` / `--text-eyebrow`, which would collide with the semantic colour utilities and the component classes of the same name.
+
 ### Named Rules
 
-**The Serif-Structures Rule.** Every heading level is Instrument Serif at 400. Hierarchy comes from fluid size and progressively tighter negative tracking — never from weight, and never from Outfit. A bold serif heading is off-system.
+**The Serif-Structures Rule.** Every heading level is Instrument Serif at 400. Hierarchy comes from fluid size and progressively tighter negative tracking — never from weight, and never from Outfit. A bold serif heading is off-system. The one exception is a **label** on a heading tag (an eyebrow, meta or badge role used as an `<h2>`/`<h3>` for document structure): those are Outfit by role, and must say so — see the Layered-Defaults Rule.
 
-**The Measure Rule.** Reading text is capped by characters, not by container. Prose is 68ch, ledes 46ch. A container narrowed to fix line length is treating the symptom; the measure token is the fix.
+**The Measure Rule.** Reading text is capped by characters, not by container, and the cap is expressed in `em` — never `ch`. Prose is 30em (≈69 characters), ledes 21em (≈48). `ch` is the advance of "0", which in Outfit is 0.6975em against a real prose average of 0.435em, so a `ch` cap renders about 1.5× the line length it claims and moves again under the fallback font. Verify a change to these by rendering and counting, not by reading the declaration. A container narrowed to fix line length is treating the symptom; the measure token is the fix.
 
-**The Uppercase-Is-A-Label Rule.** Uppercase with wide tracking (0.16–0.18em) means "this is a label". It is never a heading, never a sentence, and never body copy.
+**The Uppercase-Is-A-Label Rule.** Uppercase with wide tracking (0.16–0.18em) means "this is a label". It is never a heading, never a sentence, and never body copy. Uppercase with tracking below 0.16em is a defect, not a variant — one chip should not have three renderings.
+
+**The Layered-Defaults Rule.** Element defaults (`body`, `h1…h6`) live in `@layer base`; role classes in `@layer components`; Tailwind utilities above both. Nothing typographic may sit **unlayered**, because unlayered declarations outrank every layer regardless of specificity — which is how a bare `h2 { line-height: 1.12 }` silently voided `.text-section`'s 1.15 on 37 headings, and how `font-semibold` and `tracking-[0.16em]` lost to an `h2` in the footer. Svelte's scoped `<style>` blocks are unlayered too: use a media query inside the block rather than a responsive utility on the element.
 
 ## Layout
 
@@ -320,7 +324,7 @@ A bordered notice with brass at 45% on the border and a 6% brass wash behind —
 - **Do** reach for a semantic role (`bg-page`, `text-body`, `border-subtle`) rather than a palette step. The roles flip once for dark mode; a raw ramp value needs a hand-written `dark:` variant and will drift.
 - **Do** set brass text in `--accent-ink` (#7a5c15) and brass graphics in `--accent` (#c49528).
 - **Do** keep every heading in Instrument Serif at 400 and let size and tracking build the hierarchy.
-- **Do** cap reading text with `--measure-prose` (68ch) or `--measure-lede` (46ch).
+- **Do** cap reading text with `--measure-prose` (30em) or `--measure-lede` (21em), and count the rendered characters before trusting a new value.
 - **Do** give any new interactive control a 2.75rem minimum touch target and confirm it against the existing `--control-h` baseline.
 - **Do** put motion behind the tokens (`--duration-base`, `--ease-standard`) and confirm it disappears under `prefers-reduced-motion`.
 - **Do** check both locales and both themes before calling a change done. French runs roughly 20% longer, and several colours are defined only in the `.dark` block.

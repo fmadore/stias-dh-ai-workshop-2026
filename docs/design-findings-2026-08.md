@@ -20,9 +20,40 @@ The site is well built. Nine routes carry exactly one `<h1>` each with zero head
 
 **Fixed in `0e375db`** — **P1-2**, prompted by the French navbar wrapping to three lines. The horizontal nav switched on at `lg`, but the row needs 1205px of viewport in French and 1069px in English against a container that stops growing at 80rem, so both locales now switch at `xl`. Fixing that required fixing the two defects underneath it: the `lg:hidden` that never worked (now a media query inside the scoped block, where it can win) and the rule-plus-padding that sat outside the clipped area (now inside, so the closed state is genuinely 0px). The header is 73px at every width instead of 86px, and occlusion is down from 14px to the 1px hairline. Also closes the navbar half of **P3-2**: the brand qualifier was 10px, below the documented 11px floor.
 
-**Still open:** P1-4 (Measure Rule), P1-6 (programme at 375px), P1-7 (programme link affordance), all P2s, and the rest of P3.
+**Fixed in the `typeset` pass (17 August 2026)** — **P1-4**, **P2-5** and the 10px-type P3 item, plus the mechanism under all three. Measured before and after in the browser at 1280px and 375px, EN and FR, both themes:
+
+| Measurement                       | Before                         | After                            |
+| --------------------------------- | ------------------------------ | -------------------------------- |
+| Prose, full line (`/about`, EN)   | 102 characters                 | **68.4**                         |
+| Prose, full line (paper page, FR) | 101.9                          | **68.5**                         |
+| Prose, average across paragraphs  | 90                             | **61**                           |
+| `h1.text-page-title`              | 1.04 / −0.025em (display step) | **1.08 / −0.022em** (documented) |
+| `h2.text-section` ×17             | 1.12                           | **1.15**                         |
+| `h3.text-card-title` ×5           | 1.20                           | **1.25**                         |
+| `h2.text-card-title` (25 papers)  | 1.12                           | **1.25**                         |
+| Label roles on heading tags ×7    | Instrument Serif, −0.018em     | **Outfit 500/600, +0.16–0.18em** |
+| Type below the 11px floor         | 24 elements                    | **0**                            |
+| Uppercase under 0.16em tracking   | 5 renderings of the EN/FR chip | **1** (0.16em everywhere)        |
+
+P1-4's root cause is now measured rather than estimated: `ch` is the advance of "0", 0.6975em in Outfit, against a real prose average of 0.435em — a ratio of **1.50**, not the 1.46 first estimated. The tokens are `em` now, so they neither depend on a digit's width nor shift when the fallback font is in play (system-ui's "0" is 18% narrower than Outfit's).
+
+P2-5 was **larger than recorded**: not three label sites but 37 headings. The unlayered `h1…h6` block outranked `@layer components` _and_ `@layer utilities`, so it was voiding `font-semibold` and `tracking-[0.16em]` in the footer as well as whole role classes. Moving the element defaults into `@layer base` fixed all 37 at once, and closes systemic pattern 1 for the typography half.
+
+**Still open:** P1-6 (programme at 375px), P1-7 (programme link affordance), all P2s except P2-5, and the rest of P3.
 
 **Decided, not yet built:** the home hero (P2-8) is to be **quietened** — demote or drop the countdown, calm the gradient to a single tonal wash, and make the stat row's numbers real links. Scheduled after the remaining P1s.
+
+### New findings from the typeset pass
+
+Raised by the isolated typographic assessment, verified against font metrics and the compiled bundle. None were in the Phase 1 backlog.
+
+- **P2-9 · Instrument Serif has no metric-compatible fallback, and Georgia sets 30% wider.** Mean advance: Instrument Serif 0.3366em, Georgia 0.4384em (+30.2%), Times New Roman 0.3979em (+18.2%). With `font-display: swap` and no preload, every heading lays out ~30% wide on first paint and then reflows — the English hero headline goes 3 lines → 4 in the fallback, French likewise. A `size-adjust` fallback is the wrong tool here (matching Instrument Serif's width would shrink Georgia's x-height from 0.481 to 0.37 and trade a width jump for a size jump); **preloading the two normal woff2 (32.6 KB) is the fix**. This promotes the existing P3 "no `rel=preload`" item — it is a layout-stability defect, not a latency nicety. → `optimize`
+  _Verified good, by contrast:_ Outfit's fallback stack is within 0.6% of its own mean advance on both Segoe UI and Arial, so body text barely reflows. Do not "improve" that stack.
+- **P3-12 · Thirteen undeclared display-serif sizes, five inside a 3px band.** At 375px, session headings (17px), paper-page author names (18px), footer (18px), `AvatarSmall` (18px), the map popup title (19.2px, now 19px) and the navbar wordmark (20px) are the same face at the same weight, indistinguishable. Above the scale, the numerals in `AtAGlance`, `Countdown`, `ThematicAxis` and `Avatar` (24–48px) are a legitimate distinct role that has never been named. Naming it is worth doing **after** the home-hero direction resolves, since `quieter` may remove the countdown. → `typeset` (second pass) or the home-hero work
+- **P3-13 · The project `--text-*` steps carry no paired line-height**, while Tailwind's `text-sm` and friends set both. So `text-caption` appears with `leading-snug`, with `leading-relaxed`, and with nothing at all, and its leading silently inherits. Tailwind v4 supports `--text-caption--line-height`; adding them changes rendering at every consumer, so it needs its own bounded pass. → `layout`
+- **P3-14 · `.text-eyebrow` hard-codes `color: var(--accent-ink)`**, so it cannot be used on the dark hero or footer and gets rebuilt from raw utilities there instead. That is the structural reason two label roles had eight tracking values. An `-on-inverse` colour variant would let the role travel. → `colorize`
+- **P3-15 · `--font-mono` now has zero consumers.** The session times were the only real use and they are Outfit tabular-nums now; `.container-prose` (44rem) is likewise declared and documented with no consumers. Both join the dead-token list. → `distill`
+- **Open question · `.text-lede` stays at Outfit 300** while prose was moved to 400 for exactly the reason that applies to the lede too ("Outfit Light reads washed out on cream"), and the lede additionally sits in `--ink-subtle` with antialiasing thinning it. Left alone because DESIGN.md records the 300 as a deliberate choice — worth a decision rather than a silent flip.
 
 ---
 
