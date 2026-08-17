@@ -33,7 +33,8 @@
 			onerror={() => (failed = true)}
 		/>
 	{:else}
-		<span class="text-primary-600 font-display text-lg" aria-hidden="true">{getInitials(name)}</span
+		<span class="text-primary-600 dark:text-primary-300 font-display text-lg" aria-hidden="true"
+			>{getInitials(name)}</span
 		>
 	{/if}
 </div>

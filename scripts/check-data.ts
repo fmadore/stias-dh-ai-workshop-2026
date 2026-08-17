@@ -15,6 +15,21 @@ const fail = (message: string) => {
 	console.error(`✗ ${message}`);
 };
 
+/** Ids whose bio duplicates one language into both fields, awaiting translation. */
+const untranslatedBios: string[] = [];
+
+/**
+ * Cheap language sniff, only ever used to decide whether an untranslated bio
+ * needs an explicit `bioLanguage`. English is the assumed default, so this only
+ * has to be confident enough to catch prose that plainly is not English.
+ */
+const FRENCH_MARKERS =
+	/\b(le|la|les|des|du|une|dans|est|qui|pour|sur|avec|ses|aux|elle|son|sa|au|et|de)\b/gi;
+const ENGLISH_MARKERS =
+	/\b(the|of|and|in|is|for|with|his|her|at|she|their|on|a|an|to|research)\b/gi;
+const isProbablyEnglish = (text: string) =>
+	(text.match(ENGLISH_MARKERS) ?? []).length >= (text.match(FRENCH_MARKERS) ?? []).length;
+
 async function loadDefaultModules<T>(
 	directory: string
 ): Promise<Array<{ file: string; value: T }>> {
@@ -89,6 +104,14 @@ for (const person of people) {
 	if (!person.affiliation.en.trim() || !person.affiliation.fr.trim())
 		fail(`person ${person.id}: incomplete affiliation`);
 	if (person.image) await expectStaticFile(person.image, `person ${person.id}`);
+	// An untranslated bio is served to readers of both locales, so it has to say
+	// which language it is actually in or a screen reader mispronounces it.
+	// Warn rather than fail: most bios are still awaiting translation.
+	if (person.bio && person.bio.en === person.bio.fr) {
+		untranslatedBios.push(person.id);
+		if (!person.bioLanguage && !isProbablyEnglish(person.bio.en))
+			fail(`person ${person.id}: bio is not English and has no bioLanguage`);
+	}
 }
 
 for (const presentation of presentations) {
@@ -134,6 +157,11 @@ if (failures) {
 	console.error(`\ncheck-data: ${failures} problem(s) found`);
 	process.exit(1);
 }
+
+if (untranslatedBios.length)
+	console.warn(
+		`check-data: ${untranslatedBios.length} bio(s) still duplicate one language into both fields — they are marked with lang, but neither locale reads them in its own language`
+	);
 
 console.log(
 	`check-data: OK (${participants.length} participants, ${organizers.length} organizers, ${pointSud.length} Point Sud representatives, ${presentations.length} presentations, ${sessionIds.size} sessions)`

@@ -15,6 +15,16 @@
 
 	const person = $derived(data.person);
 	const bio = $derived(person.bio ? t(person.bio) : '');
+	/**
+	 * Most bios duplicate one language into both fields (see `Participant.bio`),
+	 * so the text a reader gets is often not in the page's language. Mark it when
+	 * that happens; a genuinely translated bio always matches and needs nothing.
+	 */
+	const bioLang = $derived.by(() => {
+		if (!person.bio || person.bio.en !== person.bio.fr) return undefined;
+		const source = person.bioLanguage ?? 'en';
+		return source === getLocale() ? undefined : source;
+	});
 	const presentationItems = $derived(data.presentationItems);
 	const canonicalPath = $derived(`/participants/${person.id}`);
 
@@ -88,7 +98,7 @@
 					<p class="text-eyebrow mb-4">{t(data.role)}</p>
 				{/if}
 				{#if bio}
-					<p class="text-prose">{bio}</p>
+					<p class="text-prose" lang={bioLang}>{bio}</p>
 				{/if}
 			</div>
 		</div>

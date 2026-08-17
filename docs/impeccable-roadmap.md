@@ -46,9 +46,17 @@ Goal: give every later command durable, correct context.
 
 _Exit criteria: `PRODUCT.md` and `DESIGN.md` exist, reviewed by us for factual accuracy (dates, phase logic, palette)._
 
-## Phase 1 — Diagnosis (1–2 sessions)
+## Phase 1 — Diagnosis ✅ complete (17 August 2026)
 
 Evaluate before treating. These two commands produce the findings backlog that decides which Phase 2–3 commands actually run and in what order.
+
+**Done:** [`docs/design-findings-2026-08.md`](design-findings-2026-08.md) is the prioritised backlog; the critique snapshot is archived at `.impeccable/critique/` for `/impeccable polish` to inherit. Scores: design health **25/36** (Acceptable, Error Prevention `n/a`), audit health **14/20** (Good). Counts: **P0 0 · P1 8 · P2 8 · P3 11**.
+
+Three findings changed the plan below:
+
+- **Cascade layers are the recurring trap**, not a one-off. Unlayered CSS silently outranks `@layer` CSS in three separate places — Svelte scoped styles beating Tailwind utilities, the `.bg-cream` alias escaped by its own alpha modifier, and unlayered `h1…h6` rules beating `@layer components` label classes. Phase 2 must fix the mechanism, not just the three instances.
+- **`colorize` is now required** — it was originally "not scheduled". Three dark-mode colour defects (sticky day-bar, avatar initials, language-switcher separator) are role tokens that were never flipped.
+- **The home-hero decision gate resolved toward `quieter`, pending the user's call** — the gradient, countdown and stat row together are the one screen that reads as generic conference branding, and the countdown goes stale on 1 September.
 
 4. **`/impeccable critique`** — heuristic UX review, one pass per main surface: home, programme, papers (index + one detail), participants (index + one detail of each group), about, venue. Run against the dev server in both locales; note per-surface mode from the table above so scoring is fair (e.g. programme is judged on scanability, not expressiveness).
 5. **`/impeccable audit`** — technical quality sitewide:
@@ -95,12 +103,18 @@ Only after structure settles — animating a layout that's about to change is wa
 
 | Command           | Why skipped                                                                                                                                  |
 | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `onboard`         | No first-run flow, accounts, or activation — it's a content site                                                                             |
 | `overdrive`       | Tone mismatch: an academic workshop site should not push past conventional limits                                                            |
-| `colorize`        | The palette is committed (teal/gold); only revisit if the critique flags dead monochrome zones                                               |
 | `extract`         | Small site, tokens already centralized in the theme; only if Phase 2 reveals real duplication                                                |
-| `distill`         | No surface shows complexity overload; revisit only if the critique says otherwise                                                            |
 | `craft` / `shape` | No new surfaces planned. If a "practical info / travel" page emerges before the workshop, `shape` it first — that's the one likely exception |
+
+**Reinstated after Phase 1** (the diagnosis overruled the original call):
+
+| Command    | Why it's now needed                                                                                                                                                                        |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `colorize` | Three dark-mode role tokens never flipped: the programme's sticky day-bar renders near-white, avatar initials measure 2.56:1, the language-switcher separator 1.74:1                       |
+| `adapt`    | The session permalink is 12×12px, `opacity-0` until hover, and therefore unusable on touch — the device the programme is actually read on                                                  |
+| `distill`  | Two small wins: nine identical "Chair: To be determined" lines where one callout sentence would do, and two dead role tokens (`--surface-inverse`, `--ink-on-inverse`) with zero consumers |
+| `onboard`  | Not for a first-run flow — for `/venue`, which is 118 words five weeks before 33 people fly in from 16 countries. Structure and text only; PRODUCT.md forbids sourcing imagery unasked     |
 
 ## Working agreements (every session)
 

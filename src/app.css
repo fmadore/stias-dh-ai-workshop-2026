@@ -171,6 +171,12 @@ html {
 	--link: var(--color-primary-600);
 	--link-hover: var(--color-primary-700);
 
+	/* The ring is drawn on whatever sits *behind* the control (outline-offset),
+	   so one fixed teal fails 1.4.11 wherever that surface is dark: 2.79:1 on the
+	   light-mode footer, 2.20:1 mid-hero. A role lets a container flip it by
+	   inheritance — see .focus-on-inverse. */
+	--focus-ring: var(--color-primary-500);
+
 	/* --- Fluid display steps, consumed by the .text-* classes below.
 	       `rem + vw` rather than bare vw so the scale still responds to the
 	       reader's own font-size preference. --- */
@@ -215,6 +221,9 @@ html {
 	--accent-ink: var(--color-secondary-400);
 	--link: var(--color-primary-300);
 	--link-hover: var(--color-primary-200);
+	/* primary-500 measures 2.92:1 on the raised card — the surface nearly every
+	   focusable control on this site actually sits on. primary-300 is 7.4:1. */
+	--focus-ring: var(--color-primary-300);
 }
 
 /* `inline` keeps the var() at the use site instead of baking the light value
@@ -295,9 +304,16 @@ button:not(:disabled),
    FOCUS — branded, consistent
    ============================================================ */
 :focus-visible {
-	outline: 2px solid var(--color-primary-500);
+	outline: 2px solid var(--focus-ring);
 	outline-offset: 3px;
 	border-radius: var(--radius-xs);
+}
+
+/* The hero and the footer are dark in BOTH themes, so neither the light nor the
+   dark ring clears 3:1 against them. Set the role once on the container and it
+   inherits to every control inside; primary-100 measures ~10:1 on primary-900. */
+.focus-on-inverse {
+	--focus-ring: var(--color-primary-100);
 }
 
 /* ============================================================

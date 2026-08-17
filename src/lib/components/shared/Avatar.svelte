@@ -32,6 +32,10 @@
 			onerror={() => (failed = true)}
 		/>
 	{:else}
-		<span class="text-primary-600 font-display text-2xl">{getInitials(name)}</span>
+		<!-- primary-600 measures 2.56:1 on the dark wash; primary-300 is 7.7:1.
+		     Eight participants have no photograph, so this is a shipped state. -->
+		<span class="text-primary-600 dark:text-primary-300 font-display text-2xl"
+			>{getInitials(name)}</span
+		>
 	{/if}
 </div>

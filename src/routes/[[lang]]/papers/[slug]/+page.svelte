@@ -56,6 +56,7 @@
 
 <PageHeader
 	title={presentation.title}
+	titleLang={presentation.language}
 	eyebrow={m.nav_papers()}
 	meta={placement
 		? [placement.sessionLabel, placement.slotLabel, presentation.language === 'fr' ? 'FR' : 'EN']

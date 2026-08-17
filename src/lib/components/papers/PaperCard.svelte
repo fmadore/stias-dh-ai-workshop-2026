@@ -57,7 +57,7 @@
 	{/if}
 
 	{#if excerpt}
-		<p class="text-bio mt-3.5 line-clamp-3">{excerpt}</p>
+		<p class="text-bio mt-3.5 line-clamp-3" lang={presentation.language}>{excerpt}</p>
 	{/if}
 </article>
 

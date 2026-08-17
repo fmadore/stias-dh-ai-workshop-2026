@@ -31,7 +31,9 @@
 	const milestones = $derived(getMilestones());
 </script>
 
-<footer class="bg-primary-900 dark:bg-surface-950 relative mt-auto overflow-hidden text-white">
+<footer
+	class="bg-primary-900 dark:bg-surface-950 focus-on-inverse relative mt-auto overflow-hidden text-white"
+>
 	<div class="grain absolute inset-0"></div>
 
 	<div class="container-page relative z-10 py-14">

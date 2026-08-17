@@ -28,6 +28,7 @@ export interface Organizer {
 	role: LocalizedString;
 	affiliation: LocalizedString;
 	bio: LocalizedString;
+	bioLanguage?: BioLanguage;
 	image: string;
 	country: CountryCode;
 	website?: string;
@@ -35,6 +36,14 @@ export interface Organizer {
 	/** Taking part remotely — flags the person in the schedule. */
 	online?: boolean;
 }
+
+/**
+ * The language an untranslated bio is actually written in. Only meaningful when
+ * `bio.en === bio.fr` (the duplication described on `Participant.bio`); a bio
+ * with genuinely different halves matches whichever page renders it. Defaults to
+ * `'en'`, so only the French-authored bios have to declare it.
+ */
+export type BioLanguage = 'en' | 'fr';
 
 /**
  * Someone speaking for the DFG programme Point Sud, which funds the workshop.
@@ -53,6 +62,7 @@ export interface PointSudRepresentative {
 	/** Taking part remotely — flags the person in the schedule. */
 	online?: boolean;
 	bio?: LocalizedString;
+	bioLanguage?: BioLanguage;
 }
 
 export interface Participant {
@@ -70,6 +80,7 @@ export interface Participant {
 	 * text is duplicated in both fields, so `t()` always has a defined branch.
 	 */
 	bio?: LocalizedString;
+	bioLanguage?: BioLanguage;
 }
 
 /** A campus-based affiliation shown on the participants map. */

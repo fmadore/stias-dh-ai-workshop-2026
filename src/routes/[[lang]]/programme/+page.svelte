@@ -56,9 +56,12 @@
 
 <div class="page-end">
 	{#if programme.length > 0}
-		<!-- A four-day programme is otherwise 3000px of scroll with no way in. -->
+		<!-- A four-day programme is otherwise 3000px of scroll with no way in.
+		     bg-page, not bg-cream/90: the .bg-cream alias is unlayered so it beats
+		     the generated utility, but an alpha modifier is a different class name
+		     and falls through to the raw light-only token. -->
 		<nav
-			class="bg-cream/90 border-subtle sticky top-[var(--nav-height)] z-30 border-b backdrop-blur-md"
+			class="bg-page/90 border-subtle sticky top-[var(--nav-height)] z-30 border-b backdrop-blur-md"
 			aria-label={m.programme_jump_to_day()}
 		>
 			<div class="container-page flex flex-wrap items-center gap-2 py-3">

@@ -38,7 +38,7 @@
 </script>
 
 <section
-	class="from-primary-900 via-primary-800 to-primary-950 grain relative overflow-hidden bg-gradient-to-br text-white"
+	class="from-primary-900 via-primary-800 to-primary-950 grain focus-on-inverse relative overflow-hidden bg-gradient-to-br text-white"
 >
 	<!-- Texture comes from the .grain class above; a second inline feTurbulence
 	     layer only stacked more noise for another rasterised filter pass. -->
