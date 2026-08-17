@@ -33,18 +33,27 @@
 		{t(participant.affiliation)} · {countryName(participant.country, getLocale())}
 	</p>
 
-	{#each presentations as presentation (presentation.id)}
-		{@const placement = placements.get(presentation.id)}
-		<p
-			class="border-accent/55 text-link text-caption mt-3 border-l-2 pl-2.5 leading-snug"
-			lang={presentation.language}
-		>
-			{presentation.title}
-		</p>
-		{#if placement}
-			<p class="text-eyebrow mt-2">{placement.sessionLabel} · {placement.slotLabel}</p>
-		{/if}
-	{/each}
+	<!--
+		Bottom-anchored, because the cards in a row stretch to a common height but
+		names, affiliations and titles all wrap to different depths — leaving the
+		gold slot line floating at up to 74px apart across a row. Anchoring the
+		whole block, not just the slot line, keeps each title tied to its own slot
+		on the one card that carries two papers.
+	-->
+	<div class="mt-auto">
+		{#each presentations as presentation (presentation.id)}
+			{@const placement = placements.get(presentation.id)}
+			<p
+				class="border-accent/55 text-link text-caption mt-3 border-l-2 pl-2.5 leading-snug"
+				lang={presentation.language}
+			>
+				{presentation.title}
+			</p>
+			{#if placement}
+				<p class="text-eyebrow mt-2">{placement.sessionLabel} · {placement.slotLabel}</p>
+			{/if}
+		{/each}
+	</div>
 </article>
 
 <style>
