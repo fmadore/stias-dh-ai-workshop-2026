@@ -48,10 +48,15 @@
 	</article>
 {:else}
 	<!-- Full card for about page -->
+	<!-- Below 640px the numeral moves above the text rather than beside it: the
+	     44px numeral, its rule and the 24px gap left 213px of a 343px viewport
+	     for the description, which runs 29.8 characters a line and 32-38 lines
+	     per axis in French — 1.5 screens for one card. Same fix as SessionCard's
+	     time gutter, and no change from 640px up. -->
 	<article
-		class="card group overflow-hidden p-8 transition-colors hover:border-[var(--border-accent)]"
+		class="card group overflow-hidden p-6 transition-colors hover:border-[var(--border-accent)] sm:p-8"
 	>
-		<div class="flex items-start gap-6">
+		<div class="flex flex-col items-start gap-3 sm:flex-row sm:gap-6">
 			<div class="flex-shrink-0">
 				<div class="text-accent-ink font-display text-[2.75rem] leading-none" aria-hidden="true">
 					0{axis.number}

@@ -348,7 +348,7 @@
 	</aside>
 </div>
 
-<p class="text-muted mt-3 max-w-3xl text-sm leading-relaxed">{m.affiliations_note()}</p>
+<p class="text-muted measure-prose mt-3 text-sm leading-relaxed">{m.affiliations_note()}</p>
 
 <style>
 	.affiliation-shell {

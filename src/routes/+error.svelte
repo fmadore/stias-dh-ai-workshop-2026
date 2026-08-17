@@ -17,7 +17,10 @@
 			{page.status === 404 ? m.error_404_title() : m.error_generic_title()}
 		</h1>
 		{#if page.status === 404}
-			<p class="text-lede mx-auto mb-10 max-w-xl">{m.error_404_text()}</p>
+			<!-- No max-w-xl: a physical max-width utility outranks .text-lede's own
+			     logical max-inline-size (utilities layer beats components), so the
+			     lede rendered at 576px ≈ 80 characters against the role's 48. -->
+			<p class="text-lede mx-auto mb-10">{m.error_404_text()}</p>
 		{/if}
 		<a href={localePath('/')} class="btn btn-primary">
 			<ArrowLeft size={16} strokeWidth={1.75} aria-hidden="true" />

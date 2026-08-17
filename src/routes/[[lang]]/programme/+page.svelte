@@ -83,7 +83,7 @@
 					aria-hidden="true"
 				/>
 				<div>
-					<p class="text-body text-sm leading-relaxed">
+					<p class="text-body measure-prose text-sm leading-relaxed">
 						{m.programme_preliminary()}
 					</p>
 					<p class="text-muted mt-1 text-xs">

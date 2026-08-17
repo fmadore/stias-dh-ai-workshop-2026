@@ -39,7 +39,38 @@ P1-4's root cause is now measured rather than estimated: `ch` is the advance of 
 
 P2-5 was **larger than recorded**: not three label sites but 37 headings. The unlayered `h1…h6` block outranked `@layer components` _and_ `@layer utilities`, so it was voiding `font-semibold` and `tracking-[0.16em]` in the footer as well as whole role classes. Moving the element defaults into `@layer base` fixed all 37 at once, and closes systemic pattern 1 for the typography half.
 
-**Still open:** P1-6 (programme at 375px), P1-7 (programme link affordance), all P2s except P2-5, and the rest of P3.
+**Fixed in the `layout` pass (17 August 2026)** — **P1-6** and **P2-3**, plus four defects the pass found on its way. Measured before and after at 375px and 1280px, EN and FR:
+
+| Measurement                       | Before             | After               |
+| --------------------------------- | ------------------ | ------------------- |
+| Programme content column @375px   | 213px              | **309px**           |
+| Programme paper titles, full line | 23.7 chars         | **40.9**            |
+| …lines per title (avg / worst)    | 4.81 / 7           | **3.43 / 5**        |
+| Programme page height @375px      | 12.8 screens       | **11.7**            |
+| `/about` axis prose @375px (FR)   | 213px, 29.8 chars  | **293px, 41 chars** |
+| …lines per axis (FR)              | 32 / 38 / 38       | **24 / 26 / 27**    |
+| Hero CTAs                         | 39 / 40 / 41px     | **44px**            |
+| Day pills                         | 32.7px             | **44px**            |
+| Segments @375px                   | 38px               | **44px**            |
+| Session descriptions @1280px      | ~170 chars         | **57–64**           |
+| Header vs `--nav-height`          | 73px vs 72px token | **72px = 72px**     |
+
+Four found in passing, none in the Phase 1 backlog: `/about`'s thematic axes were the same defect as P1-6 on a route nobody had measured (a P1); interlude rows never carried `scroll-mt-28`, so break anchors landed 41px behind the sticky day bar; ten session→break boundaries stacked a dashed hairline directly on a solid one; and `+error.svelte`'s `max-w-xl` was silently voiding `.text-lede`'s measure — a fourth instance of the cascade-layer trap, this time layer order rather than unlayered CSS.
+
+**Still open:** P1-7 (programme link affordance), all P2s except P2-3 and P2-5, and the rest of P3.
+
+### New findings from the layout pass
+
+Raised by the isolated layout assessment, verified in the browser where noted. Deliberately **not** fixed in this pass — each needs its own bounded verification.
+
+- **P2-10 · Section rhythm runs on seven ad-hoc values while two of the four documented tokens are dead.** `--space-block` (3.5rem) has zero consumers anywhere; `--space-stack` has one, inside `app.css` itself. Meanwhile 20/28/32/40/48/56/64px do the work across ~40 call sites, and section-to-section is a different number on every route (64px participants, 56px CFP, 48px programme, 64–96px about/home). Each page is internally consistent; the pages disagree with each other. → `layout` (second pass)
+- **P2-11 · The header-to-content interval is 40 / 48 / 56 / 64–96px across eight routes**, none of them a token — `PageHeader` sets `pt-14 pb-10` and then each route declares its own `pt-*`. One token consumed by `PageHeader` itself would end it. → `layout` (second pass)
+- **P2-12 · Five distinct card-grid gaps and three breakpoint ladders** for equivalent card sizes: papers 24px @md, participants 16px @sm/lg, organisers and Point Sud 24px @lg, WhatNext 16px @sm/lg, key dates 1px. The two person grids on the same page switch at `lg` while the grid below them switches at `sm`. → `layout` (second pass)
+- **P2-13 · Cards align on the outer box only.** With paper titles running 46–184 characters, the meta row, the brass paper rule and the placement eyebrow land at a different y in every card of a row; excerpt tops can differ by three title lines (~75px). `grid-template-rows` on the card, or `mt-auto` on the last block, would give a row one shared baseline. → `polish`
+- **P3-16 · `scroll-mt-28` is a hard-coded 112px** on sessions and days, not derived from `--nav-height` plus the day-bar. It works — every anchor type was measured clearing by 67px — but it is the one offset the Anchor Clearance Rule does not cover, and it drifts whenever the bar changes. → `harden`
+- **P3-17 · Four bespoke `max-width` values on page wrappers** (`Hero.svelte`, the home thematic header, `AffiliationMap` ×2) against the Four Containers Rule; and `container-prose` (44rem) still has zero consumers while `/about`'s and `/papers/[slug]`'s abstracts are exactly what it was built for. → `distill`
+- **P3-18 · Panel numbers print twice** — the eyebrow renders "PANEL 1" and the session title begins "Panel 1 · …". At 375px that duplication costs a line on all seven panels. → `distill`
+- **Correction to the backlog:** the "TBD Day 4 excursion" named in P2 planning is wrong. `programme.ts` puts the two excursions on **Day 2** and **Day 3**, both `type: 'social'` with "Destination to be determined"; Day 4 ends with concluding remarks and a farewell dinner.
 
 **Decided, not yet built:** the home hero (P2-8) is to be **quietened** — demote or drop the countdown, calm the gradient to a single tonal wash, and make the stat row's numbers real links. Scheduled after the remaining P1s.
 

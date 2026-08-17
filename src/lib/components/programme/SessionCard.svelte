@@ -78,10 +78,14 @@
 	<!-- A break is a quiet dashed rule: no badge, no card, no serif. -->
 	<!-- scroll-mt-28 matches the session row below: without it a break anchor
 	     landed on the global scroll-padding-top (88px), which clears the header
-	     but not the programme's own sticky day bar — 41px behind it at 375px. -->
+	     but not the programme's own sticky day bar — 41px behind it at 375px.
+
+	     border-b, not border-y: the session above already draws a solid rule on
+	     its own bottom edge, so border-y stacked a dashed hairline directly on
+	     it at all ten session→break boundaries. -->
 	<div
 		id={anchor}
-		class="border-subtle flex scroll-mt-28 items-baseline gap-4 border-y border-dashed py-2.5"
+		class="border-subtle interlude-row flex scroll-mt-28 items-baseline border-b border-dashed py-2.5 last:border-b-0"
 	>
 		<span class="text-muted text-caption interlude-time flex-shrink-0 tabular-nums">
 			{times[0]}
@@ -181,7 +185,7 @@
 				{/if}
 
 				{#if session.description}
-					<p class="text-muted mt-1.5 text-sm leading-relaxed">
+					<p class="text-muted measure-prose mt-1.5 text-sm leading-relaxed">
 						{t(session.description)}
 					</p>
 				{/if}
@@ -254,6 +258,14 @@
 		color: var(--ink-subtle);
 	}
 
+	/* A break stays one line at every width — it is a time and three words. Its
+	   gap tracks .session-row's so the label starts on the same x as a session's
+	   content column; at gap-4 against the row's 1.25rem they sat 4px apart,
+	   staggering the one column this layout exists to make scannable. */
+	.interlude-row {
+		gap: 1rem;
+	}
+
 	.interlude-time {
 		width: auto;
 	}
@@ -261,6 +273,10 @@
 	@media (min-width: 640px) {
 		.session-row {
 			flex-direction: row;
+			gap: 1.25rem;
+		}
+
+		.interlude-row {
 			gap: 1.25rem;
 		}
 

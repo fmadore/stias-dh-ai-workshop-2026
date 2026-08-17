@@ -34,7 +34,10 @@
 					{m.section_thematic_axes()}
 				</h2>
 			</div>
-			<div class="grid grid-cols-1 gap-5 md:grid-cols-3">
+			<!-- 1 → 2 → 3 rather than 1 → 3: going straight to three columns at
+			     768px left each card 169px of content for a serif card title and a
+			     caption, the tightest card on the site, in the 768–1023 band alone. -->
+			<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
 				{#each thematicAxes as axis (axis.id)}
 					<ThematicAxis {axis} compact={true} />
 				{/each}

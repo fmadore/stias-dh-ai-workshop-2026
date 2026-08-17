@@ -237,7 +237,9 @@ Breakpoints are Tailwind's defaults; 640px is the meaningful one, where prose st
 
 **The Four Containers Rule.** Pick one of the four containers. A bespoke `max-width` on a page wrapper is a system violation — if none of the four fits, the missing one is a token, not a one-off.
 
-**The Anchor Clearance Rule.** Anything that changes header height changes `--nav-height`, never a hard-coded offset. Three consumers depend on it staying the single source.
+**The Anchor Clearance Rule.** Anything that changes header height changes `--nav-height`, never a hard-coded offset. Four consumers depend on it staying the single source: the navbar's own row, `main`'s top padding, `scroll-padding-top`, and the programme's sticky day-bar `top`. The token is the header's **outer** height — the navbar's inner row is `calc(var(--nav-height) - 1px)` so the header's own hairline is inside the number rather than added to it. Sessions and days additionally carry `scroll-mt-28` to clear the day-bar; that literal is the one offset still not derived.
+
+**The Measure Rule Applies To Any Reading Text.** `.text-prose` and `.prose` carry the cap as part of their role; `.measure-prose` applies it alone, for text that has its own size and colour — session descriptions, page notices, section intros. A paragraph wide enough to read is wide enough to need the cap: uncapped, these ran 126–190 characters at 1280px.
 
 ## Elevation & Depth
 
@@ -325,7 +327,7 @@ A bordered notice with brass at 45% on the border and a 6% brass wash behind —
 - **Do** set brass text in `--accent-ink` (#7a5c15) and brass graphics in `--accent` (#c49528).
 - **Do** keep every heading in Instrument Serif at 400 and let size and tracking build the hierarchy.
 - **Do** cap reading text with `--measure-prose` (30em) or `--measure-lede` (21em), and count the rendered characters before trusting a new value.
-- **Do** give any new interactive control a 2.75rem minimum touch target and confirm it against the existing `--control-h` baseline.
+- **Do** give any new interactive control a 2.75rem minimum touch target and confirm it against the existing `--control-h` baseline. Declare it as `min-height`; padding alone does not hold it, which is how the hero's large CTAs ended up shorter than `.btn-sm`.
 - **Do** put motion behind the tokens (`--duration-base`, `--ease-standard`) and confirm it disappears under `prefers-reduced-motion`.
 - **Do** check both locales and both themes before calling a change done. French runs roughly 20% longer, and several colours are defined only in the `.dark` block.
 - **Do** budget page weight deliberately. A meaningful share of participants arrive on mobile data.

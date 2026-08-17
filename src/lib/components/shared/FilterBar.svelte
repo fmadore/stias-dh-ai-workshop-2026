@@ -224,8 +224,9 @@
 		justify-content: space-between;
 		gap: 0.75rem;
 		/* Reserved height: the reset button appears and disappears with the
-		   filters, and without this the grid below jumped 26px each time. */
-		min-height: 2.5rem;
+		   filters, and without this the grid below jumped 26px each time.
+		   Tracks .filter-reset's own min-height, or the jump comes back. */
+		min-height: 2.75rem;
 		font-family: var(--font-sans);
 		font-size: var(--text-caption);
 		color: var(--ink-subtle);
@@ -245,7 +246,7 @@
 		font-family: var(--font-sans);
 		font-size: var(--text-caption);
 		cursor: pointer;
-		min-height: 2.5rem;
+		min-height: 2.75rem;
 		padding: 0.5rem 0.625rem;
 		margin-right: -0.625rem;
 		border-radius: var(--radius-md);

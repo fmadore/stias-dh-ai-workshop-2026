@@ -484,6 +484,14 @@ button:not(:disabled),
 		}
 	}
 
+	/* The Measure Rule without the rest of the prose role. Descriptions, notices
+	   and intros are reading text too, but they carry their own size and colour,
+	   so before this the only way to get the cap was to take all of .text-prose
+	   — and so they went uncapped, running 126–190 characters at 1280px. */
+	.measure-prose {
+		max-inline-size: var(--measure-prose);
+	}
+
 	/* Shared rich-text block: the paper abstract, and any future rendered
 	   markdown, instead of 60 lines of scoped CSS re-implementing .text-prose. */
 	.prose {
@@ -809,6 +817,13 @@ button:not(:disabled),
 		font-weight: 500;
 		color: var(--color-primary-700);
 		transition: color var(--duration-fast) var(--ease-standard);
+	}
+	/* The standard onward control — "Back to papers", "Visit website", the person
+	   links — rendered ~18px tall. Scoped to the anchor: .link-arrow also dresses
+	   a non-interactive <span> on the paper page, which should keep its own
+	   height. The text stays centred, so this reads as breathing room. */
+	a.link-arrow {
+		min-height: 2.75rem;
 	}
 	.dark .link-arrow {
 		color: var(--color-primary-300);

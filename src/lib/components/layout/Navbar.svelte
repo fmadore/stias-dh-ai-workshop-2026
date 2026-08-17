@@ -78,7 +78,11 @@
 	style="transition: box-shadow var(--duration-base) var(--ease-standard);"
 >
 	<div class="container-page">
-		<div class="flex h-[var(--nav-height)] items-center justify-between gap-4">
+		<!-- The inner row is --nav-height minus the header's own hairline, so the
+		     header's outer height IS --nav-height. It was 73px against a 72px
+		     token, which left main's padding and the programme's sticky day-bar
+		     each 1px short of the thing they are derived from. -->
+		<div class="flex h-[calc(var(--nav-height)-1px)] items-center justify-between gap-4">
 			<!-- Two stacked lines, so the qualifier is present at every width
 			     instead of appearing only at xl. "DH & AI" alone is cryptic. -->
 			<a href={localePath('/')} class="flex min-w-0 flex-col leading-none">
@@ -172,7 +176,7 @@
 							href={link.href}
 							onclick={() => (mobileMenuOpen = false)}
 							aria-current={isActive(link.href) ? 'page' : undefined}
-							class="block px-3 py-3 text-sm {isActive(link.href)
+							class="block px-3 py-3.5 text-sm {isActive(link.href)
 								? 'text-link border-secondary-500 border-l-2 pl-4 font-semibold'
 								: 'text-muted hover:text-strong font-medium'}"
 						>
