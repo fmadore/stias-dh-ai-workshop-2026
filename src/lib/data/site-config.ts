@@ -3,7 +3,7 @@ import type { SiteConfig } from '$lib/types';
 export const siteConfig: SiteConfig = {
 	title: {
 		en: 'Digital Humanities and Artificial Intelligence in African Studies: Towards Sustainable and Equitable Practices',
-		fr: 'Humanités numériques et intelligence artificielle en études africaines : vers des pratiques durables et équitables'
+		fr: 'Humanités numériques et intelligence artificielle en études africaines\u00a0: vers des pratiques durables et équitables'
 	},
 	shortTitle: 'DH & AI in African Studies',
 	description: {

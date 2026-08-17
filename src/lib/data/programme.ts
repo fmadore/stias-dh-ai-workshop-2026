@@ -56,7 +56,7 @@ export const programme: ProgrammeDay[] = [
 				title: { en: 'Welcome addresses', fr: 'Mots de bienvenue' },
 				description: {
 					en: 'Short welcome addresses on behalf of STIAS — by Edward Kirumira, Director, or Christoff Pauw, Senior Programme Manager — and on behalf of the DFG programme Point Sud, by Issa Fofana (Point Sud, Bamako), followed by a brief framing of the workshop: its goals, themes and practical information.',
-					fr: "Brefs mots de bienvenue au nom du STIAS — par Edward Kirumira, directeur, ou Christoff Pauw, responsable principal des programmes — et au nom du programme DFG Point Sud, par Issa Fofana (Point Sud, Bamako), suivis d'un cadrage de l'atelier : objectifs, thèmes et informations pratiques."
+					fr: "Brefs mots de bienvenue au nom du STIAS — par Edward Kirumira, directeur, ou Christoff Pauw, responsable principal des programmes — et au nom du programme DFG Point Sud, par Issa Fofana (Point Sud, Bamako), suivis d'un cadrage de l'atelier\u00a0: objectifs, thèmes et informations pratiques."
 				},
 				links: [
 					{ label: 'Edward Kirumira', url: 'https://www.stias.ac.za/team/edward-k-kirumira/' },
@@ -154,7 +154,7 @@ export const programme: ProgrammeDay[] = [
 				},
 				description: {
 					en: 'AI-assisted metadata, entity linking and protocol-based access converge on a shared problem: making African heritage collections findable, connected and usable across institutions.',
-					fr: "Métadonnées assistées par l'IA, liage d'entités et accès fondé sur des protocoles convergent vers un même enjeu : rendre les collections patrimoniales africaines repérables, connectées et exploitables d'une institution à l'autre."
+					fr: "Métadonnées assistées par l'IA, liage d'entités et accès fondé sur des protocoles convergent vers un même enjeu\u00a0: rendre les collections patrimoniales africaines repérables, connectées et exploitables d'une institution à l'autre."
 				},
 				presentationIds: [
 					'enriching-the-invisible',
@@ -174,7 +174,7 @@ export const programme: ProgrammeDay[] = [
 				type: 'panel',
 				title: {
 					en: 'Panel 4 · Language AI: Translation & Learning',
-					fr: 'Panel 4 · IA des langues : traduction et apprentissage'
+					fr: 'Panel 4 · IA des langues\u00a0: traduction et apprentissage'
 				},
 				description: {
 					en: 'Scaling language technologies for African languages — from a framework for inclusive language AI to rule-based machine translation and multimodal computer-assisted learning under infrastructural constraint.',
@@ -228,7 +228,7 @@ export const programme: ProgrammeDay[] = [
 				},
 				description: {
 					en: 'FAIR data practices, generative AI for multilingual literacy and strategies for long-term sustainability: how African linguistic heritage is documented, taught and kept alive in the digital era.',
-					fr: "Pratiques de données FAIR, IA générative pour la littératie multilingue et stratégies de pérennisation : comment documenter, enseigner et maintenir vivant le patrimoine linguistique africain à l'ère numérique."
+					fr: "Pratiques de données FAIR, IA générative pour la littératie multilingue et stratégies de pérennisation\u00a0: comment documenter, enseigner et maintenir vivant le patrimoine linguistique africain à l'ère numérique."
 				},
 				presentationIds: [
 					'fair-indigenous-languages',
@@ -252,7 +252,7 @@ export const programme: ProgrammeDay[] = [
 				},
 				description: {
 					en: 'HTR for Ajami manuscripts, large language models reading historical codebooks and computational ethnography of Sahelian social media show what computation makes legible in African textual and social archives.',
-					fr: 'HTR des manuscrits ajami, grands modèles de langue lisant des codebooks historiques et ethnographie computationnelle des réseaux sociaux sahéliens : ce que le calcul rend lisible dans les archives textuelles et sociales africaines.'
+					fr: 'HTR des manuscrits ajami, grands modèles de langue lisant des codebooks historiques et ethnographie computationnelle des réseaux sociaux sahéliens\u00a0: ce que le calcul rend lisible dans les archives textuelles et sociales africaines.'
 				},
 				presentationIds: [
 					'ajami-nlp-infrastructure',
@@ -311,7 +311,7 @@ export const programme: ProgrammeDay[] = [
 				},
 				description: {
 					en: 'Frugal infrastructures, South–South ecologies, community co-production and the limits of generic AI in African settings: what it takes to build research capacity that lasts.',
-					fr: "Infrastructures frugales, écologies Sud-Sud, co-production communautaire et limites de l'IA générique en contexte africain : ce qu'exige une capacité de recherche durable."
+					fr: "Infrastructures frugales, écologies Sud-Sud, co-production communautaire et limites de l'IA générique en contexte africain\u00a0: ce qu'exige une capacité de recherche durable."
 				},
 				presentationIds: [
 					'frugal-infrastructures',
@@ -345,7 +345,7 @@ export const programme: ProgrammeDay[] = [
 				title: { en: 'Concluding remarks & synthesis', fr: 'Remarques finales et synthèse' },
 				description: {
 					en: 'Closing discussion: shared takeaways, open questions, and next steps — including plans for the joint publication arising from the workshop.',
-					fr: 'Discussion de clôture : acquis partagés, questions ouvertes et prochaines étapes — y compris les plans pour la publication collective issue de l’atelier.'
+					fr: 'Discussion de clôture\u00a0: acquis partagés, questions ouvertes et prochaines étapes — y compris les plans pour la publication collective issue de l’atelier.'
 				}
 			},
 			{
