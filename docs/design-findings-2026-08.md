@@ -18,7 +18,9 @@ The site is well built. Nine routes carry exactly one `<h1>` each with zero head
 
 **Fixed in `a97f92b` (17 August 2026)** — the four binding-constraint failures, chosen as the first Phase 2 pass: **P1-1** focus ring, **P1-3** `lang` markers, **P1-5** sticky day-bar, **P1-8** avatar initials. Each was measured before and after in the browser; the "before" figures below reproduce exactly, and the after figures are 10.95 / 8.63 / 6.87:1 for the ring, 5.34:1 for the day-bar label, and 7.80:1 for the initials.
 
-**Still open:** P1-2 (`--nav-height`), P1-4 (Measure Rule), P1-6 (programme at 375px), P1-7 (programme link affordance), all P2s and P3s.
+**Fixed in `0e375db`** — **P1-2**, prompted by the French navbar wrapping to three lines. The horizontal nav switched on at `lg`, but the row needs 1205px of viewport in French and 1069px in English against a container that stops growing at 80rem, so both locales now switch at `xl`. Fixing that required fixing the two defects underneath it: the `lg:hidden` that never worked (now a media query inside the scoped block, where it can win) and the rule-plus-padding that sat outside the clipped area (now inside, so the closed state is genuinely 0px). The header is 73px at every width instead of 86px, and occlusion is down from 14px to the 1px hairline. Also closes the navbar half of **P3-2**: the brand qualifier was 10px, below the documented 11px floor.
+
+**Still open:** P1-4 (Measure Rule), P1-6 (programme at 375px), P1-7 (programme link affordance), all P2s, and the rest of P3.
 
 **Decided, not yet built:** the home hero (P2-8) is to be **quietened** — demote or drop the countdown, calm the gradient to a single tonal wash, and make the stat row's numbers real links. Scheduled after the remaining P1s.
 
