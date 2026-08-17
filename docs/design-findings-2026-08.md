@@ -14,6 +14,16 @@ The site is well built. Nine routes carry exactly one `<h1>` each with zero head
 
 ---
 
+## Status
+
+**Fixed in `a97f92b` (17 August 2026)** — the four binding-constraint failures, chosen as the first Phase 2 pass: **P1-1** focus ring, **P1-3** `lang` markers, **P1-5** sticky day-bar, **P1-8** avatar initials. Each was measured before and after in the browser; the "before" figures below reproduce exactly, and the after figures are 10.95 / 8.63 / 6.87:1 for the ring, 5.34:1 for the day-bar label, and 7.80:1 for the initials.
+
+**Still open:** P1-2 (`--nav-height`), P1-4 (Measure Rule), P1-6 (programme at 375px), P1-7 (programme link affordance), all P2s and P3s.
+
+**Decided, not yet built:** the home hero (P2-8) is to be **quietened** — demote or drop the countdown, calm the gradient to a single tonal wash, and make the stat row's numbers real links. Scheduled after the remaining P1s.
+
+---
+
 ## P1 — Fix before the workshop
 
 ### P1-1 · Focus ring fails WCAG 1.4.11 on every dark surface **[converged: A + audit]**
