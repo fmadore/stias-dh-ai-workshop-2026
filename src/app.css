@@ -28,6 +28,7 @@
 	       existing component classes of the same name. --- */
 	--text-badge: 0.6875rem; /* language chip, session type, small caps */
 	--text-caption: 0.8125rem; /* filter meta, session time, captions   */
+	--text-ui-sm: 0.875rem; /* compact controls: .btn-sm, skip link   */
 	--text-ui: 0.9375rem; /* buttons, inputs, card meta            */
 	--text-reading: 1.0625rem; /* prose                                 */
 
@@ -194,9 +195,19 @@ html {
 
 	/* --- Measure. The readability problem was never the type size, it was
 	       the line length: .text-prose across .container-readable is ~100
-	       characters against a comfortable 60–75. --- */
-	--measure-prose: 68ch;
-	--measure-lede: 46ch;
+	       characters against a comfortable 60–75.
+
+	       In `em`, not `ch`. `ch` is the advance of "0", which in Outfit is
+	       0.6975em — while this site's actual running prose (EN and FR alike)
+	       averages 0.435em per character. `68ch` therefore rendered 102
+	       characters on a full line, 1.5x its own stated intent, and moved
+	       again whenever the fallback font was in play (system-ui's "0" is
+	       18% narrower than Outfit's). Measured, not declared: 30em holds
+	       ~69 characters at both 16px and 17px, and 21em holds ~48 for the
+	       lede, keeping the standfirst distinctly narrower than the body.
+	       Both resolve against the consuming element's own font-size. --- */
+	--measure-prose: 30em;
+	--measure-lede: 21em;
 }
 
 .dark {
@@ -248,37 +259,49 @@ html {
 	--color-link: var(--link);
 }
 
-body {
-	font-family: var(--font-sans);
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	background-color: var(--surface-page);
-	color: var(--ink-strong);
-	font-feature-settings: 'ss01', 'cv11';
-}
+/* Element defaults live in @layer base so the role classes in @layer components
+   and Tailwind's utilities both outrank them. Unlayered, they did not: a bare
+   `h2 { line-height: 1.12 }` beat `.text-section { line-height: 1.15 }`, and
+   `h1..h6 { font-family: display; font-weight: 400 }` beat `.text-eyebrow`,
+   `font-semibold` and `tracking-[0.16em]` alike — so a label on an <h2> came
+   out as tight-tracked Instrument Serif. Same cascade-layer trap documented at
+   the top of @layer components; these rules were sitting outside it. */
+@layer base {
+	body {
+		font-family: var(--font-sans);
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		background-color: var(--surface-page);
+		color: var(--ink-strong);
+		font-feature-settings: 'ss01', 'cv11';
+	}
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.font-display {
-	font-family: var(--font-display);
-	font-weight: 400;
-}
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	.font-display {
+		font-family: var(--font-display);
+		font-weight: 400;
+	}
 
-h1 {
-	letter-spacing: -0.025em;
-	line-height: 1.04;
-}
-h2 {
-	letter-spacing: -0.018em;
-	line-height: 1.12;
-}
-h3 {
-	letter-spacing: -0.012em;
-	line-height: 1.2;
+	/* The fallback shape for an unclassed heading. A heading that carries a
+	   role class (.text-page-title, .text-section, .text-card-title) takes the
+	   role's leading and tracking instead — that is the point of the layer. */
+	h1 {
+		letter-spacing: -0.025em;
+		line-height: 1.04;
+	}
+	h2 {
+		letter-spacing: -0.018em;
+		line-height: 1.12;
+	}
+	h3 {
+		letter-spacing: -0.012em;
+		line-height: 1.2;
+	}
 }
 
 /* Tailwind v4's preflight sets `cursor: default` on buttons, so a button
@@ -331,7 +354,7 @@ button:not(:disabled),
 	color: #fff;
 	border-radius: var(--radius-md);
 	font-family: var(--font-sans);
-	font-size: 0.875rem;
+	font-size: var(--text-ui-sm);
 	font-weight: 500;
 	transition: top var(--duration-base) var(--ease-standard);
 }
@@ -635,7 +658,7 @@ button:not(:disabled),
 		gap: 0.5rem;
 		font-family: var(--font-sans);
 		font-weight: 500;
-		font-size: 0.9375rem;
+		font-size: var(--text-ui);
 		line-height: 1;
 		border-radius: var(--radius-lg);
 		padding: 0.75rem 1.25rem;
@@ -656,7 +679,7 @@ button:not(:disabled),
 	}
 
 	.btn-sm {
-		font-size: 0.875rem;
+		font-size: var(--text-ui-sm);
 		min-height: 2.75rem;
 		padding: 0.625rem 0.875rem;
 		border-radius: var(--radius-md);

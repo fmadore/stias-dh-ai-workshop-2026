@@ -100,7 +100,7 @@
 					<span class="text-secondary-300 text-badge font-semibold tracking-[0.16em] uppercase">
 						{milestone.label}
 					</span>
-					<span class="text-primary-100 font-mono text-sm">{milestone.value}</span>
+					<span class="text-primary-100 text-sm tabular-nums">{milestone.value}</span>
 				</div>
 				<Countdown target={milestone.datetime} milestone={milestone.label} />
 			</div>

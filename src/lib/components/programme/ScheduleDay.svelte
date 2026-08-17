@@ -27,7 +27,9 @@
 		<!-- h2: days are the top-level sections under the page's h1 -->
 		<h2 class="text-section text-strong">{t(day.dayLabel)}</h2>
 		{#if isToday}
-			<span class="bg-accent text-ink text-badge rounded-full px-2.5 py-1 font-semibold uppercase">
+			<span
+				class="bg-accent text-ink text-badge rounded-full px-2.5 py-1 font-semibold tracking-[0.16em] uppercase"
+			>
 				{m.programme_happening_now()}
 			</span>
 		{/if}

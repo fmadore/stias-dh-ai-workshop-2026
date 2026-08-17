@@ -546,8 +546,11 @@
 	:global(.affiliation-popup-title) {
 		color: var(--ink-strong);
 		font-family: var(--font-display);
-		font-size: 1.2rem;
-		line-height: 1.2;
+		/* The card-title role at its floor, fixed rather than fluid: the popup
+		   has a max-width, so it must not grow with the viewport. */
+		font-size: 1.1875rem;
+		line-height: 1.25;
+		letter-spacing: -0.012em;
 	}
 
 	:global(.affiliation-popup-place) {
@@ -575,7 +578,7 @@
 
 	:global(.affiliation-popup-list a) {
 		color: var(--link);
-		font-size: 0.875rem;
+		font-size: var(--text-ui-sm);
 		text-decoration: underline;
 		text-decoration-color: color-mix(in oklab, var(--link) 30%, transparent);
 		text-underline-offset: 0.18em;

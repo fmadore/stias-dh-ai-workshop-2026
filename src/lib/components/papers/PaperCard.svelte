@@ -33,7 +33,7 @@
 			<span class="text-meta">{placement.slotLabel}</span>
 		{/if}
 		<span
-			class="text-link text-badge ml-auto font-semibold tracking-[0.12em]"
+			class="text-link text-badge ml-auto font-semibold tracking-[0.16em]"
 			lang={presentation.language}
 		>
 			{presentation.language === 'fr' ? 'FR' : 'EN'}

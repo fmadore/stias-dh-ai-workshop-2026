@@ -20,7 +20,7 @@
 	</div>
 
 	<div class="min-w-0 flex-1">
-		<h3 class="text-card-title text-strong leading-tight">
+		<h3 class="text-card-title text-strong">
 			<a href={localePath(`/participants/${person.id}`)} class="person-link">
 				{person.name}
 			</a>

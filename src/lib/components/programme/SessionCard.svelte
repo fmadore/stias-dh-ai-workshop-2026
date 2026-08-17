@@ -77,7 +77,7 @@
 {#if treatment === 'interlude'}
 	<!-- A break is a quiet dashed rule: no badge, no card, no serif. -->
 	<div id={anchor} class="border-subtle flex items-baseline gap-4 border-y border-dashed py-2.5">
-		<span class="text-muted text-caption w-20 flex-shrink-0 font-mono tabular-nums sm:w-28">
+		<span class="text-muted text-caption w-20 flex-shrink-0 tabular-nums sm:w-28">
 			{times[0]}
 		</span>
 		<span class="text-muted text-caption">
@@ -92,11 +92,15 @@
 			: ''}"
 	>
 		<div class="flex gap-4 sm:gap-5">
-			<!-- Start time leads, end time recedes. -->
+			<!-- Start time leads, end time recedes. Outfit with tabular-nums, not
+			     font-mono: DESIGN.md names session times as a tabular-Outfit site,
+			     and the mono stack was resolving to whatever face the OS supplied
+			     (Consolas / SF Mono) in the most repeated position on the site.
+			     tabular-nums keeps the column aligned without a third family. -->
 			<div class="border-subtle w-20 flex-shrink-0 border-r pr-4 sm:w-28">
-				<div class="text-strong font-mono text-sm tabular-nums">{times[0]}</div>
+				<div class="text-strong text-sm tabular-nums">{times[0]}</div>
 				{#if times[1]}
-					<div class="text-muted font-mono text-xs tabular-nums">{times[1]}</div>
+					<div class="text-muted text-xs tabular-nums">{times[1]}</div>
 				{/if}
 			</div>
 
@@ -134,7 +138,10 @@
 				</div>
 
 				{#if heading}
-					<h3 class="text-strong font-display text-reading leading-snug">
+					<!-- Deliberately below .text-card-title: a session name frames the
+					     papers inside it and should not outweigh them. leading comes from
+					     the h3 base step. -->
+					<h3 class="text-strong font-display text-reading">
 						{#if headingHref}
 							<a href={headingHref} class="session-link" lang={featuredPaper?.language}>{heading}</a
 							>
@@ -245,9 +252,14 @@
 		display: inline-block;
 		margin-left: 0.4rem;
 		font-family: var(--font-sans);
-		font-size: 0.625rem;
+		/* 11px is the documented floor; this and .online-badge were the only
+		   10px type on the site, on the surface most often read on a phone. */
+		font-size: var(--text-badge);
 		font-weight: 600;
-		letter-spacing: 0.1em;
+		/* 0.16em: the badge role's tracking, shared with the EN/FR chip on
+		   PaperCard and the language switcher. Uppercase needs positive
+		   tracking, and one chip should not have three renderings. */
+		letter-spacing: 0.16em;
 		vertical-align: 0.1em;
 		color: var(--color-primary-700);
 	}
@@ -264,9 +276,9 @@
 		border: 1px solid var(--border-accent);
 		border-radius: 9999px;
 		background-color: color-mix(in oklab, var(--accent) 10%, transparent);
-		font-size: 0.625rem;
+		font-size: var(--text-badge);
 		font-weight: 600;
-		letter-spacing: 0.06em;
+		letter-spacing: 0.16em;
 		text-transform: uppercase;
 		line-height: 1.5;
 		white-space: nowrap;

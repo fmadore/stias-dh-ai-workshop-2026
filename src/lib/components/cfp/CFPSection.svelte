@@ -82,7 +82,11 @@
 							>
 								0{axis.number}
 							</span>
-							<h3 class="text-strong font-sans text-base leading-snug font-medium sm:text-lg">
+							<!-- The same thematic axes render as .text-card-title on /about
+							     (ThematicAxis.svelte); one role, one rendering. The sans/medium
+							     utilities here never applied — a bare h3 outranked them — so
+							     this has always shipped as display serif. -->
+							<h3 class="text-card-title text-strong">
 								{t(axis.title)}
 							</h3>
 						</div>

@@ -171,7 +171,7 @@
 	.filter-input,
 	.filter-select {
 		font-family: var(--font-sans);
-		font-size: 0.9375rem;
+		font-size: var(--text-ui);
 		color: var(--ink-strong);
 		background-color: var(--surface-raised);
 		border: 1px solid var(--border-subtle);
@@ -227,7 +227,7 @@
 		   filters, and without this the grid below jumped 26px each time. */
 		min-height: 2.5rem;
 		font-family: var(--font-sans);
-		font-size: 0.8125rem;
+		font-size: var(--text-caption);
 		color: var(--ink-subtle);
 	}
 
@@ -243,7 +243,7 @@
 		border: 0;
 		color: var(--ink-subtle);
 		font-family: var(--font-sans);
-		font-size: 0.8125rem;
+		font-size: var(--text-caption);
 		cursor: pointer;
 		min-height: 2.5rem;
 		padding: 0.5rem 0.625rem;

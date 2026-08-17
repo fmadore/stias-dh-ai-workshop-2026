@@ -1,0 +1,27 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "display",
+        "createdAt": "2026-08-17T10:22:56.944Z",
+        "reason": "Claude: var(--font-display) IS the documented display family (Instrument Serif, DESIGN.md Typography); the detector reads the token name as a face name"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "1rem",
+        "createdAt": "2026-08-17T10:22:57.252Z",
+        "reason": "Claude: DESIGN.md documents prose as '1rem rising to 1.0625rem at 640px'; the frontmatter records only the 640px value"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "1.25rem",
+        "files": ["src/lib/components/participants/AffiliationMap.svelte"],
+        "createdAt": "2026-08-17T10:22:57.468Z",
+        "reason": "Claude: sizes the MapLibre popup close-button glyph, not type"
+      }
+    ]
+  }
+}

@@ -49,7 +49,9 @@
 
 			{#each columns as column (column.heading)}
 				<nav aria-label={column.heading}>
-					<h2 class="text-secondary-300 text-badge mb-3 font-semibold tracking-[0.16em] uppercase">
+					<h2
+						class="text-secondary-300 text-badge mb-3 font-sans font-semibold tracking-[0.16em] uppercase"
+					>
 						{column.heading}
 					</h2>
 					<ul class="space-y-2">
@@ -69,7 +71,9 @@
 			{/each}
 
 			<div>
-				<h2 class="text-secondary-300 text-badge mb-3 font-semibold tracking-[0.16em] uppercase">
+				<h2
+					class="text-secondary-300 text-badge mb-3 font-sans font-semibold tracking-[0.16em] uppercase"
+				>
 					{m.key_dates()}
 				</h2>
 				<ul class="space-y-2">

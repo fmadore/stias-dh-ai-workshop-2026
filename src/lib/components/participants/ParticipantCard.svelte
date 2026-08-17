@@ -25,7 +25,7 @@
 <article class="card card-hover flex h-full flex-col p-5">
 	<AvatarSmall name={participant.name} image={participant.image} />
 
-	<h3 class="text-card-title text-strong mt-3.5 leading-tight">
+	<h3 class="text-card-title text-strong mt-3.5">
 		<a {href} class="card-link participant-link">{participant.name}</a>
 	</h3>
 

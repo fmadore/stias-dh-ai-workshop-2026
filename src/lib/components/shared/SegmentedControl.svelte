@@ -69,7 +69,7 @@
 
 	.segment {
 		font-family: var(--font-sans);
-		font-size: 0.8125rem;
+		font-size: var(--text-caption);
 		font-weight: 500;
 		letter-spacing: 0.04em;
 		white-space: nowrap;

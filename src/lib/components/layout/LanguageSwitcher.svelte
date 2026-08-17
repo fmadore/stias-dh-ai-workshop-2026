@@ -24,7 +24,7 @@
 		{/if}
 		<button
 			onclick={() => switchLocale(locale)}
-			class="min-h-11 min-w-11 rounded-[var(--radius-sm)] px-2 py-1 text-[11px] font-semibold tracking-[0.12em] transition-colors duration-[var(--duration-fast)] {currentLocale ===
+			class="text-badge min-h-11 min-w-11 rounded-[var(--radius-sm)] px-2 py-1 font-semibold tracking-[0.16em] transition-colors duration-[var(--duration-fast)] {currentLocale ===
 			locale
 				? 'text-link'
 				: 'text-ink-muted dark:text-surface-300 hover:text-ink dark:hover:text-surface-100'}"
