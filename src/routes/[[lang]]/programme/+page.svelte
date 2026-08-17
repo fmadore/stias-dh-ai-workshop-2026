@@ -27,7 +27,10 @@
 		let panels = 0;
 		return programme.map((day) => {
 			const offset = panels;
-			panels += day.sessions.filter((session) => session.type === 'panel').length;
+			// Continuations resume the panel before them, so they take no number of their own.
+			panels += day.sessions.filter(
+				(session) => session.type === 'panel' && !session.continuation
+			).length;
 			return {
 				day,
 				panelOffset: offset,

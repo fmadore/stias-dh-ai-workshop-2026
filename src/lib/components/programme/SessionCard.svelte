@@ -28,7 +28,7 @@
 
 	const typeLabel = $derived(
 		session.type === 'panel' && panelNumber
-			? `${typeLabels.panel} ${panelNumber}`
+			? `${typeLabels.panel} ${panelNumber}${session.continuation ? ` (${m.session_continued()})` : ''}`
 			: typeLabels[session.type]
 	);
 
@@ -45,8 +45,9 @@
 
 	// Panels and keynotes always show a chair line (falling back to "to be
 	// determined"); other session types only show one when a chair is set.
+	// ...except a panel resumed after a break, which already showed one.
 	const chairPerson = $derived(session.chair ? getPeople([session.chair])[0] : undefined);
-	const showChair = $derived(isPanel || isKeynote || !!session.chair);
+	const showChair = $derived(!session.continuation && (isPanel || isKeynote || !!session.chair));
 
 	// A keynote or group discussion that references a single paper derives its
 	// heading (and a link to the abstract) from it; everything else uses the

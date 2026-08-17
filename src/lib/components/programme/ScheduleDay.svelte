@@ -16,7 +16,10 @@
 		const numbers: Record<string, number> = {};
 		let n = panelOffset;
 		for (const session of day.sessions) {
-			if (session.type === 'panel') numbers[session.id] = ++n;
+			if (session.type !== 'panel') continue;
+			// A panel resumed after a break keeps its number rather than taking the next.
+			if (!session.continuation) n++;
+			numbers[session.id] = n;
 		}
 		return numbers;
 	});

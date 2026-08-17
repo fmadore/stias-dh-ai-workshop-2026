@@ -62,14 +62,27 @@ function sessionLabel(session: Session, panelNumber: number | undefined): string
  * localised and the locale can change between renders.
  */
 export function getPlacements(): Map<string, Placement> {
-	const placements = new Map<string, Placement>();
+	type Entry = { id: string; placement: Omit<Placement, 'siblingIds'>; group: string[] };
+	const entries: Entry[] = [];
 	let panelCount = 0;
+	/**
+	 * The papers of the panel being read, shared by reference across its sittings.
+	 * A panel split by a catering break spans two sessions, and its papers stay
+	 * siblings of one another wherever they fall — so siblings are resolved after
+	 * the whole programme is walked, once the group is complete.
+	 */
+	let group: string[] = [];
 
 	for (const day of programme) {
 		for (const session of day.sessions) {
-			if (session.type === 'panel') panelCount += 1;
+			const isContinuation = session.type === 'panel' && session.continuation;
+			if (session.type === 'panel' && !isContinuation) panelCount += 1;
+
 			const ids = session.presentationIds ?? [];
 			if (ids.length === 0) continue;
+
+			if (isContinuation) group.push(...ids);
+			else group = [...ids];
 
 			const placement = {
 				session,
@@ -79,13 +92,16 @@ export function getPlacements(): Map<string, Placement> {
 				anchor: sessionAnchor(session.id)
 			};
 
-			for (const id of ids) {
-				placements.set(id, { ...placement, siblingIds: ids.filter((other) => other !== id) });
-			}
+			for (const id of ids) entries.push({ id, placement, group });
 		}
 	}
 
-	return placements;
+	return new Map(
+		entries.map(({ id, placement, group }) => [
+			id,
+			{ ...placement, siblingIds: group.filter((other) => other !== id) }
+		])
+	);
 }
 
 export function getPlacement(presentationId: string): Placement | undefined {
