@@ -64,7 +64,7 @@
 			class="bg-page/90 border-subtle sticky top-[var(--nav-height)] z-30 border-b backdrop-blur-md"
 			aria-label={m.programme_jump_to_day()}
 		>
-			<div class="container-page flex flex-wrap items-center gap-2 py-3">
+			<div class="container-page flex flex-wrap items-center gap-2 py-2">
 				<span class="text-meta mr-1 hidden sm:inline">{m.programme_jump_to_day()}</span>
 				{#each days as entry (entry.day.date)}
 					<a href="#day-{entry.day.date}" class="day-pill" class:is-today={entry.isToday}>
@@ -117,6 +117,13 @@
 
 <style>
 	.day-pill {
+		/* The only in-page navigation on a four-day schedule, and the control most
+		   likely to be tapped while walking into a room — it rendered 33px against
+		   a documented 2.75rem floor. The bar's own padding drops from py-3 to
+		   py-2 so honouring the floor costs the sticky bar 2px, not 11. */
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.75rem;
 		font-family: var(--font-sans);
 		font-size: var(--text-caption);
 		font-weight: 600;

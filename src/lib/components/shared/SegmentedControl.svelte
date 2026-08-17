@@ -56,7 +56,10 @@
 		display: flex;
 		align-items: stretch;
 		gap: 0.25rem;
-		height: var(--control-h, 2.75rem);
+		/* min-height, not height: the tray's 1px border and 0.25rem padding take
+		   10px out of --control-h, so a 3rem tray gave 38px segments. Letting the
+		   tray grow lets the segments own the touch floor below 640px. */
+		min-height: var(--control-h, 2.75rem);
 		padding: 0.25rem;
 		background-color: color-mix(in oklab, var(--color-ink) 5%, transparent);
 		border: 1px solid var(--border-subtle);
@@ -80,6 +83,10 @@
 		/* Equal shares while the tray is full-width on mobile; intrinsic
 		   widths once it shrinks to its content on desktop. */
 		flex: 1 1 auto;
+		/* 2.75rem below 640px, where these are thumb targets; above it the tray
+		   keeps its --control-h density, matching the input and select beside it.
+		   Same breakpoint --control-h itself steps at, for the same reason. */
+		min-height: 2.75rem;
 		padding: 0 0.875rem;
 		cursor: pointer;
 		transition:
@@ -95,6 +102,7 @@
 
 		.segment {
 			flex: 0 0 auto;
+			min-height: 0;
 		}
 	}
 

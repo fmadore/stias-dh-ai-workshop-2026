@@ -76,8 +76,14 @@
 
 {#if treatment === 'interlude'}
 	<!-- A break is a quiet dashed rule: no badge, no card, no serif. -->
-	<div id={anchor} class="border-subtle flex items-baseline gap-4 border-y border-dashed py-2.5">
-		<span class="text-muted text-caption w-20 flex-shrink-0 tabular-nums sm:w-28">
+	<!-- scroll-mt-28 matches the session row below: without it a break anchor
+	     landed on the global scroll-padding-top (88px), which clears the header
+	     but not the programme's own sticky day bar — 41px behind it at 375px. -->
+	<div
+		id={anchor}
+		class="border-subtle flex scroll-mt-28 items-baseline gap-4 border-y border-dashed py-2.5"
+	>
+		<span class="text-muted text-caption interlude-time flex-shrink-0 tabular-nums">
 			{times[0]}
 		</span>
 		<span class="text-muted text-caption">
@@ -91,16 +97,21 @@
 			? 'opacity-90'
 			: ''}"
 	>
-		<div class="flex gap-4 sm:gap-5">
+		<div class="session-row">
 			<!-- Start time leads, end time recedes. Outfit with tabular-nums, not
 			     font-mono: DESIGN.md names session times as a tabular-Outfit site,
 			     and the mono stack was resolving to whatever face the OS supplied
 			     (Consolas / SF Mono) in the most repeated position on the site.
-			     tabular-nums keeps the column aligned without a third family. -->
-			<div class="border-subtle w-20 flex-shrink-0 border-r pr-4 sm:w-28">
+			     tabular-nums keeps the column aligned without a third family.
+
+			     Below 640px the time is a line above the title rather than a side
+			     gutter: the gutter cost 97px of a 343px card and squeezed titles to
+			     23 characters a line over 4.8 lines each. Times still lead the row
+			     and still align on the left edge, so scanning a day survives. -->
+			<div class="session-time flex-shrink-0">
 				<div class="text-strong text-sm tabular-nums">{times[0]}</div>
 				{#if times[1]}
-					<div class="text-muted text-xs tabular-nums">{times[1]}</div>
+					<div class="session-time-end text-muted text-xs tabular-nums">{times[1]}</div>
 				{/if}
 			</div>
 
@@ -221,6 +232,55 @@
 {/if}
 
 <style>
+	/* Media queries live inside the scoped block rather than as `sm:` utilities:
+	   Svelte scoped styles are unlayered and outrank @layer utilities, so a
+	   responsive utility on an element this block also styles would silently
+	   lose. Same reason the navbar disclosure was rewritten this way. */
+	.session-row {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	/* Mobile: the two times sit on one line, joined by an en dash. */
+	.session-time {
+		display: flex;
+		align-items: baseline;
+		gap: 0.4rem;
+	}
+	.session-time-end::before {
+		content: '–';
+		margin-inline-end: 0.4rem;
+		color: var(--ink-subtle);
+	}
+
+	.interlude-time {
+		width: auto;
+	}
+
+	@media (min-width: 640px) {
+		.session-row {
+			flex-direction: row;
+			gap: 1.25rem;
+		}
+
+		/* From 640px the time returns to a fixed gutter, which is what lets the
+		   eye run down a column of start times on a wide screen. */
+		.session-time {
+			display: block;
+			width: 7rem;
+			padding-inline-end: 1rem;
+			border-inline-end: 1px solid var(--border-subtle);
+		}
+		.session-time-end::before {
+			content: none;
+		}
+
+		.interlude-time {
+			width: 7rem;
+		}
+	}
+
 	.session-link,
 	.session-paper-link {
 		color: inherit;

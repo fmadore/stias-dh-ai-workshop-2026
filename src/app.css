@@ -662,6 +662,11 @@ button:not(:disabled),
 		line-height: 1;
 		border-radius: var(--radius-lg);
 		padding: 0.75rem 1.25rem;
+		/* The documented 2.75rem floor, declared where every variant inherits it.
+		   Only .btn-sm carried it before, so the small button was 44px while the
+		   hero's three large CTAs rendered 39–41px — the floor held everywhere
+		   except the buttons it most needed to hold for. */
+		min-height: 2.75rem;
 		cursor: pointer;
 		white-space: nowrap;
 		transition:
