@@ -165,6 +165,23 @@ export const affiliationLocations: AffiliationLocation[] = [
 		personIds: ['sanjin-muftic']
 	},
 	{
+		id: 'five-hundred-year-archive',
+		name: {
+			en: 'Five Hundred Year Archive, University of Cape Town',
+			fr: 'Five Hundred Year Archive, Université du Cap'
+		},
+		city: { en: 'Cape Town', fr: 'Le Cap' },
+		country: 'ZA',
+		coordinates: { lat: -33.9553, lng: 18.4613 },
+		personIds: [
+			'carolyn-hamilton',
+			'grant-mcnulty',
+			'steven-kotze',
+			'debra-pryor',
+			'makhosi-mkhize'
+		]
+	},
+	{
 		id: 'kings-college-london',
 		name: { en: "King's College London", fr: "King's College London" },
 		city: { en: 'London', fr: 'Londres' },

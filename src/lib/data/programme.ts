@@ -4,7 +4,7 @@ import type { ProgrammeDay } from '$lib/types';
  * Date the programme was last revised (ISO `yyyy-mm-dd`). Bump this whenever you
  * change the sessions below — it is shown as "Last updated" on the page.
  */
-export const programmeLastUpdated = '2026-08-13';
+export const programmeLastUpdated = '2026-08-14';
 
 /**
  * Workshop programme — STIAS, Stellenbosch, 21–24 September 2026.
@@ -28,6 +28,15 @@ export const programmeLastUpdated = '2026-08-13';
  *
  * Sessions therefore cap at 90 minutes (panels = 3 papers × 30 min), no comfort
  * breaks are allowed mid-session, and anything past 17:30 is billed at R1200/h.
+ *
+ * Panel 7 is the one panel with four papers, and no block in the grid is longer
+ * than 90 minutes. Rather than squeeze the papers or move a catering point, it
+ * is split across the 10:30 break: three papers before it, the fourth (30 min)
+ * straight after, then the Day 4 keynote (60 min) fills 11:30 – 12:30 so lunch
+ * still starts at 12:30. The second sitting is a session with `continuation:
+ * true` — it keeps Panel 7's number instead of becoming Panel 8, and its paper
+ * stays a sibling of the other three. Every break here is exactly where the
+ * STIAS grid puts it.
  * STIAS caters two coffee breaks only on full days on site (Days 1 and 4); Days
  * 2 and 3 leave for an excursion in the afternoon (Day 3 straight after lunch,
  * so both its panels sit in the morning), and get the 10:30 break only.
@@ -149,17 +158,17 @@ export const programme: ProgrammeDay[] = [
 				time: '09:00 – 10:30',
 				type: 'panel',
 				title: {
-					en: 'Panel 3 · Digital Archives, Metadata & Discovery',
-					fr: 'Panel 3 · Archives numériques, métadonnées et découvrabilité'
+					en: 'Panel 3 · Sustainable Infrastructures & Frugal Innovation',
+					fr: 'Panel 3 · Infrastructures durables et innovation frugale'
 				},
 				description: {
-					en: 'AI-assisted metadata, entity linking and protocol-based access converge on a shared problem: making African heritage collections findable, connected and usable across institutions.',
-					fr: "Métadonnées assistées par l'IA, liage d'entités et accès fondé sur des protocoles convergent vers un même enjeu : rendre les collections patrimoniales africaines repérables, connectées et exploitables d'une institution à l'autre."
+					en: 'Frugal infrastructures, South–South ecologies, community co-production and the limits of generic AI in African settings: what it takes to build research capacity that lasts.',
+					fr: "Infrastructures frugales, écologies Sud-Sud, co-production communautaire et limites de l'IA générique en contexte africain : ce qu'exige une capacité de recherche durable."
 				},
 				presentationIds: [
-					'enriching-the-invisible',
-					'entity-linking-african-studies',
-					'mcp-servers-african-glams'
+					'frugal-infrastructures',
+					'nigerian-town-question',
+					'ai-cybersecurity-burkina'
 				]
 			},
 			{
@@ -289,11 +298,22 @@ export const programme: ProgrammeDay[] = [
 		dayLabel: { en: 'Day 4 · Thursday 24 September', fr: 'Jour 4 · Jeudi 24 septembre' },
 		sessions: [
 			{
-				id: 'd4-keynote',
-				time: '09:30 – 10:30',
-				type: 'keynote',
-				speakers: ['ngue-um'],
-				presentationIds: ['que-sait-une-machine']
+				id: 'd4-panel-g',
+				time: '09:00 – 10:30',
+				type: 'panel',
+				title: {
+					en: 'Panel 7 · Digital Archives, Metadata & Discovery',
+					fr: 'Panel 7 · Archives numériques, métadonnées et découvrabilité'
+				},
+				description: {
+					en: 'An archive built for low-resource environments, AI-assisted metadata, entity linking and protocol-based access converge on a shared problem: making African heritage collections findable, connected and usable across institutions — and asking whose categories organise them.',
+					fr: "Une archive conçue pour les environnements à faibles ressources, des métadonnées assistées par l'IA, le liage d'entités et l'accès fondé sur des protocoles convergent vers un même enjeu : rendre les collections patrimoniales africaines repérables, connectées et exploitables d'une institution à l'autre — et interroger les catégories qui les organisent."
+				},
+				presentationIds: [
+					'shifting-the-discursive-spine',
+					'enriching-the-invisible',
+					'entity-linking-african-studies'
+				]
 			},
 			{
 				id: 'd4-coffee-1',
@@ -302,22 +322,18 @@ export const programme: ProgrammeDay[] = [
 				title: { en: 'Coffee break', fr: 'Pause-café' }
 			},
 			{
-				id: 'd4-panel-g',
-				time: '11:00 – 12:30',
+				id: 'd4-panel-g-cont',
+				time: '11:00 – 11:30',
 				type: 'panel',
-				title: {
-					en: 'Panel 7 · Sustainable Infrastructures & Frugal Innovation',
-					fr: 'Panel 7 · Infrastructures durables et innovation frugale'
-				},
-				description: {
-					en: 'Frugal infrastructures, South–South ecologies, community co-production and the limits of generic AI in African settings: what it takes to build research capacity that lasts.',
-					fr: "Infrastructures frugales, écologies Sud-Sud, co-production communautaire et limites de l'IA générique en contexte africain : ce qu'exige une capacité de recherche durable."
-				},
-				presentationIds: [
-					'frugal-infrastructures',
-					'nigerian-town-question',
-					'ai-cybersecurity-burkina'
-				]
+				continuation: true,
+				presentationIds: ['mcp-servers-african-glams']
+			},
+			{
+				id: 'd4-keynote',
+				time: '11:30 – 12:30',
+				type: 'keynote',
+				speakers: ['ngue-um'],
+				presentationIds: ['que-sait-une-machine']
 			},
 			{
 				id: 'd4-lunch',
