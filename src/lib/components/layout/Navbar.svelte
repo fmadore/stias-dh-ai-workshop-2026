@@ -83,13 +83,17 @@
 			     instead of appearing only at xl. "DH & AI" alone is cryptic. -->
 			<a href={localePath('/')} class="flex min-w-0 flex-col leading-none">
 				<span class="text-link font-display text-xl tracking-tight"> DH &amp; AI </span>
-				<span class="text-meta mt-1 truncate text-[0.625rem] tracking-[0.14em]">
+				<span class="text-meta text-badge mt-1 truncate tracking-[0.14em]">
 					{m.brand_qualifier()}
 				</span>
 			</a>
 
-			<!-- Desktop navigation (lg and up — the French labels don't fit at md) -->
-			<nav class="hidden items-center gap-0.5 lg:flex" aria-label={m.nav_main_label()}>
+			<!-- Desktop navigation at xl and up. Measured: the row needs 1205px of
+			     viewport in French and 1069px in English, against a container that
+			     stops growing at 80rem. Below that the French labels wrap to two and
+			     three lines ("Lieu & Accès", "Appel à contributions"), so lg was
+			     181px too early. One breakpoint for both locales, set by the wider. -->
+			<nav class="hidden items-center gap-0.5 xl:flex" aria-label={m.nav_main_label()}>
 				{#each navLinks as link (link.href)}
 					<a
 						href={link.href}
@@ -136,7 +140,7 @@
 				</button>
 				<button
 					onclick={() => (mobileMenuOpen = !mobileMenuOpen)}
-					class="btn-ghost lg:hidden"
+					class="btn-ghost xl:hidden"
 					aria-label={mobileMenuOpen ? m.menu_close() : m.menu_open()}
 					aria-expanded={mobileMenuOpen}
 					aria-controls="mobile-navigation"
@@ -154,26 +158,28 @@
 		     accessibility tree while the grid-row transition closes it. -->
 		<div
 			id="mobile-navigation"
-			class="mobile-navigation lg:hidden"
+			class="mobile-navigation"
 			class:is-open={mobileMenuOpen}
 			inert={!mobileMenuOpen}
 		>
-			<nav
-				class="border-subtle min-h-0 overflow-hidden border-t pt-3"
-				aria-label={m.nav_mobile_label()}
-			>
-				{#each allLinks as link (link.href)}
-					<a
-						href={link.href}
-						onclick={() => (mobileMenuOpen = false)}
-						aria-current={isActive(link.href) ? 'page' : undefined}
-						class="block px-3 py-3 text-sm {isActive(link.href)
-							? 'text-link border-secondary-500 border-l-2 pl-4 font-semibold'
-							: 'text-muted hover:text-strong font-medium'}"
-					>
-						{link.label}
-					</a>
-				{/each}
+			<nav class="min-h-0 overflow-hidden" aria-label={m.nav_mobile_label()}>
+				<!-- The rule and the top padding live INSIDE the clipped area. On the
+				     outer element they are not part of its height, so the collapsed
+				     menu still painted a 13px strip under the bar at every width. -->
+				<div class="border-subtle border-t pt-3">
+					{#each allLinks as link (link.href)}
+						<a
+							href={link.href}
+							onclick={() => (mobileMenuOpen = false)}
+							aria-current={isActive(link.href) ? 'page' : undefined}
+							class="block px-3 py-3 text-sm {isActive(link.href)
+								? 'text-link border-secondary-500 border-l-2 pl-4 font-semibold'
+								: 'text-muted hover:text-strong font-medium'}"
+						>
+							{link.label}
+						</a>
+					{/each}
+				</div>
 			</nav>
 		</div>
 	</div>
@@ -191,5 +197,16 @@
 	.mobile-navigation.is-open {
 		grid-template-rows: 1fr;
 		padding-bottom: 1rem;
+	}
+
+	/* Hidden here rather than with an `xl:hidden` utility. Svelte's scoped styles
+	   are unlayered, and unlayered rules beat @layer utilities whatever their
+	   specificity — so the `display: grid` above silently won and the disclosure
+	   rendered at every width. Same trap app.css documents for its component
+	   classes; a utility cannot override a rule in this block. */
+	@media (min-width: 80rem) {
+		.mobile-navigation {
+			display: none;
+		}
 	}
 </style>
