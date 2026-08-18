@@ -29,6 +29,7 @@
 				? 'text-link'
 				: 'text-ink-muted dark:text-surface-300 hover:text-ink dark:hover:text-surface-100'}"
 			aria-current={currentLocale === locale ? 'true' : undefined}
+			lang={locale}
 		>
 			{locale.toUpperCase()}
 		</button>

@@ -18,7 +18,8 @@
 			{t(venueInfo.description)}
 		</p>
 		<p class="text-muted text-sm">
-			{venueInfo.address}, {venueInfo.city}, {countryName(venueInfo.country, getLocale())}
+			{venueInfo.address}, {venueInfo.postalCode}
+			{venueInfo.city}, {countryName(venueInfo.country, getLocale())}
 		</p>
 		<a
 			href={venueInfo.website}

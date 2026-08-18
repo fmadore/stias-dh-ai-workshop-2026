@@ -12,7 +12,7 @@
 
 <PageHeader
 	title={m.section_venue()}
-	subtitle={m.seo_venue_description()}
+	subtitle={m.venue_page_subtitle()}
 	meta={[m.hero_dates(), m.hero_location()]}
 />
 

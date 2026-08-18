@@ -16,12 +16,15 @@
 		<h1 class="text-page-title text-strong mb-5">
 			{page.status === 404 ? m.error_404_title() : m.error_generic_title()}
 		</h1>
-		{#if page.status === 404}
-			<!-- No max-w-xl: a physical max-width utility outranks .text-lede's own
-			     logical max-inline-size (utilities layer beats components), so the
-			     lede rendered at 576px ≈ 80 characters against the role's 48. -->
-			<p class="text-lede mx-auto mb-10">{m.error_404_text()}</p>
-		{/if}
+		<!-- No max-w-xl: a physical max-width utility outranks .text-lede's own
+		     logical max-inline-size (utilities layer beats components), so the
+		     lede rendered at 576px ≈ 80 characters against the role's 48.
+
+		     The non-404 branch used to render nothing here: a heading saying
+		     something went wrong, and no account of what to do about it. -->
+		<p class="text-lede mx-auto mb-10">
+			{page.status === 404 ? m.error_404_text() : m.error_generic_text()}
+		</p>
 		<a href={localePath('/')} class="btn btn-primary">
 			<ArrowLeft size={16} strokeWidth={1.75} aria-hidden="true" />
 			{m.error_back_home()}

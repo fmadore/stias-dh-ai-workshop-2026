@@ -6,7 +6,10 @@ export const venueInfo: VenueInfo = {
 		en: 'Stellenbosch Institute for Advanced Study',
 		fr: "Stellenbosch Institute for Advanced Study (Institut d'études avancées de Stellenbosch)"
 	},
-	address: '10 Marais Street, Stellenbosch',
+	// Street only. It is also schema.org streetAddress in event-schema.ts, and
+	// the page renders it beside `city` — which is how the venue printed
+	// "Stellenbosch, Stellenbosch, South Africa".
+	address: '10 Marais Street',
 	city: 'Stellenbosch',
 	postalCode: '7600',
 	country: 'ZA',

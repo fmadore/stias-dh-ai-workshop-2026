@@ -40,10 +40,16 @@
 			class="text-badge font-medium tracking-[0.14em] text-white/65 uppercase"
 			aria-hidden="true"
 		>
-			{m.countdown_days_remaining()}
+			{days === 1 ? m.countdown_days_remaining_one() : m.countdown_days_remaining()}
 		</span>
 		<span class="sr-only">
-			{days === 0 ? m.countdown_today() : m.countdown_until({ count: String(days), milestone })}
+			{#if days === 0}
+				{m.countdown_today()}
+			{:else if days === 1}
+				{m.countdown_until_one({ count: String(days), milestone })}
+			{:else}
+				{m.countdown_until({ count: String(days), milestone })}
+			{/if}
 		</span>
 	</time>
 </div>

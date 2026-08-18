@@ -118,7 +118,7 @@
 		<div class="border-primary-800/60 dark:border-surface-800 mt-10 border-t pt-8 text-center">
 			<p class="text-sm font-light text-white/75">
 				&copy; {new Date().getFullYear()}
-				{organizers.map((o) => o.name).join(', ')}. {m.footer_rights()}
+				{organizers.map((o) => o.name).join(', ')}. {m.footer_licence()}
 			</p>
 		</div>
 	</div>
