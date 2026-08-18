@@ -21,18 +21,69 @@
 	} = $props();
 
 	const uid = $props.id();
+
+	/**
+	 * A radiogroup, not a row of toggles. `aria-pressed` said each segment was
+	 * on or off and nothing said the three were exclusive, so "All languages
+	 * pressed, EN not pressed, FR not pressed" was three unrelated facts. It
+	 * also spent one tab stop per segment: six across the participants filter
+	 * row, in front of a grid of 33 cards. A radiogroup is one tab stop and
+	 * arrow keys within, which is what the pattern exists for.
+	 */
+	let segments: HTMLButtonElement[] = $state([]);
+
+	const activeIndex = $derived(
+		Math.max(
+			0,
+			options.findIndex((option) => option.value === value)
+		)
+	);
+
+	function select(index: number) {
+		value = options[index].value;
+		segments[index]?.focus();
+	}
+
+	function onkeydown(event: KeyboardEvent, from: number) {
+		const last = options.length - 1;
+		let next: number;
+		switch (event.key) {
+			case 'ArrowRight':
+			case 'ArrowDown':
+				next = from === last ? 0 : from + 1;
+				break;
+			case 'ArrowLeft':
+			case 'ArrowUp':
+				next = from === 0 ? last : from - 1;
+				break;
+			case 'Home':
+				next = 0;
+				break;
+			case 'End':
+				next = last;
+				break;
+			default:
+				return;
+		}
+		event.preventDefault();
+		select(next);
+	}
 </script>
 
 <div class="field">
 	<span class="text-meta field-label" id={uid}>{label}</span>
-	<div class="tray" role="group" aria-labelledby={uid}>
-		{#each options as option (String(option.value))}
+	<div class="tray" role="radiogroup" aria-labelledby={uid}>
+		{#each options as option, i (String(option.value))}
 			<button
+				bind:this={segments[i]}
 				type="button"
+				role="radio"
 				class="segment"
 				class:is-active={value === option.value}
-				aria-pressed={value === option.value}
+				aria-checked={value === option.value}
+				tabindex={i === activeIndex ? 0 : -1}
 				onclick={() => (value = option.value)}
+				onkeydown={(event) => onkeydown(event, i)}
 			>
 				{option.label}
 			</button>

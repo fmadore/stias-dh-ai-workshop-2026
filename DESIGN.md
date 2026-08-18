@@ -301,7 +301,7 @@ The recurring silhouette is the **accent rule** — a 2.75rem × 2px brass bar w
 
 ### Segmented Control
 
-A labelled tray of mutually exclusive options — the shared idiom for every pick-one control on a listing page. Tray: 5% ink fill, subtle border, `lg` radius, 0.25rem padding. Segments are borderless and transparent; the active one takes a raised-white fill, deep-teal label, and `xs` shadow. Segments stretch to equal shares while stacked on mobile and shrink to intrinsic width from 640px. Semantics are `role="group"` with `aria-labelledby`, and `aria-pressed` on each segment.
+A labelled tray of mutually exclusive options — the shared idiom for every pick-one control on a listing page. Tray: 5% ink fill, subtle border, `lg` radius, 0.25rem padding. Segments are borderless and transparent; the active one takes a raised-white fill, deep-teal label, and `xs` shadow. Segments stretch to equal shares while stacked on mobile and shrink to intrinsic width from 640px. Semantics are `role="radiogroup"` with `aria-labelledby`, and `role="radio"` plus `aria-checked` on each segment. Exclusivity is the point of the control, and `aria-pressed` conveyed none of it; a roving `tabindex` with arrow-key, Home and End handling also collapses the group to a single tab stop.
 
 ### Navigation
 
