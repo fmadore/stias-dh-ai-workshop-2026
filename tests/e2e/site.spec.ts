@@ -7,7 +7,7 @@ test('locale switching uses the canonical French homepage', async ({ page }) => 
 	await page.goto(`${BASE}/`);
 	await page
 		.getByRole('navigation', { name: 'Language' })
-		.getByRole('button', { name: 'FR' })
+		.getByRole('link', { name: 'FR' })
 		.click();
 
 	await expect(page).toHaveURL(new RegExp(`${BASE}/fr$`));
@@ -35,8 +35,10 @@ test('mobile navigation, theme and participant filtering remain functional', asy
 	// the placeholder is the kind of copy that gets reworded.
 	await page.getByRole('searchbox', { name: 'Search' }).fill('Tajuddeen');
 	// The total is deliberately loose — this test is about the filter narrowing
-	// to one result, and check-data.ts already guards the participant count.
-	await expect(page.getByRole('status')).toContainText(/1 of \d+ participants/);
+	// to one result, and check-data.ts already guards the directory count.
+	// Located by class: the affiliation map carries a live region of its own, so
+	// role=status alone is ambiguous on this page.
+	await expect(page.locator('.filter-count')).toContainText(/1 of \d+ people/);
 	await expect(page.getByRole('link', { name: 'Tajuddeen Gwadabe' })).toBeVisible();
 });
 
@@ -53,6 +55,48 @@ test('CFP downloads are static, reachable assets', async ({ page, request }) => 
 		expect(response.ok()).toBeTruthy();
 		expect((await response.body()).byteLength).toBeGreaterThan(500);
 	}
+});
+
+test('the directory filter reports every group it narrows', async ({ page }) => {
+	await page.goto(`${BASE}/participants`);
+	const status = page.locator('.filter-count');
+	// 33 participants + 4 organisers + 2 Point Sud: the filter spans all three,
+	// so the count has to as well. It used to read "of 33" while seven people
+	// stayed on screen unfiltered.
+	await expect(status).toContainText(/39 of 39 people/);
+
+	await page.getByRole('searchbox', { name: 'Search' }).fill('Madore');
+	await expect(status).toContainText(/of 39 people/);
+	// Frédérick Madore is an organiser, and searching his name must find him.
+	await expect(page.getByRole('link', { name: 'Frédérick Madore' }).first()).toBeVisible();
+});
+
+test('language switching survives without JavaScript', async ({ page }) => {
+	await page.goto(`${BASE}/programme`);
+	const fr = page.getByRole('navigation', { name: 'Language' }).getByRole('link', { name: 'FR' });
+	await expect(fr).toHaveAttribute('href', `${BASE}/fr/programme`);
+	await expect(fr).toHaveAttribute('hreflang', 'fr');
+});
+
+test('a bad French URL is answered in French', async ({ page }) => {
+	// One 404 document serves the whole static site and renders on the client,
+	// so the locale has to come from the path rather than a matched route.
+	await page.goto(`${BASE}/fr/no-such-page`);
+	await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Page introuvable');
+});
+
+test('the directory and its map degrade without JavaScript', async ({ browser }) => {
+	const context = await browser.newContext({ javaScriptEnabled: false });
+	const page = await context.newPage();
+	await page.goto(`${BASE}/participants`);
+
+	// The map cannot arrive, so its prerendered loading state must not pretend
+	// otherwise; the affiliation list beside it is static and still works.
+	await expect(page.locator('.map-loading')).toBeHidden();
+	await expect(page.locator('.affiliation-list li')).not.toHaveCount(0);
+	await expect(page.getByRole('heading', { name: 'Organisers', exact: true })).toBeVisible();
+	await context.close();
 });
 
 for (const route of ['/', '/fr', '/programme', '/participants', '/call-for-papers']) {
