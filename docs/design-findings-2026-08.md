@@ -88,7 +88,36 @@ Also closed: the venue printed "Stellenbosch, Stellenbosch, South Africa" (the P
 - **P3-19 · The French catalogue uses two apostrophes.** 24 strings carry U+0027 (`l'atelier`), 11 carry U+2019 (`l’organisation`), none mixes both within one string; the content data files mix the same two ways. It is one find-and-replace plus a test run, but it spans `messages/fr.json` and `src/lib/data/`, so it belongs with the second typographic pass rather than here. The strings added in this pass use U+2019, which is where the newest copy already sat. → `typeset` (second pass)
 - **P3-20 · The P1-7 treatment stops at the programme.** `PaperCard`'s title link and the paper page's `.author-link` share the identical `color: inherit` + hover-only pattern the finding describes. Both sit inside cards with their own affordances (a lifting card, a brass rule), which is why they were left out of a fix scoped to the programme — but "underlined on one surface, not on another" is now a consistency question the backlog should hold explicitly. → `polish`
 
-**Still open:** all P2s except P2-3 and P2-5, and the rest of P3. **P1 is now clear.**
+**Fixed in the `harden` pass (18 August 2026)** — **P2-2**, **P2-6**, **P2-7**, **P2-14**, **P3-16**, the live-theme P3, and the roadmap's own edge-case list. Measured against the production build in headless Chromium:
+
+| Measurement                | Before                                | After                                     |
+| -------------------------- | ------------------------------------- | ----------------------------------------- |
+| Directory filter scope     | 33 of 39 people                       | **39 of 39**                              |
+| Search "Madore"            | "1 of 33", Madore unmatched on screen | **"2 of 39 people"**, both found          |
+| Language switch without JS | inert                                 | **`<a href>` + `hreflang`**               |
+| Map selection announced    | nothing                               | **location, place, count, names**         |
+| Map without JS             | a spinner that never resolves         | **falls back; 18 locations still listed** |
+| French 404                 | answered in English, `lang="en"`      | **French, `lang="fr"`**                   |
+| Programme anchor offset    | hard-coded 112px                      | **derived; bar measures 61px = token**    |
+| Live OS theme change       | ignored until reload                  | **followed, unless a choice is stored**   |
+| Long unbroken token @320px | page widened to **518px**             | **320px**                                 |
+
+**P2-2 was a structural problem, not a counting one.** The filter narrowed the `participants` array while the Organisers and Point Sud sections rendered raw above it, so the control governed a third of what it appeared to govern. `filterParticipants` is now `filterPeople`, a generic predicate over a structural `FilterablePerson` — organisers and Point Sud are separate types with the same searchable surface — and the FilterBar moved above all three sections, because a control that governs the page cannot sit two thirds of the way down it. Sections hide when they have no match, and one empty state replaces three. The count message is `filter_count_people`, since "39 participants" would have been the same class of untruth the fix exists to remove. **This changes the page's opening**: it now leads with the directory controls rather than with the Organisers heading. That is a consequence worth a second look.
+
+**P2-14 was worse than the clarify pass recorded.** It was reported as a title/body mismatch in dev; against the build it is simpler and worse — `build/404.html` is an empty shell rendered entirely on the client, one document for the whole site, so _every_ bad French URL was answered in English with `lang="en"`. Fixed with `localeFromPath()`, which reads the locale from the URL instead of from a route parameter that by definition did not match, plus explicit `{ locale }` arguments on the error page's messages rather than the ambient global. Unit-covered, including `/papers/french-history`, which starts with `fr` but is not the locale segment.
+
+**P3-16 is now genuinely derived.** `--day-bar-height` (3.8125rem) is declared once, consumed by the sticky bar as `min-height` so it cannot quietly stop being true, and consumed by days and sessions as `scroll-margin-top`. It composes with `scroll-padding-top` rather than duplicating it: the header offset stays in one place, the bar's in another. Measured in the build — the bar renders **61px**, exactly the token, and anchors land 16px below it.
+
+Two things found in passing, neither in the backlog:
+
+- **A single unbreakable word pushed the page to 518px inside a 320px viewport.** `OrganizerCard`'s text column lacked the `min-w-0` its Point Sud twin already carried, so a flex child's `min-width: auto` refused to shrink. Fixed there, and `overflow-wrap: break-word` added to `body` as a safety net — institution names, compound surnames and bare URLs are content the site does not control. It engages only for a word that would otherwise overflow, so the measured line lengths from the typographic pass are untouched.
+- **The map's prerendered loading state was a promise nothing would keep.** Without JavaScript the spinner and "Loading the affiliations map…" render from static HTML and never resolve. A `<noscript>` fallback takes its place and the loader is hidden under `.no-js`; the 18-location list beside it was already static and works either way.
+
+_Verified good, not changed:_ reduced motion genuinely surrenders — all three `.scroll-reveal` blocks render at opacity 1 with no transform, so the staggered `setTimeout` delays nothing visible. No broken images across the directory. No horizontal overflow at 320, 375 or 1280px across six routes in both locales and both themes.
+
+Four regression guards were added to `tests/e2e/site.spec.ts` — the directory count, the switcher's `href`/`hreflang`, the French 404, and the no-JS directory — because each of these fails silently and none is visible to lint, `svelte-check` or the axe scan.
+
+**Still open:** P2-1 (`optimize`), P2-8 (the home hero), and the rest of P3. **P1 is clear, and every P2 routed to `harden` is closed.**
 
 ### New findings from the layout pass
 
