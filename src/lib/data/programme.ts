@@ -204,7 +204,7 @@ export const programme: ProgrammeDay[] = [
 				time: '15:00 – 19:00',
 				type: 'social',
 				title: { en: 'Visit A', fr: 'Visite A' },
-				description: { en: 'Destination to be determined.', fr: 'Destination à déterminer.' }
+				description: { en: 'Destination to be confirmed.', fr: 'Destination à confirmer.' }
 			},
 			{
 				id: 'd2-evening',
@@ -271,7 +271,7 @@ export const programme: ProgrammeDay[] = [
 				time: '14:00 – 18:00',
 				type: 'social',
 				title: { en: 'Visit B', fr: 'Visite B' },
-				description: { en: 'Destination to be determined.', fr: 'Destination à déterminer.' }
+				description: { en: 'Destination to be confirmed.', fr: 'Destination à confirmer.' }
 			},
 			{
 				id: 'd3-evening',
