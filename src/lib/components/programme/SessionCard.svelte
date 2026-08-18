@@ -144,12 +144,10 @@
 						</span>
 					{/if}
 					<!-- Per-session anchor: until now you could not send anyone a
-					     link to Tuesday's panel. -->
-					<a
-						href="#{anchor}"
-						class="text-primary-600/50 hover:text-primary-600 text-xs opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
-						aria-label={m.session_anchor_label()}
-					>
+					     link to Tuesday's panel. Sizing, resting visibility and colour
+					     are in the scoped block — a hover-revealed 12px target is a
+					     desktop affordance on the page most often read on a phone. -->
+					<a href="#{anchor}" class="session-anchor" aria-label={m.session_anchor_label()}>
 						<LinkIcon size={12} strokeWidth={2} aria-hidden="true" />
 					</a>
 				</div>
@@ -304,6 +302,67 @@
 		.interlude-time {
 			width: 7rem;
 		}
+	}
+
+	/* The session permalink. It was `opacity-0` until `group-hover` on a 12x12
+	   box: three separate failures on the device this page is actually read on.
+	   Hover does not exist on a phone, so the control was invisible; 12x12 is
+	   half of WCAG 2.5.8's 24x24 minimum; and at 50% alpha it measured 1.16:1
+	   against the dark card, which is not a control that is merely hard to see
+	   but one that is not there.
+
+	   - 1.5rem square satisfies 2.5.8 outright, so no spacing exception is
+	     needed from the eyebrow beside it or the heading below.
+	   - The negative block margin absorbs the growth back into the 18px eyebrow
+	     row, so 20 sessions do not each gain 6px of height.
+	   - margin-inline-start: auto sends it to the right edge. On touch, where it
+	     is visible at rest, that puts it in the thumb's reach and out of the
+	     label cluster; down the page the 20 of them line up as one rail rather
+	     than sitting at 20 different x positions.
+	   - The mixes are the ones the link-affordance pass measured on this same
+	     card surface: 65% light, 60% dark, both clearing 3:1 (SC 1.4.11). */
+	.session-anchor {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 1.5rem;
+		min-height: 1.5rem;
+		margin-block: -0.1875rem;
+		margin-inline-start: auto;
+		border-radius: var(--radius-full);
+		color: color-mix(in oklab, var(--color-primary-600) 65%, transparent);
+		opacity: 0;
+		transition:
+			opacity var(--duration-fast) var(--ease-standard),
+			color var(--duration-fast) var(--ease-standard);
+	}
+	:global(.dark) .session-anchor {
+		color: color-mix(in oklab, var(--color-primary-300) 60%, transparent);
+	}
+
+	/* Fine pointers keep the quiet reveal: on a desktop reading surface 20
+	   permanent glyphs are noise, and hover is a real affordance there. */
+	.group:hover .session-anchor,
+	.session-anchor:focus-visible {
+		opacity: 1;
+	}
+
+	/* Coarse pointers get it at rest, because there is no hover to reveal it
+	   with. `any-hover: none` rather than `hover: none` so a laptop that also
+	   has a touchscreen keeps the desktop behaviour it has a mouse for. */
+	@media (any-hover: none) {
+		.session-anchor {
+			opacity: 1;
+		}
+	}
+
+	.session-anchor:hover,
+	.session-anchor:focus-visible {
+		color: var(--color-primary-700);
+	}
+	:global(.dark) .session-anchor:hover,
+	:global(.dark) .session-anchor:focus-visible {
+		color: var(--color-primary-300);
 	}
 
 	.session-link,

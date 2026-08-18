@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test } from '@playwright/test';
+import { devices, expect, test } from '@playwright/test';
 
 const BASE = '/stias-dh-ai-workshop-2026';
 
@@ -96,6 +96,63 @@ test('the directory and its map degrade without JavaScript', async ({ browser })
 	await expect(page.locator('.map-loading')).toBeHidden();
 	await expect(page.locator('.affiliation-list li')).not.toHaveCount(0);
 	await expect(page.getByRole('heading', { name: 'Organisers', exact: true })).toBeVisible();
+	await context.close();
+});
+
+test('the programme day bar stays one row at the narrowest supported width', async ({ page }) => {
+	// --day-bar-height is a declared constant that days and sessions consume as
+	// scroll-margin-top. At 320px the four pills used to wrap to a second row and
+	// the bar rendered 113px against a token that still said 61px, so jumping to
+	// a day landed its heading 36px *behind* the bar. French is the wider locale
+	// and the one that fails first.
+	await page.setViewportSize({ width: 320, height: 812 });
+	await page.goto(`${BASE}/fr/programme`);
+
+	const bar = page.getByRole('navigation', { name: 'Aller au jour' });
+	const tokenPx = await page.evaluate(() => {
+		const root = document.documentElement;
+		const rem = parseFloat(getComputedStyle(root).fontSize);
+		return parseFloat(getComputedStyle(root).getPropertyValue('--day-bar-height')) * rem;
+	});
+	expect(Math.abs((await bar.boundingBox())!.height - tokenPx)).toBeLessThan(1);
+
+	// One row: every pill shares a top edge.
+	const tops = await page
+		.locator('.day-pill')
+		.evaluateAll((pills) => [
+			...new Set(pills.map((p) => Math.round(p.getBoundingClientRect().top)))
+		]);
+	expect(tops).toHaveLength(1);
+
+	// And the anchor the token exists for lands below the bar, not behind it.
+	await page.locator('.day-pill').nth(2).click();
+	await page.waitForTimeout(600);
+	await expect(page).toHaveURL(/#day-/);
+	const clearance = await page.evaluate(() => {
+		const nav = document.querySelector('nav[aria-label="Aller au jour"]')!;
+		const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+		if (!target) throw new Error(`no element for ${location.hash}`);
+		return target.getBoundingClientRect().top - nav.getBoundingClientRect().bottom;
+	});
+	expect(clearance).toBeGreaterThan(0);
+});
+
+test('the session permalink is a real target on touch', async ({ browser }) => {
+	// It was `opacity: 0` until `group-hover` on a 12x12 box: invisible on the
+	// device the programme is read on, half of WCAG 2.5.8's 24x24 minimum, and
+	// 1.44:1 against the dark card. Nothing in lint, svelte-check or axe sees
+	// any of those three.
+	const context = await browser.newContext({ ...devices['Pixel 7'] });
+	const page = await context.newPage();
+	await page.goto(`${BASE}/programme`);
+
+	// Located by accessible name, not by class: the name predates this fix, so
+	// the guard fails on the defect rather than on a missing selector.
+	const anchor = page.getByRole('link', { name: 'Link to this session' }).first();
+	const box = (await anchor.boundingBox())!;
+	expect(box.width).toBeGreaterThanOrEqual(24);
+	expect(box.height).toBeGreaterThanOrEqual(24);
+	expect(await anchor.evaluate((el) => getComputedStyle(el).opacity)).toBe('1');
 	await context.close();
 });
 
