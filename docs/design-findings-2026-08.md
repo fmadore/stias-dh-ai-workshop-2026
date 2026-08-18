@@ -57,7 +57,38 @@ P2-5 was **larger than recorded**: not three label sites but 37 headings. The un
 
 Four found in passing, none in the Phase 1 backlog: `/about`'s thematic axes were the same defect as P1-6 on a route nobody had measured (a P1); interlude rows never carried `scroll-mt-28`, so break anchors landed 41px behind the sticky day bar; ten session→break boundaries stacked a dashed hairline directly on a solid one; and `+error.svelte`'s `max-w-xl` was silently voiding `.text-lede`'s measure — a fourth instance of the cascade-layer trap, this time layer order rather than unlayered CSS.
 
-**Still open:** P1-7 (programme link affordance), all P2s except P2-3 and P2-5, and the rest of P3.
+**Fixed in the `clarify` pass (18 August 2026)** — **P1-7**, the segmented-control P3, and the copy half of the backlog. Measured in the browser in both locales and both themes:
+
+| Measurement                               | Before                           | After                                              |
+| ----------------------------------------- | -------------------------------- | -------------------------------------------------- |
+| Programme links with a resting affordance | 0 of 63                          | **63 of 63**                                       |
+| …underline vs its surface, light          | n/a (none drawn)                 | **3.26:1**                                         |
+| …underline vs its surface, dark           | n/a                              | **3.32:1**                                         |
+| Tab stops in the participants filter row  | 8                                | **4**                                              |
+| Segment semantics                         | `aria-pressed` on 6 buttons      | `role="radio"` + `aria-checked`                    |
+| Filter count, EN / FR                     | "Showing 12 of 25" / "12 sur 25" | **"12 of 25 papers" / "12 sur 25 communications"** |
+| Recovery in the filtered-empty state      | none                             | **one "Clear filters", 44px**                      |
+| Dead message keys                         | 17                               | **0**                                              |
+
+P1-7's first attempt was itself a defect worth recording: the fix as specified in this document — a 35% teal mix — measured **1.78:1** in light and 2.18:1 in dark on the tightest surface each theme puts it on. That is a resting cue you cannot resolve on a phone, which is the failure P1-7 names, reproduced in a new form. The shipped mixes are **65% light and 60% dark**, the first steps that clear 3:1. The two external links in a session row keep the icon and opt out of the underline (`.session-external`), because an underline runs straight through the glyph.
+
+The chair line stopped being a label plus a placeholder. "Chair: To be determined" was a colon promising a name and then not supplying one, on nine of the ten sessions that render the line; it is now one statement, `session_chair_tbd` ("Chair to be confirmed" / "Présidence à confirmer"), with the labelled form kept for the sessions that have a chair. The excursion descriptions moved from "to be determined" to "to be confirmed" so the site has one phrase for "not settled yet", not two.
+
+Two findings this pass did not expect to fix:
+
+- **The Call for Papers page said nowhere that the call had closed.** It still opened "We invite proposals…" and listed four addresses to send them to, three and a half months after the 30 April deadline — the exact class of error PRODUCT.md's Principle 1 exists to prevent, on the one page where it is most legible to a stranger arriving from search. It now carries a notice derived from `isCfpOpen()`, and its key-dates list reads from `getMilestones()` so the same four dates that are flagged past/next on the home page are flagged here too. The authored call text is untouched, by decision: the page is a record of what was published. `getKeyDates()` had no other consumer once the list moved — the PDF and text exports build their own — so `key-dates.ts` went with it.
+- **The footer claimed "All rights reserved"** against a repository that ships `LICENSE-CONTENT` granting CC BY 4.0. Replaced, by decision, with the split the licence actually records.
+
+Also closed: the venue printed "Stellenbosch, Stellenbosch, South Africa" (the P3 item; the town sat in both `address` and `city`, which also made `address` a wrong schema.org `streetAddress`); the venue page's lede was its own meta description, restating a heading instead of adding to it; `milestone_done` read "Completed" in English against "Passé" in French, and a deadline does not complete; the countdown would have rendered **"1 DAYS REMAINING" on 30 August**; the footer's "Take part" invited an action the closed call cannot offer; and the language switcher's EN/FR now carry `lang`, so each is spoken with its own phonemes.
+
+### New findings from the clarify pass
+
+- **P2-14 · The error page renders its title in one locale and its body in another.** On `/fr/no-such-page` the document title is "Page introuvable" while the `<h1>` reads "Page not found". `+error.svelte` sits outside the `[[lang]]` route, so the head and the body resolve the locale at different moments. Pre-existing; the copy is correct in both languages, the selection is not. → `harden`
+- **P2-2 is worse than recorded, on the same surface.** With the search emptied of results, the participants page still shows seven unfiltered people above the fold, and the "No participants match these filters" state renders **below** them — so the one honest signal is the piece the reader does not see. Scoping the filter to the unified `everyone` array fixes the count and the ordering together. → `harden`
+- **P3-19 · The French catalogue uses two apostrophes.** 24 strings carry U+0027 (`l'atelier`), 11 carry U+2019 (`l’organisation`), none mixes both within one string; the content data files mix the same two ways. It is one find-and-replace plus a test run, but it spans `messages/fr.json` and `src/lib/data/`, so it belongs with the second typographic pass rather than here. The strings added in this pass use U+2019, which is where the newest copy already sat. → `typeset` (second pass)
+- **P3-20 · The P1-7 treatment stops at the programme.** `PaperCard`'s title link and the paper page's `.author-link` share the identical `color: inherit` + hover-only pattern the finding describes. Both sit inside cards with their own affordances (a lifting card, a brass rule), which is why they were left out of a fix scoped to the programme — but "underlined on one surface, not on another" is now a consistency question the backlog should hold explicitly. → `polish`
+
+**Still open:** all P2s except P2-3 and P2-5, and the rest of P3. **P1 is now clear.**
 
 ### New findings from the layout pass
 
