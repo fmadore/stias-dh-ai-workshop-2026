@@ -1,4 +1,4 @@
-import type { Participant, Presentation } from '$lib/types';
+import type { Presentation } from '$lib/types';
 import { getPeople, type Person } from '$lib/data/people';
 
 const modules = import.meta.glob<Presentation>(['./*.ts', '!./index.ts'], {
@@ -14,9 +14,13 @@ export function getPresentation(id: string): Presentation | undefined {
 	return byId.get(id);
 }
 
-/** A participant's papers, derived from each presentation's `authors` list. */
-export function getParticipantPresentations(participant: Participant): Presentation[] {
-	return presentations.filter((p) => p.authors.includes(participant.id));
+/**
+ * A person's papers, derived from each presentation's `authors` list. Takes
+ * anything carrying an id: authors may be participants or organisers, and the
+ * directory filter runs over both.
+ */
+export function getParticipantPresentations(person: { id: string }): Presentation[] {
+	return presentations.filter((p) => p.authors.includes(person.id));
 }
 
 /**

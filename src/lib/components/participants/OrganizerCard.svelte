@@ -17,7 +17,10 @@
 				<Avatar name={organizer.name} image={organizer.image} loading="eager" />
 			</div>
 
-			<div class="flex-1 text-center sm:text-left">
+			<!-- min-w-0: a flex child defaults to min-width:auto, so without this the
+			     column refuses to shrink below its longest word and widens the card
+			     instead. PointSudCard already carried it; this one did not. -->
+			<div class="min-w-0 flex-1 text-center sm:text-left">
 				<h3 class="text-card-title text-strong">
 					<a href={localePath(`/participants/${organizer.id}`)} class="person-link">
 						{organizer.name}

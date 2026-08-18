@@ -1,4 +1,4 @@
-import type { CountryCode, Participant, Presentation } from '$lib/types';
+import type { CountryCode, LocalizedString, Presentation } from '$lib/types';
 import { getParticipantPresentations, getPresentationAuthors } from '$lib/data/presentations';
 import { countrySearchTerms } from './country';
 
@@ -25,15 +25,34 @@ function uniqueCountries(countries: Iterable<CountryCode>): CountryCode[] {
 	return Array.from(new Set(countries));
 }
 
-export function filterParticipants(
-	participants: Participant[],
+/**
+ * The minimum a person needs to be searchable in the directory. Deliberately
+ * structural rather than `Participant`: the same predicate has to run over
+ * organisers and Point Sud representatives, who are separate types with the
+ * same searchable surface. The filter used to narrow only the participants
+ * array while those two sections rendered unfiltered above it, so searching a
+ * convenor's name reported "1 of 33" while the convenor sat, unmatched, on
+ * screen.
+ */
+export interface FilterablePerson {
+	id: string;
+	name: string;
+	affiliation: LocalizedString;
+	country: CountryCode;
+	bio?: LocalizedString;
+}
+
+export function filterPeople<T extends FilterablePerson>(
+	people: T[],
 	{ query, country, language }: FilterOptions
-): Participant[] {
+): T[] {
 	const q = normalize(query.trim());
 
-	return participants.filter((p) => {
+	return people.filter((p) => {
 		if (country && p.country !== country) return false;
 
+		// Resolved by id, so it works for anyone in the registry, not only for
+		// people who live in the participants list.
 		const papers = getParticipantPresentations(p);
 
 		if (language && !papers.some((pp) => pp.language === language)) return false;
@@ -56,8 +75,8 @@ export function filterParticipants(
 	});
 }
 
-export function uniqueParticipantCountries(participants: Participant[]): CountryCode[] {
-	return uniqueCountries(participants.map((p) => p.country));
+export function uniquePersonCountries(people: FilterablePerson[]): CountryCode[] {
+	return uniqueCountries(people.map((p) => p.country));
 }
 
 export function filterPresentations(
