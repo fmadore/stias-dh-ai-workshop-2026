@@ -12,7 +12,7 @@ import type { LayoutLoad } from './$types';
  * migrate to Paraglide's `url` strategy. The post-build smoke test
  * (scripts/smoke-test.mjs) guards the "French pages contain French"
  * property in CI. It also means locale changes need a full page reload,
- * which is why LanguageSwitcher navigates with window.location.
+ * which is why LanguageSwitcher's links carry `data-sveltekit-reload`.
  */
 export const load: LayoutLoad = ({ params }) => {
 	const lang = params.lang || baseLocale;

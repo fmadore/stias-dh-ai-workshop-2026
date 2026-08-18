@@ -43,6 +43,31 @@ export function unlocalizedPath(
 	return normalizeRoutePath(route);
 }
 
+/**
+ * The locale a URL belongs to, read from its own path rather than from a
+ * matched route parameter. The error page needs this: it renders when no route
+ * matched, so `params.lang` is undefined and the locale global still holds
+ * whatever the last render set. On a static host there is one 404 document for
+ * the whole site, entirely client-rendered, so a visitor landing on a bad
+ * French URL was answered in English.
+ */
+export function localeFromPath(
+	pathname: string,
+	base = '',
+	baseLocale: SupportedLocale = 'en'
+): SupportedLocale {
+	const route = normalizeRoutePath(
+		base && pathname.startsWith(base) ? pathname.slice(base.length) || '/' : pathname
+	);
+
+	for (const locale of ['en', 'fr'] as const) {
+		if (locale === baseLocale) continue;
+		if (route === `/${locale}` || route.startsWith(`/${locale}/`)) return locale;
+	}
+
+	return baseLocale;
+}
+
 export function switchLocalePath(
 	pathname: string,
 	currentLocale: SupportedLocale,

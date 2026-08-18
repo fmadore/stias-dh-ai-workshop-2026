@@ -8,14 +8,16 @@
 	import Footer from '$lib/components/layout/Footer.svelte';
 	import WhatNext from '$lib/components/layout/WhatNext.svelte';
 	import BackToTop from '$lib/components/layout/BackToTop.svelte';
-	import { localizedPath } from '$lib/utils/localized-paths';
+	import { localizedPath, localeFromPath } from '$lib/utils/localized-paths';
 
 	let { children } = $props();
 
 	// Keep <html lang> in sync after client-side navigation — the server only
-	// sets it on the initially requested document (see hooks.server.ts).
+	// sets it on the initially requested document (see hooks.server.ts). Read
+	// from the path, not from params: the error page matches no route, so
+	// params.lang is undefined there and a French 404 declared itself English.
 	$effect(() => {
-		document.documentElement.lang = page.params.lang || 'en';
+		document.documentElement.lang = localeFromPath(page.url.pathname, base);
 	});
 
 	onMount(() => {
