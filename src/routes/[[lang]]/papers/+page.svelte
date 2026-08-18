@@ -6,6 +6,7 @@
 	import { presentations } from '$lib/data/presentations';
 	import PaperGrid from '$lib/components/papers/PaperGrid.svelte';
 	import FilterBar from '$lib/components/shared/FilterBar.svelte';
+	import NoResults from '$lib/components/shared/NoResults.svelte';
 	import { filterPresentations, uniquePaperCountries } from '$lib/utils/filter';
 	import type { CountryCode } from '$lib/types';
 
@@ -19,6 +20,12 @@
 
 	const countries = uniquePaperCountries(sorted);
 	const filtered = $derived(filterPresentations(sorted, { query, country, language }));
+
+	function clearFilters() {
+		query = '';
+		country = null;
+		language = null;
+	}
 </script>
 
 <SEO title="{m.nav_papers()} | {siteConfig.shortTitle}" description={m.seo_papers_description()} />
@@ -41,8 +48,8 @@
 		{#if sorted.length > 0}
 			<div class="mb-8">
 				<FilterBar
-					totalCount={sorted.length}
-					visibleCount={filtered.length}
+					countLabel={m.filter_count_papers({ visible: filtered.length, total: sorted.length })}
+					hasResults={filtered.length > 0}
 					{countries}
 					searchPlaceholder={m.papers_search_placeholder()}
 					bind:query
@@ -53,9 +60,7 @@
 			{#if filtered.length > 0}
 				<PaperGrid presentations={filtered} />
 			{:else}
-				<p class="text-muted py-12 text-center text-sm">
-					{m.papers_filter_no_results()}
-				</p>
+				<NoResults message={m.papers_filter_no_results()} onclear={clearFilters} />
 			{/if}
 		{/if}
 	</div>

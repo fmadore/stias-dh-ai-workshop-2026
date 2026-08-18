@@ -36,7 +36,7 @@ test('mobile navigation, theme and participant filtering remain functional', asy
 	await page.getByRole('searchbox', { name: 'Search' }).fill('Tajuddeen');
 	// The total is deliberately loose — this test is about the filter narrowing
 	// to one result, and check-data.ts already guards the participant count.
-	await expect(page.getByRole('status')).toContainText(/Showing 1 of \d+/);
+	await expect(page.getByRole('status')).toContainText(/1 of \d+ participants/);
 	await expect(page.getByRole('link', { name: 'Tajuddeen Gwadabe' })).toBeVisible();
 });
 

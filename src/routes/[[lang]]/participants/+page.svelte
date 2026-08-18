@@ -13,6 +13,7 @@
 	} from '$lib/components/participants/ParticipantGrid.svelte';
 	import FilterBar from '$lib/components/shared/FilterBar.svelte';
 	import SegmentedControl from '$lib/components/shared/SegmentedControl.svelte';
+	import NoResults from '$lib/components/shared/NoResults.svelte';
 	import AffiliationMap from '$lib/components/participants/AffiliationMap.svelte';
 	import { filterParticipants, uniqueParticipantCountries } from '$lib/utils/filter';
 	import type { CountryCode } from '$lib/types';
@@ -30,6 +31,12 @@
 
 	const countries = uniqueParticipantCountries(participants);
 	const filtered = $derived(filterParticipants(participants, { query, country, language }));
+
+	function clearFilters() {
+		query = '';
+		country = null;
+		language = null;
+	}
 </script>
 
 <SEO
@@ -85,8 +92,11 @@
 				</h2>
 				<div class="mb-8">
 					<FilterBar
-						totalCount={participants.length}
-						visibleCount={filtered.length}
+						countLabel={m.filter_count_participants({
+							visible: filtered.length,
+							total: participants.length
+						})}
+						hasResults={filtered.length > 0}
 						{countries}
 						searchPlaceholder={m.participants_search_placeholder()}
 						languageLabel={m.filter_language_label_participants()}
@@ -106,9 +116,7 @@
 				{#if filtered.length > 0}
 					<ParticipantGrid participants={filtered} {grouping} />
 				{:else}
-					<p class="text-muted py-12 text-center text-sm">
-						{m.participants_filter_no_results()}
-					</p>
+					<NoResults message={m.participants_filter_no_results()} onclear={clearFilters} />
 				{/if}
 			</section>
 

@@ -8,8 +8,21 @@
 	import { Search, X } from '@lucide/svelte';
 
 	type Props = {
-		totalCount: number;
-		visibleCount: number;
+		/**
+		 * The already-formatted "12 of 25 papers" line. Resolved by the caller
+		 * rather than assembled here: it is announced by a live region, and
+		 * "Showing 12 of 25" told a screen-reader user the count of nothing in
+		 * particular. Each surface knows its own noun, and French has to agree
+		 * with it.
+		 */
+		countLabel: string;
+		/**
+		 * False once the filters have emptied the list. The empty state below
+		 * carries its own "Clear filters", and two identical buttons for one
+		 * action, 300px apart, is the redundancy this pass exists to remove. The
+		 * reserved height on .filter-meta means dropping it costs no layout jump.
+		 */
+		hasResults?: boolean;
 		countries: CountryCode[];
 		searchPlaceholder: string;
 		/**
@@ -27,8 +40,8 @@
 	};
 
 	let {
-		totalCount,
-		visibleCount,
+		countLabel,
+		hasResults = true,
 		countries,
 		searchPlaceholder,
 		languageLabel = m.filter_language_label(),
@@ -95,9 +108,9 @@
 
 	<div class="filter-meta">
 		<span class="filter-count" role="status" aria-live="polite" aria-atomic="true">
-			{m.filter_count({ visible: visibleCount, total: totalCount })}
+			{countLabel}
 		</span>
-		{#if hasActiveFilter}
+		{#if hasActiveFilter && hasResults}
 			<button type="button" class="filter-reset" onclick={reset}>
 				<X size={14} strokeWidth={1.75} aria-hidden="true" />
 				{m.filter_clear()}
