@@ -21,6 +21,13 @@
         "files": ["src/lib/components/participants/AffiliationMap.svelte"],
         "createdAt": "2026-08-17T10:22:57.468Z",
         "reason": "Claude: sizes the MapLibre popup close-button glyph, not type"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "1.25rem",
+        "files": ["src/lib/components/venue/VenueMap.svelte"],
+        "createdAt": "2026-08-18T10:52:21.417Z",
+        "reason": "Claude: sizes the MapLibre popup close-button glyph, not type - same sanctioned exception already recorded for AffiliationMap.svelte"
       }
     ]
   }

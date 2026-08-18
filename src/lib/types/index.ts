@@ -168,6 +168,24 @@ export interface VenueInfo {
 	logisticsInfo: LocalizedString;
 }
 
+/**
+ * A guest house the workshop books for participants. Deliberately not a
+ * `VenueInfo`: there is no `fullName` or `logisticsInfo` to carry, and the
+ * venue page renders these beside the venue rather than in its place.
+ */
+export interface Accommodation {
+	id: string;
+	name: string;
+	/** Street line only, as with `VenueInfo.address`. */
+	address: string;
+	city: string;
+	postalCode: string;
+	country: CountryCode;
+	coordinates: { lat: number; lng: number };
+	description: LocalizedString;
+	website: string;
+}
+
 export interface Sponsor {
 	id: string;
 	name: string;

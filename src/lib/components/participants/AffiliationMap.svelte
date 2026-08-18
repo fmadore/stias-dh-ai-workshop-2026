@@ -13,6 +13,7 @@
 	import { countryName } from '$lib/utils/country';
 	import { localePath, t } from '$lib/utils/i18n';
 	import { getLocale } from '$lib/paraglide/runtime';
+	import { createLazyMap } from '$lib/utils/map';
 
 	type LocationView = AffiliationLocation & {
 		label: string;
@@ -145,88 +146,19 @@
 		});
 	}
 
-	onMount(() => {
-		let destroyed = false;
-		let started = false;
-		let themeObserver: MutationObserver | undefined;
-		let intersectionObserver: IntersectionObserver | undefined;
-		let loadTimer: number | undefined;
-		let resizeTimer: number | undefined;
-
-		function handleResize() {
-			if (!map) return;
-			if (resizeTimer) window.clearTimeout(resizeTimer);
-			resizeTimer = window.setTimeout(() => {
-				map?.resize();
-				if (mapReady && !selectedId) showAllLocations(false);
-			}, 150);
-		}
-
-		window.addEventListener('resize', handleResize);
-
-		async function initializeMap() {
-			if (started) return;
-			started = true;
-
-			try {
-				// The stylesheet rides the same lazy path as the renderer. Imported
-				// statically it was hoisted into the route stylesheet, where it was
-				// 83,143 of 89,906 bytes — 92.5% of a file that blocks the first
-				// paint of /participants for every visitor, including the ones who
-				// never scroll to the map and the ones whose browser never runs
-				// this function at all. Dynamic, it becomes its own asset that
-				// arrives with the renderer it styles.
-				const [maplibre, workerModule] = await Promise.all([
-					import('maplibre-gl'),
-					import('maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'),
-					import('maplibre-gl/dist/maplibre-gl.css')
-				]);
-				if (destroyed) return;
-
-				maplibre.setWorkerUrl(workerModule.default);
-				let dark = document.documentElement.classList.contains('dark');
-				const styleUrl = () =>
-					dark
-						? 'https://tiles.openfreemap.org/styles/dark'
-						: 'https://tiles.openfreemap.org/styles/positron';
-
-				map = new maplibre.Map({
-					container: mapHost,
-					style: styleUrl(),
-					center: [-10, 18],
-					zoom: 1.25,
-					minZoom: 0.5,
-					maxZoom: 12,
-					renderWorldCopies: false,
-					cooperativeGestures: true,
-					dragRotate: false,
-					locale: {
-						'AttributionControl.ToggleAttribution': m.map_attribution_toggle(),
-						'NavigationControl.ZoomIn': m.map_zoom_in(),
-						'NavigationControl.ZoomOut': m.map_zoom_out(),
-						'Popup.Close': m.map_popup_close(),
-						'CooperativeGesturesHandler.WindowsHelpText': m.map_gesture_windows(),
-						'CooperativeGesturesHandler.MacHelpText': m.map_gesture_mac(),
-						'CooperativeGesturesHandler.MobileHelpText': m.map_gesture_mobile()
-					}
-				});
-				map.setMissingStyleImageResolver((imageId) => {
-					if (imageId !== 'circle-11' || !map) return;
-
-					// OpenFreeMap's dark style references the legacy Maki name
-					// `circle-11`; its shared sprite contains the same icon as
-					// `circle_11_black`. Register an alias without replacing the
-					// externally maintained style or suppressing other image errors.
-					const fallback = map.getImage('circle_11_black');
-					if (!fallback || map.hasImage(imageId)) return;
-					map.addImage(imageId, fallback.data, {
-						pixelRatio: fallback.pixelRatio,
-						sdf: fallback.sdf
-					});
-				});
-				map.touchZoomRotate.disableRotation();
-				map.addControl(new maplibre.NavigationControl({ showCompass: false }), 'top-right');
-				map.addControl(new maplibre.ScaleControl({ maxWidth: 100, unit: 'metric' }), 'bottom-left');
+	onMount(() =>
+		createLazyMap({
+			container: mapHost,
+			popupCloseLabel: m.map_popup_close(),
+			options: {
+				center: [-10, 18],
+				zoom: 1.25,
+				minZoom: 0.5,
+				maxZoom: 12,
+				renderWorldCopies: false
+			},
+			setup(instance, maplibre) {
+				map = instance;
 
 				popup = new maplibre.Popup({
 					className: 'affiliation-popup',
@@ -260,65 +192,30 @@
 
 					const marker = new maplibre.Marker({ element: markerButton })
 						.setLngLat([location.coordinates.lng, location.coordinates.lat])
-						.addTo(map);
+						.addTo(instance);
 					markers.push({ id: location.id, marker });
 					bounds.extend([location.coordinates.lng, location.coordinates.lat]);
 				}
-
-				map.on('load', () => {
-					if (loadTimer) window.clearTimeout(loadTimer);
-					mapReady = true;
-					mapFailed = false;
-					showAllLocations(false);
-				});
-
-				loadTimer = window.setTimeout(() => {
-					if (!mapReady) mapFailed = true;
-				}, 15000);
-
-				themeObserver = new MutationObserver(() => {
-					const nextDark = document.documentElement.classList.contains('dark');
-					if (nextDark === dark) return;
-					dark = nextDark;
-					map?.setStyle(styleUrl());
-				});
-				themeObserver.observe(document.documentElement, {
-					attributes: true,
-					attributeFilter: ['class']
-				});
-			} catch {
+			},
+			onReady() {
+				mapReady = true;
+				mapFailed = false;
+				showAllLocations(false);
+			},
+			onFail() {
 				mapFailed = true;
+			},
+			onResize() {
+				if (!selectedId) showAllLocations(false);
+			},
+			teardown() {
+				popup?.remove();
+				for (const entry of markers) entry.marker.remove();
+				markers = [];
+				map = undefined;
 			}
-		}
-
-		if ('IntersectionObserver' in window) {
-			intersectionObserver = new IntersectionObserver(
-				(entries) => {
-					if (!entries.some((entry) => entry.isIntersecting)) return;
-					intersectionObserver?.disconnect();
-					void initializeMap();
-				},
-				{ rootMargin: '320px 0px' }
-			);
-			intersectionObserver.observe(mapHost);
-		} else {
-			void initializeMap();
-		}
-
-		return () => {
-			destroyed = true;
-			if (loadTimer) window.clearTimeout(loadTimer);
-			if (resizeTimer) window.clearTimeout(resizeTimer);
-			window.removeEventListener('resize', handleResize);
-			intersectionObserver?.disconnect();
-			themeObserver?.disconnect();
-			popup?.remove();
-			for (const entry of markers) entry.marker.remove();
-			markers = [];
-			map?.remove();
-			map = undefined;
-		};
-	});
+		})
+	);
 </script>
 
 <div class="mb-7 max-w-3xl">

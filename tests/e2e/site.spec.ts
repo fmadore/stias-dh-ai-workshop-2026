@@ -181,7 +181,46 @@ test('the map stylesheet stays off the critical path until the map is wanted', a
 		.toBe(1);
 });
 
-for (const route of ['/', '/fr', '/programme', '/participants', '/call-for-papers']) {
+test('the venue map places the venue and both guest houses', async ({ page }) => {
+	await page.goto(`${BASE}/venue`);
+
+	// The three addresses are static markup: the two cards below the map, and
+	// the chip row that drives it. They are the fallback when the renderer never
+	// arrives, so they must be there before anything is loaded.
+	await expect(page.getByRole('button', { name: 'Roosenwijn Guest House' })).toBeAttached();
+	await expect(page.getByRole('button', { name: 'De Haas Luxury Living' })).toBeAttached();
+	await expect(page.getByText('750 m from STIAS')).toBeVisible();
+
+	await page.locator('.venue-map').scrollIntoViewIfNeeded();
+	await expect(page.locator('.venue-marker')).toHaveCount(3, { timeout: 15_000 });
+	// The venue is the reference point the distances are measured from, and reads
+	// differently from the two guest houses.
+	await expect(page.locator('.venue-marker.is-venue')).toHaveCount(1);
+	await expect(page.locator('.venue-marker.is-stay')).toHaveCount(2);
+
+	await page.getByRole('button', { name: 'Show Roosenwijn Guest House on the map' }).click();
+	const popup = page.locator('.venue-popup');
+	await expect(popup.getByRole('heading', { name: 'Roosenwijn Guest House' })).toBeVisible();
+	await expect(popup.getByRole('link', { name: 'Visit website' })).toHaveAttribute(
+		'href',
+		'https://www.roosenwijn.co.za'
+	);
+});
+
+test('the venue map degrades without JavaScript', async ({ browser }) => {
+	const context = await browser.newContext({ javaScriptEnabled: false });
+	const page = await context.newPage();
+	await page.goto(`${BASE}/venue`);
+
+	// Same contract as the affiliation map: no spinner promising a map that
+	// cannot arrive, and every address still readable as text.
+	await expect(page.locator('.map-loading')).toBeHidden();
+	await expect(page.getByText('14 Van Riebeeck Street, 7600 Stellenbosch')).toBeVisible();
+	await expect(page.getByText('Die Laan 2, 7600 Stellenbosch')).toBeVisible();
+	await context.close();
+});
+
+for (const route of ['/', '/fr', '/programme', '/participants', '/call-for-papers', '/venue']) {
 	test(`accessibility: ${route} has no automated violations`, async ({ page }) => {
 		// Scan settled styles and exercise the site's reduced-motion alternative;
 		// otherwise axe can sample text midway through an opacity transition.
