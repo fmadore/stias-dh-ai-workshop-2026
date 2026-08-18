@@ -22,7 +22,9 @@
 	});
 </script>
 
-<section id="day-{day.date}" class="scroll-mt-28">
+<!-- scroll-mt derived, not guessed: scroll-padding-top clears the fixed
+     header, this clears the sticky day bar on top of it. -->
+<section id="day-{day.date}" class="scroll-mt-[var(--day-bar-height)]">
 	<div class="mb-5 flex flex-wrap items-center gap-3">
 		<!-- h2: days are the top-level sections under the page's h1 -->
 		<h2 class="text-section text-strong">{t(day.dayLabel)}</h2>

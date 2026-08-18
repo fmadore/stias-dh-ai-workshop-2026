@@ -51,6 +51,26 @@
 		}
 	}
 
+	/**
+	 * The boot script in app.html reads prefers-color-scheme once and never
+	 * again, so a visitor who flips their system theme while the page is open —
+	 * which is exactly what a scheduled light/dark switch does at dusk — sat on
+	 * the old one until a reload. Follow the OS only while no explicit choice is
+	 * stored: pressing the toggle writes `theme`, and that has to keep winning.
+	 */
+	$effect(() => {
+		const query = window.matchMedia('(prefers-color-scheme: dark)');
+
+		function applySystemPreference(event: MediaQueryListEvent) {
+			if (localStorage.getItem('theme')) return;
+			darkMode = event.matches;
+			document.documentElement.classList.toggle('dark', event.matches);
+		}
+
+		query.addEventListener('change', applySystemPreference);
+		return () => query.removeEventListener('change', applySystemPreference);
+	});
+
 	function isActive(href: string): boolean {
 		const pathname = page.url.pathname;
 		const pathWithoutBase = pathname.replace(base, '') || '/';

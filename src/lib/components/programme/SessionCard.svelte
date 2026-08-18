@@ -76,16 +76,17 @@
 
 {#if treatment === 'interlude'}
 	<!-- A break is a quiet dashed rule: no badge, no card, no serif. -->
-	<!-- scroll-mt-28 matches the session row below: without it a break anchor
-	     landed on the global scroll-padding-top (88px), which clears the header
-	     but not the programme's own sticky day bar — 41px behind it at 375px.
+	<!-- The same derived offset as the session row below: without it a break
+	     anchor landed on the global scroll-padding-top alone, which clears the
+	     header but not the programme's own sticky day bar — 41px behind it at
+	     375px. --day-bar-height is that bar's declared height.
 
 	     border-b, not border-y: the session above already draws a solid rule on
 	     its own bottom edge, so border-y stacked a dashed hairline directly on
 	     it at all ten session→break boundaries. -->
 	<div
 		id={anchor}
-		class="border-subtle interlude-row flex scroll-mt-28 items-baseline border-b border-dashed py-2.5 last:border-b-0"
+		class="border-subtle interlude-row flex scroll-mt-[var(--day-bar-height)] items-baseline border-b border-dashed py-2.5 last:border-b-0"
 	>
 		<span class="text-muted text-caption interlude-time flex-shrink-0 tabular-nums">
 			{times[0]}
@@ -97,7 +98,8 @@
 {:else}
 	<div
 		id={anchor}
-		class="border-subtle group scroll-mt-28 border-b py-5 last:border-b-0 {treatment === 'social'
+		class="border-subtle group scroll-mt-[var(--day-bar-height)] border-b py-5 last:border-b-0 {treatment ===
+		'social'
 			? 'opacity-90'
 			: ''}"
 	>

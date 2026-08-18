@@ -148,6 +148,17 @@ html {
 	   are tree-shaken unless a generated utility references them. */
 	--nav-height: 4.5rem;
 
+	/* The programme's sticky day bar, which sits *below* the fixed header and
+	   occludes anchors a second time. scroll-padding-top above already clears
+	   the header plus a 1rem gap; a day or session additionally carries this as
+	   scroll-margin-top, so the two offsets compose instead of being guessed at.
+	   It replaces a hard-coded scroll-mt-28 (112px) — the one offset the Anchor
+	   Clearance Rule did not cover, which drifted whenever the bar changed.
+	   Its value is the bar's real outer height: 0.5rem padding twice, a 2.75rem
+	   day pill, and the 1px bottom hairline. The bar consumes it as min-height
+	   so the number cannot quietly stop being true. */
+	--day-bar-height: 3.8125rem;
+
 	/* --- Surfaces --- */
 	--surface-page: var(--color-cream);
 	--surface-raised: var(--color-paper);
@@ -274,6 +285,13 @@ html {
 		background-color: var(--surface-page);
 		color: var(--ink-strong);
 		font-feature-settings: 'ss01', 'cv11';
+		/* A safety net, not a style: this only engages for a word that would
+		   otherwise overflow its box. Institution names, compound surnames and
+		   bare URLs are all content the site does not control, and a single
+		   unbreakable token was enough to push the page to 518px inside a 320px
+		   viewport. Normal prose is unaffected, so the measured line lengths from
+		   the typographic pass still hold. */
+		overflow-wrap: break-word;
 	}
 
 	h1,
