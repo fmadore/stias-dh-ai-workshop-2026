@@ -5,9 +5,9 @@
 	import { thematicAxes } from '$lib/data/thematic-axes';
 	import { contactEmails } from '$lib/data/contacts';
 	import { t } from '$lib/utils/i18n';
-	import { getKeyDates } from '$lib/utils/key-dates';
+	import { getMilestones } from '$lib/utils/milestones';
 	import * as m from '$lib/paraglide/messages';
-	import { Send, ExternalLink } from '@lucide/svelte';
+	import { Send, ExternalLink, Check } from '@lucide/svelte';
 	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
 
 	const JDHASA_NAME = 'Journal of the Digital Humanities Association of Southern Africa (JDHASA)';
@@ -23,7 +23,12 @@
 		};
 	});
 
-	const keyDates = $derived(getKeyDates());
+	// getMilestones, not getKeyDates: the same four dates render on the home
+	// page flagged past/next, and rendered here as a bare list with no state at
+	// all — on the one page whose whole subject is a deadline that has passed.
+	// The PDF and text exports build their own list in generate-cfp-downloads.ts
+	// and stay stateless, as a record of the call as published should.
+	const keyDates = $derived(getMilestones());
 </script>
 
 <div class="space-y-14">
@@ -195,16 +200,31 @@
 					aria-hidden="true"
 				></span>
 				<ol class="space-y-5">
-					{#each keyDates as dateItem}
+					{#each keyDates as dateItem (dateItem.id)}
 						<li class="flex items-start gap-5">
 							<span
 								class="bg-secondary-500 border-cream dark:border-deep relative z-10 mt-1.5 hidden h-[11px] w-[11px] flex-shrink-0 rounded-full border-2 sm:block"
 								aria-hidden="true"
 							></span>
-							<div class="card flex-1 p-5">
-								<p class="text-meta mb-1">{dateItem.label}</p>
+							<div class="card flex-1 p-5" class:is-past={dateItem.past}>
+								<div class="mb-1 flex flex-wrap items-center gap-x-2 gap-y-1">
+									<p class="text-meta">{dateItem.label}</p>
+									{#if dateItem.past}
+										<span class="text-meta inline-flex items-center gap-1">
+											<Check
+												size={12}
+												strokeWidth={2.5}
+												class="text-primary-600 dark:text-primary-300"
+												aria-hidden="true"
+											/>
+											{m.milestone_done()}
+										</span>
+									{:else if dateItem.next}
+										<span class="text-eyebrow">{m.milestone_next()}</span>
+									{/if}
+								</div>
 								<p class="text-strong font-sans text-lg font-medium">
-									{dateItem.value}
+									<time datetime={dateItem.datetime}>{dateItem.value}</time>
 								</p>
 							</div>
 						</li>
@@ -231,3 +251,11 @@
 		</ScrollReveal>
 	{/if}
 </div>
+
+<style>
+	/* Sunken rather than raised: a date that has passed is still on the record,
+	   it just is not what the reader is waiting for. */
+	.is-past {
+		background-color: var(--surface-sunken);
+	}
+</style>

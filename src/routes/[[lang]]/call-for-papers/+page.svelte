@@ -1,11 +1,21 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages';
 	import { siteConfig } from '$lib/data/site-config';
-	import { t } from '$lib/utils/i18n';
+	import { cfpInfo } from '$lib/data/cfp';
+	import { t, localePath } from '$lib/utils/i18n';
+	import { isCfpOpen } from '$lib/utils/milestones';
+	import { formatDate } from '$lib/utils/date';
+	import { Archive, ArrowRight } from '@lucide/svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import PageHeader from '$lib/components/layout/PageHeader.svelte';
 	import CFPSection from '$lib/components/cfp/CFPSection.svelte';
 	import DownloadCFPButton from '$lib/components/cfp/DownloadCFPButton.svelte';
+
+	// The call closed on 30 April 2026 and the page said so nowhere: it still
+	// opened "We invite proposals…" and listed four addresses to send them to.
+	// Derived, not asserted — the same rule the hero follows.
+	const closed = $derived(!isCfpOpen());
+	const closedOn = $derived(formatDate(cfpInfo.deadline));
 </script>
 
 <SEO title="{m.nav_cfp()} | {siteConfig.shortTitle}" description={m.seo_cfp_description()} />
@@ -26,6 +36,25 @@
 
 <div class="page-end pt-14">
 	<div class="container-readable">
+		{#if closed}
+			<div class="callout mb-12">
+				<Archive
+					size={18}
+					strokeWidth={1.75}
+					class="text-accent-ink mt-0.5 shrink-0"
+					aria-hidden="true"
+				/>
+				<div>
+					<p class="text-body measure-prose text-sm leading-relaxed">
+						{m.cfp_closed_notice({ date: closedOn })}
+					</p>
+					<a href={localePath('/papers')} class="link-arrow mt-2 inline-flex text-sm">
+						{m.cfp_closed_cta()}
+						<ArrowRight size={14} strokeWidth={1.75} aria-hidden="true" />
+					</a>
+				</div>
+			</div>
+		{/if}
 		<CFPSection />
 	</div>
 </div>
