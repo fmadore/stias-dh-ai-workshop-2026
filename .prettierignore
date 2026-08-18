@@ -18,3 +18,6 @@ project.inlang/
 .env
 .env.*
 !.env.example
+
+# Impeccable writes this locally; it is git-excluded, not source.
+.impeccable/hook.cache.json
