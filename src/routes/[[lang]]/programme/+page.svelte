@@ -64,7 +64,16 @@
 			class="bg-page/90 border-subtle sticky top-[var(--nav-height)] z-30 border-b backdrop-blur-md"
 			aria-label={m.programme_jump_to_day()}
 		>
-			<div class="container-page flex flex-wrap items-center gap-2 py-2">
+			<!-- flex-nowrap, not flex-wrap: --day-bar-height is a declared constant
+			     that days and sessions consume as scroll-margin-top, so the bar is
+			     only allowed one height. At 320px four day pills measured 290.7px
+			     (EN) and 293.6px (FR) against 288px of content, wrapped to a second
+			     row, and rendered 113px — leaving every day heading 36px *behind*
+			     the bar it was supposed to clear. A row that cannot wrap keeps the
+			     token true by construction; overflow-x is the escape valve if a
+			     fifth day or a longer locale ever exceeds the width, so it scrolls
+			     rather than silently lying about its height again. -->
+			<div class="container-page flex flex-nowrap items-center gap-2 overflow-x-auto py-2">
 				<span class="text-meta mr-1 hidden sm:inline">{m.programme_jump_to_day()}</span>
 				{#each days as entry (entry.day.date)}
 					<a href="#day-{entry.day.date}" class="day-pill" class:is-today={entry.isToday}>
@@ -134,10 +143,21 @@
 		border-radius: var(--radius-full);
 		padding: 0.35rem 0.85rem;
 		white-space: nowrap;
+		flex-shrink: 0;
 		transition:
 			background-color var(--duration-fast) var(--ease-standard),
 			color var(--duration-fast) var(--ease-standard),
 			border-color var(--duration-fast) var(--ease-standard);
+	}
+
+	/* Below 360px the four pills need 5.6px back to fit on their single row.
+	   Content-driven, not a device breakpoint: 359px is the width at which
+	   French — the wider of the two locales — stops fitting. The 2.75rem touch
+	   floor is untouched; only the horizontal padding gives. */
+	@media (max-width: 359px) {
+		.day-pill {
+			padding-inline: 0.55rem;
+		}
 	}
 
 	.day-pill:hover {
