@@ -175,6 +175,32 @@ _Verified good, not changed:_ no horizontal overflow at 320, 375, 640 or 1280px;
 
 **Deliberately not acted on:** open question 1 below (should `/programme` default to _today_ during the event?) is squarely an adapt question — a phone opened in a room on day 3 currently starts on Monday. It was left alone because auto-scrolling on load fights deep links, scroll restoration and the back button, and because the gold "today" pill and the "Happening now" badge already answer the wayfinding half of it. It wants a decision, not a default.
 
+### New findings from the optimize pass
+
+**Fixed in the `optimize` pass (18 August 2026)** — **P2-1**, **P2-9**, and the two font P3s. Measured against the production build.
+
+| Measurement                         | Before                     | After                       |
+| ----------------------------------- | -------------------------- | --------------------------- |
+| `/participants` route stylesheet    | 89,906 raw / 11,905 gzip   | **7,038 / 1,646**           |
+| `/participants` render-blocking CSS | 24.9 KiB gzip              | **14.9 KiB**                |
+| MapLibre CSS at first paint         | in `<head>`                | **its own lazy asset**      |
+| Instrument Serif on first paint     | fallback, then ~30% reflow | **preloaded (latin)**       |
+| Outfit 700                          | 20.5 KB for one rule       | **removed**                 |
+| CI CSS gate                         | sitewide total only        | **per-page 20 KiB ceiling** |
+
+**P2-1 was a lazy component with an eager stylesheet.** The renderer sat correctly behind an `IntersectionObserver`; the `import 'maplibre-gl/dist/maplibre-gl.css'` beside it did not, so Vite hoisted 83,143 of the route stylesheet's 89,906 bytes — 92.5% — into the `<head>` of `/participants`, where every visitor waited for it including those who never scroll to the map and those whose browser never runs the initialiser. Moving it into the same dynamic `Promise.all` makes it its own asset. **The load-order risk was checked rather than assumed:** our `.maplibregl-*` overrides now parse before MapLibre's own, and all of them are more specific (0,2,0 against 0,1,0). The single true tie — `.affiliation-popup .maplibregl-popup-tip` against `.maplibregl-popup-anchor-* .maplibregl-popup-tip` — is safe because no MapLibre rule sets `display` on the tip. Confirmed in the built site: 18 markers, the custom 8px control radius and the teal-tinted shadow all render unchanged.
+
+**The CI half of P2-1 needed a different number than the one that existed.** `check-bundle-size.mjs` already capped CSS sitewide at 45 KiB, and that total is blind to this defect by construction — moving bytes from a lazy asset into a render-blocking one does not change it. The gate now sums, per prerendered page, the gzip of the stylesheets its `<head>` blocks on, and caps the worst at 20 KiB. `/participants` is heaviest at 14.9 KiB; at 24.9 KiB it would have failed, so the ceiling would have caught P2-1 the day it landed. The href-to-asset mapping was verified to resolve on all 143 pages rather than silently summing zero — which is how a check like this fails quietly.
+
+**P2-9's fix is narrower than the finding proposed.** The backlog called for preloading both normal subsets (32.6 KB). Only the latin one is preloaded: latin-ext is a further 11.6 KB and just **18 of the 143 built pages** contain a character that needs it, mostly Yorùbá diacritics in paper titles. Preloading it sitewide would push an unused font at 87% of page loads — against the brief's low-bandwidth constraint — and earn a "preloaded but not used" warning on each. It still loads on demand.
+
+**`adapt participants` was assessed and found not to need work.** Measured on a Pixel 7 (412×839) against the build: markers 32×32 and map controls 40×40 (both clear SC 2.5.8's 24px, and neither is a new control the 2.75rem promise governs), the 18 affiliation buttons 378×69, `cooperativeGestures` active so the map cannot hijack page scroll on touch, and no horizontal overflow. This matches what the Phase 1 audit had already put on the Preserve list. The roadmap scoped `optimize` here to "only if the Phase 1 audit flags map bundle/interaction cost" — it flagged bundle cost, which is fixed, and not interaction cost. Nothing was changed for the sake of having changed something.
+
+**Still open, with a reason:**
+
+- **The uncapped tile requests to `tiles.openfreemap.org` stay uncapped.** It is the site's only external host and the requests are inherent to a real map; bounding them means self-hosting tiles, which is a hosting decision rather than a design one. A `preconnect` was considered and rejected on the same logic as latin-ext: it would open a third-party connection on every page for a resource only `/participants` uses, and only then if the visitor scrolls.
+- **P2-13** (cards align on the outer box only) and **P3-20** (the link affordance stops at the programme) remain routed to `polish`.
+
 ---
 
 ## P1 — Fix before the workshop
@@ -272,7 +298,7 @@ Eight of 33 participants have no photograph, a state PRODUCT.md explicitly calls
 
 ## P2 — Fix if the schedule allows
 
-- **P2-1 · MapLibre's stylesheet ships eagerly** **[converged: A + B + audit]**. `AffiliationMap.svelte:9` statically imports `maplibre-gl.css`, so Vite hoists it into the route stylesheet: 89,822 bytes raw / **11.8 KiB gzip render-blocking**, 99% of that file and 47% of the route's CSS. The JS is correctly lazy behind an `IntersectionObserver`. Total map cost is **382 KiB gzip** — about 2.6× the entire rest of the site's JavaScript — plus uncapped tile requests to `tiles.openfreemap.org`, the site's only external host. Move the CSS into the dynamic path and add a per-route CSS ceiling to `check-bundle-size.mjs`, which currently gates JS only. → `optimize`
+- ~~**P2-1 · MapLibre's stylesheet ships eagerly**~~ **[converged: A + B + audit]** — **closed in the `optimize` pass, 18 August 2026.** `AffiliationMap.svelte:9` statically imports `maplibre-gl.css`, so Vite hoists it into the route stylesheet: 89,822 bytes raw / **11.8 KiB gzip render-blocking**, 99% of that file and 47% of the route's CSS. The JS is correctly lazy behind an `IntersectionObserver`. Total map cost is **382 KiB gzip** — about 2.6× the entire rest of the site's JavaScript — plus uncapped tile requests to `tiles.openfreemap.org`, the site's only external host. Move the CSS into the dynamic path and add a per-route CSS ceiling to `check-bundle-size.mjs`, which currently gates JS only. → `optimize`
 - **P2-2 · The participants search misreports its own results** **[A, confirmed in source]**. `+page.svelte:32` filters only the `participants` array while the Organisers and Point Sud sections iterate their raw arrays unfiltered, and the counter reads `totalCount={participants.length}`. Searching "Madore" reports "Showing 1 of 33" while seven people remain visible — and the one "match" is Mohamadou Konaté, hit on the string "Madore (2021)" inside his abstract, while Frédérick Madore sits unfiltered above it. A count that contradicts the screen is a trust failure on a Read-mode surface. Scope the filter to the same unified `everyone` array the people registry already exposes. → `harden`
 - **P2-3 · The documented 2.75rem touch floor does not hold** **[converged: A + audit]**. Only `.btn-sm` declares `min-height`, so the _large_ buttons are shorter than the small ones: base `.btn` renders 39–41px (hero CTAs), `.day-pill` 33px, `.segment` 38px. All clear WCAG 2.5.8's 24px minimum, so this is a broken promise rather than a violation — on the two surfaces that matter most on a phone. → `layout`
 - ~~**P2-4 · Session permalink is invisible on touch and 12×12px**~~ **[converged: A + audit]** — **closed in the `adapt` pass, 18 August 2026.** `opacity-0` until `group-hover`, below the 24×24 minimum (SC 2.5.8), with adjacent targets 10px away, and 1.44:1 in dark mode (recorded here as 2.69:1, which was optimistic). Keyboard handling via `focus-visible:opacity-100` was genuinely good; touch and dark mode were the gaps. → `adapt`
