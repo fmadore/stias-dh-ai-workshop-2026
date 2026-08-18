@@ -6,10 +6,12 @@ export const venueInfo: VenueInfo = {
 		en: 'Stellenbosch Institute for Advanced Study',
 		fr: "Stellenbosch Institute for Advanced Study (Institut d'études avancées de Stellenbosch)"
 	},
-	// Street only. It is also schema.org streetAddress in event-schema.ts, and
-	// the page renders it beside `city` — which is how the venue printed
-	// "Stellenbosch, Stellenbosch, South Africa".
+	// Street only — the suburb is `district` and the town is `city`, because
+	// every renderer joins them differently and one of them once printed
+	// "Stellenbosch, Stellenbosch, South Africa". Use `venueStreet` below rather
+	// than reaching for these two separately.
 	address: '10 Marais Road',
+	district: 'Mostertsdrift',
 	city: 'Stellenbosch',
 	postalCode: '7600',
 	country: 'ZA',
@@ -29,3 +31,11 @@ export const venueInfo: VenueInfo = {
 		fr: "Le programme DFG Point Sud prendra en charge le transport, l'hébergement, les frais de visa, la restauration et le transport local pour tou·tes les participant·es sélectionné·es. Cependant, les vaccinations, l'assurance maladie et les repas pendant les jours de voyage vers et depuis Stellenbosch ne peuvent pas être couverts."
 	}
 };
+
+/**
+ * Street and suburb as one line: "10 Marais Road, Mostertsdrift". Three places
+ * need this exact pairing — the venue page, the map popup and schema.org's
+ * `streetAddress`, which has no field of its own for a suburb — and each joins
+ * what follows it differently.
+ */
+export const venueStreet = [venueInfo.address, venueInfo.district].filter(Boolean).join(', ');

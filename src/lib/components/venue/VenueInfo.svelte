@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { venueInfo } from '$lib/data/venue';
+	import { venueInfo, venueStreet } from '$lib/data/venue';
 	import { t } from '$lib/utils/i18n';
 	import * as m from '$lib/paraglide/messages';
 	import { ExternalLink } from '@lucide/svelte';
@@ -18,7 +18,7 @@
 			{t(venueInfo.description)}
 		</p>
 		<p class="text-muted text-sm">
-			{venueInfo.address}, {venueInfo.postalCode}
+			{venueStreet}, {venueInfo.postalCode}
 			{venueInfo.city}, {countryName(venueInfo.country, getLocale())}
 		</p>
 		<a

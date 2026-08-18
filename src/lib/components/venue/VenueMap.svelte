@@ -7,7 +7,7 @@
 		Popup as MapLibrePopup
 	} from 'maplibre-gl';
 	import * as m from '$lib/paraglide/messages';
-	import { venueInfo } from '$lib/data/venue';
+	import { venueInfo, venueStreet } from '$lib/data/venue';
 	import { accommodations } from '$lib/data/accommodation';
 	import { getLocale } from '$lib/paraglide/runtime';
 	import { createLazyMap } from '$lib/utils/map';
@@ -32,7 +32,7 @@
 			id: 'venue',
 			name: venueInfo.name,
 			role: m.venue_role_venue(),
-			address: `${venueInfo.address}, ${venueInfo.city}`,
+			address: `${venueStreet}, ${venueInfo.city}`,
 			coordinates: venueInfo.coordinates,
 			website: venueInfo.website,
 			isVenue: true

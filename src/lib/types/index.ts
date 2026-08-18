@@ -159,6 +159,13 @@ export interface VenueInfo {
 	name: string;
 	fullName: LocalizedString;
 	address: string;
+	/**
+	 * Suburb, between the street and the town. South African addresses carry one
+	 * and STIAS's is load-bearing: "Marais Road, Mostertsdrift" is what tells a
+	 * driver which end of a road that runs through two suburbs. schema.org has
+	 * no field for it, so `event-schema.ts` folds it into `streetAddress`.
+	 */
+	district?: string;
 	city: string;
 	postalCode: string;
 	country: CountryCode;

@@ -1,5 +1,5 @@
 import { siteConfig } from './site-config';
-import { venueInfo } from './venue';
+import { venueInfo, venueStreet } from './venue';
 import { organizers } from './organizers';
 import { sponsors } from './sponsors';
 import { t } from '$lib/utils/i18n';
@@ -27,7 +27,7 @@ export function buildEventSchema(ogImage: string): object {
 				name: `${venueInfo.name} — ${venueInfo.fullName.en}`,
 				address: {
 					'@type': 'PostalAddress',
-					streetAddress: venueInfo.address,
+					streetAddress: venueStreet,
 					addressLocality: venueInfo.city,
 					postalCode: venueInfo.postalCode,
 					addressCountry: 'ZA'
