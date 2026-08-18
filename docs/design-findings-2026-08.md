@@ -117,7 +117,7 @@ _Verified good, not changed:_ reduced motion genuinely surrenders — all three 
 
 Four regression guards were added to `tests/e2e/site.spec.ts` — the directory count, the switcher's `href`/`hreflang`, the French 404, and the no-JS directory — because each of these fails silently and none is visible to lint, `svelte-check` or the axe scan.
 
-**Still open:** P2-1 (`optimize`), P2-8 (the home hero), and the rest of P3. **P1 is clear, and every P2 routed to `harden` is closed.**
+**Still open:** P2-1 (`optimize`), P2-8 (the home hero), and the rest of P3. **P1 is clear, and every P2 routed to `harden` is closed.** (P2-4 has since closed too — see the adapt pass below.)
 
 ### New findings from the layout pass
 
@@ -145,6 +145,35 @@ Raised by the isolated typographic assessment, verified against font metrics and
 - **P3-14 · `.text-eyebrow` hard-codes `color: var(--accent-ink)`**, so it cannot be used on the dark hero or footer and gets rebuilt from raw utilities there instead. That is the structural reason two label roles had eight tracking values. An `-on-inverse` colour variant would let the role travel. → `colorize`
 - **P3-15 · `--font-mono` now has zero consumers.** The session times were the only real use and they are Outfit tabular-nums now; `.container-prose` (44rem) is likewise declared and documented with no consumers. Both join the dead-token list. → `distill`
 - **Open question · `.text-lede` stays at Outfit 300** while prose was moved to 400 for exactly the reason that applies to the lede too ("Outfit Light reads washed out on cream"), and the lede additionally sits in `--ink-subtle` with antialiasing thinning it. Left alone because DESIGN.md records the 300 as a deliberate choice — worth a decision rather than a silent flip.
+
+### New findings from the adapt pass
+
+**Fixed in the `adapt` pass (18 August 2026)** — **P2-4**, plus one defect the backlog had never measured because nobody had measured the programme at 320px.
+
+| Measurement                        | Before                      | After                     |
+| ---------------------------------- | --------------------------- | ------------------------- |
+| Day bar height @320px (FR)         | 113px, two rows             | **61px, one row = token** |
+| Day heading clearance @320px       | **−35.8px, behind the bar** | **+15.8px**               |
+| Session permalink target           | 12×12px                     | **24×24px**               |
+| Permalink at rest, touch           | `opacity: 0`                | **visible**               |
+| Permalink contrast, light          | 2.37:1                      | **3.26:1**                |
+| Permalink contrast, dark           | 1.44:1                      | **3.32:1**                |
+| Permalink x-positions, 20 sessions | 20 different                | **one rail at x=318**     |
+
+**The day bar wrap is the same class of failure the `harden` pass thought it had closed.** `--day-bar-height` was made derived rather than guessed, and it is consumed as `min-height` so the bar cannot render _shorter_ than the token. Nothing stopped it rendering _taller_: at 320px the four day pills measure 290.7px (EN) and 293.6px (FR) against 288px of content, wrapped, and the bar became 113px while every day and session still offset by 61px. Jumping to a day put its `<h2>` 35.8px behind the bar — the one thing you asked to see was the one thing occluded. `flex-nowrap` makes the height constant by construction rather than by declaration; `overflow-x` is the escape valve if a fifth day or a longer locale ever exceeds the width. Below 360px the pills give back 5.6px of horizontal padding, which is what lets four days fit without scrolling; the 2.75rem touch floor is untouched.
+
+**P2-4's dark-mode figure in this backlog was optimistic.** It was recorded as 2.69:1; measured on the dark card it is **1.44:1**. The first two attempts to measure it in this pass were also wrong — a contrast helper parsed the computed `oklab()` string as RGB and returned plausible nonsense in both directions. Every figure above was re-measured by compositing on a canvas and reading the pixel back, with a black-on-white sanity check returning 21:1 first.
+
+Two regression guards added, since neither defect is visible to lint, `svelte-check` or the axe scan: the bar's rendered height against its own token at 320px in French, and the permalink's size and resting opacity under touch emulation. Both were confirmed to fail against the previous build before being kept.
+
+_Verified good, not changed:_ no horizontal overflow at 320, 375, 640 or 1280px; the eyebrow row is still 18px after the permalink grew, so 20 sessions gained no height; session and day anchors both clear by 16px, matching the figure `harden` measured at 375px.
+
+**Raised, not fixed:**
+
+- **P2-15 · On a phone in landscape, 35.5% of the viewport is sticky chrome.** At 667×375 the fixed header (72px) and the sticky day bar (61px) leave 242px of reading area — about three lines of a session. Neither bar is wrong on its own and the page does not break; the cost is only visible when the two stack on a short viewport. Fixing it means deciding something about the _sitewide_ header (collapse on scroll-down, or shrink under `max-height`), which is outside a single surface's scope and should not be decided by the programme alone. → `adapt` (sitewide) or a header decision
+- **P3-21 · The online badge's `title` is unreachable on touch.** `title="Taking part online"` sits on a badge that already reads "ONLINE". The visible text carries the meaning, so nothing is lost — but the clarification exists only for pointer users, on the surface most read by touch. Either the visible label says it or the `title` goes. → `clarify` or `distill`
+
+**Deliberately not acted on:** open question 1 below (should `/programme` default to _today_ during the event?) is squarely an adapt question — a phone opened in a room on day 3 currently starts on Monday. It was left alone because auto-scrolling on load fights deep links, scroll restoration and the back button, and because the gold "today" pill and the "Happening now" badge already answer the wayfinding half of it. It wants a decision, not a default.
 
 ---
 
@@ -246,7 +275,7 @@ Eight of 33 participants have no photograph, a state PRODUCT.md explicitly calls
 - **P2-1 · MapLibre's stylesheet ships eagerly** **[converged: A + B + audit]**. `AffiliationMap.svelte:9` statically imports `maplibre-gl.css`, so Vite hoists it into the route stylesheet: 89,822 bytes raw / **11.8 KiB gzip render-blocking**, 99% of that file and 47% of the route's CSS. The JS is correctly lazy behind an `IntersectionObserver`. Total map cost is **382 KiB gzip** — about 2.6× the entire rest of the site's JavaScript — plus uncapped tile requests to `tiles.openfreemap.org`, the site's only external host. Move the CSS into the dynamic path and add a per-route CSS ceiling to `check-bundle-size.mjs`, which currently gates JS only. → `optimize`
 - **P2-2 · The participants search misreports its own results** **[A, confirmed in source]**. `+page.svelte:32` filters only the `participants` array while the Organisers and Point Sud sections iterate their raw arrays unfiltered, and the counter reads `totalCount={participants.length}`. Searching "Madore" reports "Showing 1 of 33" while seven people remain visible — and the one "match" is Mohamadou Konaté, hit on the string "Madore (2021)" inside his abstract, while Frédérick Madore sits unfiltered above it. A count that contradicts the screen is a trust failure on a Read-mode surface. Scope the filter to the same unified `everyone` array the people registry already exposes. → `harden`
 - **P2-3 · The documented 2.75rem touch floor does not hold** **[converged: A + audit]**. Only `.btn-sm` declares `min-height`, so the _large_ buttons are shorter than the small ones: base `.btn` renders 39–41px (hero CTAs), `.day-pill` 33px, `.segment` 38px. All clear WCAG 2.5.8's 24px minimum, so this is a broken promise rather than a violation — on the two surfaces that matter most on a phone. → `layout`
-- **P2-4 · Session permalink is invisible on touch and 12×12px** **[converged: A + audit]**. `opacity-0` until `group-hover`, below the 24×24 minimum (SC 2.5.8), with adjacent targets 10px away, and 2.69:1 in dark mode. Keyboard handling via `focus-visible:opacity-100` is genuinely good; touch and dark mode are the gaps. → `adapt`
+- ~~**P2-4 · Session permalink is invisible on touch and 12×12px**~~ **[converged: A + audit]** — **closed in the `adapt` pass, 18 August 2026.** `opacity-0` until `group-hover`, below the 24×24 minimum (SC 2.5.8), with adjacent targets 10px away, and 1.44:1 in dark mode (recorded here as 2.69:1, which was optimistic). Keyboard handling via `focus-visible:opacity-100` was genuinely good; touch and dark mode were the gaps. → `adapt`
 - **P2-5 · `.text-eyebrow` renders two different ways depending only on tag name** **[A]**. Unlayered base rules (`h1…h6 { font-family: var(--font-display) }`, `app.css:251`) beat `@layer components`, so the class renders correctly on a `<span>` but as **uppercase Instrument Serif at 11px with negative tracking** on an `<h2>` — the worst legibility combination available, and backwards, since uppercase needs positive tracking. Affects `Footer.svelte:50,70` and `WhatNext.svelte:82` on every page. Same cascade-layer root cause as P1-2 and P1-5. → `typeset`
 - **P2-6 · Language switching is JavaScript-only** **[audit]**. `LanguageSwitcher` uses `<button onclick>` setting `window.location.href`, though the destination is fully computable at render time. The only path between the English and French sites is inert without JS, cannot be middle-clicked, copied, or opened in a new tab. Render an `<a href>` with `hreflang`; full page navigation still happens. → `harden`
 - **P2-7 · Map popup opens with no announcement or focus management** **[audit]**. The keyboard path is otherwise sound — real buttons, `aria-pressed`, `role="region"`, live loading state. But selecting a location never announces who is there. Mirror the selection into the panel list rather than depending on the popup. → `harden`
