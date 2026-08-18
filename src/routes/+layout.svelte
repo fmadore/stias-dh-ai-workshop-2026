@@ -4,6 +4,20 @@
 	import { page } from '$app/state';
 	import * as m from '$lib/paraglide/messages';
 	import '../app.css';
+	// Preloaded, not merely imported. Instrument Serif has no metric-compatible
+	// fallback: its mean advance is 0.3366em against Georgia's 0.4384em, so with
+	// font-display: swap every heading on the site lays out ~30% wide on first
+	// paint and then reflows — the hero headline goes 3 lines to 4 and back. A
+	// size-adjust fallback would trade that width jump for an x-height jump
+	// (0.481 to 0.37), so the fix is to stop the round trip instead. Imported
+	// through Vite so the hashed, fingerprinted URLs stay correct.
+	//
+	// Latin only. The latin-ext subset is another 11.6 KB and just 18 of the 143
+	// built pages contain a character that needs it — mostly Yoruba diacritics in
+	// paper titles. Preloading it everywhere would push an unused font at 87% of
+	// page loads on a site whose brief puts low bandwidth first, and earn a
+	// "preloaded but not used" warning on each. It still loads on demand.
+	import instrumentSerifLatin from '@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2?url';
 	import Navbar from '$lib/components/layout/Navbar.svelte';
 	import Footer from '$lib/components/layout/Footer.svelte';
 	import WhatNext from '$lib/components/layout/WhatNext.svelte';
@@ -36,6 +50,16 @@
 		}
 	});
 </script>
+
+<svelte:head>
+	<link
+		rel="preload"
+		href={instrumentSerifLatin}
+		as="font"
+		type="font/woff2"
+		crossorigin="anonymous"
+	/>
+</svelte:head>
 
 <a class="skip-link" href="#main">{m.skip_to_content()}</a>
 

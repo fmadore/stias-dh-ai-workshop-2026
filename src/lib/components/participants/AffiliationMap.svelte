@@ -535,7 +535,11 @@
 		color: #fff;
 		font-family: var(--font-sans);
 		font-size: var(--text-caption);
-		font-weight: 700;
+		/* 600, not 700: this marker count was the only 700 in the codebase, and
+		   Outfit 700 ships 20.5 KB across two subsets to set a one- or two-digit
+		   number inside a 2rem circle. 600 is already loaded, is a documented
+		   weight in the type system, and is indistinguishable at this size. */
+		font-weight: 600;
 		line-height: 1;
 		transition:
 			background-color var(--duration-fast) var(--ease-standard),
