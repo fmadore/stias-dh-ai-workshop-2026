@@ -8,6 +8,13 @@ const budgets = {
 	maxJavaScriptGzip: 100 * 1024,
 	totalJavaScriptGzip: 300 * 1024,
 	totalCssGzip: 45 * 1024,
+	// Per-page render-blocking CSS. The sitewide total says nothing about how
+	// much of it any one visitor waits for: maplibre-gl.css was imported
+	// statically into a lazily-loaded component, so 83 KB of it rode the
+	// /participants route stylesheet into the <head> and the sitewide total
+	// never moved. This is the number that regressed, so this is the number to
+	// gate.
+	routeBlockingCssGzip: 20 * 1024,
 	// MapLibre is a deliberately lazy feature: keep its renderer and Web Worker
 	// out of the core-site budget, but give both their own regression ceilings.
 	mapLibreRendererGzip: 260 * 1024,
@@ -45,6 +52,25 @@ const coreJavaScript = javascript.filter(
 		file !== mapLibreRendererPath && !mapLibreWorkers.some((worker) => worker.file === file)
 );
 const total = (items) => items.reduce((sum, item) => sum + item.gzip, 0);
+const gzipByFile = new Map(sizes.map(({ file, gzip }) => [file, gzip]));
+
+// Every prerendered page, and the stylesheets its <head> makes the browser wait
+// for. adapter-static writes one HTML file per route, so this is the real set.
+const pages = (await walk(path.resolve('build'))).filter((file) => file.endsWith('.html'));
+const routeCss = await Promise.all(
+	pages.map(async (file) => {
+		const html = await readFile(file, 'utf8');
+		const hrefs = [...html.matchAll(/<link[^>]+rel="stylesheet"[^>]*>/g)]
+			.map((tag) => /href="([^"]+)"/.exec(tag[0])?.[1])
+			.filter(Boolean);
+		const gzip = hrefs.reduce((sum, href) => {
+			const asset = path.resolve('build', href.replace(/^\/[^/]+\//, ''));
+			return sum + (gzipByFile.get(asset) ?? 0);
+		}, 0);
+		return { page: path.relative(path.resolve('build'), file), gzip };
+	})
+);
+const heaviestRoute = routeCss.toSorted((a, b) => b.gzip - a.gzip)[0];
 const largest = coreJavaScript.toSorted((a, b) => b.gzip - a.gzip)[0];
 const failures = [];
 
@@ -54,6 +80,10 @@ if (total(coreJavaScript) > budgets.totalJavaScriptGzip)
 	failures.push(`core JS is ${(total(coreJavaScript) / 1024).toFixed(1)} KiB gzip`);
 if (total(css) > budgets.totalCssGzip)
 	failures.push(`all CSS is ${(total(css) / 1024).toFixed(1)} KiB gzip`);
+if (heaviestRoute.gzip > budgets.routeBlockingCssGzip)
+	failures.push(
+		`${heaviestRoute.page} blocks on ${(heaviestRoute.gzip / 1024).toFixed(1)} KiB gzip of CSS`
+	);
 if (!mapLibreRenderer) failures.push('MapLibre renderer chunk was not found in the Vite manifest');
 if (mapLibreRenderer && mapLibreRenderer.gzip > budgets.mapLibreRendererGzip)
 	failures.push(`MapLibre renderer is ${(mapLibreRenderer.gzip / 1024).toFixed(1)} KiB gzip`);
@@ -68,5 +98,5 @@ if (failures.length) {
 }
 
 console.log(
-	`bundle-size: OK (largest core JS ${(largest.gzip / 1024).toFixed(1)} KiB, core JS ${(total(coreJavaScript) / 1024).toFixed(1)} KiB, MapLibre ${((mapLibreRenderer?.gzip ?? 0) / 1024).toFixed(1)} KiB + worker ${(total(mapLibreWorkers) / 1024).toFixed(1)} KiB, CSS ${(total(css) / 1024).toFixed(1)} KiB gzip)`
+	`bundle-size: OK (largest core JS ${(largest.gzip / 1024).toFixed(1)} KiB, core JS ${(total(coreJavaScript) / 1024).toFixed(1)} KiB, MapLibre ${((mapLibreRenderer?.gzip ?? 0) / 1024).toFixed(1)} KiB + worker ${(total(mapLibreWorkers) / 1024).toFixed(1)} KiB, CSS ${(total(css) / 1024).toFixed(1)} KiB gzip, heaviest route ${(heaviestRoute.gzip / 1024).toFixed(1)} KiB blocking)`
 );
