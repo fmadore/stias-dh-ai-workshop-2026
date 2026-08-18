@@ -156,6 +156,31 @@ test('the session permalink is a real target on touch', async ({ browser }) => {
 	await context.close();
 });
 
+test('the map stylesheet stays off the critical path until the map is wanted', async ({ page }) => {
+	// Imported statically, maplibre-gl.css was hoisted into the route stylesheet:
+	// 83,143 of 89,906 bytes, render-blocking on /participants for every visitor
+	// including those who never scroll to the map. The renderer was already lazy;
+	// its stylesheet was not.
+	const sheets = () =>
+		page.evaluate(() =>
+			[...document.querySelectorAll('link[rel="stylesheet"]')].map(
+				(l) => (l as HTMLLinkElement).href
+			)
+		);
+
+	await page.goto(`${BASE}/participants`);
+	expect((await sheets()).filter((href) => href.includes('maplibre'))).toHaveLength(0);
+
+	// It must still arrive when the map does — the lazy path has to actually
+	// carry it, or the map renders unstyled.
+	await page.locator('.affiliation-map').scrollIntoViewIfNeeded();
+	await expect
+		.poll(async () => (await sheets()).filter((href) => href.includes('maplibre')).length, {
+			timeout: 15_000
+		})
+		.toBe(1);
+});
+
 for (const route of ['/', '/fr', '/programme', '/participants', '/call-for-papers']) {
 	test(`accessibility: ${route} has no automated violations`, async ({ page }) => {
 		// Scan settled styles and exercise the site's reduced-motion alternative;

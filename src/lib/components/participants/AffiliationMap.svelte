@@ -6,7 +6,6 @@
 		Marker as MapLibreMarker,
 		Popup as MapLibrePopup
 	} from 'maplibre-gl';
-	import 'maplibre-gl/dist/maplibre-gl.css';
 	import * as m from '$lib/paraglide/messages';
 	import { affiliationLocations } from '$lib/data/affiliations';
 	import { getPeople, type Person } from '$lib/data/people';
@@ -170,9 +169,17 @@
 			started = true;
 
 			try {
+				// The stylesheet rides the same lazy path as the renderer. Imported
+				// statically it was hoisted into the route stylesheet, where it was
+				// 83,143 of 89,906 bytes — 92.5% of a file that blocks the first
+				// paint of /participants for every visitor, including the ones who
+				// never scroll to the map and the ones whose browser never runs
+				// this function at all. Dynamic, it becomes its own asset that
+				// arrives with the renderer it styles.
 				const [maplibre, workerModule] = await Promise.all([
 					import('maplibre-gl'),
-					import('maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url')
+					import('maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'),
+					import('maplibre-gl/dist/maplibre-gl.css')
 				]);
 				if (destroyed) return;
 
