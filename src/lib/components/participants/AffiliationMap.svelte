@@ -45,6 +45,26 @@
 		return count === 1 ? m.affiliations_member_one() : m.affiliations_member_many({ count });
 	}
 
+	/**
+	 * Selecting a location moved the map and opened a popup, and announced
+	 * nothing — so the one control that answers "who works here" was silent to
+	 * anyone not looking at the pin. The popup is MapLibre's, drawn outside this
+	 * component's markup and dismissed on any map interaction, so the
+	 * announcement belongs to the panel instead, which is also where the
+	 * keyboard path already lives.
+	 */
+	const selectedLocation = $derived(
+		selectedId ? locations.find((entry) => entry.id === selectedId) : undefined
+	);
+
+	const selectionSummary = $derived(
+		selectedLocation
+			? `${selectedLocation.label}, ${selectedLocation.place} — ${memberCount(
+					selectedLocation.people.length
+				)}: ${selectedLocation.people.map((person) => person.name).join(', ')}`
+			: ''
+	);
+
 	function setSelectedMarker(id: string | null) {
 		selectedId = id;
 		for (const entry of markers) {
@@ -302,8 +322,11 @@
 <div class="affiliation-shell">
 	<div class="map-frame" role="region" aria-label={m.affiliations_map_label()}>
 		<div bind:this={mapHost} class="affiliation-map"></div>
+		<noscript>
+			<p class="map-state map-error">{m.affiliations_map_error()}</p>
+		</noscript>
 		{#if !mapReady && !mapFailed}
-			<div class="map-state" aria-live="polite">
+			<div class="map-state map-loading" aria-live="polite">
 				<span class="map-loader" aria-hidden="true"></span>
 				<span>{m.affiliations_map_loading()}</span>
 			</div>
@@ -329,6 +352,8 @@
 			</button>
 		</div>
 
+		<p class="sr-only" role="status" aria-live="polite" aria-atomic="true">{selectionSummary}</p>
+
 		<ol class="affiliation-list">
 			{#each locations as location (location.id)}
 				<li>
@@ -351,6 +376,14 @@
 <p class="text-muted measure-prose mt-3 text-sm leading-relaxed">{m.affiliations_note()}</p>
 
 <style>
+	/* The loading state is prerendered, so without JavaScript it is a spinner
+	   that spins forever under a promise nothing will keep. The <noscript>
+	   message above takes its place; the affiliation list beside it is static
+	   markup and works either way. */
+	:global(.no-js) .map-loading {
+		display: none;
+	}
+
 	.affiliation-shell {
 		display: grid;
 		grid-template-columns: minmax(0, 1fr);
