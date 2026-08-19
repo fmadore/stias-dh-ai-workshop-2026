@@ -22,6 +22,10 @@ export const accommodations: Accommodation[] = [
 	{
 		id: 'de-haas',
 		name: 'De Haas Luxury Living',
+		// De Haas runs three properties within a kilometre of each other — Die
+		// Laan 2, Die Laan 40 and Villa Grande. This is the confirmed one, not
+		// merely the address their homepage leads with; the pin and the distance
+		// below both follow from it, so do not "correct" it to another.
 		address: 'Die Laan 2',
 		city: 'Stellenbosch',
 		postalCode: '7600',
