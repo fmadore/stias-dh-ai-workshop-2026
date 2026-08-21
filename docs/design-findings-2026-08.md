@@ -203,6 +203,41 @@ _Verified good, not changed:_ no horizontal overflow at 320, 375, 640 or 1280px;
 
 ---
 
+### The quieter pass
+
+**Fixed in the `quieter` pass (21 August 2026)** — **P2-8**, the whole of it. Measured against the dev build at 1280, 375 and 320px, EN and FR, both themes:
+
+| Measurement                        | Before                                   | After                                 |
+| ---------------------------------- | ---------------------------------------- | ------------------------------------- |
+| Decorative layers on the hero      | 3 (3-stop diagonal, brass radial, grain) | **2** (one tonal wash, grain)         |
+| Hero gradient stops                | 3, on a diagonal                         | **2, top to bottom, adjacent steps**  |
+| Brass radial                       | 18% over 70% × 140%                      | **removed**                           |
+| Strip overlay                      | `bg-black/20` (pure black over teal)     | **none — the wash deepens into it**   |
+| Countdown numeral                  | 36px Instrument Serif, white             | **14px Outfit, in the strip's voice** |
+| …its label                         | tracked uppercase badge                  | **the same 14px sentence text**       |
+| Strip height, EN / FR @1280        | 73px                                     | **61px, one row in both**             |
+| Strip @320px, FR                   | 136px                                    | **98px, no overflow**                 |
+| Links in `<main>`                  | 4                                        | **7**                                 |
+| At-a-glance figures that are links | 0 of 3                                   | **3 of 3**                            |
+| …underline vs cream                | n/a (none drawn)                         | **3.20:1**                            |
+| …underline vs the dark page        | n/a                                      | **3.55:1**                            |
+| `#affiliations` anchor clearance   | n/a (no such id)                         | **+16px below the header**            |
+
+**The countdown did not need removing; it needed a smaller voice.** Its premise in this backlog — that it "will be stale from 1 September" — had already been closed by an earlier pass: it reads `nextMilestone()`, so on 1 September it stops counting to full papers and starts counting to the workshop. What was left was the _treatment_: a display-serif numeral over a tracked uppercase label is the hero-metric template, and it made the second-largest thing on the page a number addressed to twenty-five authors. Set in the strip's own 14px sans, third in the same `label · value · count` row the dates line already uses, it says the same fact and stops asking for the eye.
+
+**The gold radial went rather than shrank.** The hero already carries brass three ways — the italic serif deck, the strip's label, and `.btn-accent`, which is the page's one solid gold moment. A fourth as pure decoration is what the One Gold Moment Rule exists to prevent, and it was the only element on the surface with no informational job. Removing it also removes a rasterised paint layer, which the low-bandwidth constraint counts.
+
+**Format stays plain.** Three of the four at-a-glance figures now link; the fourth ("Hybrid workshop") does not, because no page on this site _is_ the hybrid format. A fourth link invented to even up the row would have been the row lying about itself.
+
+### New findings from the quieter pass
+
+- **P3-22 · The reduced-motion block enumerates selectors instead of covering transitions.** `@media (prefers-reduced-motion: reduce)` names `.card`, `.btn`, `.btn-ghost`, `.mobile-navigation` and `.link-arrow svg` one by one. Every transition added since has had to remember to register itself, and two have not: `.session-link` (the clarify pass) and now `.stat-link`. Both are colour-only, so nothing moves and nothing fails — but the mechanism is a list that has to be maintained by hand, which is how the cascade-layer trap kept recurring. → `animate`
+- **`--surface-inverse` and `--ink-on-inverse` are not dead by oversight.** The distill list has them as tokens with zero consumers, and the hero is the surface they are named for — but their dark values (`surface-950` and `surface-300`, near-chroma-free) would strip the teal out of the hero in dark mode and flatten it into the page behind it. They are unused because the only candidate consumer needs a different value, not because nobody got round to wiring them up. `distill` should delete them rather than adopt them. → `distill`
+- **P3-20 narrows.** The link affordance now reaches the home page's figures as well as the programme; what remains inconsistent is `PaperCard`'s title link and the paper page's `.author-link`, both inside cards that carry their own affordances. → `polish`
+- **Measurement note.** Computed styles read **stale** for one or more turns after a runtime theme toggle while the browser pane is not compositing: the class had flipped but `getComputedStyle` still returned the old theme's custom properties, which produced a 1.01:1 "contrast" for near-white ink on cream. Every figure above was taken after a **full page load** in the theme being measured, with the canvas sanity check returning 21:1 first — the same discipline the adapt pass adopted after its `oklab()` parsing error, for a different cause.
+
+---
+
 ## P1 — Fix before the workshop
 
 ### P1-1 · Focus ring fails WCAG 1.4.11 on every dark surface **[converged: A + audit]**
@@ -305,7 +340,7 @@ Eight of 33 participants have no photograph, a state PRODUCT.md explicitly calls
 - **P2-5 · `.text-eyebrow` renders two different ways depending only on tag name** **[A]**. Unlayered base rules (`h1…h6 { font-family: var(--font-display) }`, `app.css:251`) beat `@layer components`, so the class renders correctly on a `<span>` but as **uppercase Instrument Serif at 11px with negative tracking** on an `<h2>` — the worst legibility combination available, and backwards, since uppercase needs positive tracking. Affects `Footer.svelte:50,70` and `WhatNext.svelte:82` on every page. Same cascade-layer root cause as P1-2 and P1-5. → `typeset`
 - **P2-6 · Language switching is JavaScript-only** **[audit]**. `LanguageSwitcher` uses `<button onclick>` setting `window.location.href`, though the destination is fully computable at render time. The only path between the English and French sites is inert without JS, cannot be middle-clicked, copied, or opened in a new tab. Render an `<a href>` with `hreflang`; full page navigation still happens. → `harden`
 - **P2-7 · Map popup opens with no announcement or focus management** **[audit]**. The keyboard path is otherwise sound — real buttons, `aria-pressed`, `role="region"`, live loading state. But selecting a location never announces who is there. Mirror the selection into the panel list rather than depending on the popup. → `harden`
-- **P2-8 · The home hero is the one screen that could belong to any event** **[A]**. A three-stop teal gradient, a 36px "15 / DAYS REMAINING" countdown, and a four-up stat row — together, above the fold, this is the drift toward _conference-brand energy_ that DESIGN.md names outright. The countdown addresses only authors of accepted papers and will be stale from 1 September. Separately, the three most clickable-looking objects on the page ("25 Papers", "33 Participants", "16 Countries") are inert `<dd>` elements, and `<main>` contains only four links. → decide direction first (see Open questions)
+- ~~**P2-8 · The home hero is the one screen that could belong to any event**~~ **[A]** — **closed in the `quieter` pass, 21 August 2026.** A three-stop teal gradient, a 36px "15 / DAYS REMAINING" countdown, and a four-up stat row — together, above the fold, this is the drift toward _conference-brand energy_ that DESIGN.md names outright. The countdown addresses only authors of accepted papers and will be stale from 1 September. Separately, the three most clickable-looking objects on the page ("25 Papers", "33 Participants", "16 Countries") are inert `<dd>` elements, and `<main>` contains only four links. → decide direction first (see Open questions)
 
 ---
 
