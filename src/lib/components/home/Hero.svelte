@@ -43,15 +43,11 @@
      brand" reading DESIGN.md names; one is the reading room. The wash also
      deepens into the strip below, so that strip needs no overlay of its own. -->
 <section
-	class="from-primary-900 to-primary-950 grain focus-on-inverse relative overflow-hidden bg-gradient-to-b text-white"
+	class="from-primary-900 to-primary-950 grain on-inverse relative overflow-hidden bg-gradient-to-b text-white"
 >
 	<div class="container-wide relative z-10">
 		<div class="max-w-3xl pt-[clamp(4.5rem,10vw,8rem)] pb-[clamp(3rem,6vw,4.5rem)]">
-			<p
-				class="mb-6 text-xs font-medium tracking-[0.18em] text-[var(--color-primary-200)] uppercase"
-			>
-				{m.hero_subtitle()}
-			</p>
+			<p class="text-eyebrow mb-6">{m.hero_subtitle()}</p>
 
 			<h1 class="text-display mb-5 text-white">{headline}</h1>
 

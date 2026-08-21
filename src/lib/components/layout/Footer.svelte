@@ -32,7 +32,7 @@
 </script>
 
 <footer
-	class="bg-primary-900 dark:bg-surface-950 focus-on-inverse relative mt-auto overflow-hidden text-white"
+	class="bg-primary-900 dark:bg-surface-950 on-inverse relative mt-auto overflow-hidden text-white"
 >
 	<div class="grain absolute inset-0"></div>
 
@@ -90,11 +90,7 @@
 		</div>
 
 		<div class="border-primary-800/60 dark:border-surface-800 border-t pt-10">
-			<p
-				class="text-primary-200/70 mb-8 text-center font-sans text-xs font-medium tracking-[0.18em] uppercase"
-			>
-				{m.footer_supported_by()}
-			</p>
+			<p class="text-eyebrow mb-8 text-center">{m.footer_supported_by()}</p>
 			<div class="flex flex-wrap items-center justify-center gap-5 sm:gap-6">
 				{#each sponsors as sponsor (sponsor.id)}
 					<a

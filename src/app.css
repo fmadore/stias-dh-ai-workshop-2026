@@ -17,7 +17,6 @@
 	/* --- Typography --- */
 	--font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
 	--font-sans: 'Outfit', system-ui, -apple-system, sans-serif;
-	--font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
 	/* --- Type scale, small end. The named display steps live on the
 	       .text-* component classes below; these four name the sizes that
@@ -162,13 +161,11 @@ html {
 	--surface-page: var(--color-cream);
 	--surface-raised: var(--color-paper);
 	--surface-sunken: var(--color-cream-dark);
-	--surface-inverse: var(--color-primary-900);
 
 	/* --- Ink --- */
 	--ink-strong: var(--color-ink);
 	--ink-body: #3a3630; /* 400-weight body — lighter than ink, darker than ink-muted */
 	--ink-subtle: var(--color-ink-muted);
-	--ink-on-inverse: var(--color-primary-100);
 
 	/* --- Borders --- */
 	--border-subtle: color-mix(in oklab, var(--color-ink) 10%, transparent);
@@ -179,13 +176,21 @@ html {
 	--accent: var(--color-secondary-500); /* graphics only            */
 	--accent-ink: #7a5c15; /* the gold you may set text in — 5.5:1 on cream,
 	                          where secondary-600 is 3.7:1 and fails AA    */
+
+	/* The eyebrow's ink is a role of its own because the label has to work on
+	   paper *and* on the two surfaces that are dark in both themes. Hard-coded
+	   to brass, .text-eyebrow could not be used on the hero or the footer, so
+	   both rebuilt it from raw utilities instead — which is how one 0.18em
+	   label role ended up written three ways. Inherits --accent-ink, so it
+	   flips with the theme for free; .on-inverse overrides it. */
+	--eyebrow-ink: var(--accent-ink);
 	--link: var(--color-primary-600);
 	--link-hover: var(--color-primary-700);
 
 	/* The ring is drawn on whatever sits *behind* the control (outline-offset),
 	   so one fixed teal fails 1.4.11 wherever that surface is dark: 2.79:1 on the
 	   light-mode footer, 2.20:1 mid-hero. A role lets a container flip it by
-	   inheritance — see .focus-on-inverse. */
+	   inheritance — see .on-inverse. */
 	--focus-ring: var(--color-primary-500);
 
 	/* --- Fluid display steps, consumed by the .text-* classes below.
@@ -228,12 +233,10 @@ html {
 	--surface-page: var(--color-deep);
 	--surface-raised: #221f1b; /* opaque — translucency over .grain goes muddy */
 	--surface-sunken: var(--color-paper-dark);
-	--surface-inverse: var(--color-surface-950);
 
 	--ink-strong: var(--color-surface-50);
 	--ink-body: var(--color-surface-200);
 	--ink-subtle: var(--color-surface-400);
-	--ink-on-inverse: var(--color-surface-300);
 
 	--border-subtle: color-mix(in oklab, var(--color-surface-50) 12%, transparent);
 	--border-strong: color-mix(in oklab, var(--color-surface-50) 20%, transparent);
@@ -255,12 +258,10 @@ html {
 	--color-page: var(--surface-page);
 	--color-raised: var(--surface-raised);
 	--color-sunken: var(--surface-sunken);
-	--color-inverse: var(--surface-inverse);
 
 	--color-strong: var(--ink-strong);
 	--color-body: var(--ink-body);
 	--color-muted: var(--ink-subtle);
-	--color-on-inverse: var(--ink-on-inverse);
 
 	--color-subtle: var(--border-subtle);
 	--color-hairline: var(--border-strong);
@@ -349,11 +350,15 @@ button:not(:disabled),
 	border-radius: var(--radius-xs);
 }
 
-/* The hero and the footer are dark in BOTH themes, so neither the light nor the
-   dark ring clears 3:1 against them. Set the role once on the container and it
-   inherits to every control inside; primary-100 measures ~10:1 on primary-900. */
-.focus-on-inverse {
+/* The hero and the footer are dark in BOTH themes, so the light and dark values
+   of several ink roles are both wrong against them. Set the roles once on the
+   container and they inherit to everything inside: primary-100 measures ~10:1
+   on primary-900 for the ring, and the eyebrow's brass — chosen to clear AA on
+   cream — becomes pale teal, which is what the hero and footer were already
+   spelling out by hand. Named for the surface, not for one of its consequences. */
+.on-inverse {
 	--focus-ring: var(--color-primary-100);
+	--eyebrow-ink: var(--color-primary-200);
 }
 
 /* ============================================================
@@ -429,8 +434,9 @@ button:not(:disabled),
 		font-weight: 500;
 		letter-spacing: 0.18em;
 		text-transform: uppercase;
-		/* --accent-ink, not secondary-600: the latter is ~3.7:1 on cream */
-		color: var(--accent-ink);
+		/* --eyebrow-ink resolves to --accent-ink on paper (not secondary-600:
+		   the latter is ~3.7:1 on cream) and to pale teal inside .on-inverse */
+		color: var(--eyebrow-ink);
 	}
 
 	.text-meta {
@@ -553,8 +559,7 @@ button:not(:disabled),
 	/* --- Containers --- */
 	.container-page,
 	.container-wide,
-	.container-readable,
-	.container-prose {
+	.container-readable {
 		margin-inline: auto;
 		width: 100%;
 		padding-inline: 1rem;
@@ -568,14 +573,10 @@ button:not(:disabled),
 	.container-readable {
 		max-width: 56rem;
 	}
-	.container-prose {
-		max-width: 44rem;
-	}
 	@media (min-width: 640px) {
 		.container-page,
 		.container-wide,
-		.container-readable,
-		.container-prose {
+		.container-readable {
 			padding-inline: 1.5rem;
 		}
 	}
