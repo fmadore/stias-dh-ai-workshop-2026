@@ -84,8 +84,8 @@ export const programme: ProgrammeDay[] = [
 				time: '11:00 – 12:30',
 				type: 'panel',
 				title: {
-					en: 'Panel 1 · Centring African Knowledge Systems',
-					fr: 'Panel 1 · Centrer les systèmes de savoirs africains'
+					en: 'Centring African Knowledge Systems',
+					fr: 'Centrer les systèmes de savoirs africains'
 				},
 				description: {
 					en: 'These papers ground digital and AI methods in African epistemologies — reading folktales, Yorùbá thought and literary emotion as knowledge systems that reshape the very tools used to study them.',
@@ -121,8 +121,8 @@ export const programme: ProgrammeDay[] = [
 				time: '16:00 – 17:30',
 				type: 'panel',
 				title: {
-					en: 'Panel 2 · Decolonial Methods & Epistemic Justice',
-					fr: 'Panel 2 · Méthodes décoloniales et justice épistémique'
+					en: 'Decolonial Methods & Epistemic Justice',
+					fr: 'Méthodes décoloniales et justice épistémique'
 				},
 				description: {
 					en: 'From decolonial computing to the measurement of citation practices and the digital life of Ajami manuscripts, these contributions move decolonisation from critique to method and infrastructure.',
@@ -149,8 +149,8 @@ export const programme: ProgrammeDay[] = [
 				time: '09:00 – 10:30',
 				type: 'panel',
 				title: {
-					en: 'Panel 3 · Digital Archives, Metadata & Discovery',
-					fr: 'Panel 3 · Archives numériques, métadonnées et découvrabilité'
+					en: 'Digital Archives, Metadata & Discovery',
+					fr: 'Archives numériques, métadonnées et découvrabilité'
 				},
 				description: {
 					en: 'AI-assisted metadata, entity linking and protocol-based access converge on a shared problem: making African heritage collections findable, connected and usable across institutions.',
@@ -173,8 +173,8 @@ export const programme: ProgrammeDay[] = [
 				time: '11:00 – 12:30',
 				type: 'panel',
 				title: {
-					en: 'Panel 4 · Language AI: Translation & Learning',
-					fr: 'Panel 4 · IA des langues\u00a0: traduction et apprentissage'
+					en: 'Language AI: Translation & Learning',
+					fr: 'IA des langues\u00a0: traduction et apprentissage'
 				},
 				description: {
 					en: 'Scaling language technologies for African languages — from a framework for inclusive language AI to rule-based machine translation and multimodal computer-assisted learning under infrastructural constraint.',
@@ -223,8 +223,8 @@ export const programme: ProgrammeDay[] = [
 				time: '09:00 – 10:30',
 				type: 'panel',
 				title: {
-					en: 'Panel 5 · Documenting & Sustaining African Languages',
-					fr: 'Panel 5 · Documenter et pérenniser les langues africaines'
+					en: 'Documenting & Sustaining African Languages',
+					fr: 'Documenter et pérenniser les langues africaines'
 				},
 				description: {
 					en: 'FAIR data practices, generative AI for multilingual literacy and strategies for long-term sustainability: how African linguistic heritage is documented, taught and kept alive in the digital era.',
@@ -247,8 +247,8 @@ export const programme: ProgrammeDay[] = [
 				time: '11:00 – 12:30',
 				type: 'panel',
 				title: {
-					en: 'Panel 6 · Manuscripts, Histories & Computational Methods',
-					fr: 'Panel 6 · Manuscrits, histoires et méthodes computationnelles'
+					en: 'Manuscripts, Histories & Computational Methods',
+					fr: 'Manuscrits, histoires et méthodes computationnelles'
 				},
 				description: {
 					en: 'HTR for Ajami manuscripts, large language models reading historical codebooks and computational ethnography of Sahelian social media show what computation makes legible in African textual and social archives.',
@@ -311,8 +311,8 @@ export const programme: ProgrammeDay[] = [
 				time: '11:00 – 12:30',
 				type: 'panel',
 				title: {
-					en: 'Panel 7 · Sustainable Infrastructures & Frugal Innovation',
-					fr: 'Panel 7 · Infrastructures durables et innovation frugale'
+					en: 'Sustainable Infrastructures & Frugal Innovation',
+					fr: 'Infrastructures durables et innovation frugale'
 				},
 				description: {
 					en: 'Frugal infrastructures, South–South ecologies, community co-production and the limits of generic AI in African settings: what it takes to build research capacity that lasts.',

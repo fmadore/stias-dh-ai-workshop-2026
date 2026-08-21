@@ -68,7 +68,10 @@
 	panel with both on-site and online authors stays unambiguous.
 -->
 {#snippet onlineBadge()}
-	<span class="online-badge" title={m.session_online_title()}>
+	<!-- No `title`: it read "Taking part online" against a badge that already
+	     says ONLINE, so the clarification existed for pointer users only, on the
+	     surface most read by touch. The visible label carries the meaning. -->
+	<span class="online-badge">
 		<Video size={11} strokeWidth={2.25} aria-hidden="true" />
 		{m.session_online()}
 	</span>
