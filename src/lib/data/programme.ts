@@ -4,7 +4,7 @@ import type { ProgrammeDay } from '$lib/types';
  * Date the programme was last revised (ISO `yyyy-mm-dd`). Bump this whenever you
  * change the sessions below — it is shown as "Last updated" on the page.
  */
-export const programmeLastUpdated = '2026-08-13';
+export const programmeLastUpdated = '2026-08-21';
 
 /**
  * Workshop programme — STIAS, Stellenbosch, 21–24 September 2026.
@@ -203,7 +203,7 @@ export const programme: ProgrammeDay[] = [
 				id: 'd2-visit-a',
 				time: '15:00 – 19:00',
 				type: 'social',
-				title: { en: 'Visit A', fr: 'Visite A' },
+				title: { en: 'Excursion', fr: 'Excursion' },
 				description: { en: 'Destination to be confirmed.', fr: 'Destination à confirmer.' }
 			},
 			{
@@ -270,8 +270,13 @@ export const programme: ProgrammeDay[] = [
 				id: 'd3-visit-b',
 				time: '14:00 – 18:00',
 				type: 'social',
-				title: { en: 'Visit B', fr: 'Visite B' },
-				description: { en: 'Destination to be confirmed.', fr: 'Destination à confirmer.' }
+				title: { en: 'Data centre visit', fr: "Visite d'un centre de données" },
+				description: {
+					en: "Guided visit to Teraco's Cape Town campus, a vendor-neutral colocation data centre hosting the NAPAfrica internet exchange point.",
+					fr: "Visite guidée du campus Teraco au Cap, un centre de données de colocation neutre vis-à-vis des opérateurs qui héberge le point d'échange internet NAPAfrica."
+				},
+				venue: 'Teraco Cape Town',
+				venueUrl: 'https://www.teraco.co.za/data-centre-locations/cape-town/'
 			},
 			{
 				id: 'd3-evening',
