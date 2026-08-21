@@ -600,6 +600,25 @@ button:not(:disabled),
 		padding-block-end: var(--space-section);
 	}
 
+	/* …and now every page begins the same way too. --space-block (3.5rem) was
+	   declared for the interval between a page's own blocks and had no consumer
+	   at all, while pt-14, pt-12, mt-14, mt-12, mt-10, mb-16, mb-10 and
+	   space-y-14 did its job by hand: four different numbers for one
+	   relationship, with 56px already the most common of them. The token was
+	   right; nothing was reading it.
+
+	   .page-body is padding rather than margin so it cannot collapse into the
+	   banded header above it. .block-flow puts the rhythm on the container the
+	   way .prose owns paragraph rhythm — so a section rendered behind an {#if}
+	   cannot forget its own gap, and the last one before an unconditional
+	   sibling cannot leave a doubled one behind. */
+	.page-body {
+		padding-block-start: var(--space-block);
+	}
+	.block-flow > * + * {
+		margin-block-start: var(--space-block);
+	}
+
 	/* --- Typography helpers shared by cards --- */
 	.text-bio {
 		font-size: var(--text-ui);

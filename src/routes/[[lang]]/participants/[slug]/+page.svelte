@@ -78,7 +78,7 @@
 	meta={[countryName(person.country, getLocale())]}
 />
 
-<div class="page-end pt-12">
+<div class="page-end page-body">
 	<div class="container-readable">
 		<div class="mb-8">
 			<a href={localePath('/participants')} class="link-arrow text-sm">
@@ -87,57 +87,62 @@
 			</a>
 		</div>
 
-		<div class="flex flex-col gap-8 sm:flex-row sm:items-start">
-			<div class="flex flex-shrink-0 flex-col items-center gap-4 sm:items-start">
-				<Avatar name={person.name} image={person.image} loading="eager" />
-				<PersonLinks website={person.website} orcid={person.orcid} />
+		<div class="block-flow">
+			<div class="flex flex-col gap-8 sm:flex-row sm:items-start">
+				<div class="flex flex-shrink-0 flex-col items-center gap-4 sm:items-start">
+					<Avatar name={person.name} image={person.image} loading="eager" />
+					<PersonLinks website={person.website} orcid={person.orcid} />
+				</div>
+
+				<div class="min-w-0 flex-1">
+					{#if data.role}
+						<p class="text-eyebrow mb-4">{t(data.role)}</p>
+					{/if}
+					{#if bio}
+						<p class="text-prose" lang={bioLang}>{bio}</p>
+					{/if}
+				</div>
 			</div>
 
-			<div class="min-w-0 flex-1">
-				{#if data.role}
-					<p class="text-eyebrow mb-4">{t(data.role)}</p>
-				{/if}
-				{#if bio}
-					<p class="text-prose" lang={bioLang}>{bio}</p>
-				{/if}
-			</div>
-		</div>
-
-		{#if presentationItems.length > 0}
-			<section class="mt-14">
-				<h2 class="text-eyebrow mb-5">
-					{presentationItems.length === 1
-						? m.participant_papers_label()
-						: m.participant_papers_label_plural()}
-				</h2>
-				<ul class="space-y-4">
-					{#each presentationItems as item (item.presentation.id)}
-						{@const presentation = item.presentation}
-						{@const placement = item.placement}
-						<li>
-							<a href={localePath(`/papers/${presentation.id}`)} class="card card-hover block p-5">
-								{#if placement}
-									<span class="text-meta mb-2 block">
-										{placementLabel(placement)}
-									</span>
-								{/if}
-								<span class="text-card-title text-strong block" lang={presentation.language}>
-									{presentation.title}
-								</span>
-							</a>
-							{#if placement}
+			{#if presentationItems.length > 0}
+				<section>
+					<h2 class="text-eyebrow mb-5">
+						{presentationItems.length === 1
+							? m.participant_papers_label()
+							: m.participant_papers_label_plural()}
+					</h2>
+					<ul class="space-y-4">
+						{#each presentationItems as item (item.presentation.id)}
+							{@const presentation = item.presentation}
+							{@const placement = item.placement}
+							<li>
 								<a
-									href="{localePath('/programme')}#session-{placement.sessionId}"
-									class="link-arrow mt-2 inline-flex text-sm"
+									href={localePath(`/papers/${presentation.id}`)}
+									class="card card-hover block p-5"
 								>
-									{m.paper_in_programme()}
-									<ArrowRight size={14} strokeWidth={1.75} aria-hidden="true" />
+									{#if placement}
+										<span class="text-meta mb-2 block">
+											{placementLabel(placement)}
+										</span>
+									{/if}
+									<span class="text-card-title text-strong block" lang={presentation.language}>
+										{presentation.title}
+									</span>
 								</a>
-							{/if}
-						</li>
-					{/each}
-				</ul>
-			</section>
-		{/if}
+								{#if placement}
+									<a
+										href="{localePath('/programme')}#session-{placement.sessionId}"
+										class="link-arrow mt-2 inline-flex text-sm"
+									>
+										{m.paper_in_programme()}
+										<ArrowRight size={14} strokeWidth={1.75} aria-hidden="true" />
+									</a>
+								{/if}
+							</li>
+						{/each}
+					</ul>
+				</section>
+			{/if}
+		</div>
 	</div>
 </div>

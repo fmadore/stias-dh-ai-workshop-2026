@@ -43,7 +43,7 @@
 	]}
 />
 
-<div class="page-end pt-14">
+<div class="page-end page-body">
 	<div class="container-page">
 		{#if sorted.length > 0}
 			<div class="mb-8">

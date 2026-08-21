@@ -67,11 +67,11 @@
 	]}
 />
 
-<div class="page-end pt-14">
+<div class="page-end page-body">
 	<div class="container-page">
 		<!-- The controls lead, because they now govern all three sections rather
 		     than the last one. -->
-		<div class="mb-10">
+		<div class="mb-8">
 			<FilterBar
 				countLabel={m.filter_count_people({ visible: shownCount, total: everyone.length })}
 				hasResults={shownCount > 0}
@@ -92,56 +92,58 @@
 			</FilterBar>
 		</div>
 
-		{#if shownCount === 0}
-			<NoResults message={m.participants_filter_no_results()} onclear={clearFilters} />
-		{:else}
-			<!-- The convenors keep the editorial two-column card: four people whose
+		<div class="block-flow">
+			{#if shownCount === 0}
+				<NoResults message={m.participants_filter_no_results()} onclear={clearFilters} />
+			{:else}
+				<!-- The convenors keep the editorial two-column card: four people whose
 			     only distinction used to be one teal role line on an identical card. -->
-			{#if shownOrganizers.length > 0}
-				<section class="mb-16">
-					<h2 class="text-section text-strong mb-8">
-						{m.section_organisers()}
-					</h2>
-					<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-						{#each shownOrganizers as organizer (organizer.id)}
-							<OrganizerCard {organizer} />
-						{/each}
-					</div>
-				</section>
+				{#if shownOrganizers.length > 0}
+					<section>
+						<h2 class="text-section text-strong mb-8">
+							{m.section_organisers()}
+						</h2>
+						<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+							{#each shownOrganizers as organizer (organizer.id)}
+								<OrganizerCard {organizer} />
+							{/each}
+						</div>
+					</section>
+				{/if}
+
+				{#if shownPointSud.length > 0}
+					<section>
+						<h2 class="text-section text-strong mb-2">
+							{m.section_point_sud()}
+						</h2>
+						<p class="text-muted mb-8 text-sm">
+							{m.section_point_sud_note()}
+						</p>
+						<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+							{#each shownPointSud as person (person.id)}
+								<PointSudCard {person} />
+							{/each}
+						</div>
+					</section>
+				{/if}
+
+				{#if shownParticipants.length > 0}
+					<section>
+						<h2 class="text-section text-strong mb-8">
+							{m.section_participants()}
+						</h2>
+						<ParticipantGrid participants={shownParticipants} {grouping} />
+					</section>
+				{/if}
 			{/if}
 
-			{#if shownPointSud.length > 0}
-				<section class="mb-16">
-					<h2 class="text-section text-strong mb-2">
-						{m.section_point_sud()}
-					</h2>
-					<p class="text-muted mb-8 text-sm">
-						{m.section_point_sud_note()}
-					</p>
-					<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-						{#each shownPointSud as person (person.id)}
-							<PointSudCard {person} />
-						{/each}
-					</div>
-				</section>
-			{/if}
-
-			{#if shownParticipants.length > 0}
-				<section class="mb-16">
-					<h2 class="text-section text-strong mb-8">
-						{m.section_participants()}
-					</h2>
-					<ParticipantGrid participants={shownParticipants} {grouping} />
-				</section>
-			{/if}
-		{/if}
-
-		<!-- Outside the filter: the map is a statement about every affiliation the
+			<!-- Outside the filter: the map is a statement about every affiliation the
 		     workshop brings together, and it carries its own selection control.
 		     The id is the landing point for the home page's countries figure —
 		     a number whose evidence is this map, not the grid above it. -->
-		<section id="affiliations">
-			<AffiliationMap />
-		</section>
+			<section id="affiliations">
+				<AffiliationMap />
+			</section>
+		</div>
 	</div>
 </div>

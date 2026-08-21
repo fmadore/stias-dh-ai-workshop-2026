@@ -83,8 +83,8 @@
 			</div>
 		</nav>
 
-		<div class="container-page pt-10">
-			<div class="callout mb-10">
+		<div class="container-page block-flow pt-10">
+			<div class="callout">
 				<Info
 					size={18}
 					strokeWidth={1.75}
@@ -101,14 +101,14 @@
 				</div>
 			</div>
 
-			<div class="space-y-12">
+			<div class="block-flow">
 				{#each days as entry (entry.day.date)}
 					<ScheduleDay day={entry.day} panelOffset={entry.panelOffset} isToday={entry.isToday} />
 				{/each}
 			</div>
 		</div>
 	{:else}
-		<div class="container-readable pt-14">
+		<div class="container-readable page-body">
 			<div class="card p-14 text-center">
 				<Calendar
 					size={44}

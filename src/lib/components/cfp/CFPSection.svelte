@@ -31,7 +31,7 @@
 	const keyDates = $derived(getMilestones());
 </script>
 
-<div class="space-y-14">
+<div class="block-flow">
 	<!-- Rationale -->
 	<ScrollReveal>
 		<section>

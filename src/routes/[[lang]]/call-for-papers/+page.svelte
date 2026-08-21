@@ -34,10 +34,10 @@
 	{/snippet}
 </PageHeader>
 
-<div class="page-end pt-14">
-	<div class="container-readable">
+<div class="page-end page-body">
+	<div class="container-readable block-flow">
 		{#if closed}
-			<div class="callout mb-12">
+			<div class="callout">
 				<Archive
 					size={18}
 					strokeWidth={1.75}

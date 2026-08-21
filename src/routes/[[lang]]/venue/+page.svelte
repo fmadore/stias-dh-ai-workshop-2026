@@ -18,7 +18,7 @@
 	meta={[m.hero_dates(), m.hero_location()]}
 />
 
-<div class="page-end pt-14">
+<div class="page-end page-body block-flow">
 	<div class="container-readable">
 		<ScrollReveal>
 			<VenueInfo />
@@ -27,7 +27,7 @@
 
 	<!-- Wider than the prose above it: the map carries three pins roughly a
 	     kilometre apart, and at 56rem the guest houses crowd the venue. -->
-	<div class="container-wide mt-16">
+	<div class="container-wide">
 		<ScrollReveal delay={1}>
 			<section>
 				<div class="measure-prose mb-7">

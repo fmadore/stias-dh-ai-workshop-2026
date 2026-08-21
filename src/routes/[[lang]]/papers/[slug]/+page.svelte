@@ -63,7 +63,7 @@
 		: [presentation.language === 'fr' ? 'FR' : 'EN']}
 />
 
-<div class="page-end pt-12">
+<div class="page-end page-body">
 	<div class="container-readable">
 		<div class="mb-8 flex flex-wrap items-center justify-between gap-3">
 			<span class="language-badge" lang={presentation.language}>
@@ -75,76 +75,78 @@
 			</a>
 		</div>
 
-		{#if authors.length > 0}
-			<section class="mb-10">
-				<h2 class="text-eyebrow mb-4">{m.paper_presented_by()}</h2>
-				<ul class="authors">
-					{#each authors as author (author.id)}
-						<li class="author">
-							<!-- Author names are links now: every person has a citable page. -->
-							<a href={localePath(`/participants/${author.id}`)} class="author-link">
-								<span class="font-display text-strong block text-lg">{author.name}</span>
-								<span class="text-muted block text-sm">{t(author.affiliation)}</span>
-							</a>
-						</li>
-					{/each}
-				</ul>
-			</section>
-		{/if}
+		<div class="block-flow">
+			{#if authors.length > 0}
+				<section>
+					<h2 class="text-eyebrow mb-4">{m.paper_presented_by()}</h2>
+					<ul class="authors">
+						{#each authors as author (author.id)}
+							<li class="author">
+								<!-- Author names are links now: every person has a citable page. -->
+								<a href={localePath(`/participants/${author.id}`)} class="author-link">
+									<span class="font-display text-strong block text-lg">{author.name}</span>
+									<span class="text-muted block text-sm">{t(author.affiliation)}</span>
+								</a>
+							</li>
+						{/each}
+					</ul>
+				</section>
+			{/if}
 
-		{#if data.abstractHtml}
-			<article class="prose" lang={presentation.language}>
-				<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-				{@html data.abstractHtml}
-			</article>
-		{/if}
+			{#if data.abstractHtml}
+				<article class="prose" lang={presentation.language}>
+					<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+					{@html data.abstractHtml}
+				</article>
+			{/if}
 
-		{#if placement}
-			<section class="mt-12">
-				<a
-					href="{localePath('/programme')}#{sessionAnchor(placement.session.id)}"
-					class="callout hover:border-accent block no-underline"
-					style="transition: border-color var(--duration-base) var(--ease-standard);"
-				>
-					<CalendarClock
-						size={18}
-						strokeWidth={1.75}
-						class="text-accent-ink mt-0.5"
-						aria-hidden="true"
-					/>
-					<span class="min-w-0">
-						<span class="text-eyebrow mb-1 block">{m.paper_in_programme()}</span>
-						<span class="text-strong block font-medium">
-							{placement.sessionLabel} · {placement.slotLabel}
+			{#if placement}
+				<section>
+					<a
+						href="{localePath('/programme')}#{sessionAnchor(placement.session.id)}"
+						class="callout hover:border-accent block no-underline"
+						style="transition: border-color var(--duration-base) var(--ease-standard);"
+					>
+						<CalendarClock
+							size={18}
+							strokeWidth={1.75}
+							class="text-accent-ink mt-0.5"
+							aria-hidden="true"
+						/>
+						<span class="min-w-0">
+							<span class="text-eyebrow mb-1 block">{m.paper_in_programme()}</span>
+							<span class="text-strong block font-medium">
+								{placement.sessionLabel} · {placement.slotLabel}
+							</span>
+							<span class="link-arrow mt-2 inline-flex text-sm">
+								{m.paper_view_session()}
+								<ArrowRight size={14} strokeWidth={1.75} aria-hidden="true" />
+							</span>
 						</span>
-						<span class="link-arrow mt-2 inline-flex text-sm">
-							{m.paper_view_session()}
-							<ArrowRight size={14} strokeWidth={1.75} aria-hidden="true" />
-						</span>
-					</span>
-				</a>
-			</section>
-		{/if}
+					</a>
+				</section>
+			{/if}
 
-		{#if siblings.length > 0}
-			<section class="mt-10">
-				<h2 class="text-eyebrow mb-4">{m.paper_same_session()}</h2>
-				<ul class="space-y-3">
-					{#each siblings as sibling (sibling.id)}
-						<li>
-							<a href={localePath(`/papers/${sibling.id}`)} class="card card-hover block p-4">
-								<span
-									class="text-strong block text-sm leading-snug font-medium"
-									lang={sibling.language}
-								>
-									{sibling.title}
-								</span>
-							</a>
-						</li>
-					{/each}
-				</ul>
-			</section>
-		{/if}
+			{#if siblings.length > 0}
+				<section>
+					<h2 class="text-eyebrow mb-4">{m.paper_same_session()}</h2>
+					<ul class="space-y-3">
+						{#each siblings as sibling (sibling.id)}
+							<li>
+								<a href={localePath(`/papers/${sibling.id}`)} class="card card-hover block p-4">
+									<span
+										class="text-strong block text-sm leading-snug font-medium"
+										lang={sibling.language}
+									>
+										{sibling.title}
+									</span>
+								</a>
+							</li>
+						{/each}
+					</ul>
+				</section>
+			{/if}
+		</div>
 	</div>
 </div>
 
