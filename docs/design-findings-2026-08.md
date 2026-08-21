@@ -123,8 +123,8 @@ Four regression guards were added to `tests/e2e/site.spec.ts` — the directory 
 
 Raised by the isolated layout assessment, verified in the browser where noted. Deliberately **not** fixed in this pass — each needs its own bounded verification.
 
-- **P2-10 · Section rhythm runs on seven ad-hoc values while two of the four documented tokens are dead.** `--space-block` (3.5rem) has zero consumers anywhere; `--space-stack` has one, inside `app.css` itself. Meanwhile 20/28/32/40/48/56/64px do the work across ~40 call sites, and section-to-section is a different number on every route (64px participants, 56px CFP, 48px programme, 64–96px about/home). Each page is internally consistent; the pages disagree with each other. → `layout` (second pass)
-- **P2-11 · The header-to-content interval is 40 / 48 / 56 / 64–96px across eight routes**, none of them a token — `PageHeader` sets `pt-14 pb-10` and then each route declares its own `pt-*`. One token consumed by `PageHeader` itself would end it. → `layout` (second pass)
+- ~~**P2-10 · Section rhythm runs on seven ad-hoc values while two of the four documented tokens are dead.**~~ **closed in the second `layout` pass, 21 August 2026.** `--space-block` (3.5rem) has zero consumers anywhere; `--space-stack` has one, inside `app.css` itself. Meanwhile 20/28/32/40/48/56/64px do the work across ~40 call sites, and section-to-section is a different number on every route (64px participants, 56px CFP, 48px programme, 64–96px about/home). Each page is internally consistent; the pages disagree with each other. → `layout` (second pass)
+- ~~**P2-11 · The header-to-content interval is 40 / 48 / 56 / 64–96px across eight routes**~~ **closed in the second `layout` pass, 21 August 2026.** Was:, none of them a token — `PageHeader` sets `pt-14 pb-10` and then each route declares its own `pt-*`. One token consumed by `PageHeader` itself would end it. → `layout` (second pass)
 - **P2-12 · Five distinct card-grid gaps and three breakpoint ladders** for equivalent card sizes: papers 24px @md, participants 16px @sm/lg, organisers and Point Sud 24px @lg, WhatNext 16px @sm/lg, key dates 1px. The two person grids on the same page switch at `lg` while the grid below them switches at `sm`. → `layout` (second pass)
 - **P2-13 · Cards align on the outer box only.** With paper titles running 46–184 characters, the meta row, the brass paper rule and the placement eyebrow land at a different y in every card of a row; excerpt tops can differ by three title lines (~75px). `grid-template-rows` on the card, or `mt-auto` on the last block, would give a row one shared baseline. → `polish`
 - **P3-16 · `scroll-mt-28` is a hard-coded 112px** on sessions and days, not derived from `--nav-height` plus the day-bar. It works — every anchor type was measured clearing by 67px — but it is the one offset the Anchor Clearance Rule does not cover, and it drifts whenever the bar changes. → `harden`
@@ -228,6 +228,34 @@ _Verified good, not changed:_ no horizontal overflow at 320, 375, 640 or 1280px;
 **The gold radial went rather than shrank.** The hero already carries brass three ways — the italic serif deck, the strip's label, and `.btn-accent`, which is the page's one solid gold moment. A fourth as pure decoration is what the One Gold Moment Rule exists to prevent, and it was the only element on the surface with no informational job. Removing it also removes a rasterised paint layer, which the low-bandwidth constraint counts.
 
 **Format stays plain.** Three of the four at-a-glance figures now link; the fourth ("Hybrid workshop") does not, because no page on this site _is_ the hybrid format. A fourth link invented to even up the row would have been the row lying about itself.
+
+### The second layout pass
+
+**Fixed in the second `layout` pass (21 August 2026)** — **P2-10** and **P2-11**, the pair the roadmap said to take together. Measured in the browser, EN and FR, with no horizontal overflow anywhere:
+
+| Measurement                           | Before                 | After                                    |
+| ------------------------------------- | ---------------------- | ---------------------------------------- |
+| Header-to-content interval            | 40 / 48 / 56 / 64–96px | **56px wherever it means that**          |
+| Subsection-to-subsection              | 40 / 48 / 56 / 64px    | **56px**                                 |
+| Programme day → day                   | 48px                   | **56px**                                 |
+| Filter bar → results, papers / people | 32px / 40px            | **32px / 32px**                          |
+| `--space-block` consumers             | 0                      | **15** (7 `.page-body`, 8 `.block-flow`) |
+
+**The fix was not a new value — it was reading the one the site had already converged on.** `--space-block` is 3.5rem, and 56px was the most common of the four numbers doing its work by hand: `pt-14` on five wrappers, `space-y-14` inside the call for papers, `mt-14` on the participant page. The other three (40, 48, 64) were drift around it, not decisions.
+
+Two classes consume the token. `.page-body` is the header-to-content inset, **padding rather than margin** so it cannot collapse into the banded header above it. `.block-flow` puts the rhythm on the container the way `.prose` owns paragraph rhythm — which the participants directory and the paper page actually needed rather than preferred: with three sections behind `{#if}` and an unconditional map after them, a margin on each child either forgets a gap or doubles one depending on which sections render.
+
+**Three intervals were deliberately left out, because one value repeated everywhere is the monotony this pass exists to avoid.** Chrome that belongs to what follows it stays tight at 32px — the filter bar, the back link, the paper page's badge row. The programme's 40px sits below its sticky day bar rather than below the header, so it is a different relationship. And `/about` opens with a banded `section-pad` section, whose padding is a band's own inset and not a gap at all.
+
+**Closed in passing:** `/papers` and `/participants` spelled the same FilterBar-to-results relationship `mb-8` and `mb-10`. Same component, same job, two numbers; both are 32px now.
+
+**Still open, and still `layout`:** **P2-12** (five card-grid gaps and three breakpoint ladders) and **P3-13** (the `--text-*` steps carry no paired line-height, so `text-caption` inherits a different leading at every call site). Neither is a rhythm question, and P3-13 changes rendering at every consumer, so it wants its own bounded pass.
+
+### New findings from the second layout pass
+
+- **P3-24 · `PageHeader`'s own band inset is `pt-14 pb-10`.** The top half is 56px — `--space-block`'s value again, arrived at independently, now the only place that number is still written as a utility. It is a band's internal padding rather than an interval between blocks, so it is a different role and was left alone; but if a fourth rhythm token is ever named, this is its consumer. → `polish`
+
+---
 
 ### The colorize + distill pass
 
