@@ -229,6 +229,39 @@ _Verified good, not changed:_ no horizontal overflow at 320, 375, 640 or 1280px;
 
 **Format stays plain.** Three of the four at-a-glance figures now link; the fourth ("Hybrid workshop") does not, because no page on this site _is_ the hybrid format. A fourth link invented to even up the row would have been the row lying about itself.
 
+### The colorize + distill pass
+
+**Fixed in the `colorize` + `distill` pass (21 August 2026)** — **P3-14**, **P3-17** (in part), **P3-18**, **P3-21**, the four dead tokens, and the last of `colorize`'s reinstated list. Measured after a full load in each theme:
+
+| Measurement                             | Before               | After                            |
+| --------------------------------------- | -------------------- | -------------------------------- |
+| Label roles hand-rebuilt on inverse     | 2 (hero, footer)     | **0 — both use `.text-eyebrow`** |
+| Hero eyebrow vs the wash                | 8.54:1 (raw utility) | **8.54:1 (role)**                |
+| Footer eyebrow, light / dark            | 70% alpha, unstated  | **8.54:1 / 10.25:1**             |
+| Eyebrow on paper, dark                  | brass                | **unchanged, 8.77:1**            |
+| Declared tokens with zero consumers     | 4                    | **0**                            |
+| Panel titles duplicating their number   | 7 of 7               | **0 of 7**                       |
+| …panels wrapping to 2 lines @375px      | 2 EN / 3 FR          | **0 / 0**                        |
+| Page height saved @375px, EN / FR       | —                    | **41px / 61px**                  |
+| `title` attributes unreachable on touch | 1                    | **0**                            |
+
+**`colorize` is now finished, and one of its three items closed itself.** The language-switcher separator recorded at 1.74:1 no longer exists: the switcher was rewritten as a single anchor — "one control, not two" — so the separator was deleted rather than recoloured. What was left was P3-14, and its fix is the role the finding predicted. `--eyebrow-ink` inherits `--accent-ink`, so the theme flip is free and there is one declaration rather than two; `.focus-on-inverse` became `.on-inverse`, because a container that flips two roles should be named for the surface rather than for the first thing that followed from it.
+
+**Two of the four dead tokens were dead for a reason, and one was dead because the system got better.** `--surface-inverse` / `--ink-on-inverse` name the surface the hero is, but their dark values are near-chroma-free and would have flattened the hero into the page behind it — so they were deleted rather than adopted. `.container-prose` is dead because the `typeset` pass moved the measure onto `.text-prose` itself, which caps 30em regardless of its container; a 44rem wrapper caps nothing the role does not.
+
+**P3-18's measurement was wrong, and P3-17's premise does not survive inspection.**
+
+- The duplicated panel number was recorded as costing "a line on all seven panels at 375px". Measured by putting the prefix back into the DOM and taking it out again: **2 of 7 in English and 3 of 7 in French**, worth 41px and 61px of page height. The duplication was still worth removing — numbering held in prose renumbers by hand while the eyebrow renumbers itself — but the figure was overstated.
+- P3-17's "four bespoke `max-width` values on page wrappers" is three, and none of the three is a page wrapper: the hero's `max-w-3xl` and the map intro's are content columns _inside_ `container-wide`, the home thematic header's `max-w-xl` caps a centred section intro, and the fourth was a comment about MapLibre's popup width rather than a wrapper at all. The Four Containers Rule governs page wrappers; these cap content inside one. Left alone, deliberately — tokenising a column with one consumer is the thing this pass spent its time deleting.
+
+### New findings from the colorize + distill pass
+
+- **P3-23 · The footer's column headings are a third label variant.** `text-badge` size with `.text-meta`'s weight and tracking, in `secondary-300` — neither of the two declared label roles, and now the only label on an inverse surface still built from raw utilities. It was left alone because converting it would change its size (11 → 12px) and its colour, which is a design decision rather than a cleanup. → `typeset` (second pass) or `polish`
+- **P3-12 gains a confirmed measurement.** The programme's session heading renders at **17px Instrument Serif** in a 309px column at 375px — one of the thirteen undeclared display-serif sizes the typeset pass recorded, now measured rather than inferred. → `typeset` (second pass)
+- **A guard from the previous pass was itself a defect.** The at-a-glance test clicked through to `/participants` and evaluated immediately, so it read the old document on a loaded machine and passed on a fast one. Fixed by awaiting the destination. Worth recording because a guard that passes intermittently is worse than no guard: it makes the suite stop meaning what it says.
+
+---
+
 ### New findings from the quieter pass
 
 - **P3-22 · The reduced-motion block enumerates selectors instead of covering transitions.** `@media (prefers-reduced-motion: reduce)` names `.card`, `.btn`, `.btn-ghost`, `.mobile-navigation` and `.link-arrow svg` one by one. Every transition added since has had to remember to register itself, and two have not: `.session-link` (the clarify pass) and now `.stat-link`. Both are colour-only, so nothing moves and nothing fails — but the mechanism is a list that has to be maintained by hand, which is how the cascade-layer trap kept recurring. → `animate`
@@ -346,7 +379,7 @@ Eight of 33 participants have no photograph, a state PRODUCT.md explicitly calls
 
 ## P3 — Polish
 
-Skip-link motion not neutralised under `prefers-reduced-motion` (`animate`) · dead `--surface-inverse` / `--ink-on-inverse` tokens with zero consumers (`distill`) · no `rel="preload"` for any woff2, so fonts wait a round trip on high-latency connections (`optimize`) · Outfit 700 ships 20.5 KB for a single map marker rule (`optimize`) · 10px type on the programme below the documented 11px floor (`typeset`) · language-switcher separator at 1.74:1 with its dark variant moving the wrong way (`colorize`) · nine identical "Chair: To be determined" where one line in the existing callout would do (`distill`) · two solid-brass elements on the programme during the event, against a documented one-gold-moment rule (`quieter`) · the venue address prints "Stellenbosch, Stellenbosch" (`polish`) · theme does not respond to a live OS theme change (`harden`) · segmented control uses `aria-pressed` toggles where `radiogroup` would convey exclusivity and collapse six tab stops to one (`clarify`).
+Skip-link motion not neutralised under `prefers-reduced-motion` (`animate`) · ~~dead `--surface-inverse` / `--ink-on-inverse` tokens with zero consumers~~ **closed in `distill`, 21 August 2026** · no `rel="preload"` for any woff2, so fonts wait a round trip on high-latency connections (`optimize`) · Outfit 700 ships 20.5 KB for a single map marker rule (`optimize`) · 10px type on the programme below the documented 11px floor (`typeset`) · ~~language-switcher separator at 1.74:1~~ **closed — the separator no longer exists, the switcher is one anchor** · nine identical "Chair: To be determined" where one line in the existing callout would do (`distill`) · two solid-brass elements on the programme during the event, against a documented one-gold-moment rule (`quieter`) · the venue address prints "Stellenbosch, Stellenbosch" (`polish`) · theme does not respond to a live OS theme change (`harden`) · segmented control uses `aria-pressed` toggles where `radiogroup` would convey exclusivity and collapse six tab stops to one (`clarify`).
 
 ---
 
