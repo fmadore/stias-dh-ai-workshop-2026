@@ -137,8 +137,10 @@
 		{/if}
 
 		<!-- Outside the filter: the map is a statement about every affiliation the
-		     workshop brings together, and it carries its own selection control. -->
-		<section>
+		     workshop brings together, and it carries its own selection control.
+		     The id is the landing point for the home page's countries figure —
+		     a number whose evidence is this map, not the grid above it. -->
+		<section id="affiliations">
 			<AffiliationMap />
 		</section>
 	</div>

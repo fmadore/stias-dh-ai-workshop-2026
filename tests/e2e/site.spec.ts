@@ -220,6 +220,29 @@ test('the venue map degrades without JavaScript', async ({ browser }) => {
 	await context.close();
 });
 
+test('the at-a-glance figures lead to what they count', async ({ page }) => {
+	// The three most clickable-looking objects on the home page were inert <dd>
+	// elements. Nothing else sees this: lint and svelte-check have no opinion on
+	// a number that should be a link, axe does not flag text for not being one,
+	// and check-links drops the fragment, so a missing #affiliations id would
+	// leave the countries figure pointing at the top of a page 15 screens long.
+	await page.goto(`${BASE}/`);
+	const figures = page.locator('main dl a');
+	await expect(figures).toHaveCount(3);
+	await expect(figures.nth(0)).toHaveAttribute('href', `${BASE}/papers`);
+	await expect(figures.nth(1)).toHaveAttribute('href', `${BASE}/participants`);
+	await expect(figures.nth(2)).toHaveAttribute('href', `${BASE}/participants#affiliations`);
+
+	await figures.nth(2).click();
+	const clearance = await page.evaluate(() => {
+		const target = document.getElementById('affiliations');
+		if (!target) throw new Error('no #affiliations section to land on');
+		const header = document.querySelector('header')!;
+		return target.getBoundingClientRect().top - header.getBoundingClientRect().bottom;
+	});
+	expect(clearance).toBeGreaterThan(0);
+});
+
 for (const route of ['/', '/fr', '/programme', '/participants', '/call-for-papers', '/venue']) {
 	test(`accessibility: ${route} has no automated violations`, async ({ page }) => {
 		// Scan settled styles and exercise the site's reduced-motion alternative;

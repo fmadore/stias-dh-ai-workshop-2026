@@ -3,14 +3,28 @@
 	import { participants } from '$lib/data/participants';
 	import { presentations } from '$lib/data/presentations';
 	import { uniquePaperCountries } from '$lib/utils/filter';
+	import { localePath } from '$lib/utils/i18n';
 	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
 
 	// Replaces Key Information, which restated the hero's dates and location.
 	// Every number here already exists in the data.
+	//
+	// Each count now goes where the thing it counts actually is: these were the
+	// three most clickable-looking objects on the page and the only inert ones.
+	// "Format" stays plain — there is no page that is the hybrid format, and a
+	// link invented to even up a row is worse than a row that is uneven.
 	const stats = $derived([
-		{ value: String(presentations.length), label: m.glance_papers() },
-		{ value: String(participants.length), label: m.glance_participants() },
-		{ value: String(uniquePaperCountries(presentations).length), label: m.glance_countries() },
+		{ value: String(presentations.length), label: m.glance_papers(), href: localePath('/papers') },
+		{
+			value: String(participants.length),
+			label: m.glance_participants(),
+			href: localePath('/participants')
+		},
+		{
+			value: String(uniquePaperCountries(presentations).length),
+			label: m.glance_countries(),
+			href: `${localePath('/participants')}#affiliations`
+		},
 		{ value: m.format_value(), label: m.glance_format(), text: true }
 	]);
 </script>
@@ -32,7 +46,11 @@
 								? 'text-2xl sm:text-3xl'
 								: 'text-4xl tabular-nums sm:text-5xl'}"
 						>
-							{stat.value}
+							{#if stat.href}
+								<a href={stat.href} class="stat-link">{stat.value}</a>
+							{:else}
+								{stat.value}
+							{/if}
 						</dd>
 					</div>
 				{/each}
@@ -40,3 +58,33 @@
 		</ScrollReveal>
 	</div>
 </section>
+
+<style>
+	/* The same resting affordance the programme carries: a faint teal underline
+	   at a generous offset, going solid on hover and focus. The mixes are the
+	   ones measured there — 65% light, 60% dark — because below that a resting
+	   cue does not clear 3:1 and is not a cue. Thickness steps up with the type:
+	   a 1px rule under a 48px serif numeral reads as a hairline artefact. */
+	.stat-link {
+		color: inherit;
+		text-decoration: underline;
+		text-decoration-color: color-mix(in oklab, var(--color-primary-600) 65%, transparent);
+		text-decoration-thickness: 2px;
+		text-underline-offset: 0.16em;
+		transition:
+			color var(--duration-fast) var(--ease-standard),
+			text-decoration-color var(--duration-fast) var(--ease-standard);
+	}
+	:global(.dark) .stat-link {
+		text-decoration-color: color-mix(in oklab, var(--color-primary-300) 60%, transparent);
+	}
+	.stat-link:hover,
+	.stat-link:focus-visible {
+		color: var(--color-primary-700);
+		text-decoration-color: currentColor;
+	}
+	:global(.dark) .stat-link:hover,
+	:global(.dark) .stat-link:focus-visible {
+		color: var(--color-primary-300);
+	}
+</style>
