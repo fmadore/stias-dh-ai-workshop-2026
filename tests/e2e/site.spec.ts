@@ -233,7 +233,12 @@ test('the at-a-glance figures lead to what they count', async ({ page }) => {
 	await expect(figures.nth(1)).toHaveAttribute('href', `${BASE}/participants`);
 	await expect(figures.nth(2)).toHaveAttribute('href', `${BASE}/participants#affiliations`);
 
+	// Wait for the destination document, not just the click: without this the
+	// evaluate below can run against the home page still being torn down, which
+	// fails as "no #affiliations" on a slow machine and passes on a fast one.
 	await figures.nth(2).click();
+	await page.waitForURL(/\/participants#affiliations$/);
+	await expect(page.locator('#affiliations')).toBeVisible();
 	const clearance = await page.evaluate(() => {
 		const target = document.getElementById('affiliations');
 		if (!target) throw new Error('no #affiliations section to land on');
