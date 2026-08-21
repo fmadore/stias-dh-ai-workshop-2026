@@ -37,19 +37,14 @@
 	);
 </script>
 
+<!-- One tonal wash, top to bottom, between two adjacent steps of the same teal
+     — where there were three stops on a diagonal plus a brass radial at 18%
+     plus grain. Three decorative layers on one surface is the "conference
+     brand" reading DESIGN.md names; one is the reading room. The wash also
+     deepens into the strip below, so that strip needs no overlay of its own. -->
 <section
-	class="from-primary-900 via-primary-800 to-primary-950 grain focus-on-inverse relative overflow-hidden bg-gradient-to-br text-white"
+	class="from-primary-900 to-primary-950 grain focus-on-inverse relative overflow-hidden bg-gradient-to-b text-white"
 >
-	<!-- Texture comes from the .grain class above; a second inline feTurbulence
-	     layer only stacked more noise for another rasterised filter pass. -->
-
-	<!-- Single soft radial accent -->
-	<div
-		class="pointer-events-none absolute -top-1/3 -right-1/4 h-[140%] w-[70%] rounded-full opacity-[0.18]"
-		style="background: radial-gradient(closest-side, var(--color-secondary-500), transparent 70%);"
-		aria-hidden="true"
-	></div>
-
 	<div class="container-wide relative z-10">
 		<div class="max-w-3xl pt-[clamp(4.5rem,10vw,8rem)] pb-[clamp(3rem,6vw,4.5rem)]">
 			<p
@@ -89,30 +84,29 @@
 		</div>
 	</div>
 
-	<!-- Deadline strip: the countdown moved out of the spotlight and now counts
-	     to the next thing anyone can act on, in days. -->
+	<!-- Milestone strip: one status line, not a clock. The count sits third in
+	     the same label · value · count row the dates line above already uses,
+	     so the hero has one meta idiom rather than two, and the largest thing
+	     on this screen stays the title rather than a number counting down. -->
 	{#if milestone}
-		<div class="relative z-10 border-t border-white/12 bg-black/20">
-			<div
-				class="container-wide flex flex-wrap items-center justify-between gap-x-8 gap-y-3 py-4.5"
-			>
-				<div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-					<span class="text-secondary-300 text-badge font-semibold tracking-[0.16em] uppercase">
-						{milestone.label}
-					</span>
-					<span class="text-primary-100 text-sm tabular-nums">{milestone.value}</span>
-				</div>
+		<div class="relative z-10 border-t border-white/12">
+			<div class="container-wide flex flex-wrap items-baseline gap-x-3 gap-y-1 py-4.5">
+				<span class="text-secondary-300 text-badge font-semibold tracking-[0.16em] uppercase">
+					{milestone.label}
+				</span>
+				<span class="text-primary-100 text-sm tabular-nums">{milestone.value}</span>
+				<span class="text-primary-300/40" aria-hidden="true">·</span>
 				<Countdown target={milestone.datetime} milestone={milestone.label} />
 			</div>
 		</div>
 	{:else if phase === 'during'}
-		<div class="relative z-10 border-t border-white/12 bg-black/20">
+		<div class="relative z-10 border-t border-white/12">
 			<div class="container-wide py-4.5">
 				<p class="text-secondary-300 font-medium">{m.countdown_event_started()}</p>
 			</div>
 		</div>
 	{:else}
-		<div class="relative z-10 border-t border-white/12 bg-black/20">
+		<div class="relative z-10 border-t border-white/12">
 			<div class="container-wide py-4.5">
 				<p class="text-primary-100/80">{m.countdown_event_ended()}</p>
 			</div>

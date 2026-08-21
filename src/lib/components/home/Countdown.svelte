@@ -26,30 +26,24 @@
 	});
 </script>
 
-<div class="flex items-baseline gap-2.5">
-	<!-- The digits carry no relationship to each other for a screen reader, so
+<!-- The count is a clause in the milestone line, not a metric. A 36px display
+     serif numeral over a tracked uppercase label is the hero-metric template,
+     and an urgency device on a page whose deadline concerns twenty-five
+     authors; the same fact set in the strip's own small sans says it once. -->
+<time datetime={target} class="text-primary-100/85 text-sm tabular-nums">
+	<!-- The digits carry no relationship to the words for a screen reader, so
 	     they are hidden and one sentence is announced instead. -->
-	<time datetime={target} class="flex items-baseline gap-2.5">
-		<span
-			class="font-display text-3xl leading-none text-white tabular-nums sm:text-4xl"
-			aria-hidden="true"
-		>
-			{days}
-		</span>
-		<span
-			class="text-badge font-medium tracking-[0.14em] text-white/65 uppercase"
-			aria-hidden="true"
-		>
-			{days === 1 ? m.countdown_days_remaining_one() : m.countdown_days_remaining()}
-		</span>
-		<span class="sr-only">
-			{#if days === 0}
-				{m.countdown_today()}
-			{:else if days === 1}
-				{m.countdown_until_one({ count: String(days), milestone })}
-			{:else}
-				{m.countdown_until({ count: String(days), milestone })}
-			{/if}
-		</span>
-	</time>
-</div>
+	<span aria-hidden="true">
+		{days}
+		{days === 1 ? m.countdown_days_remaining_one() : m.countdown_days_remaining()}
+	</span>
+	<span class="sr-only">
+		{#if days === 0}
+			{m.countdown_today()}
+		{:else if days === 1}
+			{m.countdown_until_one({ count: String(days), milestone })}
+		{:else}
+			{m.countdown_until({ count: String(days), milestone })}
+		{/if}
+	</span>
+</time>
