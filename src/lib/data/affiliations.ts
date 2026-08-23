@@ -171,5 +171,21 @@ export const affiliationLocations: AffiliationLocation[] = [
 		country: 'GB',
 		coordinates: { lat: 51.5115, lng: -0.116 },
 		personIds: ['hiribarren']
+	},
+	{
+		// The one entry that is a person rather than a campus. Being
+		// unaffiliated is not the same as being unlocatable: she works in
+		// Tunisia, and leaving the country off a map of where this workshop
+		// draws from lost a real fact to a technicality about institutions.
+		// `name` repeats her own affiliation string so the map and her card
+		// say the same thing. Masakhane's two members stay off deliberately —
+		// a distributed collective has no single place to claim, which is
+		// what `affiliations_note` still describes.
+		id: 'independent-tunisia',
+		name: { en: 'Unaffiliated scholar', fr: 'Chercheuse indépendante' },
+		city: { en: 'Tunis', fr: 'Tunis' },
+		country: 'TN',
+		coordinates: { lat: 36.8065, lng: 10.1815 },
+		personIds: ['khaoula-stiti']
 	}
 ];
