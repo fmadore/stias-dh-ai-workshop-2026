@@ -6,7 +6,7 @@ Method: dual-agent critique (Assessment A design review · Assessment B detector
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Design health (Nielsen, renormalised) | **25 / 36** — Acceptable, just under Good. Error Prevention scored `n/a`: no forms, no auth, no destructive action, nothing a user can get wrong. |
 | Audit health                          | **14 / 20** — Good                                                                                                                                |
-| Issue counts                          | P0 **0** · P1 **8** · P2 **8** · P3 **11** (at diagnosis; later passes raised P2-9…P2-18 and P3-12…P3-29)                                         |
+| Issue counts                          | P0 **0** · P1 **8** · P2 **8** · P3 **11** (at diagnosis; later passes raised P2-9…P2-20 and P3-12…P3-33)                                         |
 
 The site is well built. Nine routes carry exactly one `<h1>` each with zero heading-level skips, zero unlabelled controls, zero missing `alt`, zero positive `tabindex`, and zero horizontal overflow at 320px in **either** locale. Only two hard-coded hex values exist across all `.svelte` files. The defects that matter cluster in two places: **colour tokens that were never flipped for dark or inverse surfaces**, and **`lang` marking on mixed-language content** — two of the three binding constraints.
 
@@ -355,6 +355,40 @@ Two classes consume the token. `.page-body` is the header-to-content inset, **pa
 - **P2-18 · /venue still cannot tell anyone how to get to Stellenbosch.** The single largest remaining content gap before the workshop: no airport, no transfer arrangement, no expected arrival or departure day, on the page whose title is "Venue & Travel". It is a content gap, not a design one — the structure to hold it now exists — and it can be closed the moment the facts do. → content, not a pass
 - **P3-29 · The two logistics lists are load-bearing for an archival sentence, and P3-19 does not know it.** The French items use U+0027 (`l'hébergement`) because the sentence they compose was published with U+0027. When the apostrophe sweep runs, `tests/logistics.test.ts` will fail — correctly, because modernising the punctuation of an archived sentence is a decision, not a cleanup. Whoever runs P3-19 should expect that failure and update `AS_PUBLISHED` deliberately or leave both alone. → `typeset` (second pass)
 - **The page's routes out were already there.** The first draft of this pass added a link to the programme and a contact line. Both were redundant: `WhatNext` already offers Programme, Participants and "Ask the convenors" on this exact route. Measuring the page before designing for it removed two additions that would have been noise — which is the argument for measuring, not for the additions.
+
+---
+
+### Phase 4 — the animate and delight passes
+
+**Fixed in the `animate` pass (23 August 2026)** — **P3-22**, the skip-link P3, and three things the audit had not looked for. Measured against the build:
+
+| Measurement                                                  | Before        | After               |
+| ------------------------------------------------------------ | ------------- | ------------------- |
+| Transitions surviving `prefers-reduced-motion`, `/programme` | **12**        | **0**               |
+| Movement paths surviving it, sitewide                        | 3 of 11       | **0 of 11**         |
+| Skip-link travel, property / duration                        | `top` / 220ms | `transform` / 150ms |
+| CFP section reveal, lag after entering the viewport          | 141–378ms     | **0–6ms**           |
+| `ScrollReveal` props / props with a call site                | 3 / 1         | **0 / 0**           |
+
+**P3-22 was worse than recorded, and its mechanism is now a floor.** The reduced-motion block was a register: every transition had to remember to enrol. Two never did — the two the finding named — and a third, `.mobile-navigation`, had enrolled and still lost, because Svelte compiles its selector to `.mobile-navigation.svelte-xxxxxx`, which outranks the bare class the register names. **That is the cascade trap for the fourth time, this time inside the rule meant to be the safety net.** One universal `transition-duration` with the file's only `!important` replaces the register; animations stay named, because theirs is a real per-case decision — the map loader deliberately slows to 1.5s rather than freeze, and a blanket rule would have turned it into a strobe.
+
+**Three movement paths could not be turned off by the readers most likely to want them off.** The skip link travelled 4rem over 220ms with no reduced-motion path at all — also on `top`, a layout property, at the routine-state-change tier, on the first thing a keyboard user touches. The back-to-top button lifted on hover. And its `scrollTo({ behavior: 'smooth' })` overrode `scroll-behavior: auto` from script, making the longest motion on the site the one that ignored the preference outright.
+
+**P3-30 · `.back-to-top` was a selector for a class the button did not carry.** The print stylesheet has hidden it since the print stylesheet was written; the button printed on every page anyway. Found while looking for a hook for the hover rule. It carries the class now, and both rules land.
+
+**P2-19 · `ScrollReveal`'s `delay` was latency wearing a stagger's name.** A stagger needs a group; the component observes one element and fires when that element enters, so `delay={7}` postponed a section that was already on screen. Ten sections on the call for papers passed `delay={0..9}`; eight appeared **361–378ms after the reader had arrived at them**. The cap the component applied had been quietly flattening seven of those nine values to the same number, which hid the worst of it. `delay` is gone, with `direction` (no call site ever set it, and it carried six CSS selectors) and `threshold` (none ever overrode 0.15).
+
+**Fixed in the `delight` pass (23 August 2026)** — the roadmap's own item for it, found by time-travelling the build through its timeline: ten moments, both locales, the clock fixed at each.
+
+**P2-20 · The countdown could never reach zero.** `daysUntil` divided the raw interval and rounded up, and every milestone lapses at 23:59:59 SAST on its own date — so each one's last hours read as "1 day remaining". Four hours before the full-papers deadline, and again **on 21 September at 08:00, an hour before the opening, where the home page told 33 people who had already flown in that the workshop was a day away.** It counts venue calendar days now. `m.countdown_today()` had sat unreachable in both locales since it was written, because `days === 0` could not occur while a milestone was still ahead; it is a fragment now rather than a sentence, since it sits third in the `label · value · count` row beside "1 day remaining".
+
+**P3-31 · "Happening now" outlived the workshop by six hours.** The badge was keyed to the date alone, so on the fourth day it stayed until midnight — while the home page, keyed to `workshopPhase()`, already said the workshop had concluded. It asks the phase too now.
+
+### New findings from Phase 4
+
+- **P3-32 · `reuseExistingServer` will serve a stale build to the whole e2e suite.** `playwright.config.ts` sets `reuseExistingServer: !process.env.CI`, and `vite preview` caches its asset map at startup — so a preview server left running from an earlier build serves HTML that references hashes it will 404. This produced one spurious e2e failure during this pass and, separately, made the home page appear to be frozen at build time until the server was restarted. CI is unaffected. Worth a line in the working agreements: **restart the preview after every build**, and treat "the client looks dead" as a stale server until proven otherwise. → working agreements
+- **P3-33 · The countdown's hourly tick is now the only thing keeping `Countdown` reactive**, and it exists for a value that changes at most once a day. A timer aligned to the next midnight at the venue would be one wake-up instead of twenty-four. Not worth doing on its own; worth folding into `polish` if that pass touches the hero. → `polish`
+- **`countdown_event_started` still carries an exclamation mark** ("The workshop is underway!" / "L'atelier est en cours !"), the only one in the catalogue. It is the site's warmest line and it appears on exactly four days, so it was left — but it is a register decision someone should make deliberately rather than inherit. → `polish`
 
 ---
 
