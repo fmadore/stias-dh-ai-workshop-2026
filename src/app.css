@@ -378,10 +378,21 @@ button:not(:disabled),
 	font-family: var(--font-sans);
 	font-size: var(--text-ui-sm);
 	font-weight: 500;
-	transition: top var(--duration-base) var(--ease-standard);
+	/* `top: 1rem` with the element parked at -4rem, tweened over 220ms, used to
+	   do this. Three things wrong with that: `top` makes the browser lay the
+	   element out on every frame where a transform would not; 220ms is the
+	   routine-state-change tier spent on the very first thing a keyboard user
+	   touches, where 150ms is the feedback tier; and the travel had no
+	   reduced-motion path, so it was the one piece of movement that could not
+	   be turned off by the people most likely to want it off. It now sits at
+	   its final `top` and is moved out of view by a transform, which the
+	   reduced-motion block can neutralise like every other lift. */
+	top: 1rem;
+	transform: translateY(-5rem);
+	transition: transform var(--duration-fast) var(--ease-standard);
 }
 .skip-link:focus-visible {
-	top: 1rem;
+	transform: translateY(0);
 }
 
 /* ============================================================
@@ -945,12 +956,6 @@ button:not(:disabled),
 			transform var(--duration-reveal) var(--ease-expressive);
 		will-change: opacity, transform;
 	}
-	.js .scroll-reveal.from-left {
-		transform: translateX(-16px);
-	}
-	.js .scroll-reveal.from-right {
-		transform: translateX(16px);
-	}
 	.js .scroll-reveal.visible {
 		opacity: 1;
 		transform: translate(0, 0);
@@ -959,39 +964,60 @@ button:not(:disabled),
 }
 /* end @layer components */
 
+/* DESIGN.md promises motion is "fully surrendered under prefers-reduced-motion".
+   This block used to keep that promise by naming the things that move, one at a
+   time — and every transition added since had to remember to enrol. Two never
+   did (`.session-link`, `.stat-link`), and a third, `.mobile-navigation`, was
+   enrolled and still lost: Svelte compiles its selector to
+   `.mobile-navigation.svelte-xxxxxx`, which outranks the bare class here. Twelve
+   transitions were measured surviving this block on `/programme` alone.
+
+   So: a floor for transitions, a list only for movement.
+
+   The floor is safe to apply universally because a transition's answer under
+   reduced motion is always the same — drop the tween, keep the end state, which
+   is what 0.01ms does while still firing `transitionend`. `!important` is what
+   lets one declaration outrank every scoped block on the site; it is the only
+   one in this file, and it is here because the alternative is a register.
+
+   Animations are not blanketed, because theirs is a real per-case decision:
+   `fade-rise` should not play, and the map loader deliberately slows to 1.5s
+   rather than freeze under a promise nothing will keep. There are three
+   `@keyframes` in the whole codebase, so naming them costs nothing.
+
+   Movement stays enumerated because `transform` is not only used for motion —
+   MapLibre centres its markers with one — so `transform: none` cannot be a
+   floor. `tests/e2e/site.spec.ts` walks the pages and fails on a survivor,
+   which is the part that makes the list maintain itself. */
 @media (prefers-reduced-motion: reduce) {
-	.js .scroll-reveal,
-	.js .scroll-reveal.from-left,
-	.js .scroll-reveal.from-right {
-		opacity: 1;
-		transform: none;
-		transition: none;
+	*,
+	*::before,
+	*::after {
+		transition-duration: 0.01ms !important;
 	}
 
 	html {
 		scroll-behavior: auto;
 	}
 
-	.animate-spin {
-		animation: none;
+	.js .scroll-reveal {
+		opacity: 1;
+		transform: none;
 	}
 
 	.animate-fade-rise {
 		animation: none;
 	}
 
+	/* Every place on the site where something travels or grows on interaction.
+	   An instant 2px jump is still a jump: the floor above removes the tween,
+	   these remove the distance. */
 	.card-hover:hover,
 	.btn:hover,
-	.link-arrow:hover svg {
+	.link-arrow:hover svg,
+	.back-to-top:hover,
+	.skip-link:focus-visible {
 		transform: none;
-	}
-
-	.mobile-navigation,
-	.card,
-	.btn,
-	.btn-ghost,
-	.link-arrow svg {
-		transition-duration: 0.01ms;
 	}
 }
 
@@ -1060,9 +1086,7 @@ button:not(:disabled),
 @media print {
 	/* Without this, anything the reader has not scrolled past prints blank:
 	   the hidden state is only ever cleared by the IntersectionObserver. */
-	.js .scroll-reveal,
-	.js .scroll-reveal.from-left,
-	.js .scroll-reveal.from-right {
+	.js .scroll-reveal {
 		opacity: 1 !important;
 		transform: none !important;
 	}
@@ -1083,6 +1107,9 @@ button:not(:disabled),
 	}
 
 	/* Screen-only chrome. */
+	/* `.back-to-top` was a selector for a class the button did not carry, so
+	   this rule hid nothing and the button printed on every page. It carries
+	   it now, and the reduced-motion block uses the same hook for its lift. */
 	header[class*='fixed'],
 	.skip-link,
 	.back-to-top,

@@ -28,7 +28,7 @@
 	<!-- Wider than the prose above it: the map carries three pins roughly a
 	     kilometre apart, and at 56rem the guest houses crowd the venue. -->
 	<div class="container-wide">
-		<ScrollReveal delay={1}>
+		<ScrollReveal>
 			<section>
 				<div class="measure-prose mb-7">
 					<h2 class="text-section text-strong mb-2">{m.accommodation_title()}</h2>

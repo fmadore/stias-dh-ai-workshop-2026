@@ -49,7 +49,7 @@
 	</ScrollReveal>
 
 	<!-- Convenors -->
-	<ScrollReveal delay={1}>
+	<ScrollReveal>
 		<section>
 			<h2 class="text-section text-strong mb-5">
 				{m.cfp_convenors_label()}
@@ -73,7 +73,7 @@
 	</ScrollReveal>
 
 	<!-- Thematic Axes reference -->
-	<ScrollReveal delay={2}>
+	<ScrollReveal>
 		<section>
 			<h2 class="text-section text-strong mb-5">
 				{m.section_thematic_axes()}
@@ -109,7 +109,7 @@
 	</ScrollReveal>
 
 	<!-- Workshop Format & Language Policy -->
-	<ScrollReveal delay={3}>
+	<ScrollReveal>
 		<section>
 			<h2 class="text-section text-strong mb-5">
 				{m.workshop_format_label()}
@@ -121,7 +121,7 @@
 	</ScrollReveal>
 
 	<!-- Guidelines -->
-	<ScrollReveal delay={4}>
+	<ScrollReveal>
 		<section>
 			<h2 class="text-section text-strong mb-5">{m.guidelines()}</h2>
 			<p class="text-prose text-body mb-5">
@@ -151,7 +151,7 @@
 	</ScrollReveal>
 
 	<!-- Publication -->
-	<ScrollReveal delay={5}>
+	<ScrollReveal>
 		<section>
 			<h2 class="text-section text-strong mb-5">
 				{m.cfp_publication_label()}
@@ -169,7 +169,7 @@
 	</ScrollReveal>
 
 	<!-- Selection Criteria -->
-	<ScrollReveal delay={6}>
+	<ScrollReveal>
 		<section>
 			<h2 class="text-section text-strong mb-5">
 				{m.cfp_selection_label()}
@@ -181,7 +181,7 @@
 	</ScrollReveal>
 
 	<!-- Funding -->
-	<ScrollReveal delay={7}>
+	<ScrollReveal>
 		<section>
 			<h2 class="text-section text-strong mb-5">
 				{m.cfp_funding_label()}
@@ -200,7 +200,7 @@
 	</ScrollReveal>
 
 	<!-- Key Dates — refined timeline -->
-	<ScrollReveal delay={8}>
+	<ScrollReveal>
 		<section>
 			<h2 class="text-section text-strong mb-8">{m.key_dates()}</h2>
 			<div class="relative">
@@ -246,7 +246,7 @@
 
 	<!-- Submit button -->
 	{#if cfpInfo.submissionUrl}
-		<ScrollReveal delay={9}>
+		<ScrollReveal>
 			<div class="pt-4 text-center">
 				<a
 					href={cfpInfo.submissionUrl}

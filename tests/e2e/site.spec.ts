@@ -304,6 +304,47 @@ test('the venue page separates what is paid for from what is not', async ({ page
 	expect(new Set(names).size).toBe(names.length);
 });
 
+test('nothing tweens or travels when the reader has asked for less motion', async ({ browser }) => {
+	// DESIGN.md promises motion is "fully surrendered under prefers-reduced-motion",
+	// and the promise was kept by a register: every transition had to remember to
+	// enrol. Two never did, one enrolled and lost to Svelte's scoped specificity,
+	// and twelve were measured surviving on /programme alone. The register is a
+	// floor now — and this is what stops it becoming a register again.
+	const context = await browser.newContext({ reducedMotion: 'reduce' });
+	const page = await context.newPage();
+
+	for (const route of ['/', '/programme', '/participants', '/call-for-papers', '/venue']) {
+		await page.goto(`${BASE}${route}`);
+		const tweening = await page.evaluate(() =>
+			[...document.querySelectorAll('*')]
+				.filter((el) =>
+					getComputedStyle(el)
+						.transitionDuration.split(',')
+						.some((d) => parseFloat(d) * (d.includes('ms') ? 1 : 1000) > 1)
+				)
+				.map((el) => el.tagName + '.' + String(el.className).slice(0, 40))
+				.slice(0, 8)
+		);
+		expect(tweening, `transitions still running on ${route}`).toEqual([]);
+	}
+
+	// The floor removes the tween; it cannot remove the distance, because
+	// `transform` is not only used for motion. So the lifts are checked directly.
+	await page.goto(`${BASE}/papers`);
+	const card = page.locator('.card-hover').first();
+	const before = await card.evaluate((el) => getComputedStyle(el).transform);
+	await card.hover();
+	expect(await card.evaluate((el) => getComputedStyle(el).transform)).toBe(before);
+
+	// The skip link travels on focus, and is the first thing a keyboard user meets.
+	await page.keyboard.press('Tab');
+	const skip = page.locator('.skip-link');
+	await expect(skip).toBeFocused();
+	expect(await skip.evaluate((el) => getComputedStyle(el).transform)).toBe('none');
+
+	await context.close();
+});
+
 for (const route of ['/', '/fr', '/programme', '/participants', '/call-for-papers', '/venue']) {
 	test(`accessibility: ${route} has no automated violations`, async ({ page }) => {
 		// Scan settled styles and exercise the site's reduced-motion alternative;
