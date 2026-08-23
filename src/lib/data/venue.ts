@@ -26,9 +26,30 @@ export const venueInfo: VenueInfo = {
 		fr: "Le STIAS est un institut indépendant d'études avancées situé sur le domaine de Mostertsdrift à Stellenbosch, en Afrique du Sud. Il offre un espace aux chercheur·euses de premier plan du monde entier pour s'engager dans la recherche fondamentale et l'échange intellectuel interdisciplinaire."
 	},
 	website: 'https://stias.ac.za',
-	logisticsInfo: {
-		en: 'The DFG Programme Point Sud will cover transportation, accommodation, visa costs, catering and local transport for all selected participants. However, vaccinations, health insurance and meals during travel days to and from Stellenbosch cannot be covered.',
-		fr: "Le programme DFG Point Sud prendra en charge le transport, l'hébergement, les frais de visa, la restauration et le transport local pour tou·tes les participant·es sélectionné·es. Cependant, les vaccinations, l'assurance maladie et les repas pendant les jours de voyage vers et depuis Stellenbosch ne peuvent pas être couverts."
+	// The call for papers said this as one 43-word sentence, and the venue page
+	// repeated it: what the funder pays for, then "However," then what it does
+	// not. The second half is the half a participant has to act on — it is the
+	// money they must budget — and it was the half nobody read. Held as two
+	// lists so the venue page can show them as two lists; `logisticsSentences()`
+	// rebuilds the call's own prose from these, word for word, so the archival
+	// page still reads as it was published and neither can drift from the other.
+	logisticsCovered: {
+		en: ['transportation', 'accommodation', 'visa costs', 'catering', 'local transport'],
+		fr: [
+			'le transport',
+			"l'hébergement",
+			'les frais de visa',
+			'la restauration',
+			'le transport local'
+		]
+	},
+	logisticsNotCovered: {
+		en: ['vaccinations', 'health insurance', 'meals during travel days to and from Stellenbosch'],
+		fr: [
+			'les vaccinations',
+			"l'assurance maladie",
+			'les repas pendant les jours de voyage vers et depuis Stellenbosch'
+		]
 	}
 };
 

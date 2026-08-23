@@ -2,13 +2,17 @@
 	import { cfpInfo } from '$lib/data/cfp';
 	import { organizers } from '$lib/data/organizers';
 	import { venueInfo } from '$lib/data/venue';
+	import { joinLogisticsList } from '$lib/utils/logistics';
 	import { thematicAxes } from '$lib/data/thematic-axes';
 	import { contactEmails } from '$lib/data/contacts';
 	import { t } from '$lib/utils/i18n';
 	import { getMilestones } from '$lib/utils/milestones';
+	import { getLocale } from '$lib/paraglide/runtime';
 	import * as m from '$lib/paraglide/messages';
 	import { Send, ExternalLink, Check } from '@lucide/svelte';
 	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
+
+	const locale = $derived(getLocale() as 'en' | 'fr');
 
 	const JDHASA_NAME = 'Journal of the Digital Humanities Association of Southern Africa (JDHASA)';
 	const JDHASA_URL = 'https://upjournals.up.ac.za/index.php/dhasa';
@@ -182,9 +186,15 @@
 			<h2 class="text-section text-strong mb-5">
 				{m.cfp_funding_label()}
 			</h2>
-			<!-- The funding paragraph is the venue's logistics info — one source of truth. -->
+			<!-- Composed from the venue's two logistics lists — one source of truth,
+			     and this page keeps the sentence the call was published with. -->
 			<p class="text-prose text-body">
-				{t(venueInfo.logisticsInfo)}
+				{m.logistics_covered_sentence({
+					items: joinLogisticsList(venueInfo.logisticsCovered, locale)
+				})}
+				{m.logistics_not_covered_sentence({
+					items: joinLogisticsList(venueInfo.logisticsNotCovered, locale)
+				})}
 			</p>
 		</section>
 	</ScrollReveal>

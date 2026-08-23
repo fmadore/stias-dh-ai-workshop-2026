@@ -3,6 +3,12 @@ export interface LocalizedString {
 	fr: string;
 }
 
+/** The same, for content that is a list of things rather than a passage. */
+export interface LocalizedList {
+	en: string[];
+	fr: string[];
+}
+
 export type CountryCode =
 	| 'BF'
 	| 'CA'
@@ -172,7 +178,14 @@ export interface VenueInfo {
 	coordinates: { lat: number; lng: number };
 	description: LocalizedString;
 	website: string;
-	logisticsInfo: LocalizedString;
+	/**
+	 * What the funder pays for, and what it does not — as two lists rather than
+	 * one sentence, because the half a traveller must act on used to sit after
+	 * a "However,". `logisticsSentences()` composes the prose the call for
+	 * papers published from exactly these, so the two pages cannot drift.
+	 */
+	logisticsCovered: LocalizedList;
+	logisticsNotCovered: LocalizedList;
 }
 
 /**

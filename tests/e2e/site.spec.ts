@@ -282,6 +282,28 @@ test('an abstract has intervals between its blocks, and its subheads bind downwa
 	expect(above).toBeGreaterThan(between);
 });
 
+test('the venue page separates what is paid for from what is not', async ({ page }) => {
+	// One 43-word sentence used to carry both, with the half a traveller has to
+	// budget for sitting after a "However,". The two lists and the archival
+	// sentence now come from one source; `tests/logistics.test.ts` guards that
+	// the sentence still composes, and this guards that the page still splits.
+	await page.goto(`${BASE}/venue`);
+	const lists = page.locator('.logistics-list');
+	await expect(lists).toHaveCount(2);
+	await expect(lists.nth(0).getByRole('listitem')).toHaveCount(5);
+	await expect(lists.nth(1).getByRole('listitem')).toHaveCount(3);
+	await expect(page.getByRole('heading', { name: 'Not covered' })).toBeVisible();
+
+	// Three links called "Visit website" went to three different places. The
+	// accessible name has to name which; axe does not flag a duplicated one.
+	const names = await page
+		.locator('main a')
+		.evaluateAll((links) =>
+			links.map((a) => a.getAttribute('aria-label') || a.textContent?.trim())
+		);
+	expect(new Set(names).size).toBe(names.length);
+});
+
 for (const route of ['/', '/fr', '/programme', '/participants', '/call-for-papers', '/venue']) {
 	test(`accessibility: ${route} has no automated violations`, async ({ page }) => {
 		// Scan settled styles and exercise the site's reduced-motion alternative;

@@ -46,6 +46,7 @@
 		target="_blank"
 		rel="noopener noreferrer"
 		class="link-arrow mt-auto pt-4 text-sm"
+		aria-label={m.visit_website_of({ name: accommodation.name })}
 	>
 		<ExternalLink size={14} strokeWidth={1.75} aria-hidden="true" />
 		{m.visit_website()}

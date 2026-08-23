@@ -10,6 +10,7 @@ import { siteConfig } from '../src/lib/data/site-config.ts';
 import { sponsors } from '../src/lib/data/sponsors.ts';
 import { thematicAxes } from '../src/lib/data/thematic-axes.ts';
 import { venueInfo } from '../src/lib/data/venue.ts';
+import { joinLogisticsList } from '../src/lib/utils/logistics.ts';
 import type { LocalizedString } from '../src/lib/types/index.ts';
 
 type Locale = 'en' | 'fr';
@@ -128,7 +129,18 @@ async function loadLabels(locale: Locale): Promise<Labels> {
 		selectionLabel: message('cfp_selection_label'),
 		selectionCriteria: localize(cfpInfo.selectionCriteria, locale),
 		fundingLabel: message('cfp_funding_label'),
-		fundingText: localize(venueInfo.logisticsInfo, locale),
+		// Composed from the same two lists the venue page renders, so the PDF,
+		// the call-for-papers page and the venue page cannot say three things.
+		fundingText: [
+			message('logistics_covered_sentence').replace(
+				'{items}',
+				joinLogisticsList(venueInfo.logisticsCovered, locale)
+			),
+			message('logistics_not_covered_sentence').replace(
+				'{items}',
+				joinLogisticsList(venueInfo.logisticsNotCovered, locale)
+			)
+		].join(' '),
 		keyDatesLabel: message('key_dates'),
 		keyDates: [
 			{ label: message('submission_deadline'), value: formatDate(cfpInfo.deadline, locale) },

@@ -10,7 +10,7 @@ web
 
 Two audiences of equal standing; no design may serve one at the cost of the other.
 
-**Accepted participants and organisers** (33 participants, 4 organisers, 2 Point Sud representatives). Before the workshop they check the programme, find their own page and paper, read venue and logistics information, and confirm what is expected of them — pre-circulated draft papers, bilingual slides, a one-page terminology handout. During the workshop (21–24 September 2026) they consult the day's schedule, often on a phone, in a room at STIAS. Many are Africa-based and travelling internationally; some join remotely by Zoom.
+**Accepted participants and organisers** (33 participants, 4 organisers, 2 Point Sud representatives). Before the workshop they check the programme, find their own page and paper, read venue and logistics information, and confirm what is expected of them — pre-circulated draft papers, bilingual slides, a one-page terminology handout. During the workshop (21–24 September 2026) they consult the day's schedule, often on a phone, in a room at STIAS. Many are Africa-based and travelling internationally; some join remotely by Microsoft Teams.
 
 **The wider scholarly public** — African Studies and digital humanities researchers who encounter the workshop through search, citation, or colleagues. They read the abstract and thematic axes, browse the 25 papers as a body of work, look up who is taking part, and decide whether to follow the event or attend remotely.
 
@@ -34,7 +34,7 @@ The bilingualism is substantive, not decorative: the workshop itself runs biling
 - **Content lives in typed TypeScript files** under `src/lib/data/` — one file per participant and per presentation, auto-discovered by `import.meta.glob`. Editing content means editing code, and `scripts/check-data.mjs` enforces referential integrity (author ids, programme references, image paths) at build time.
 - **Workshop state is derived, never hardcoded.** `src/lib/utils/milestones.ts` computes `isCfpOpen()`, `nextMilestone()`, and `workshopPhase()` from four dates in `cfp.ts` and `site-config.ts`, in South African Standard Time. Any design that implies a phase — an open call, a countdown, a "register now" — must read from these functions rather than assuming. A previous design review assumed the call for papers was open three months after it had closed; this indirection exists because of that.
 - **Two locales, URL-prefixed.** English at the base path, French under `/fr/`. Both are fully prerendered; `scripts/smoke-test.mjs` verifies French pages are genuinely prerendered in French.
-- **The workshop is hybrid** — in-person at STIAS with Zoom access — and operates bilingually, with near-real-time AI captioning and, where possible, a bilingual chair providing consecutive interpretation.
+- **The workshop is hybrid** — in-person at STIAS with remote access on **Microsoft Teams** — and operates bilingually, with near-real-time AI captioning and, where possible, a bilingual chair providing consecutive interpretation. The call for papers said Zoom, and `cfp.ts` still does: that page is an archival record of the call as published, so it keeps the platform the call named. Anything forward-looking says Teams. No joining details are published yet.
 
 ## Capabilities and Constraints
 
