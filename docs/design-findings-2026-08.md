@@ -6,7 +6,7 @@ Method: dual-agent critique (Assessment A design review · Assessment B detector
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Design health (Nielsen, renormalised) | **25 / 36** — Acceptable, just under Good. Error Prevention scored `n/a`: no forms, no auth, no destructive action, nothing a user can get wrong. |
 | Audit health                          | **14 / 20** — Good                                                                                                                                |
-| Issue counts                          | P0 **0** · P1 **8** · P2 **8** · P3 **11**                                                                                                        |
+| Issue counts                          | P0 **0** · P1 **8** · P2 **8** · P3 **11** (at diagnosis; later passes raised P2-9…P2-16 and P3-12…P3-27)                                         |
 
 The site is well built. Nine routes carry exactly one `<h1>` each with zero heading-level skips, zero unlabelled controls, zero missing `alt`, zero positive `tabindex`, and zero horizontal overflow at 320px in **either** locale. Only two hard-coded hex values exist across all `.svelte` files. The defects that matter cluster in two places: **colour tokens that were never flipped for dark or inverse surfaces**, and **`lang` marking on mixed-language content** — two of the three binding constraints.
 
@@ -296,6 +296,36 @@ Two classes consume the token. `.page-body` is the header-to-content inset, **pa
 - **`--surface-inverse` and `--ink-on-inverse` are not dead by oversight.** The distill list has them as tokens with zero consumers, and the hero is the surface they are named for — but their dark values (`surface-950` and `surface-300`, near-chroma-free) would strip the teal out of the hero in dark mode and flatten it into the page behind it. They are unused because the only candidate consumer needs a different value, not because nobody got round to wiring them up. `distill` should delete them rather than adopt them. → `distill`
 - **P3-20 narrows.** The link affordance now reaches the home page's figures as well as the programme; what remains inconsistent is `PaperCard`'s title link and the paper page's `.author-link`, both inside cards that carry their own affordances. → `polish`
 - **Measurement note.** Computed styles read **stale** for one or more turns after a runtime theme toggle while the browser pane is not compositing: the class had flipped but `getComputedStyle` still returned the old theme's custom properties, which produced a 1.01:1 "contrast" for near-white ink on cream. Every figure above was taken after a **full page load** in the theme being measured, with the canvas sanity check returning 21:1 first — the same discipline the adapt pass adopted after its `oklab()` parsing error, for a different cause.
+
+---
+
+### The papers-detail pass
+
+**Fixed in the papers-detail pass (23 August 2026)** — the roadmap's item 13 was a verification: had the typeset pass landed on the longest abstracts, in both languages? The measure had. The intervals had not. Measured against the build at 1280 / 375 / 320px, EN and FR, both themes:
+
+| Measurement                               | Before          | After                           |
+| ----------------------------------------- | --------------- | ------------------------------- |
+| Interval between an abstract's paragraphs | **0px**         | **20px** (`--space-stack`)      |
+| Longest abstract, unbroken lines @1280    | 66              | **13 blocks, 5 sections**       |
+| Longest abstract, unbroken lines @320     | 110             | **13 blocks, 5 sections**       |
+| Section heading, space above / below      | 0 / 1px         | **36 / 8px**                    |
+| Section heading, treatment                | 17px Outfit 600 | **21.9px Instrument Serif 400** |
+| Abstract body contrast, light / dark      | 11.61 / 10.79:1 | unchanged                       |
+| Subhead contrast, light / dark            | 16.77 / 18.93:1 | **16.77 / 18.93:1**             |
+| Longest paper page, height @1280          | 4.6 screens     | 4.9 screens                     |
+
+**P2-16 · Every abstract on the site rendered as one unbroken column.** `.prose p { margin-block: 0 }` sat two lines below `.prose > * + *` and outranked it — (0,1,1) against (0,1,0) — so the paragraph interval the rule above declares never reached the page. It read as a UA reset; Tailwind's preflight already zeroes `*`, so it reset nothing and only voided its neighbour. Twenty-five paper pages, both locales, both themes, every viewport. This is the same family as the three cascade-layer findings the backlog already groups under _Systemic patterns_ — a declaration that looks inert and is not — except the mechanism here is plain specificity rather than layers, which is why the audit's layer sweep did not catch it.
+
+**The typeset pass could not have found this, and that is worth naming.** It measured line length, font size, leading and tracking — all per-block properties, all correct here. Nothing in that vocabulary asks what sits _between_ two blocks. The defect was visible in a screenshot and invisible in every metric the pass was built around.
+
+**One abstract carries author-written section headings, and the fix had to answer them.** `frugal-infrastructures` has five paragraphs whose whole content is one bold run — section headings in the only syntax to hand. Restoring the interval alone would have given each 20px above and 20px below, which says nothing about what they introduce. They are now tagged at render time and set at the card-title step in the display serif, 36px above against 8px below. Tagged at render time because the distinction cannot be selected: `p:has(> strong:only-child)` also matches a paragraph that merely _opens_ with a bold phrase, which `masakhane-4d-framework` does mid-sentence.
+
+### New findings from the papers-detail pass
+
+- **P3-25 · The five in-abstract section headings are invisible to the document outline.** They read as headings and are not ones: a screen-reader user cannot jump between the five sections of the site's longest text. Promoting them to `<h3>` needs the abstract to have a heading of its own first — otherwise they file under the preceding "Presented by", which is not what they belong to — and that heading is new copy in two locales ("Abstract" / "Résumé"). The visual fix landed; the semantic one is a copy decision that is the user's to make. → `polish`, pending a decision
+- **P3-26 · Outfit has no italic, so every emphasis in an abstract is a synthesised oblique.** Nine of them across three abstracts — titles of works (_Une si longue lettre_), the 4D model's four stages, a research question. The site self-hosts a real Instrument Serif italic that nothing uses. **Inspected and deliberately left alone:** a serif italic inside a 17px sans paragraph needs a 1.12em size bump to match x-heights, and reads as a mismatch rather than as emphasis; Chrome's slant of Outfit is clean and legible. Recorded so the next typographic pass does not rediscover it as a defect.
+- **P3-27 · `.prose` styles four things, and `marked` can emit a dozen.** `renderAbstract` runs GFM, so an author writing a list, a blockquote, a table or a `##` heading in a future abstract gets an unstyled one — a bare `h3` inside `.prose` renders as 17px Instrument Serif in body ink, which is not a heading. None of the 25 current abstracts uses any of these, so nothing is broken today; it is a gap between what the renderer accepts and what the stylesheet answers for. → `harden` (second pass) or `polish`
+- **The unit suite named one file.** `test:unit` ran `tests/localized-paths.test.ts` by name, so a second test file would have been written, committed and never run. It globs `tests/*.test.ts` now.
 
 ---
 
