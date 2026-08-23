@@ -25,8 +25,9 @@
 
 	const DEFAULT_EXITS: Destination[] = ['about', 'programme', 'contact'];
 
-	// Four addresses, already in contacts.ts — mailto rather than a contact
-	// page nobody would maintain.
+	// A mailto rather than a contact page nobody would maintain. Every convenor
+	// is on the one address list, so a participant writes once instead of
+	// choosing which of four people their question belongs to.
 	const convenorMailto = organizers
 		.map((organizer) => contactEmails[organizer.id])
 		.filter(Boolean)
