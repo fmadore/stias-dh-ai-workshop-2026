@@ -25,6 +25,19 @@ export interface Milestone {
  */
 const SAST = '+02:00';
 
+/**
+ * The same offset as an IANA zone, for the two places that need to ask what
+ * the *calendar date* is at the venue rather than how many hours away
+ * something is. The programme page asks it to badge today; `daysUntil` asks
+ * it so that a deadline at 23:59 today is "today" and not "one day away".
+ */
+export const VENUE_TIME_ZONE = 'Africa/Johannesburg';
+
+/** The calendar date at the venue, as `YYYY-MM-DD`. */
+export function dateAtVenue(at: number | Date = Date.now()): string {
+	return new Date(at).toLocaleDateString('en-CA', { timeZone: VENUE_TIME_ZONE });
+}
+
 function endOfDay(isoDate: string): string {
 	return `${isoDate}T23:59:59${SAST}`;
 }
@@ -101,7 +114,19 @@ export function workshopPhase(now: number = Date.now()): WorkshopPhase {
 	return 'before';
 }
 
-/** Whole days from `now` until `target`, floored at zero. */
+/**
+ * Whole days from `now` until `target`, counted in venue calendar days and
+ * floored at zero.
+ *
+ * It used to divide the raw interval and round up, which meant a deadline
+ * four hours away read as "1 day remaining" — and, since every milestone
+ * lapses at 23:59 on its own day, the count was wrong by one on each
+ * milestone's last day. On 21 September at 08:00, an hour before the opening,
+ * the home page said the workshop was a day away. Counting dates rather than
+ * hours makes the final day say `0`, which is the day `countdown_today` was
+ * written for and could never previously reach.
+ */
 export function daysUntil(target: number, now: number = Date.now()): number {
-	return Math.max(0, Math.ceil((target - now) / 86_400_000));
+	const midnightAtVenue = (at: number) => Date.parse(`${dateAtVenue(at)}T00:00:00Z`);
+	return Math.max(0, Math.round((midnightAtVenue(target) - midnightAtVenue(now)) / 86_400_000));
 }

@@ -5,6 +5,7 @@
 	import SEO from '$lib/components/SEO.svelte';
 	import PageHeader from '$lib/components/layout/PageHeader.svelte';
 	import { programme, programmeLastUpdated } from '$lib/data/programme';
+	import { dateAtVenue, workshopPhase } from '$lib/utils/milestones';
 	import ScheduleDay from '$lib/components/programme/ScheduleDay.svelte';
 	import { Calendar, Info } from '@lucide/svelte';
 
@@ -19,7 +20,13 @@
 	);
 
 	/** Today's date in South African time, so "happening now" matches the venue. */
-	const todayAtVenue = new Date().toLocaleDateString('en-CA', { timeZone: 'Africa/Johannesburg' });
+	const todayAtVenue = dateAtVenue();
+
+	// "Happening now" is a claim about the present, not about the date. The
+	// closing session ends at 18:00 on the fourth day and the badge sat on that
+	// day until midnight, so for six hours the programme said the workshop was
+	// under way while the home page said it had concluded.
+	const stillRunning = workshopPhase() !== 'after';
 
 	// Panel numbers run across the whole programme, so each day needs to know
 	// how many panels preceded it.
@@ -31,7 +38,7 @@
 			return {
 				day,
 				panelOffset: offset,
-				isToday: day.date === todayAtVenue,
+				isToday: day.date === todayAtVenue && stillRunning,
 				short: new Date(`${day.date}T12:00:00Z`).toLocaleDateString(intl, {
 					weekday: 'short',
 					day: 'numeric',

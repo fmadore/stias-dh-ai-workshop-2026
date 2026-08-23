@@ -31,19 +31,21 @@
      and an urgency device on a page whose deadline concerns twenty-five
      authors; the same fact set in the strip's own small sans says it once. -->
 <time datetime={target} class="text-primary-100/85 text-sm tabular-nums">
-	<!-- The digits carry no relationship to the words for a screen reader, so
-	     they are hidden and one sentence is announced instead. -->
-	<span aria-hidden="true">
-		{days}
-		{days === 1 ? m.countdown_days_remaining_one() : m.countdown_days_remaining()}
-	</span>
-	<span class="sr-only">
-		{#if days === 0}
-			{m.countdown_today()}
-		{:else if days === 1}
-			{m.countdown_until_one({ count: String(days), milestone })}
-		{:else}
-			{m.countdown_until({ count: String(days), milestone })}
-		{/if}
-	</span>
+	{#if days === 0}
+		<!-- One reading for both. Everywhere else the digits carry no
+		     relationship to the words, so they are hidden and a sentence is
+		     announced instead; "today" is already the whole fact and needs no
+		     screen-reader twin. -->
+		{m.countdown_today()}
+	{:else}
+		<span aria-hidden="true">
+			{days}
+			{days === 1 ? m.countdown_days_remaining_one() : m.countdown_days_remaining()}
+		</span>
+		<span class="sr-only">
+			{days === 1
+				? m.countdown_until_one({ count: String(days), milestone })
+				: m.countdown_until({ count: String(days), milestone })}
+		</span>
+	{/if}
 </time>
