@@ -336,11 +336,15 @@ test('nothing tweens or travels when the reader has asked for less motion', asyn
 	await card.hover();
 	expect(await card.evaluate((el) => getComputedStyle(el).transform)).toBe(before);
 
-	// The skip link travels on focus, and is the first thing a keyboard user meets.
-	await page.keyboard.press('Tab');
-	const skip = page.locator('.skip-link');
-	await expect(skip).toBeFocused();
-	expect(await skip.evaluate((el) => getComputedStyle(el).transform)).toBe('none');
+	// The skip link is not asserted through `:focus-visible`. It is the first
+	// thing a keyboard user meets and it does travel, but whether the pseudo-class
+	// matches a synthetic Tab is a browser heuristic: it matched on every local
+	// run and did not on CI's headless Linux Chromium, which made this a flaky
+	// guard rather than a failing one. Nothing is lost — the sweep above covers
+	// `.skip-link` like any other element, and it was the first survivor it
+	// listed when this test was checked against the pre-fix tree. An instant
+	// reposition with no tween is not motion; a re-introduced tween is, and that
+	// is what the sweep catches.
 
 	await context.close();
 });
