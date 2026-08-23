@@ -6,7 +6,7 @@ Method: dual-agent critique (Assessment A design review · Assessment B detector
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Design health (Nielsen, renormalised) | **25 / 36** — Acceptable, just under Good. Error Prevention scored `n/a`: no forms, no auth, no destructive action, nothing a user can get wrong. |
 | Audit health                          | **14 / 20** — Good                                                                                                                                |
-| Issue counts                          | P0 **0** · P1 **8** · P2 **8** · P3 **11** (at diagnosis; later passes raised P2-9…P2-16 and P3-12…P3-27)                                         |
+| Issue counts                          | P0 **0** · P1 **8** · P2 **8** · P3 **11** (at diagnosis; later passes raised P2-9…P2-18 and P3-12…P3-29)                                         |
 
 The site is well built. Nine routes carry exactly one `<h1>` each with zero heading-level skips, zero unlabelled controls, zero missing `alt`, zero positive `tabindex`, and zero horizontal overflow at 320px in **either** locale. Only two hard-coded hex values exist across all `.svelte` files. The defects that matter cluster in two places: **colour tokens that were never flipped for dark or inverse surfaces**, and **`lang` marking on mixed-language content** — two of the three binding constraints.
 
@@ -326,6 +326,35 @@ Two classes consume the token. `.page-body` is the header-to-content inset, **pa
 - **P3-26 · Outfit has no italic, so every emphasis in an abstract is a synthesised oblique.** Nine of them across three abstracts — titles of works (_Une si longue lettre_), the 4D model's four stages, a research question. The site self-hosts a real Instrument Serif italic that nothing uses. **Inspected and deliberately left alone:** a serif italic inside a 17px sans paragraph needs a 1.12em size bump to match x-heights, and reads as a mismatch rather than as emphasis; Chrome's slant of Outfit is clean and legible. Recorded so the next typographic pass does not rediscover it as a defect.
 - **P3-27 · `.prose` styles four things, and `marked` can emit a dozen.** `renderAbstract` runs GFM, so an author writing a list, a blockquote, a table or a `##` heading in a future abstract gets an unstyled one — a bare `h3` inside `.prose` renders as 17px Instrument Serif in body ink, which is not a heading. None of the 25 current abstracts uses any of these, so nothing is broken today; it is a gap between what the renderer accepts and what the stylesheet answers for. → `harden` (second pass) or `polish`
 - **The unit suite named one file.** `test:unit` ran `tests/localized-paths.test.ts` by name, so a second test file would have been written, committed and never run. It globs `tests/*.test.ts` now.
+
+---
+
+### The venue onboard pass
+
+**Fixed in the `onboard` pass (23 August 2026)** — the reinstated item, run four weeks before participants travel. Measured against the build at 1280 / 375 / 320px, EN and FR, both themes:
+
+| Measurement                                      | Before               | After                           |
+| ------------------------------------------------ | -------------------- | ------------------------------- |
+| Funding arrangement                              | one 43-word sentence | **two labelled lists, 5 + 3**   |
+| What a participant must budget for               | after a "However,"   | **its own list, its own label** |
+| Distinct accessible names among the page's links | 1 of 3               | **3 of 3**                      |
+| Sources of truth for the funding wording         | 3 (venue, CFP, PDF)  | **1, composed**                 |
+| Page height, desktop / mobile                    | 3.5 / 5.1 screens    | 3.6 / 5.4 screens               |
+| Horizontal overflow @320px, EN / FR              | none                 | none                            |
+
+**P2-17 · The one fact a traveller has to act on was the one the sentence buried.** `logisticsInfo` read "The DFG Programme Point Sud will cover … However, vaccinations, health insurance and meals during travel days … cannot be covered." Two opposite things in one paragraph, with the actionable half in the subordinate clause. It is now `logisticsCovered` and `logisticsNotCovered` — the same words, as lists — and the archival call-for-papers page composes the published sentence back out of them via `joinLogisticsList`, unit-tested against the exact wording in both languages. `en-GB`, not `en`: `Intl.ListFormat('en')` adds the Oxford comma the call was published without.
+
+**P3-28 · Three links named "Visit website", to three different places.** Not a violation — WCAG 2.4.4 is satisfied by programmatic context — but on a page where a traveller is looking for one specific guest house's site, a link list that says the same phrase three times is friction. Each now names its destination in `aria-label`, with the visible text unchanged so 2.5.3 still holds.
+
+**The page never said whether you had to be there.** The workshop is hybrid; /venue is where that question gets asked, and only the call-for-papers page answered it. It says so now — **and the platform is Microsoft Teams, not Zoom**. The call announced Zoom, `cfp.ts` still says Zoom, and it should: that page is a record of what was published. PRODUCT.md, which is forward-looking, now says Teams and says explicitly which document holds which, so a future pass does not "correct" one into the other. No joining details exist yet, so none are promised.
+
+**Deliberately not built: a "getting there" section.** No airport, transfer or arrival-day facts exist anywhere in the repository, and PRODUCT.md forbids sourcing or inventing them. Confirmed with the user rather than assumed.
+
+### New findings from the venue onboard pass
+
+- **P2-18 · /venue still cannot tell anyone how to get to Stellenbosch.** The single largest remaining content gap before the workshop: no airport, no transfer arrangement, no expected arrival or departure day, on the page whose title is "Venue & Travel". It is a content gap, not a design one — the structure to hold it now exists — and it can be closed the moment the facts do. → content, not a pass
+- **P3-29 · The two logistics lists are load-bearing for an archival sentence, and P3-19 does not know it.** The French items use U+0027 (`l'hébergement`) because the sentence they compose was published with U+0027. When the apostrophe sweep runs, `tests/logistics.test.ts` will fail — correctly, because modernising the punctuation of an archived sentence is a decision, not a cleanup. Whoever runs P3-19 should expect that failure and update `AS_PUBLISHED` deliberately or leave both alone. → `typeset` (second pass)
+- **The page's routes out were already there.** The first draft of this pass added a link to the programme and a contact line. Both were redundant: `WhatNext` already offers Programme, Participants and "Ask the convenors" on this exact route. Measuring the page before designing for it removed two additions that would have been noise — which is the argument for measuring, not for the additions.
 
 ---
 
