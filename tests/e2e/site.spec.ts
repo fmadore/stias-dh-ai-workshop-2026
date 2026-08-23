@@ -248,6 +248,40 @@ test('the at-a-glance figures lead to what they count', async ({ page }) => {
 	expect(clearance).toBeGreaterThan(0);
 });
 
+test('an abstract has intervals between its blocks, and its subheads bind downward', async ({
+	page
+}) => {
+	// `.prose p { margin-block: 0 }` (0,1,1) outranked `.prose > * + *` (0,1,0)
+	// two lines above it, so every abstract on the site rendered as one
+	// unbroken column: 66 lines with no paragraph break on the longest. It
+	// looked like a reset and reset nothing — Tailwind's preflight already
+	// zeroes `*`. No tool sees a paragraph gap that is zero.
+	await page.goto(`${BASE}/papers/frugal-infrastructures`);
+	const geometry = await page.evaluate(() => {
+		const blocks = [...document.querySelectorAll('article.prose > *')];
+		const rect = (el: Element) => el.getBoundingClientRect();
+		return {
+			count: blocks.length,
+			subheads: blocks.filter((b) => b.classList.contains('prose-subhead')).length,
+			// Gap above each block, paired with what kind of block follows it.
+			gaps: blocks.slice(1).map((b, i) => ({
+				subhead: b.classList.contains('prose-subhead'),
+				gap: Math.round(rect(b).top - rect(blocks[i]).bottom)
+			}))
+		};
+	});
+
+	expect(geometry.count).toBeGreaterThan(1);
+	expect(geometry.subheads).toBe(5);
+	for (const { gap } of geometry.gaps) expect(gap).toBeGreaterThan(0);
+
+	// A subhead belongs to the section it opens: further from the text above
+	// than from the text below, or it reads as a bold sentence in the middle.
+	const above = Math.min(...geometry.gaps.filter((g) => g.subhead).map((g) => g.gap));
+	const between = Math.max(...geometry.gaps.filter((g) => !g.subhead).map((g) => g.gap));
+	expect(above).toBeGreaterThan(between);
+});
+
 for (const route of ['/', '/fr', '/programme', '/participants', '/call-for-papers', '/venue']) {
 	test(`accessibility: ${route} has no automated violations`, async ({ page }) => {
 		// Scan settled styles and exercise the site's reduced-motion alternative;

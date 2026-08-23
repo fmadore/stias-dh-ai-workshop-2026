@@ -530,11 +530,16 @@ button:not(:disabled),
 			font-size: var(--text-reading);
 		}
 	}
+	/* The interval between an abstract's blocks. There used to be a
+	   `.prose p { margin-block: 0 }` directly beneath this rule, meant as a
+	   reset — but Tailwind's preflight already zeroes every margin from `*`,
+	   so it reset nothing and instead outranked the line above it: `.prose p`
+	   is (0,1,1) against `.prose > * + *`'s (0,1,0). Every abstract on the
+	   site rendered as one unbroken column — 66 lines with no paragraph
+	   break on the longest, 110 at 320px. Same family as the cascade-layer
+	   trap documented above: a rule that looks inert and is not. */
 	.prose > * + * {
 		margin-block-start: var(--space-stack);
-	}
-	.prose p {
-		margin-block: 0;
 	}
 	.prose strong {
 		font-weight: 600;
@@ -542,6 +547,30 @@ button:not(:disabled),
 	}
 	.prose em {
 		font-style: italic;
+	}
+
+	/* An author's own section heading inside an abstract (see
+	   `renderAbstract`). It takes the card-title step rather than a sixth
+	   serif size, and binds to the paragraph it introduces: 2.25rem above
+	   against 0.5rem below, so the interval says which text it belongs to.
+	   The bold run inside it goes back to 400 — the serif carries hierarchy
+	   by size, never by weight. */
+	.prose .prose-subhead {
+		font-family: var(--font-display);
+		font-weight: 400;
+		font-size: var(--step-card);
+		line-height: 1.25;
+		letter-spacing: -0.012em;
+		color: var(--ink-strong);
+	}
+	.prose .prose-subhead strong {
+		font-weight: 400;
+	}
+	.prose > .prose-subhead + * {
+		margin-block-start: 0.5rem;
+	}
+	.prose > * + .prose-subhead {
+		margin-block-start: 2.25rem;
 	}
 	.prose a {
 		color: var(--link);
@@ -1081,9 +1110,12 @@ button:not(:disabled),
 	figure {
 		break-inside: avoid;
 	}
+	/* .prose-subhead is a heading in everything but tag name — it would
+	   otherwise be the one that prints orphaned at a page foot. */
 	h1,
 	h2,
-	h3 {
+	h3,
+	.prose-subhead {
 		break-after: avoid;
 	}
 

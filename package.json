@@ -16,7 +16,7 @@
     "prepare": "npm run messages",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "test": "npm run test:unit && npm run build && npm run test:e2e",
-    "test:unit": "tsx --test tests/localized-paths.test.ts",
+    "test:unit": "tsx --test tests/*.test.ts",
     "test:e2e": "playwright test",
     "lint": "eslint .",
     "format": "prettier --write .",
