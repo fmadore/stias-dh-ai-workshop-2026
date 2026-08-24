@@ -73,6 +73,15 @@
 	   cue does not clear 3:1 and is not a cue. Thickness steps up with the type:
 	   a 1px rule under a 48px serif numeral reads as a hairline artefact. */
 	.stat-link {
+		/* SC 2.5.8's floor on the narrow axis. The figures are already 47px tall
+		   and 35–38px wide at "25" and "33", so this binds on exactly one of
+		   them: "17" set 21.4px at 375px and 320px, which is the width a
+		   two-digit tabular numeral gives you and no amount of type scale fixes.
+		   Centring only takes effect once the digits are narrower than the
+		   floor, so the other two are untouched. */
+		display: inline-block;
+		min-width: 1.5rem;
+		text-align: center;
 		color: inherit;
 		text-decoration: underline;
 		text-decoration-color: color-mix(in oklab, var(--color-primary-600) 65%, transparent);

@@ -216,7 +216,10 @@
 				{/if}
 
 				{#if isPanel && papers.length > 0}
-					<ul class="mt-3 space-y-2.5">
+					<!-- space-y-3, not 2.5: at 10px the author link on one paper and the
+					     title link on the next left 23px of safe clickable space between
+					     them, one pixel under SC 2.5.8's floor. 12px makes it 25px. -->
+					<ul class="mt-3 space-y-3">
 						{#each papers as paper (paper.id)}
 							{@const authors = getPresentationAuthors(paper)}
 							<li class="session-paper">
@@ -231,7 +234,10 @@
 									>{paper.language === 'fr' ? 'FR' : 'EN'}</span
 								>
 								{#if authors.length > 0}
-									<span class="text-muted mt-0.5 block text-xs">
+									<!-- mt-1.5, not mt-0.5: the author links are 15px tall and sat
+									     4px under the title link, which leaves 23px of safe clickable
+									     space where SC 2.5.8 asks for 24. -->
+									<span class="text-muted mt-1.5 block text-xs">
 										<!-- prettier-ignore -->
 										{#each authors as author, i (author.id)}{i > 0 ? ', ' : ''}<a href={localePath(`/participants/${author.id}`)} class="session-link">{author.name}</a>{#if author.online}{@render onlineBadge()}{/if}{/each}
 									</span>
