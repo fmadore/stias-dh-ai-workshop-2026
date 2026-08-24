@@ -440,21 +440,70 @@ test("a person's links are real targets, and they sit on one line across a row",
 	expect(geometry[0].bottomGap).toBeCloseTo(geometry[1].bottomGap, 0);
 });
 
-for (const route of ['/', '/fr', '/programme', '/participants', '/call-for-papers', '/venue']) {
-	test(`accessibility: ${route} has no automated violations`, async ({ page }) => {
-		// Scan settled styles and exercise the site's reduced-motion alternative;
-		// otherwise axe can sample text midway through an opacity transition.
-		await page.emulateMedia({ reducedMotion: 'reduce' });
+test('what the reader scrolled past is visible, however they got there', async ({ page }) => {
+	// ScrollReveal answered "is it on screen now" when the question is "has the
+	// reader reached it". Anything a jump skipped was never intersecting and
+	// never would be again, so it stayed at opacity 0 for good: a reload with
+	// scroll restoration hid all nine sections of the call for papers, and the
+	// End key hid the whole of /about. Separately, its 0.15 threshold is a
+	// fraction of the ELEMENT, so at 320px the /about abstract — 4905px tall in
+	// English, 5703px in French — could not reach it on any scroll at all.
+	//
+	// Nothing sees either one. The content is in the DOM and reads correctly to
+	// assistive technology; it is only invisible. And every check anyone runs
+	// scrolls from the top, which is the one path that always worked.
+	const stillHidden = () =>
+		page.evaluate(
+			() =>
+				[...document.querySelectorAll('.scroll-reveal')].filter(
+					(el) => Number(getComputedStyle(el).opacity) < 0.99
+				).length
+		);
+
+	await page.goto(`${BASE}/call-for-papers`);
+	await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+	await expect.poll(stillHidden, { message: 'jumped to the bottom' }).toBe(0);
+
+	await page.goto(`${BASE}/about`);
+	await page.keyboard.press('End');
+	await expect.poll(stillHidden, { message: 'End key' }).toBe(0);
+
+	// A section taller than ~6.7 viewports, which is what /about is at 320px.
+	await page.setViewportSize({ width: 320, height: 640 });
+	for (const route of ['/about', '/fr/about']) {
 		await page.goto(`${BASE}${route}`);
-		const results = await new AxeBuilder({ page }).analyze();
-		const summary = results.violations.map((violation) => ({
-			route,
-			id: violation.id,
-			nodes: violation.nodes.map((node) => ({
-				target: node.target,
-				failure: node.failureSummary
-			}))
-		}));
-		expect(summary).toEqual([]);
-	});
+		const height = await page.evaluate(() => document.body.scrollHeight);
+		for (let y = 0; y < height; y += 320) {
+			await page.evaluate((to) => window.scrollTo(0, to), y);
+		}
+		await expect.poll(stillHidden, { message: `${route} at 320px` }).toBe(0);
+	}
+});
+
+// Both themes. The dark half is not redundant: `--ink-subtle` measured 4.65:1
+// on the page background and 3.93:1 on a raised card, so it passed everywhere
+// most muted text lives and failed on /programme's session cards — thirteen AA
+// failures that a light-only scan could never have reported.
+for (const colorScheme of ['light', 'dark'] as const) {
+	for (const route of ['/', '/fr', '/programme', '/participants', '/call-for-papers', '/venue']) {
+		test(`accessibility: ${route} has no automated violations (${colorScheme})`, async ({
+			page
+		}) => {
+			// Scan settled styles and exercise the site's reduced-motion alternative;
+			// otherwise axe can sample text midway through an opacity transition.
+			await page.emulateMedia({ reducedMotion: 'reduce', colorScheme });
+			await page.goto(`${BASE}${route}`);
+			const results = await new AxeBuilder({ page }).analyze();
+			const summary = results.violations.map((violation) => ({
+				route,
+				colorScheme,
+				id: violation.id,
+				nodes: violation.nodes.map((node) => ({
+					target: node.target,
+					failure: node.failureSummary
+				}))
+			}));
+			expect(summary).toEqual([]);
+		});
+	}
 }

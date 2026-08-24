@@ -236,7 +236,16 @@ html {
 
 	--ink-strong: var(--color-surface-50);
 	--ink-body: var(--color-surface-200);
-	--ink-subtle: var(--color-surface-400);
+	/* Not surface-400 (oklch 0.62). A muted ink has two backgrounds in this
+	   theme, and 0.62 cleared only one of them: 4.65:1 on the page, 3.93:1 on
+	   --surface-raised, which is where session cards put it. Contrast here had
+	   always been checked per token rather than per token-on-surface, so the
+	   failing half was invisible — thirteen AA failures on /programme in both
+	   locales, on the page the workshop is actually read on. 0.66 measures
+	   4.63:1 on the card and more on the page, so one value clears both. It
+	   stays a step of its own rather than moving to surface-300, which would
+	   collapse the interval to --ink-body. */
+	--ink-subtle: oklch(0.66 0 0);
 
 	--border-subtle: color-mix(in oklab, var(--color-surface-50) 12%, transparent);
 	--border-strong: color-mix(in oklab, var(--color-surface-50) 20%, transparent);
