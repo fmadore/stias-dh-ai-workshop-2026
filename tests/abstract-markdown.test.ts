@@ -4,7 +4,7 @@ import { renderAbstract } from '../src/lib/utils/markdown';
 
 test('tags a paragraph that is entirely one bold run as a subhead', () => {
 	const html = renderAbstract('Intro paragraph.\n\n**Digital Literacy Gap**\n\nThe section body.');
-	assert.match(html, /<p class="prose-subhead"><strong>Digital Literacy Gap<\/strong><\/p>/);
+	assert.match(html, /<h3 class="prose-subhead"><strong>Digital Literacy Gap<\/strong><\/h3>/);
 	assert.equal(html.match(/prose-subhead/g)?.length, 1);
 });
 
@@ -21,8 +21,8 @@ test('leaves a paragraph that ends with a bold run alone', () => {
 
 test('does not swallow the text between two separate bold paragraphs', () => {
 	const html = renderAbstract('**One**\n\nBody between.\n\n**Two**');
-	assert.match(html, /<p class="prose-subhead"><strong>One<\/strong><\/p>/);
-	assert.match(html, /<p class="prose-subhead"><strong>Two<\/strong><\/p>/);
+	assert.match(html, /<h3 class="prose-subhead"><strong>One<\/strong><\/h3>/);
+	assert.match(html, /<h3 class="prose-subhead"><strong>Two<\/strong><\/h3>/);
 	assert.match(html, /<p>Body between\.<\/p>/);
 });
 

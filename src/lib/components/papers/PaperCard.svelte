@@ -62,16 +62,41 @@
 </article>
 
 <style>
+	/* The resting affordance the programme and the home figures already carry.
+	   This link was `color: inherit` with a hover-only colour change, which is
+	   no cue at all on the phone the papers index is browsed on — and it is the
+	   card's title, the one thing a reader is trying to click. The mixes are the
+	   measured ones: 65% light, 60% dark, both clearing 3:1 on the raised card,
+	   where 35% measured 1.78:1. The card also lifts on hover, which is a cue
+	   for a pointer and nothing for a finger.
+
+	   Thickness steps up with the type, as it does under the home page's serif
+	   numerals: this is the card-title step (19–23px), where a 1px rule reads as
+	   a hairline artefact rather than an underline. */
 	.paper-title-link {
 		color: inherit;
-		transition: color var(--duration-fast) var(--ease-standard);
+		text-decoration: underline;
+		text-decoration-color: color-mix(in oklab, var(--color-primary-600) 65%, transparent);
+		text-decoration-thickness: 1.5px;
+		text-underline-offset: 0.18em;
+		transition:
+			color var(--duration-fast) var(--ease-standard),
+			text-decoration-color var(--duration-fast) var(--ease-standard);
 	}
 
-	.paper-title-link:hover {
+	:global(.dark) .paper-title-link {
+		text-decoration-color: color-mix(in oklab, var(--color-primary-300) 60%, transparent);
+	}
+
+	.paper-title-link:hover,
+	.paper-title-link:focus-visible {
 		color: var(--color-primary-700);
+		text-decoration-color: currentColor;
 	}
 
-	:global(.dark) .paper-title-link:hover {
+	:global(.dark) .paper-title-link:hover,
+	:global(.dark) .paper-title-link:focus-visible {
 		color: var(--color-primary-300);
+		text-decoration-color: currentColor;
 	}
 </style>

@@ -15,14 +15,18 @@ marked.setOptions({ gfm: true, breaks: false });
  * `p:has(> strong:only-child)` also matches a paragraph that merely *opens*
  * with a bold phrase, which two other abstracts do mid-sentence.
  *
- * It stays a `<p>`, and keeps the author's `<strong>`: the transform adds a
- * styling hook, it does not rewrite the markup. Promoting it to `<h3>` would
- * file these under the preceding "Presented by" heading, which is not what
- * they belong to — the abstract has no heading of its own to sit beneath.
+ * It becomes an `<h3>`, and keeps the author's `<strong>`: the transform adds
+ * structure and a styling hook, it does not rewrite the author's emphasis.
+ * This was a `<p>` until the paper page gained an "Abstract" heading of its
+ * own — without one, an `<h3>` here would have filed these under the preceding
+ * "Presented by", which is not what they belong to. With `<h2>Abstract</h2>`
+ * above the article they sit where they read: h1 → h2 → h3, no level skipped,
+ * and five section headings that were invisible to the document outline are
+ * now in it.
  */
 const LONE_BOLD_PARAGRAPH = /<p>(<strong>(?:(?!<\/strong>)[\s\S])*<\/strong>)<\/p>/g;
 
 export function renderAbstract(markdown: string): string {
 	const html = marked.parse(markdown, { async: false }) as string;
-	return html.replace(LONE_BOLD_PARAGRAPH, '<p class="prose-subhead">$1</p>');
+	return html.replace(LONE_BOLD_PARAGRAPH, '<h3 class="prose-subhead">$1</h3>');
 }

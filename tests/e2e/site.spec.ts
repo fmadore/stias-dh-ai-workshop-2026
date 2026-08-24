@@ -480,6 +480,116 @@ test('what the reader scrolled past is visible, however they got there', async (
 	}
 });
 
+test("an abstract's own section headings are in the document outline", async ({ page }) => {
+	// The five headings one author wrote as `**bold**` paragraphs were styled as
+	// headings and invisible to the outline: a screen-reader user listing the
+	// page's headings got "Presented by" and "Also in this session" and nothing
+	// for the abstract itself. They are `<h3>`s now, which needed an `<h2>` of
+	// their own above them — without it they would have filed under "Presented
+	// by", which is not what they belong to.
+	for (const [route, abstractHeading] of [
+		[`${BASE}/papers/frugal-infrastructures`, 'Abstract'],
+		[`${BASE}/fr/papers/frugal-infrastructures`, 'Résumé']
+	]) {
+		await page.goto(route);
+		const outline = await page.evaluate(() =>
+			[...document.querySelectorAll('main h1, main h2, main h3, main h4, main h5, main h6')].map(
+				(h) => ({
+					level: Number(h.tagName[1]),
+					text: h.textContent!.trim(),
+					subhead: h.classList.contains('prose-subhead')
+				})
+			)
+		);
+
+		// The heading is UI copy, so it follows the page's locale…
+		expect(outline.filter((h) => h.text === abstractHeading)).toHaveLength(1);
+		// …and the author's five are below it, one level down.
+		const subheads = outline.filter((h) => h.subhead);
+		expect(subheads).toHaveLength(5);
+		for (const subhead of subheads) expect(subhead.level).toBe(3);
+
+		// One h1, and no level skipped anywhere on the route.
+		expect(outline.filter((h) => h.level === 1)).toHaveLength(1);
+		for (let i = 1; i < outline.length; i++) {
+			expect(outline[i].level - outline[i - 1].level).toBeLessThanOrEqual(1);
+		}
+	}
+});
+
+test('a link that inherits its colour still looks like a link at rest', async ({ page }) => {
+	// The Resting Affordance Rule reached the programme and the home figures and
+	// stopped. These two were `color: inherit` with a hover-only colour change —
+	// no cue at all on a phone, on the title of a card whose whole job is to be
+	// clicked. The author link was worse: both its child spans set their own
+	// colour, so the `color` change on the anchor reached neither and its only
+	// interactive feedback did nothing.
+	const resting = (selector: string) =>
+		page.evaluate((sel) => {
+			const el = document.querySelector(sel);
+			if (!el) return null;
+			const style = getComputedStyle(el);
+			// Composite the decoration colour over the surface it sits on and
+			// return the contrast ratio; `color-mix(… transparent)` means the
+			// declared value is not the rendered one.
+			let node: Element | null = el;
+			let surface = 'rgb(255, 255, 255)';
+			while (node) {
+				const bg = getComputedStyle(node).backgroundColor;
+				const parts = bg.match(/[\d.]+/g)?.map(Number) ?? [];
+				if (parts.length === 3 || parts[3] === 1) {
+					surface = bg;
+					break;
+				}
+				node = node.parentElement;
+			}
+			const canvas = document.createElement('canvas');
+			canvas.width = canvas.height = 8;
+			const ctx = canvas.getContext('2d')!;
+			const paint = (colour: string, under?: string) => {
+				ctx.clearRect(0, 0, 8, 8);
+				if (under) {
+					ctx.fillStyle = under;
+					ctx.fillRect(0, 0, 8, 8);
+				}
+				ctx.fillStyle = colour;
+				ctx.fillRect(0, 0, 8, 8);
+				const [r, g, b] = ctx.getImageData(4, 4, 1, 1).data;
+				return [r, g, b];
+			};
+			const channel = (v: number) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+			const luminance = ([r, g, b]: number[]) =>
+				0.2126 * channel(r / 255) + 0.7152 * channel(g / 255) + 0.0722 * channel(b / 255);
+			const a = luminance(paint(style.textDecorationColor, surface));
+			const b = luminance(paint(surface));
+			return {
+				line: style.textDecorationLine,
+				ratio: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05)
+			};
+		}, selector);
+
+	for (const colorScheme of ['light', 'dark'] as const) {
+		await page.emulateMedia({ colorScheme });
+
+		await page.goto(`${BASE}/papers`);
+		const title = await resting('.paper-title-link');
+		expect(title!.line, `card title, ${colorScheme}`).toBe('underline');
+		expect(title!.ratio, `card title, ${colorScheme}`).toBeGreaterThanOrEqual(3);
+
+		await page.goto(`${BASE}/papers/frugal-infrastructures`);
+		const author = await resting('.author-name');
+		expect(author!.line, `author name, ${colorScheme}`).toBe('underline');
+		expect(author!.ratio, `author name, ${colorScheme}`).toBeGreaterThanOrEqual(3);
+
+		// The affiliation under the name is part of the same anchor and must stay
+		// unruled: two underlines in one link read as two links.
+		const affiliation = await page.evaluate(
+			() => getComputedStyle(document.querySelectorAll('.author-link span')[1]).textDecorationLine
+		);
+		expect(affiliation, `affiliation, ${colorScheme}`).toBe('none');
+	}
+});
+
 // Both themes. The dark half is not redundant: `--ink-subtle` measured 4.65:1
 // on the page background and 3.93:1 on a raised card, so it passed everywhere
 // most muted text lives and failed on /programme's session cards — thirteen AA

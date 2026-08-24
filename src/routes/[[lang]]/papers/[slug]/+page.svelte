@@ -83,8 +83,13 @@
 						{#each authors as author (author.id)}
 							<li class="author">
 								<!-- Author names are links now: every person has a citable page. -->
+								<!-- The resting underline goes on the name, not the anchor: the
+								     anchor also wraps the affiliation, and underlining a second
+								     line of muted 14px reads as two links rather than one. -->
 								<a href={localePath(`/participants/${author.id}`)} class="author-link">
-									<span class="font-display text-strong block text-lg">{author.name}</span>
+									<span class="author-name font-display text-strong block text-lg">
+										{author.name}
+									</span>
 									<span class="text-muted block text-sm">{t(author.affiliation)}</span>
 								</a>
 							</li>
@@ -94,10 +99,18 @@
 			{/if}
 
 			{#if data.abstractHtml}
-				<article class="prose" lang={presentation.language}>
-					<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-					{@html data.abstractHtml}
-				</article>
+				<!-- The heading is UI copy in the page's locale; the abstract keeps its
+				     own `lang`, so the two cannot be one element. It also gives the
+				     author's own section headings something to sit beneath: they are
+				     `<h3>`s now (see `renderAbstract`), which needed an h2 above them
+				     to land in the outline without skipping a level. -->
+				<section>
+					<h2 class="text-eyebrow mb-4">{m.paper_abstract()}</h2>
+					<article class="prose" lang={presentation.language}>
+						<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+						{@html data.abstractHtml}
+					</article>
+				</section>
 			{/if}
 
 			{#if placement}
@@ -165,14 +178,46 @@
 		border-left: 2px solid color-mix(in oklab, var(--color-secondary-500) 60%, transparent);
 	}
 
+	/* Two defects in one selector. It was `color: inherit` with a hover-only
+	   colour change, so there was no resting cue that each author has a page —
+	   and on this surface no neighbouring link implies one. And the hover it did
+	   declare was inert: both child spans set their own colour (`text-strong`,
+	   `text-muted`), so `color` on the anchor reached neither, and the element's
+	   only interactive feedback did nothing at all.
+
+	   So the states live on the name, which is what the link is about. The
+	   affiliation beneath stays muted and unruled — underlining a second line of
+	   14px reads as two links rather than one, which is why `text-decoration` is
+	   cleared on the anchor and set on the span.
+
+	   These rules outrank `text-strong` because Svelte's scoped styles are
+	   unlayered and unlayered beats `@layer utilities` — the trap app.css
+	   documents, used deliberately rather than tripped over. Mixes are the
+	   measured ones (65% light, 60% dark, both clearing 3:1); 1.5px because the
+	   name sets 18px display serif, where 1px reads as a hairline artefact. */
 	.author-link {
 		color: inherit;
-		transition: color var(--duration-fast) var(--ease-standard);
+		text-decoration: none;
 	}
-	.author-link:hover {
+	.author-name {
+		text-decoration: underline;
+		text-decoration-color: color-mix(in oklab, var(--color-primary-600) 65%, transparent);
+		text-decoration-thickness: 1.5px;
+		text-underline-offset: 0.18em;
+		transition:
+			color var(--duration-fast) var(--ease-standard),
+			text-decoration-color var(--duration-fast) var(--ease-standard);
+	}
+	:global(.dark) .author-name {
+		text-decoration-color: color-mix(in oklab, var(--color-primary-300) 60%, transparent);
+	}
+	.author-link:hover .author-name,
+	.author-link:focus-visible .author-name {
 		color: var(--color-primary-700);
+		text-decoration-color: currentColor;
 	}
-	:global(.dark) .author-link:hover {
+	:global(.dark) .author-link:hover .author-name,
+	:global(.dark) .author-link:focus-visible .author-name {
 		color: var(--color-primary-300);
 	}
 

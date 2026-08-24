@@ -2,7 +2,7 @@
 	import { venueInfo, venueStreet } from '$lib/data/venue';
 	import { t } from '$lib/utils/i18n';
 	import * as m from '$lib/paraglide/messages';
-	import { Check, ExternalLink, Minus } from '@lucide/svelte';
+	import { Check, ExternalLink, Info, Minus } from '@lucide/svelte';
 	import { getLocale } from '$lib/paraglide/runtime';
 	import { countryName } from '$lib/utils/country';
 
@@ -75,6 +75,21 @@
 				</ul>
 				<p class="text-muted mt-3 text-sm">{m.logistics_not_covered_note()}</p>
 			</div>
+		</div>
+
+		<!-- What "transportation" in the covered list actually means for someone
+		     who has to get from a plane to Stellenbosch. Half of it is settled and
+		     half is not, so it takes the same callout the programme's "preliminary"
+		     notice does — the site's established idiom for information that is
+		     true now and not yet complete. -->
+		<div class="callout mt-8">
+			<Info
+				size={18}
+				strokeWidth={1.75}
+				class="text-accent-ink mt-0.5 shrink-0"
+				aria-hidden="true"
+			/>
+			<p class="text-body measure-prose text-sm leading-relaxed">{m.venue_arrival()}</p>
 		</div>
 	</section>
 </div>

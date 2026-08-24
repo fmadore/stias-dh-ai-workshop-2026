@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-24T06:33:13.635Z",
+  "generatedAt": "2026-08-24T07:08:05.400Z",
   "title": "Design System: DH & AI in African Studies",
   "extensions": {
     "colorMeta": {
@@ -505,7 +505,12 @@
       },
       {
         "name": "The Resting Affordance Rule",
-        "body": "A link that carries no colour of its own carries a resting underline: `color-mix` at **65% of `primary-600`** in light and **60% of `primary-300`** in dark, 1px thick at a 0.2em offset, going solid `currentColor` on hover and focus. Those percentages are measured, not chosen — 35% light and 40% dark came out at 1.78:1 and 2.18:1, a resting cue you cannot resolve on a phone, which is the original defect wearing a fix's clothes. 65/60 clear 3:1 (measured 3.26:1 and 3.32:1 on the card, 3.20:1 and 3.55:1 under the home page's serif numerals, where the rule steps up to 2px because 1px under a 48px numeral reads as an artefact). **Hover is not an affordance.** 67 of the programme's 91 links had `color: inherit`, no underline, and a colour change on hover alone — no resting cue at all on the page most likely to be read on a phone in a conference room. A link that carries its own glyph (an external-link mark) may opt out; nothing else may. **Two places have not been brought up to this yet** — `PaperCard`'s title link and the paper page's `.author-link`, both still `color: inherit` with a hover-only colour change. That is **P3-20**, and it is a gap in the tree rather than an exemption in the rule: they sit inside cards that already carry a hover lift, which is the argument for their being last, not for their being different.",
+        "body": "A link that carries no colour of its own carries a resting underline: `color-mix` at **65% of `primary-600`** in light and **60% of `primary-300`** in dark, 1px thick at a 0.2em offset, going solid `currentColor` on hover and focus. Those percentages are measured, not chosen — 35% light and 40% dark came out at 1.78:1 and 2.18:1, a resting cue you cannot resolve on a phone, which is the original defect wearing a fix's clothes. 65/60 clear 3:1 (measured 3.26:1 and 3.32:1 on the card, 3.20:1 and 3.55:1 under the home page's serif numerals, where the rule steps up to 2px because 1px under a 48px numeral reads as an artefact). **Hover is not an affordance.** 67 of the programme's 91 links had `color: inherit`, no underline, and a colour change on hover alone — no resting cue at all on the page most likely to be read on a phone in a conference room. A link that carries its own glyph (an external-link mark) may opt out; nothing else may. The rule now holds everywhere: `PaperCard`'s title and the paper page's author name were the last two holdouts (P3-20) and carry it at 1.5px, because at the card-title and 18px display steps a 1px rule reads as a hairline artefact rather than an underline.",
+        "section": "components"
+      },
+      {
+        "name": "The Inert-State Rule",
+        "body": "Before replacing an interactive state, check that it was ever working. The author link declared `color` on the anchor while both its child spans set their own (`text-strong`, `text-muted`), so the hover reached neither and the element's only interactive feedback did nothing at all — a defect identical in the source and identical on screen to one that works, and one no linter, type-checker or axe run reports. Where a link wraps more than one line of differently-coloured text, put the state on the part that is the link's subject, and put the underline there too: ruling a second, muted line reads as two links rather than one. The general form: a declaration on an ancestor that every descendant overrides is not a state, it is a comment.",
         "section": "components"
       },
       {
