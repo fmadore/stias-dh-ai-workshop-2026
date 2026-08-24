@@ -130,3 +130,17 @@ export function daysUntil(target: number, now: number = Date.now()): number {
 	const midnightAtVenue = (at: number) => Date.parse(`${dateAtVenue(at)}T00:00:00Z`);
 	return Math.max(0, Math.round((midnightAtVenue(target) - midnightAtVenue(now)) / 86_400_000));
 }
+
+/**
+ * Milliseconds from `now` until the next midnight at the venue — the only
+ * moment `daysUntil` can change its answer.
+ *
+ * The countdown used to poll hourly for a value that moves once a day, so
+ * twenty-three of every twenty-four wake-ups re-rendered the same number.
+ * Clamped to at least a second so a caller that re-arms on firing cannot spin
+ * if it lands exactly on the boundary.
+ */
+export function msUntilNextVenueMidnight(now: number = Date.now()): number {
+	const startOfToday = Date.parse(`${dateAtVenue(now)}T00:00:00${SAST}`);
+	return Math.max(1_000, startOfToday + 86_400_000 - now);
+}
