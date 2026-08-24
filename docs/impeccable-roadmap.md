@@ -1,13 +1,19 @@
-# Impeccable design roadmap
+# Impeccable design record
 
-A phased plan for running the `/impeccable` skill (v4.1.1) over the STIAS DH+AI Workshop 2026 site to improve design quality and consistency before the workshop.
+**Complete as of 24 August 2026.** This was the plan for running the `/impeccable` skill (v4.1.1) over the STIAS DH+AI Workshop 2026 site; all eighteen items are closed and it is kept as the record of what each pass found, fixed, and deliberately left alone. The phase headings and the calendar at the foot are the original plan, preserved rather than rewritten — read them as history, not as instructions.
 
-**Hard constraints that shape this plan:**
+**Where things stand:**
 
-- **The workshop is 21–24 September 2026.** As of mid-August that leaves ~5 weeks. The site's audience right now is accepted participants checking the programme, their own pages, and travel info — plus the interested public. Content freeze should land ~14 September.
-- **This is refinement, not redesign.** The July 2026 design audit was already implemented in full (token layer, home/shell, content pages, dark variants). The visual identity — cerberus base, teal `#0D7377` primary, gold `#D4A843` secondary, serif display type — is the incumbent world and every impeccable command must preserve it. No command in this plan replaces the visual world.
-- **No impeccable artifacts exist yet.** There is no `PRODUCT.md` and no `DESIGN.md`, so Phase 0 is a prerequisite: without them, every later command re-derives context from scratch and risks drifting from the incumbent identity.
-- **Everything ships in two locales** (EN base, FR under `/fr/`), two themes (light/dark), and must survive mobile. Every command's verification pass covers all of these.
+- **What still needs a decision from the user**, not a pass: **P3-25** (an "Abstract" heading — new copy in two locales), **P2-18** (travel facts for `/venue`, which do not exist in the repository yet) and the exclamation mark in `countdown_event_started`, the message catalogue's only one.
+- **Two findings are open**, both `distill`-shaped and neither visible to a reader: **P3-34** (25 brass paper hairlines on `/programme`, straining the One Gold Moment Rule without breaking it) and **P3-39** (a dead selector in the print stylesheet).
+- **The current spec is [`DESIGN.md`](../DESIGN.md)**, refreshed by item 18 against the shipped tree. It, not this file, is what new work should read first. The prioritised defect backlog and every pass's findings live in [`docs/design-findings-2026-08.md`](design-findings-2026-08.md); the final sweep is [`docs/audit-2026-08-24.md`](audit-2026-08-24.md).
+
+**The constraints that shaped every pass**, and still bind anything that touches the site:
+
+- **The workshop is 21–24 September 2026**, after which the site becomes a frozen record. Its audience is accepted participants checking the programme, their own pages and travel information, plus the interested scholarly public.
+- **This was refinement, not redesign.** The visual identity — teal `#0D7377` primary, gold `#D4A843` secondary, serif display type, the custom token layer in `src/app.css` — is the incumbent world, and no command in this plan replaced it. That still holds.
+- **Everything ships in two locales** (EN base, FR under `/fr/`), two themes (light/dark), and must survive mobile at 320px. Every pass's verification covered all of these; anything later should too.
+- **WCAG 2.2 AA is a gate, not a report.** The re-run audit closed at 0 axe violations across 52 runs, and the accessibility sweep now runs in both colour schemes — the missing half that once let a dark-only AA failure sit on the top surface unnoticed.
 
 ---
 
@@ -136,11 +142,11 @@ Only after structure settles — animating a layout that's about to change is wa
 | 7 Sept  | Phase 3 (home, papers) + Phase 4 (motion)                           |
 | 14 Sept | Phase 5 (polish, final audit, document) → **freeze before 21 Sept** |
 
-**Status, 24 August 2026: the roadmap is complete.** All eighteen items are done — Phases 0 through 5, plus the four commands Phase 1 reinstated (`colorize`, `adapt`, `distill`, `onboard`) and the remediation the re-run audit's own findings called for. The gate is met: 0 axe violations across 52 runs, 0 overflow and 0 hidden reveals across 156 page loads, and `DESIGN.md` now describes the tree that produced those numbers. Finished about three weeks ahead of the calendar below, which leaves the content freeze on ~14 September uncontested by design work.
+**Status, 24 August 2026: the roadmap is complete.** All eighteen items are done — Phases 0 through 5, plus the four commands Phase 1 reinstated (`colorize`, `adapt`, `distill`, `onboard`) and the remediation the re-run audit's own findings called for. The gate is met: 0 axe violations across 52 runs, 0 overflow and 0 hidden reveals across 156 page loads, and `DESIGN.md` now describes the tree that produced those numbers. Finished about three weeks ahead of the calendar above, which leaves the content freeze on ~14 September uncontested by design work.
 
-**Three things still need the user rather than a pass:** **P3-25** (an "Abstract" heading, new copy in two locales), **P2-18** (travel facts for `/venue`, which do not exist in the repository yet) and the exclamation mark in `countdown_event_started`, the catalogue's only one, which two passes have now deliberately declined to decide for you. **Two findings are open and both are `distill`-shaped, neither urgent:** **P3-34** (25 brass paper hairlines on `/programme`, against a rarity rule they strain without breaking) and **P3-39** (a dead selector in the print stylesheet). Nothing in either is visible to a reader.
+What is left is listed at the head of this file: three decisions that are the user's (P3-25, P2-18, and one exclamation mark two passes declined to decide) and two open `distill`-shaped findings (P3-34, P3-39), none of them visible to a reader.
 
-**If the site is touched again before the workshop, the standing instruction is: read `DESIGN.md` first, and check the number.** Five of its rules exist because a value that was declared stopped being true — a measure in the wrong unit, a container height that could wrap, a contrast ratio measured against the wrong surface, a threshold no tall element could reach, a floor that padding could not hold. The pattern across every pass in this roadmap is that the defects were never in the taste; they were in the arithmetic.
+**If the site is touched again before the workshop, the standing instruction is: read `DESIGN.md` first, and check the number.** Five of its rules exist because a value that was declared stopped being true — a measure in the wrong unit, a container height that could wrap, a contrast ratio measured against the wrong surface, a threshold no tall element could reach, a floor that padding could not hold. The pattern across every pass recorded here is that the defects were never in the taste; they were in the arithmetic.
 
 **A working agreement Phase 4 earned:** `playwright.config.ts` sets `reuseExistingServer: !process.env.CI` and `vite preview` caches its asset map at startup, so a preview server left running across a rebuild serves HTML referencing hashes it will 404. It cost one spurious e2e failure and one false alarm that the site was frozen at build time. **Restart the preview after every build**, and treat "the client looks dead" as a stale server until proven otherwise.
 
