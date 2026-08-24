@@ -18,7 +18,14 @@ const budgets = {
 	// MapLibre is a deliberately lazy feature: keep its renderer and Web Worker
 	// out of the core-site budget, but give both their own regression ceilings.
 	mapLibreRendererGzip: 260 * 1024,
-	mapLibreWorkerGzip: 130 * 1024
+	mapLibreWorkerGzip: 130 * 1024,
+	// The footer logos, which every page carries. They were supplied at up to
+	// 2250px wide to render 40px tall — 280 KB on every page load against a
+	// stated hard constraint on image budgets. Raw bytes, not gzip: these are
+	// already-compressed formats and the wire cost is the file. `npm run images`
+	// produces marks that fit inside this; a fresh logo dropped in at full size
+	// is exactly what this gate exists to stop.
+	footerLogosBytes: 90 * 1024
 };
 
 async function walk(directory) {
@@ -40,6 +47,13 @@ const sizes = await Promise.all(
 );
 const javascript = sizes.filter(({ file }) => file.endsWith('.js'));
 const css = sizes.filter(({ file }) => file.endsWith('.css'));
+// Read from the build, not from static/, so this measures what is actually
+// deployed — including a source file left behind next to its optimised twin.
+const logoFiles = await walk(path.resolve('build/images/logos'));
+const logoBytes = (
+	await Promise.all(logoFiles.map(async (file) => (await readFile(file)).byteLength))
+).reduce((sum, bytes) => sum + bytes, 0);
+
 const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
 const mapLibreEntry = manifest['node_modules/maplibre-gl/dist/maplibre-gl.mjs'];
 const mapLibreRendererPath = mapLibreEntry ? path.resolve('build', mapLibreEntry.file) : undefined;
@@ -91,6 +105,8 @@ if (mapLibreWorkers.length !== 1)
 	failures.push(`expected 1 MapLibre worker chunk, found ${mapLibreWorkers.length}`);
 if (total(mapLibreWorkers) > budgets.mapLibreWorkerGzip)
 	failures.push(`MapLibre worker is ${(total(mapLibreWorkers) / 1024).toFixed(1)} KiB gzip`);
+if (logoBytes > budgets.footerLogosBytes)
+	failures.push(`footer logos weigh ${(logoBytes / 1024).toFixed(1)} KiB — run npm run images`);
 
 if (failures.length) {
 	for (const failure of failures) console.error(`✗ ${failure}`);
@@ -98,5 +114,5 @@ if (failures.length) {
 }
 
 console.log(
-	`bundle-size: OK (largest core JS ${(largest.gzip / 1024).toFixed(1)} KiB, core JS ${(total(coreJavaScript) / 1024).toFixed(1)} KiB, MapLibre ${((mapLibreRenderer?.gzip ?? 0) / 1024).toFixed(1)} KiB + worker ${(total(mapLibreWorkers) / 1024).toFixed(1)} KiB, CSS ${(total(css) / 1024).toFixed(1)} KiB gzip, heaviest route ${(heaviestRoute.gzip / 1024).toFixed(1)} KiB blocking)`
+	`bundle-size: OK (largest core JS ${(largest.gzip / 1024).toFixed(1)} KiB, core JS ${(total(coreJavaScript) / 1024).toFixed(1)} KiB, MapLibre ${((mapLibreRenderer?.gzip ?? 0) / 1024).toFixed(1)} KiB + worker ${(total(mapLibreWorkers) / 1024).toFixed(1)} KiB, CSS ${(total(css) / 1024).toFixed(1)} KiB gzip, heaviest route ${(heaviestRoute.gzip / 1024).toFixed(1)} KiB blocking, footer logos ${(logoBytes / 1024).toFixed(1)} KiB)`
 );

@@ -209,8 +209,16 @@ export interface Accommodation {
 export interface Sponsor {
 	id: string;
 	name: string;
-	/** Path under static/, e.g. `/images/logos/….png`. */
+	/** Path under static/, e.g. `/images/logos/….webp`. */
 	logo: string;
+	/**
+	 * Intrinsic pixel size of `logo`, so the footer reserves each mark's width
+	 * before it loads. The row is `h-10 w-auto`: without these, seven lazy
+	 * images are 0 px wide until they arrive and the row reflows around them.
+	 * Omitted for SVGs, which have no intrinsic size to declare.
+	 */
+	width?: number;
+	height?: number;
 	url: string;
 }
 
