@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-17T00:00:00Z",
+  "generatedAt": "2026-08-24T06:08:36.619Z",
   "title": "Design System: DH & AI in African Studies",
   "extensions": {
     "colorMeta": {
@@ -108,6 +108,81 @@
           "#a6ce39",
           "#c1e45e"
         ]
+      },
+      "primary-300": {
+        "role": "primary",
+        "displayName": "Pale Teal",
+        "canonical": "#4db7b9",
+        "tonalRamp": [
+          "#021616",
+          "#042828",
+          "#063b3c",
+          "#094e50",
+          "#0b6163",
+          "#0d7377",
+          "#4db7b9",
+          "#b3e0e1"
+        ]
+      },
+      "primary-200": {
+        "role": "primary",
+        "displayName": "Teal Haze",
+        "canonical": "#80cccd",
+        "tonalRamp": [
+          "#021616",
+          "#042828",
+          "#063b3c",
+          "#094e50",
+          "#0b6163",
+          "#0d7377",
+          "#4db7b9",
+          "#b3e0e1"
+        ]
+      },
+      "secondary-300": {
+        "role": "secondary",
+        "displayName": "Pale Brass",
+        "canonical": "#dcbe5c",
+        "tonalRamp": [
+          "#44340e",
+          "#644c15",
+          "#84641b",
+          "#a47d22",
+          "#c49528",
+          "#d4a843",
+          "#e6d08a",
+          "#faf5e6"
+        ]
+      },
+      "raised-dark": {
+        "role": "neutral",
+        "displayName": "Raised Night",
+        "canonical": "#221f1b",
+        "tonalRamp": [
+          "#0e0d0b",
+          "#161411",
+          "#1a1815",
+          "#221f1b",
+          "#2d2925",
+          "#3a3630",
+          "#56514a",
+          "#8a847a"
+        ]
+      },
+      "ink-muted-dark": {
+        "role": "neutral",
+        "displayName": "Muted Ink, Dark",
+        "canonical": "oklch(0.66 0 0)",
+        "tonalRamp": [
+          "oklch(0.18 0 0)",
+          "oklch(0.25 0 0)",
+          "oklch(0.32 0 0)",
+          "oklch(0.45 0 0)",
+          "oklch(0.55 0 0)",
+          "oklch(0.66 0 0)",
+          "oklch(0.81 0 0)",
+          "oklch(0.95 0 0)"
+        ]
       }
     },
     "typographyMeta": {
@@ -119,7 +194,10 @@
         "displayName": "Page Title",
         "purpose": "The PageHeader h1 on every route."
       },
-      "section": { "displayName": "Section", "purpose": "Section headings within a page." },
+      "section": {
+        "displayName": "Section",
+        "purpose": "Section headings within a page."
+      },
       "card-title": {
         "displayName": "Card Title",
         "purpose": "Paper titles, participant names, session names. Fluid so the step down from Section survives on wide screens."
@@ -188,20 +266,44 @@
         "value": "cubic-bezier(0.2, 0.8, 0.2, 1)",
         "purpose": "Elements arriving on screen."
       },
-      { "name": "duration-fast", "value": "150ms", "purpose": "Colour-only changes." },
+      {
+        "name": "duration-fast",
+        "value": "150ms",
+        "purpose": "Colour-only changes."
+      },
       {
         "name": "duration-base",
         "value": "220ms",
         "purpose": "Default; shadow, transform, border."
       },
-      { "name": "duration-slow", "value": "360ms", "purpose": "Mobile menu, fade-rise." },
-      { "name": "duration-reveal", "value": "520ms", "purpose": "Scroll reveal only." }
+      {
+        "name": "duration-slow",
+        "value": "360ms",
+        "purpose": "Mobile menu, fade-rise."
+      },
+      {
+        "name": "duration-reveal",
+        "value": "520ms",
+        "purpose": "Scroll reveal only."
+      }
     ],
     "breakpoints": [
-      { "name": "sm", "value": "640px" },
-      { "name": "md", "value": "768px" },
-      { "name": "lg", "value": "1024px" },
-      { "name": "xl", "value": "1280px" }
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
     ]
   },
   "components": [
@@ -211,7 +313,7 @@
       "refersTo": "button-primary",
       "description": "The default action. Pressed teal with white text; lifts 1px and deepens on hover.",
       "html": "<button class=\"ds-btn ds-btn-primary\">View the programme</button>",
-      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; font-family: var(--font-sans, 'Outfit', system-ui, sans-serif); font-weight: 500; font-size: 0.9375rem; line-height: 1; border: 0; border-radius: 0.75rem; padding: 0.75rem 1.25rem; cursor: pointer; white-space: nowrap; transition: background-color 220ms cubic-bezier(0.32,0.72,0,1), color 220ms cubic-bezier(0.32,0.72,0,1), border-color 220ms cubic-bezier(0.32,0.72,0,1), box-shadow 220ms cubic-bezier(0.32,0.72,0,1), transform 220ms cubic-bezier(0.32,0.72,0,1); } .ds-btn-primary { background-color: #0b6163; color: #fff; box-shadow: 0 1px 2px 0 rgb(4 40 40 / 0.05); } .ds-btn-primary:hover { background-color: #094e50; box-shadow: 0 4px 8px -2px rgb(4 40 40 / 0.08), 0 2px 4px -2px rgb(4 40 40 / 0.04); transform: translateY(-1px); } .ds-btn-primary:focus-visible { outline: 2px solid #0d7377; outline-offset: 3px; }"
+      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; font-family: var(--font-sans, 'Outfit', system-ui, sans-serif); font-weight: 500; font-size: 0.9375rem; line-height: 1; border: 0; border-radius: 0.75rem; padding: 0.75rem 1.25rem; min-height: 2.75rem; cursor: pointer; white-space: nowrap; transition: background-color 220ms cubic-bezier(0.32,0.72,0,1), color 220ms cubic-bezier(0.32,0.72,0,1), border-color 220ms cubic-bezier(0.32,0.72,0,1), box-shadow 220ms cubic-bezier(0.32,0.72,0,1), transform 220ms cubic-bezier(0.32,0.72,0,1); } .ds-btn-primary { background-color: #0b6163; color: #fff; box-shadow: 0 1px 2px 0 rgb(4 40 40 / 0.05); } .ds-btn-primary:hover { background-color: #094e50; box-shadow: 0 4px 8px -2px rgb(4 40 40 / 0.08), 0 2px 4px -2px rgb(4 40 40 / 0.04); transform: translateY(-1px); } .ds-btn-primary:focus-visible { outline: 2px solid #0d7377; outline-offset: 3px; }"
     },
     {
       "name": "Accent Button",
@@ -265,9 +367,9 @@
       "name": "Segmented Control",
       "kind": "custom",
       "refersTo": "segment-active",
-      "description": "The shared pick-one idiom on listing pages. Inner radius subtracts the tray's 0.25rem padding so the curves stay concentric.",
-      "html": "<div class=\"ds-field\"><span class=\"ds-label\">Language</span><div class=\"ds-tray\" role=\"group\" aria-label=\"Language\"><button class=\"ds-segment is-active\" aria-pressed=\"true\">All</button><button class=\"ds-segment\" aria-pressed=\"false\">EN</button><button class=\"ds-segment\" aria-pressed=\"false\">FR</button></div></div>",
-      "css": ".ds-tray { display: inline-flex; align-items: stretch; gap: 0.25rem; height: 2.75rem; padding: 0.25rem; background-color: color-mix(in oklab, #1d1a16 5%, transparent); border: 1px solid color-mix(in oklab, #1d1a16 10%, transparent); border-radius: 0.75rem; } .ds-segment { font-family: var(--font-sans, 'Outfit', system-ui, sans-serif); font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.04em; white-space: nowrap; color: #56514a; background: transparent; border: 0; border-radius: calc(0.75rem - 0.25rem); flex: 0 0 auto; padding: 0 0.875rem; cursor: pointer; transition: background-color 150ms cubic-bezier(0.32,0.72,0,1), color 150ms cubic-bezier(0.32,0.72,0,1); } .ds-segment:hover:not(.is-active) { color: #1d1a16; } .ds-segment.is-active { background-color: #fff; color: #094e50; box-shadow: 0 1px 2px 0 rgb(4 40 40 / 0.05); } .ds-segment:focus-visible { outline: 2px solid #0d7377; outline-offset: 3px; }"
+      "description": "The shared pick-one idiom on listing pages. A radiogroup, not a set of toggles — exclusivity is the point of the control, and a roving tabindex collapses it to one tab stop. Inner radius subtracts the tray’s 0.25rem padding so the curves stay concentric.",
+      "html": "<div class=\"ds-field\"><span class=\"ds-label\" id=\"ds-seg-label\">Language</span><div class=\"ds-tray\" role=\"radiogroup\" aria-labelledby=\"ds-seg-label\"><button class=\"ds-segment is-active\" role=\"radio\" aria-checked=\"true\" tabindex=\"0\">All</button><button class=\"ds-segment\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">EN</button><button class=\"ds-segment\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">FR</button></div></div>",
+      "css": ".ds-tray { display: inline-flex; align-items: stretch; gap: 0.25rem; min-height: 2.75rem; padding: 0.25rem; background-color: color-mix(in oklab, #1d1a16 5%, transparent); border: 1px solid color-mix(in oklab, #1d1a16 10%, transparent); border-radius: 0.75rem; } .ds-segment { font-family: var(--font-sans, 'Outfit', system-ui, sans-serif); font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.04em; white-space: nowrap; color: #56514a; background: transparent; border: 0; border-radius: calc(0.75rem - 0.25rem); flex: 0 0 auto; padding: 0 0.875rem; cursor: pointer; transition: background-color 150ms cubic-bezier(0.32,0.72,0,1), color 150ms cubic-bezier(0.32,0.72,0,1); } .ds-segment:hover:not(.is-active) { color: #1d1a16; } .ds-segment.is-active { background-color: #fff; color: #094e50; box-shadow: 0 1px 2px 0 rgb(4 40 40 / 0.05); } .ds-segment:focus-visible { outline: 2px solid #0d7377; outline-offset: 3px; }"
     },
     {
       "name": "Callout",
@@ -284,97 +386,172 @@
       "description": "The recurring section marker: a 2.75rem brass bar with rounded ends, replacing the multi-colour gradient bars it superseded.",
       "html": "<div><span class=\"ds-eyebrow\">Thematic axis</span><span class=\"ds-accent-rule\"></span></div>",
       "css": ".ds-eyebrow { display: block; font-family: var(--font-sans, 'Outfit', system-ui, sans-serif); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #7a5c15; margin-bottom: 0.75rem; } .ds-accent-rule { display: block; width: 2.75rem; height: 2px; background-color: #c49528; border-radius: 9999px; }"
+    },
+    {
+      "name": "Day Pill",
+      "kind": "nav",
+      "refersTo": "day-pill",
+      "description": "The programme's only in-page navigation, and the control most likely to be tapped while walking into a room. `.is-today` fills it solid brass — the programme's one gold moment, during the workshop only.",
+      "html": "<nav class=\"ds-day-bar\" aria-label=\"Jump to day\"><a class=\"ds-day-pill\" href=\"#day-1\">Mon 21</a><a class=\"ds-day-pill is-today\" href=\"#day-2\">Tue 22</a><a class=\"ds-day-pill\" href=\"#day-3\">Wed 23</a><a class=\"ds-day-pill\" href=\"#day-4\">Thu 24</a></nav>",
+      "css": ".ds-day-bar { display: flex; flex-wrap: nowrap; align-items: center; gap: 0.5rem; overflow-x: auto; padding: 0.5rem 0; border-bottom: 1px solid color-mix(in oklab, #1d1a16 10%, transparent); } .ds-day-pill { display: inline-flex; align-items: center; flex-shrink: 0; min-height: 2.75rem; font-family: var(--font-sans, 'Outfit', system-ui, sans-serif); font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.04em; text-decoration: none; white-space: nowrap; color: #56514a; background-color: #fff; border: 1px solid color-mix(in oklab, #1d1a16 10%, transparent); border-radius: 9999px; padding: 0.35rem 0.85rem; transition: background-color 150ms cubic-bezier(0.32,0.72,0,1), color 150ms cubic-bezier(0.32,0.72,0,1), border-color 150ms cubic-bezier(0.32,0.72,0,1); } .ds-day-pill:hover { color: #1d1a16; border-color: color-mix(in oklab, #1d1a16 18%, transparent); } .ds-day-pill.is-today { background-color: #c49528; border-color: #c49528; color: #1d1a16; } .ds-day-pill:focus-visible { outline: 2px solid #0d7377; outline-offset: 3px; }"
+    },
+    {
+      "name": "Resting Link",
+      "kind": "custom",
+      "refersTo": "link-inline",
+      "description": "A link that inherits its colour still has to look like a link at rest: a teal underline at 65% (60% in dark), going solid on hover and focus. Hover is not an affordance — 67 of the programme’s 91 links had no resting cue at all.",
+      "html": "<p class=\"ds-resting-demo\">Panel 3 · <a class=\"ds-resting-link\" href=\"#\">What a Machine Knows of a Language</a></p>",
+      "css": ".ds-resting-demo { font-family: var(--font-sans, 'Outfit', system-ui, sans-serif); font-size: 0.9375rem; line-height: 1.625; color: #3a3630; margin: 0; } .ds-resting-link { color: inherit; text-decoration: underline; text-decoration-color: color-mix(in oklab, #0b6163 65%, transparent); text-decoration-thickness: 1px; text-underline-offset: 0.2em; transition: color 150ms cubic-bezier(0.32,0.72,0,1), text-decoration-color 150ms cubic-bezier(0.32,0.72,0,1); } .ds-resting-link:hover, .ds-resting-link:focus-visible { color: #094e50; text-decoration-color: currentColor; } .ds-resting-link:focus-visible { outline: 2px solid #0d7377; outline-offset: 3px; border-radius: 0.25rem; }"
     }
   ],
   "narrative": {
     "northStar": "The Reading Room",
-    "overview": "This is the visual language of an institute of advanced study: a quiet, warm room where the scholarship is the thing on display and the furniture knows it. The page is warm paper rather than screen-white, the display face is a serif that behaves like set type, and the interface withdraws until it is needed. Nothing here competes with an abstract, a paper title, or a participant's name.\n\nThe restraint is structural, not timid. Hierarchy is carried almost entirely by typography — fluid serif sizes with tightening negative tracking as they grow — so the layout needs very few boxes, rules, or shadows to stay legible. Colour follows the same logic: deep teal does the institutional work of links, actions, and focus, while brass appears solidly exactly once per page and otherwise survives as a hairline, a two-pixel rule, or a six-percent wash. A grain texture sits at 3.5% over dark surfaces to keep large fields of colour from reading as flat digital ink.\n\nThe system takes paper seriously in a literal sense too: there is a real print stylesheet, prose is capped by character measure rather than container width, numerals are tabular, and the call for papers is expected to be printed and circulated. Two constraints shape every decision — the site is fully bilingual with English and French as equals, and it must stay light enough for a participant on mobile data in Stellenbosch.",
+    "overview": "This is the visual language of an institute of advanced study: a quiet, warm room where the scholarship is the thing on display and the furniture knows it. The page is warm paper rather than screen-white, the display face is a serif that behaves like set type, and the interface withdraws until it is needed. Nothing here competes with an abstract, a paper title, or a participant's name.\n\nThe restraint is structural, not timid. Hierarchy is carried almost entirely by typography — fluid serif sizes with tightening negative tracking as they grow — so the layout needs very few boxes, rules, or shadows to stay legible. Colour follows the same logic: deep teal does the institutional work of links, actions, and focus, while brass appears solidly exactly once per page and otherwise survives as a hairline, a two-pixel rule, or a six-percent wash. A grain texture sits at 3.5% over dark surfaces to keep large fields of colour from reading as flat digital ink.\n\nWithdrawing is not the same as being absent, and that distinction has cost this system more corrections than any other. An interface that recedes still has to announce that a link is a link, that a control can be tapped, that a permalink exists — and on a phone, where there is no hover, \"revealed on hover\" is a synonym for \"not there\". So the quiet is load-bearing rather than decorative: every affordance is legible at rest, at a measured contrast, at a measured size. Where the two goals genuinely conflict, the affordance wins and the ornament goes.\n\nThe system takes paper seriously in a literal sense too: there is a real print stylesheet, prose is capped by character measure rather than container width, numerals are tabular, and the call for papers is expected to be printed and circulated. Two constraints shape every decision — the site is fully bilingual with English and French as equals, and it must stay light enough for a participant on mobile data in Stellenbosch.",
     "keyCharacteristics": [
       "Warm cream page (#fdfbf7); screen-white is reserved for raised surfaces, so elevation reads as a lightness step",
       "Serif display at a single weight (400); hierarchy from fluid size and negative tracking, never from bold",
       "Brass used solidly once per page; everywhere else it is a hairline, rule, or wash",
       "Shadows tinted warm with teal-black (rgb 4 40 40), never neutral",
-      "Semantic role tokens that flip once for dark mode instead of ~40 scattered dark: variants",
-      "Measure-capped prose (68ch) and ledes (46ch)",
-      "Motion is short, eased, and fully surrendered under prefers-reduced-motion"
+      "Semantic role tokens that flip once for dark mode instead of ~40 scattered `dark:` variants",
+      "Measure-capped prose (30em ≈ 69 characters) and ledes (21em ≈ 48)",
+      "Every affordance legible at rest at ≥3:1, and no interactive target below 24px",
+      "Motion is short, eased, and switched off by a universal floor rather than a register of selectors"
     ],
     "rules": [
       {
         "name": "The One Gold Moment Rule",
-        "body": "Brass appears as a solid fill exactly once on any given page — the .btn-accent. Everywhere else it is a 2px rule, a hairline border, or a 6% wash. Its rarity is what makes it read as gold rather than as yellow.",
+        "body": "Brass appears as a solid fill exactly once on any given page. It has two sanctioned forms, and they are mutually exclusive per page: the `.btn-accent` (the hero's primary action, the call for papers' download) and `.day-pill.is-today` (the programme, during the workshop only). Everywhere else brass is a 2px rule, a hairline border, or a 6–10% wash. Its rarity is what makes it read as gold rather than as yellow. Note the honest exception pressure: `/programme` also carries 25 two-pixel brass paper rules, one per paper, which is a great many hairlines for a rule whose stated reason is rarity. It is recorded rather than resolved; if it is ever revisited, the answer is a quieter treatment for that rule, not a licence for a second solid fill.",
         "section": "colors"
       },
       {
         "name": "The Gold-Is-Not-Text Rule",
-        "body": "--accent (#c49528) is a graphics colour. Any brass text uses --accent-ink (#7a5c15). Setting body or label text in secondary-500 or secondary-600 fails WCAG AA on cream and is a defect, not a style choice.",
+        "body": "`--accent` (#c49528) is a graphics colour. Brass _text_ uses `--accent-ink` — #7a5c15 on paper, `secondary-400` in dark — or `secondary-300` on an inverse surface. Setting body or label text in `secondary-500` or `secondary-600` on cream fails WCAG AA and is a defect, not a style choice.",
         "section": "colors"
       },
       {
         "name": "The Cream-Never-White Rule",
-        "body": "The page is #fdfbf7. Pure white is reserved for raised surfaces. A screen-white page background breaks the elevation model, because lifted is expressed as a step toward white.",
+        "body": "The page is #fdfbf7. Pure white is reserved for raised surfaces. A screen-white page background breaks the elevation model, because \"lifted\" is expressed as a step _toward_ white.",
+        "section": "colors"
+      },
+      {
+        "name": "The Contrast-On-Surface Rule",
+        "body": "A colour is measured against every surface it actually lands on, not against the page. `--ink-subtle` in dark mode had been checked once, on the page, at 4.65:1 — and shipped 3.93:1 on the raised card, which is where session cards put it: thirteen AA failures on `/programme`, in both locales, on the surface the workshop is actually read on. The failing half was invisible precisely because the passing half existed. Two corollaries: the accessibility sweep runs in **both** colour schemes, since a dark-only failure is a failure; and a role with two backgrounds takes the value that clears the harder one.",
+        "section": "colors"
+      },
+      {
+        "name": "The Inverse-Surface Rule",
+        "body": "The hero and the footer are dark in both themes, so the light _and_ dark values of several ink roles are both wrong against them. Do not hand-write teal utilities to compensate: put `.on-inverse` on the container and let `--focus-ring` and `--eyebrow-ink` inherit. The class is named for the surface, not for one of its consequences, because the next role that needs flipping there belongs in the same place.",
         "section": "colors"
       },
       {
         "name": "The Serif-Structures Rule",
-        "body": "Every heading level is Instrument Serif at 400. Hierarchy comes from fluid size and progressively tighter negative tracking — never from weight, and never from Outfit. A bold serif heading is off-system.",
+        "body": "Every heading level is Instrument Serif at 400. Hierarchy comes from fluid size and progressively tighter negative tracking — never from weight, and never from Outfit. A bold serif heading is off-system, including inside rendered markdown: `.prose-subhead strong` is returned to 400 for exactly this reason. The one exception is a **label** on a heading tag (an eyebrow, meta or badge role used as an `<h2>`/`<h3>` for document structure): those are Outfit by role, and must say so — see the Layered-Defaults Rule.",
         "section": "typography"
       },
       {
         "name": "The Measure Rule",
-        "body": "Reading text is capped by characters, not by container. Prose is 68ch, ledes 46ch. A container narrowed to fix line length is treating the symptom; the measure token is the fix.",
+        "body": "Reading text is capped by characters, not by container, and the cap is expressed in `em` — never `ch`. Prose is 30em (≈69 characters: measured 70 at 1280px, 52 at 375, 44 at 320, EN and FR alike), ledes 21em (≈48). `ch` is the advance of \"0\", which in Outfit is 0.6975em against a real prose average of 0.435em, so a `ch` cap renders about 1.5× the line length it claims and moves again under the fallback font. Verify a change by rendering and counting, not by reading the declaration. A container narrowed to fix line length is treating the symptom; the measure token is the fix. `.text-prose` and `.prose` carry the cap as part of their role; `.measure-prose` applies it alone, for text that has its own size and colour — session descriptions, page notices, section intros. A paragraph wide enough to read is wide enough to need the cap: uncapped, these ran 126–190 characters at 1280px.",
         "section": "typography"
       },
       {
         "name": "The Uppercase-Is-A-Label Rule",
-        "body": "Uppercase with wide tracking (0.16–0.18em) means this is a label. It is never a heading, never a sentence, and never body copy.",
+        "body": "Uppercase with wide tracking (0.16–0.18em) means \"this is a label\". It is never a heading, never a sentence, and never body copy. Uppercase with tracking below 0.16em is a defect, not a variant — one chip should not have three renderings.",
         "section": "typography"
       },
       {
-        "name": "The Four Containers Rule",
-        "body": "Pick one of the four containers: page 80rem, wide 72rem, readable 56rem, prose 44rem. A bespoke max-width on a page wrapper is a system violation — if none of the four fits, the missing one is a token, not a one-off.",
+        "name": "The Eleven-Pixel Floor",
+        "body": "No text on this site is smaller than 11px (`--text-badge`), and the floor holds for lettering drawn inside an SVG exactly as it does for text in the DOM. Two session labels shipped at 10px on the surface most often read on a phone; a hand-copied file icon baked the letters \"PDF\" into its artwork at 6px, rendering 8.6 × 5px beside a button whose label already said PDF. Icons come from the library and carry no lettering; a legend that has to be read is text.",
+        "section": "typography"
+      },
+      {
+        "name": "The Layered-Defaults Rule",
+        "body": "Element defaults (`body`, `h1…h6`) live in `@layer base`; role classes in `@layer components`; Tailwind utilities above both. Nothing typographic may sit **unlayered**, because unlayered declarations outrank every layer regardless of specificity — which is how a bare `h2 { line-height: 1.12 }` silently voided `.text-section`'s 1.15 on 37 headings, and how `font-semibold` and `tracking-[0.16em]` lost to an `h2` in the footer. Svelte's scoped `<style>` blocks are unlayered too: put a media query inside the block rather than a responsive utility on the element. This trap has been found five times now, and the fifth was inside the reduced-motion rule that exists to be the safety net — so treat \"this rule looks inert\" as a reason to check the cascade, not a reason to move on. Its plain-specificity cousin is the same family: `.prose p { margin-block: 0 }` at (0,1,1) outranked `.prose > * + *` at (0,1,0) two lines above it, and rendered every abstract on the site as one unbroken column — 66 lines without a paragraph break on the longest, 110 at 320px.",
+        "section": "typography"
+      },
+      {
+        "name": "The Three Containers Rule",
+        "body": "Pick one of the three containers. A bespoke `max-width` on a page wrapper is a system violation — if none of the three fits, the missing one is a token, not a one-off. This governs page wrappers; three inner copy blocks (the hero's, the map's intro, the home page's centred section intro) set their own width inside a container, which is a different thing and is fine.",
         "section": "layout"
       },
       {
         "name": "The Anchor Clearance Rule",
-        "body": "Anything that changes header height changes --nav-height, never a hard-coded offset. Three consumers depend on it staying the single source.",
+        "body": "Anything that changes the height of fixed or sticky chrome changes its token, never a hard-coded offset. `--nav-height` is the header's **outer** height — the navbar's inner row is `calc(var(--nav-height) - 1px)`, so the header's own hairline is inside the number rather than added to it. `--day-bar-height` did the same job for the literal `scroll-mt-28` that used to guess at it.",
+        "section": "layout"
+      },
+      {
+        "name": "The Min-Height-Is-A-Floor Rule",
+        "body": "A token consumed as `min-height` is a promise the layout can still break: `min-height` holds a floor, not a ceiling. At 320px the day bar's four pills measured 293.6px against 288px of content, wrapped to a second row, and rendered 113px while `--day-bar-height` still said 61px — putting every day heading 36px _behind_ the bar meant to clear it. `flex-nowrap` plus `overflow-x: auto` makes the height true by construction and lets the row scroll instead of silently lying about its height. If a declared constant describes a rendered box, make the box unable to disagree.",
         "section": "layout"
       },
       {
         "name": "The Rest-Is-Quiet Rule",
-        "body": "Surfaces sit at xs/sm at rest. The jump to lg plus a 2px lift belongs to hover alone. A card that is already lifted at rest has nowhere to go.",
+        "body": "Surfaces sit at `xs`/`sm` at rest. The jump to `lg` plus a 2px lift belongs to hover alone. A card that is already lifted at rest has nowhere to go.",
         "section": "elevation"
       },
       {
         "name": "The Warm Shadow Rule",
-        "body": "Shadows are tinted rgb(4 40 40). A neutral or pure-black shadow is off-system and reads cold against cream.",
+        "body": "Shadows are tinted `rgb(4 40 40)`. A neutral or pure-black shadow is off-system and reads cold against cream — which is also why the hero's overlay is a second step of its own teal rather than `bg-black/20`.",
+        "section": "elevation"
+      },
+      {
+        "name": "The One-Layer Rule",
+        "body": "A single surface carries one decorative treatment. The hero used to stack three — a three-stop teal gradient on a diagonal, a brass radial at 18% across 70% of the width, and the grain — and three layers on one surface is exactly the \"conference brand\" reading this system rejects. It is now one tonal wash between two adjacent steps of the same teal (`primary-900` → `primary-950`), plus the grain. Gradients are not banned; multi-stop, multi-hue, multi-layer ones are.",
         "section": "elevation"
       },
       {
         "name": "The Radius-By-Size Rule",
-        "body": "Bigger surface, bigger radius. Pills for badges and icon buttons, 1rem for cards, 0.75rem for buttons and inputs. A pill-shaped card or a sharp-cornered badge is off-system.",
+        "body": "Bigger surface, bigger radius. A pill-shaped card or a sharp-cornered badge is off-system.",
         "section": "shapes"
+      },
+      {
+        "name": "The Resting Affordance Rule",
+        "body": "A link that carries no colour of its own carries a resting underline: `color-mix` at **65% of `primary-600`** in light and **60% of `primary-300`** in dark, 1px thick at a 0.2em offset, going solid `currentColor` on hover and focus. Those percentages are measured, not chosen — 35% light and 40% dark came out at 1.78:1 and 2.18:1, a resting cue you cannot resolve on a phone, which is the original defect wearing a fix's clothes. 65/60 clear 3:1 (measured 3.26:1 and 3.32:1 on the card, 3.20:1 and 3.55:1 under the home page's serif numerals, where the rule steps up to 2px because 1px under a 48px numeral reads as an artefact). **Hover is not an affordance.** 67 of the programme's 91 links had `color: inherit`, no underline, and a colour change on hover alone — no resting cue at all on the page most likely to be read on a phone in a conference room. A link that carries its own glyph (an external-link mark) may opt out; nothing else may.",
+        "section": "components"
+      },
+      {
+        "name": "The Target Floor Rule",
+        "body": "Two tiers, both declared as `min-height` / `min-width` rather than implied by padding. **2.75rem (44px)** for anything that is a page's own action or navigation: every `.btn` variant, `a.link-arrow`, the day pill, filter controls. **1.5rem (24px)** — WCAG 2.5.8 — for an inline affordance living inside a text row, where 44px would force spacing exceptions on the label beside it: the session permalink, an ORCID mark, a two-digit statistic whose glyphs are only 21.4px wide. Below 24px there is no third tier; there is a defect.",
+        "section": "components"
+      },
+      {
+        "name": "The Motion Floor Rule",
+        "body": "Reduced motion is a floor, not a register. One universal `transition-duration: 0.01ms !important` — the only `!important` in the stylesheet — because the previous approach named the things that move one at a time, and every transition added afterwards had to remember to enrol. Two never did, and a third was enrolled and still lost, since Svelte compiles a scoped selector to `.name.svelte-hash` and outranks a bare class: twelve transitions were measured surviving the block on `/programme` alone. The floor is safe universally because a transition's answer under reduced motion is always the same — drop the tween, keep the end state, still fire `transitionend`. Movement stays enumerated, because `transform` is not only used for motion (MapLibre centres its markers with one), so `transform: none` cannot be a floor. **Animations** stay named too: `fade-rise` should not play, but the map loader deliberately slows to 1.5s rather than freeze, and a blanket rule would have made it a strobe.",
+        "section": "components"
+      },
+      {
+        "name": "The Latency-Is-Not-Stagger Rule",
+        "body": "A stagger needs a group. A per-element observer that fires when that element enters the viewport cannot stagger anything — a `delay` prop on it postpones a section the reader has already arrived at. Ten call-for-papers sections passed `delay={0..9}` and eight of them appeared 361–378ms after the reader got there. If entrances should stagger, the group owns the timing; a single observed element gets 0.",
+        "section": "components"
       }
     ],
     "dos": [
-      "Do reach for a semantic role (bg-page, text-body, border-subtle) rather than a palette step. The roles flip once for dark mode; a raw ramp value needs a hand-written dark: variant and will drift.",
-      "Do set brass text in --accent-ink (#7a5c15) and brass graphics in --accent (#c49528).",
-      "Do keep every heading in Instrument Serif at 400 and let size and tracking build the hierarchy.",
-      "Do cap reading text with --measure-prose (68ch) or --measure-lede (46ch).",
-      "Do give any new interactive control a 2.75rem minimum touch target and confirm it against the existing --control-h baseline.",
-      "Do put motion behind the tokens (--duration-base, --ease-standard) and confirm it disappears under prefers-reduced-motion.",
-      "Do check both locales and both themes before calling a change done. French runs roughly 20% longer, and several colours are defined only in the .dark block.",
-      "Do budget page weight deliberately. A meaningful share of participants arrive on mobile data."
+      "**Do** reach for a semantic role (`bg-page`, `text-body`, `text-muted`, `border-subtle`) rather than a palette step. The roles flip once for dark mode; a raw ramp value needs a hand-written `dark:` variant and will drift.",
+      "**Do** set brass text in `--accent-ink` on paper and `secondary-300` on an inverse surface, and brass graphics in `--accent`.",
+      "**Do** keep every heading in Instrument Serif at 400 and let size and tracking build the hierarchy.",
+      "**Do** cap reading text with `--measure-prose` (30em) or `--measure-lede` (21em), and count the rendered characters before trusting a new value.",
+      "**Do** give every affordance a resting state: a visible underline at ≥3:1 for a link that inherits its colour, and a control that is present on a coarse pointer without hover. Then check it on the surface it actually sits on, in both themes.",
+      "**Do** declare touch targets as `min-height` / `min-width` — 2.75rem for actions and navigation, 1.5rem for inline affordances. Padding alone does not hold a floor, which is how the hero's large CTAs ended up shorter than `.btn-sm`.",
+      "**Do** put motion behind the tokens (`--duration-base`, `--ease-standard`) and confirm it disappears under `prefers-reduced-motion` — the floor covers transitions, but a new `@keyframes` is a decision you have to make by hand.",
+      "**Do** measure contrast per token **and** per surface, and run the accessibility sweep in both colour schemes. A role with two backgrounds takes the value that clears the harder one.",
+      "**Do** check both locales and both themes before calling a change done, at 320, 375 and 1280. French runs roughly 20% longer, and 320px is where declared constants stop being true.",
+      "**Do** budget page weight deliberately, and gate it: 100 KiB gzip for the largest core JS chunk, 300 KiB for core JS in total, 45 KiB for all CSS, **20 KiB of render-blocking CSS per page**, 90 KiB raw for the footer logo set, with MapLibre's renderer and worker held outside the core budget at their own ceilings. The per-page CSS gate exists because a sitewide total is blind to bytes moving from a lazy asset into a render-blocking one.",
+      "**Do** ship images as WebP with intrinsic `width` and `height` attributes, so a row of logos holds its shape while they load instead of assembling itself out of zero-width boxes.",
+      "**Do** derive workshop state from `milestones.ts` before designing anything that implies a phase. A countdown, a \"today\" marker or an archival notice that hard-codes its own assumption will be wrong on a date nobody is watching."
     ],
     "donts": [
-      "Don't use pure white as a page background, or neutral-black shadows. Both break the warm-paper model.",
-      "Don't add a second solid brass element to a page. One gold moment.",
-      "Don't introduce a bespoke max-width; use one of the four containers.",
-      "Don't bold a serif heading or set a heading in Outfit.",
-      "Don't hard-code a header offset; consume --nav-height.",
-      "Don't drift toward conference-brand energy — gradient heroes, urgency countdowns, Register now CTAs, sponsor tiers, stock photography of people at laptops. This is a scholarly record, not a commercial event site.",
-      "Don't drift toward tech-startup minimalism — screen-white, electric blue, sans-only, oversized pills, everything centred. The cream-and-serif world exists in deliberate rejection of it.",
-      "Don't drift toward institutional heaviness — crests, navy-and-maroon, justified dense serif, grey formal chrome. It would read as stuffy against an argument about equitable, forward-looking practice.",
-      "Don't ever reach for decorative Africanist or orientalist visual shorthand — ochre-and-sunset palettes, mudcloth or kente pattern fills, silhouette maps of the continent, ethnic display faces, acacia-and-savannah imagery. This is an explicit, user-confirmed prohibition. The workshop argues against extractive and stereotyping representation; the design must not enact what the scholarship critiques. Regional specificity, when it is wanted, comes from real content — people, places, institutions, and their own words — never from ornament."
+      "**Don't** use pure white as a page background, or neutral-black shadows. Both break the warm-paper model.",
+      "**Don't** add a second solid brass element to a page. One gold moment.",
+      "**Don't** introduce a bespoke `max-width` on a page wrapper; use one of the three containers.",
+      "**Don't** bold a serif heading or set a heading in Outfit.",
+      "**Don't** hard-code an offset for fixed or sticky chrome; consume `--nav-height` and `--day-bar-height`.",
+      "**Don't** leave a rule unlayered, and don't trust a rule that looks like an inert reset. Tailwind's preflight has already zeroed what you are about to re-zero, and your reset will outrank the rule above it.",
+      "**Don't** rely on `:hover` to reveal a control, or on a `title` attribute to name one. Neither exists for a touch reader or a screen reader, and the programme is read on a phone.",
+      "**Don't** stack decorative layers on one surface — a multi-stop gradient plus a radial plus grain is the conference-brand reading this system exists to avoid.",
+      "**Don't** put lettering inside an icon, and don't set any text below 11px.",
+      "**Don't** drift toward **conference-brand energy** — gradient heroes, urgency countdowns, \"Register now\" CTAs, sponsor tiers, stock photography of people at laptops. This is a scholarly record, not a commercial event site.",
+      "**Don't** drift toward **tech-startup minimalism** — screen-white, electric blue, sans-only, oversized pills, everything centred. The cream-and-serif world exists in deliberate rejection of it.",
+      "**Don't** drift toward **institutional heaviness** — crests, navy-and-maroon, justified dense serif, grey formal chrome. It would read as stuffy against an argument about equitable, forward-looking practice.",
+      "**Don't** ever reach for **decorative Africanist or orientalist visual shorthand** — ochre-and-sunset palettes, mudcloth or kente pattern fills, silhouette maps of the continent, \"ethnic\" display faces, acacia-and-savannah imagery. This is an explicit, user-confirmed prohibition. The workshop argues against extractive and stereotyping representation; the design must not enact what the scholarship critiques. Regional specificity, when it is wanted, comes from real content — people, places, institutions, and their own words — never from ornament."
     ]
   }
 }

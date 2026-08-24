@@ -153,8 +153,11 @@ html {
 	   It replaces a hard-coded scroll-mt-28 (112px) — the one offset the Anchor
 	   Clearance Rule did not cover, which drifted whenever the bar changed.
 	   Its value is the bar's real outer height: 0.5rem padding twice, a 2.75rem
-	   day pill, and the 1px bottom hairline. The bar consumes it as min-height
-	   so the number cannot quietly stop being true. */
+	   day pill, and the 1px bottom hairline. A min-height held that number for
+	   a while and could not keep it — a floor is not a ceiling, and at 320px
+	   the pills wrapped to a second row and rendered 113px against a token
+	   still saying 61px. The bar is flex-nowrap instead, so it cannot disagree
+	   with this constant by construction. */
 	--day-bar-height: 3.8125rem;
 
 	/* --- Surfaces --- */
