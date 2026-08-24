@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-24T06:08:36.619Z",
+  "generatedAt": "2026-08-24T06:33:13.635Z",
   "title": "Design System: DH & AI in African Studies",
   "extensions": {
     "colorMeta": {
@@ -420,7 +420,7 @@
     "rules": [
       {
         "name": "The One Gold Moment Rule",
-        "body": "Brass appears as a solid fill exactly once on any given page. It has two sanctioned forms, and they are mutually exclusive per page: the `.btn-accent` (the hero's primary action, the call for papers' download) and `.day-pill.is-today` (the programme, during the workshop only). Everywhere else brass is a 2px rule, a hairline border, or a 6–10% wash. Its rarity is what makes it read as gold rather than as yellow. Note the honest exception pressure: `/programme` also carries 25 two-pixel brass paper rules, one per paper, which is a great many hairlines for a rule whose stated reason is rarity. It is recorded rather than resolved; if it is ever revisited, the answer is a quieter treatment for that rule, not a licence for a second solid fill.",
+        "body": "Brass appears as a solid fill exactly once on any given page. It has two sanctioned forms, and they are mutually exclusive per page: the `.btn-accent` (the hero's primary action, the call for papers' download) and `.day-pill.is-today` (the programme, during the workshop only). Everywhere else brass is a 2px rule, a hairline border, or a 6–10% wash. Its rarity is what makes it read as gold rather than as yellow. Note the honest exception pressure, in two places. `/papers` gives every one of its 25 cards a 2px brass top rule at **full** opacity (`border-t-accent`), so the index carries 25 of them at once — that is **P3-34**, inside the letter of the rule and against the spirit of it. `/programme` then does the same thing a second way: a 2px brass left border on each of its 25 session papers, at 55%. Both are recorded rather than resolved; if either is revisited, the answer is a quieter treatment for the rule itself, not a licence for a second solid fill.",
         "section": "colors"
       },
       {
@@ -505,7 +505,7 @@
       },
       {
         "name": "The Resting Affordance Rule",
-        "body": "A link that carries no colour of its own carries a resting underline: `color-mix` at **65% of `primary-600`** in light and **60% of `primary-300`** in dark, 1px thick at a 0.2em offset, going solid `currentColor` on hover and focus. Those percentages are measured, not chosen — 35% light and 40% dark came out at 1.78:1 and 2.18:1, a resting cue you cannot resolve on a phone, which is the original defect wearing a fix's clothes. 65/60 clear 3:1 (measured 3.26:1 and 3.32:1 on the card, 3.20:1 and 3.55:1 under the home page's serif numerals, where the rule steps up to 2px because 1px under a 48px numeral reads as an artefact). **Hover is not an affordance.** 67 of the programme's 91 links had `color: inherit`, no underline, and a colour change on hover alone — no resting cue at all on the page most likely to be read on a phone in a conference room. A link that carries its own glyph (an external-link mark) may opt out; nothing else may.",
+        "body": "A link that carries no colour of its own carries a resting underline: `color-mix` at **65% of `primary-600`** in light and **60% of `primary-300`** in dark, 1px thick at a 0.2em offset, going solid `currentColor` on hover and focus. Those percentages are measured, not chosen — 35% light and 40% dark came out at 1.78:1 and 2.18:1, a resting cue you cannot resolve on a phone, which is the original defect wearing a fix's clothes. 65/60 clear 3:1 (measured 3.26:1 and 3.32:1 on the card, 3.20:1 and 3.55:1 under the home page's serif numerals, where the rule steps up to 2px because 1px under a 48px numeral reads as an artefact). **Hover is not an affordance.** 67 of the programme's 91 links had `color: inherit`, no underline, and a colour change on hover alone — no resting cue at all on the page most likely to be read on a phone in a conference room. A link that carries its own glyph (an external-link mark) may opt out; nothing else may. **Two places have not been brought up to this yet** — `PaperCard`'s title link and the paper page's `.author-link`, both still `color: inherit` with a hover-only colour change. That is **P3-20**, and it is a gap in the tree rather than an exemption in the rule: they sit inside cards that already carry a hover lift, which is the argument for their being last, not for their being different.",
         "section": "components"
       },
       {
