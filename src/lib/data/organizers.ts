@@ -4,7 +4,7 @@ export const organizers: Organizer[] = [
 	{
 		id: 'madore',
 		name: 'Frédérick Madore',
-		role: { en: 'Organizer', fr: 'Organisateur' },
+		role: { en: 'Organiser', fr: 'Organisateur' },
 		affiliation: {
 			en: 'University of Bayreuth',
 			fr: 'Université de Bayreuth'
@@ -21,7 +21,7 @@ export const organizers: Organizer[] = [
 	{
 		id: 'hiribarren',
 		name: 'Vincent Hiribarren',
-		role: { en: 'Organizer', fr: 'Organisateur' },
+		role: { en: 'Organiser', fr: 'Organisateur' },
 		affiliation: {
 			en: "King's College London",
 			fr: "King's College London"
@@ -39,7 +39,7 @@ export const organizers: Organizer[] = [
 	{
 		id: 'ngue-um',
 		name: 'Emmanuel Ngue Um',
-		role: { en: 'Organizer', fr: 'Organisateur' },
+		role: { en: 'Organiser', fr: 'Organisateur' },
 		affiliation: {
 			en: 'University of Yaoundé 1',
 			fr: 'Université de Yaoundé 1'
@@ -55,7 +55,7 @@ export const organizers: Organizer[] = [
 	{
 		id: 'van-zaanen',
 		name: 'Menno van Zaanen',
-		role: { en: 'Organizer', fr: 'Organisateur' },
+		role: { en: 'Organiser', fr: 'Organisateur' },
 		affiliation: {
 			en: 'South African Centre for Digital Language Resources (SADiLaR)',
 			fr: 'Centre sud-africain pour les ressources linguistiques numériques (SADiLaR)'

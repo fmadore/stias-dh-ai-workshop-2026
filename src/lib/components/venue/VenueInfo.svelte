@@ -17,7 +17,9 @@
 
 <div class="space-y-10">
 	<section>
-		<span class="text-eyebrow mb-3 inline-block">{m.section_venue()}</span>
+		<!-- No eyebrow: it was `m.section_venue()`, the same string the page's own
+		     h1 renders 300px above it. A label that repeats the heading it sits
+		     under carries nothing. -->
 		<h2 class="text-section text-strong mb-2">{venueInfo.name}</h2>
 		<p class="text-link mb-4 text-lg font-light">
 			{t(venueInfo.fullName)}

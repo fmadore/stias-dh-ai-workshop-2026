@@ -349,6 +349,97 @@ test('nothing tweens or travels when the reader has asked for less motion', asyn
 	await context.close();
 });
 
+test('a figure means the same thing on every page that prints it', async ({ page }) => {
+	// The home page counted the countries of paper *authors* and linked that
+	// figure at the map of *people*, which is a different set — Point Sud's
+	// co-director is in Bamako and presents nothing. So the home page said 16
+	// and the page one click away said 17. Nothing sees a number that is true
+	// about the wrong population: both come from real helpers over real data,
+	// and each page is self-consistent on its own.
+	await page.goto(`${BASE}/`);
+	const homeCountries = await page
+		.locator('main dl a[href$="#affiliations"] dd, main dl a[href$="#affiliations"]')
+		.first()
+		.innerText();
+
+	await page.goto(`${BASE}/participants`);
+	const header = page.locator('header.bg-cream-dark');
+	await expect(header).toContainText(`${homeCountries.trim()} countries`);
+
+	// The header enumerates the page's three groups; the filter counts all of
+	// them. The Point Sud section was left out of the header when `harden`
+	// widened the filter to cover it, so the row summed to 37 while the control
+	// below it said 39.
+	const groups = await header.locator('.meta-item').allInnerTexts();
+	const summed = groups
+		.map((text) => Number(text.match(/^\d+/)?.[0] ?? 0))
+		.filter((value, index) => index < groups.length - 1)
+		.reduce((total, value) => total + value, 0);
+	const total = Number((await page.getByText(/of \d+ people/).innerText()).match(/of (\d+)/)![1]);
+	expect(summed).toBe(total);
+});
+
+test('the wordmark says the whole thing on a phone, at the header height', async ({ page }) => {
+	// `truncate` clipped the qualifier below 414px in English and 480px in
+	// French — every phone — and what it cut was the year: "AFRICAN STUDIES ·
+	// STIA…". An ellipsis is a rendering, not an error: no tool reports one,
+	// and the header's own height is what makes the fix non-obvious, since
+	// --nav-height feeds main's padding, scroll-padding and the day bar.
+	for (const width of [320, 375, 414]) {
+		await page.setViewportSize({ width, height: 720 });
+		await page.goto(`${BASE}/programme`);
+		const measured = await page.evaluate(() => {
+			const qualifier = document.querySelector<HTMLElement>('header a span[class*="line-clamp"]');
+			if (!qualifier) throw new Error('no brand qualifier to measure');
+			const token = getComputedStyle(document.documentElement).getPropertyValue('--nav-height');
+			const probe = document.createElement('div');
+			probe.style.cssText = `position:absolute;visibility:hidden;height:${token}`;
+			document.body.appendChild(probe);
+			const navHeight = probe.getBoundingClientRect().height;
+			probe.remove();
+			return {
+				clippedVertically: qualifier.scrollHeight > qualifier.clientHeight + 1,
+				clippedHorizontally: qualifier.scrollWidth > qualifier.clientWidth + 1,
+				headerHeight: document.querySelector('header')!.getBoundingClientRect().height,
+				navHeight
+			};
+		});
+		expect(measured.clippedVertically, `qualifier clipped at ${width}px`).toBe(false);
+		expect(measured.clippedHorizontally, `qualifier clipped at ${width}px`).toBe(false);
+		expect(measured.headerHeight, `header height moved at ${width}px`).toBeCloseTo(
+			measured.navHeight,
+			0
+		);
+	}
+});
+
+test("a person's links are real targets, and they sit on one line across a row", async ({
+	page
+}) => {
+	// `a.link-arrow` carries the documented 2.75rem floor; the ORCID link beside
+	// it never had one, so two links doing the same job in the same row measured
+	// 44px and 20px. And every level between the card and that row stopped at
+	// its content, so the links floated wherever the bio ended — 195px apart on
+	// two cards the grid had already stretched to the same height.
+	await page.goto(`${BASE}/participants`);
+	const cards = page.locator('article.card').filter({ has: page.locator('a[href*="orcid.org"]') });
+	const geometry = await cards.evaluateAll((nodes) =>
+		nodes.slice(0, 2).map((card) => {
+			const row = card.querySelector('a[href*="orcid.org"]')!.parentElement!;
+			return {
+				bottomGap: card.getBoundingClientRect().bottom - row.getBoundingClientRect().bottom,
+				heights: [...row.querySelectorAll('a')].map((link) => link.getBoundingClientRect().height)
+			};
+		})
+	);
+	expect(geometry.length).toBe(2);
+	for (const card of geometry) {
+		for (const height of card.heights) expect(height).toBeGreaterThanOrEqual(44);
+	}
+	// Same row of the grid, so the link rows land on one line.
+	expect(geometry[0].bottomGap).toBeCloseTo(geometry[1].bottomGap, 0);
+});
+
 for (const route of ['/', '/fr', '/programme', '/participants', '/call-for-papers', '/venue']) {
 	test(`accessibility: ${route} has no automated violations`, async ({ page }) => {
 		// Scan settled styles and exercise the site's reduced-motion alternative;

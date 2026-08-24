@@ -10,6 +10,12 @@
 		// for cards that keep their text column beside the avatar at every width.
 		align = 'responsive'
 	}: { website?: string; orcid?: string; align?: 'responsive' | 'start' } = $props();
+
+	// The ORCID link sits in this row beside "Visit website", which `a.link-arrow`
+	// gives the documented 2.75rem floor. This one had never been given it, so the
+	// two links in one row measured 44px and 20px. `min-h-11` is that same 2.75rem.
+	// Its `title` became an `aria-label` for the same reason: the tooltip named the
+	// destination for a pointer and for nobody else.
 </script>
 
 {#if website || orcid}
@@ -29,8 +35,8 @@
 				href="https://orcid.org/{orcid}"
 				target="_blank"
 				rel="noopener noreferrer"
-				class="text-orcid hover:text-orcid-hover inline-flex items-center gap-1 text-sm transition-colors duration-[var(--duration-fast)]"
-				title={m.view_orcid()}
+				class="text-orcid hover:text-orcid-hover inline-flex min-h-11 items-center gap-1 text-sm transition-colors duration-[var(--duration-fast)]"
+				aria-label={m.view_orcid()}
 			>
 				<svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
 					<path

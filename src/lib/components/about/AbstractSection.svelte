@@ -11,8 +11,10 @@
 		     used to carry delay={i}, so at 120ms a step the last one arrived
 		     ~840ms after entering view — prose that fades in as you reach it. -->
 		<ScrollReveal>
+			<!-- No eyebrow: it was `m.nav_about()`, which is also this page's h1.
+			     On the home page the same section keeps its label, because there it
+			     names which section you are in. Here it named the page you are on. -->
 			<div class="mb-10">
-				<span class="text-eyebrow mb-3 inline-block">{m.nav_about()}</span>
 				<h2 class="text-section text-strong">
 					{m.section_about()}
 				</h2>

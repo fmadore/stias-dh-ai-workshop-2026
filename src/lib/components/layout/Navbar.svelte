@@ -107,7 +107,15 @@
 			     instead of appearing only at xl. "DH & AI" alone is cryptic. -->
 			<a href={localePath('/')} class="flex min-w-0 flex-col leading-none">
 				<span class="text-link font-display text-xl tracking-tight"> DH &amp; AI </span>
-				<span class="text-meta text-badge mt-1 truncate tracking-[0.14em]">
+				<!-- Wraps rather than truncates. `truncate` clipped it below 414px in
+				     English and 480px in French — every phone — and what it cut was
+				     the year: "AFRICAN STUDIES · STIA…". It takes two lines from
+				     375px down and three at 320px, where the column is 116px wide;
+				     three lines of 11px plus the 20px brand still measure 57px inside
+				     a 71px row, so --nav-height is untouched at every width. The clamp
+				     is a guard against a future qualifier long enough to burst the
+				     header, not something the current strings reach. -->
+				<span class="text-meta text-badge mt-1 line-clamp-3 tracking-[0.14em]">
 					{m.brand_qualifier()}
 				</span>
 			</a>

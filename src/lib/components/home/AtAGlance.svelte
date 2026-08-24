@@ -1,8 +1,10 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages';
 	import { participants } from '$lib/data/participants';
+	import { organizers } from '$lib/data/organizers';
+	import { pointSud } from '$lib/data/point-sud';
 	import { presentations } from '$lib/data/presentations';
-	import { uniquePaperCountries } from '$lib/utils/filter';
+	import { uniquePersonCountries } from '$lib/utils/filter';
 	import { localePath } from '$lib/utils/i18n';
 	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
 
@@ -21,7 +23,12 @@
 			href: localePath('/participants')
 		},
 		{
-			value: String(uniquePaperCountries(presentations).length),
+			// Counted over people, not papers. This figure links to the affiliation
+			// map, which plots where the 39 people work — and paper countries are a
+			// different set: Mali is here only because Point Sud's representative
+			// is, and he presents nothing. Counting papers made this read 16 while
+			// the page it points at said 17.
+			value: String(uniquePersonCountries([...organizers, ...pointSud, ...participants]).length),
 			label: m.glance_countries(),
 			href: `${localePath('/participants')}#affiliations`
 		},

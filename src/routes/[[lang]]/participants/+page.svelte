@@ -63,6 +63,10 @@
 	meta={[
 		`${participants.length} ${m.glance_participants()}`,
 		`${organizers.length} ${m.section_organisers()}`,
+		// The third section had no figure here, so the row summed to 37 of the 39
+		// people the filter directly below counts. "Point Sud" is the funder's own
+		// name and reads the same in both locales, so the label needs no message.
+		`${pointSud.length} Point Sud`,
 		`${countries.length} ${m.glance_countries()}`
 	]}
 />
