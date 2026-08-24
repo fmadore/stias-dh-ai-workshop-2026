@@ -58,7 +58,18 @@
 	>
 		<div class="flex flex-col items-start gap-3 sm:flex-row sm:gap-6">
 			<div class="flex-shrink-0">
-				<div class="text-accent-ink font-display text-[2.75rem] leading-none" aria-hidden="true">
+				<!-- Fluid, like every other display size on the site. At a fixed
+				     2.75rem this decorative numeral rendered 44px at every width,
+				     which on a phone made it larger than the page's own h1 (34px)
+				     and nearly twice the section heading it sits beside (24px) — an
+				     ornament outranking the title. The clamp keeps 44px at 1280 and
+				     lands 32px at 375, between the two headings where it belongs.
+				     Local rather than a token: it is the only consumer, and the
+				     eight type roles are for text that is read. -->
+				<div
+					class="text-accent-ink font-display text-[clamp(2rem,1.5rem+2vw,2.75rem)] leading-none"
+					aria-hidden="true"
+				>
 					0{axis.number}
 				</div>
 				<div

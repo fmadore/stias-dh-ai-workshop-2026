@@ -18,41 +18,19 @@
 	);
 </script>
 
-{#snippet pdfIcon()}
-	<svg
-		xmlns="http://www.w3.org/2000/svg"
-		width="16"
-		height="16"
-		viewBox="0 0 24 24"
-		fill="none"
-		stroke="currentColor"
-		stroke-width="1.75"
-		stroke-linecap="round"
-		stroke-linejoin="round"
-		aria-hidden="true"
-	>
-		<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-		<polyline points="14 2 14 8 20 8" />
-		<text
-			x="12"
-			y="17"
-			text-anchor="middle"
-			font-size="6"
-			font-weight="700"
-			font-family="sans-serif"
-			fill="currentColor"
-			stroke="none">PDF</text
-		>
-	</svg>
-{/snippet}
-
+<!-- Both controls take the same Lucide mark. The PDF one used to be a
+     hand-copy of it at 16px beside the library's own at 15px, with the letters
+     "PDF" baked in at 6px — 8.6 × 5px rendered, the only text on the site below
+     the 11px floor, and unreadable at that size. It also repeated the button's
+     own label, which says "PDF" four pixels to its right. The two downloads
+     differ by format, and the label is where a format belongs. -->
 <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
 	<span class="text-meta">
 		{m.download_cfp()}
 	</span>
 	<div class="flex flex-wrap items-center gap-2">
 		<a href={`${base}/downloads/${stem}.pdf`} download class={buttonClass}>
-			{@render pdfIcon()}
+			<FileText size={15} strokeWidth={1.75} aria-hidden="true" />
 			{m.download_cfp_pdf()}
 		</a>
 		<a href={`${base}/downloads/${stem}.txt`} download class={buttonClass}>
