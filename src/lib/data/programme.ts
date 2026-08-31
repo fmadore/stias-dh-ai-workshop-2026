@@ -29,7 +29,7 @@ export const programmeLastUpdated = '2026-08-31';
  * Sessions therefore cap at 90 minutes (panels = 3 papers × 30 min), no comfort
  * breaks are allowed mid-session, and anything past 17:30 is billed at R1200/h.
  * STIAS caters two coffee breaks only on full days on site (Days 1 and 4); Days
- * 2 and 3 leave for an excursion in the afternoon (Day 3 straight after lunch,
+ * 2 and 3 leave for an excursion in the afternoon (Day 2 straight after lunch,
  * so both its panels sit in the morning), and get the 10:30 break only.
  * After-hours functions (the welcome dinner on Day 1 and the farewell dinner on
  * Day 4) start at 19:00, off site; Days 2 and 3 leave the evening free.
@@ -149,80 +149,6 @@ export const programme: ProgrammeDay[] = [
 				time: '09:00 – 10:30',
 				type: 'panel',
 				title: {
-					en: 'Digital Archives, Metadata & Discovery',
-					fr: 'Archives numériques, métadonnées et découvrabilité'
-				},
-				description: {
-					en: 'AI-assisted metadata, entity linking and protocol-based access converge on a shared problem: making African heritage collections findable, connected and usable across institutions.',
-					fr: "Métadonnées assistées par l'IA, liage d'entités et accès fondé sur des protocoles convergent vers un même enjeu\u00a0: rendre les collections patrimoniales africaines repérables, connectées et exploitables d'une institution à l'autre."
-				},
-				presentationIds: [
-					'enriching-the-invisible',
-					'entity-linking-african-studies',
-					'mcp-servers-african-glams'
-				]
-			},
-			{
-				id: 'd2-coffee-1',
-				time: '10:30 – 11:00',
-				type: 'break',
-				title: { en: 'Coffee break', fr: 'Pause-café' }
-			},
-			{
-				id: 'd2-panel-d',
-				time: '11:00 – 12:30',
-				type: 'panel',
-				title: {
-					en: 'Language AI: Translation & Learning',
-					fr: 'IA des langues\u00a0: traduction et apprentissage'
-				},
-				description: {
-					en: 'Scaling language technologies for African languages — from a framework for inclusive language AI to rule-based machine translation and multimodal computer-assisted learning under infrastructural constraint.',
-					fr: "Passer à l'échelle les technologies langagières pour les langues africaines — d'un cadre pour une IA linguistique inclusive à la traduction automatique à base de règles et à l'apprentissage multimodal assisté par ordinateur en contexte de contraintes infrastructurelles."
-				},
-				presentationIds: [
-					'masakhane-4d-framework',
-					'french-ewondo-rbmt',
-					'multimodal-call-african-languages'
-				]
-			},
-			{
-				id: 'd2-lunch',
-				time: '12:30 – 14:00',
-				type: 'break',
-				title: { en: 'Lunch', fr: 'Déjeuner' }
-			},
-			{
-				id: 'd2-discussion',
-				time: '14:00 – 15:00',
-				type: 'discussion',
-				speakers: ['van-zaanen'],
-				presentationIds: ['networking-strategies']
-			},
-			{
-				id: 'd2-visit-a',
-				time: '15:00 – 19:00',
-				type: 'social',
-				title: { en: 'Excursion', fr: 'Excursion' },
-				description: { en: 'Destination to be confirmed.', fr: 'Destination à confirmer.' }
-			},
-			{
-				id: 'd2-evening',
-				time: '19:00',
-				type: 'social',
-				title: { en: 'Free evening', fr: 'Soirée libre' }
-			}
-		]
-	},
-	{
-		date: '2026-09-23',
-		dayLabel: { en: 'Day 3 · Wednesday 23 September', fr: 'Jour 3 · Mercredi 23 septembre' },
-		sessions: [
-			{
-				id: 'd3-panel-e',
-				time: '09:00 – 10:30',
-				type: 'panel',
-				title: {
 					en: 'Documenting & Sustaining African Languages',
 					fr: 'Documenter et pérenniser les langues africaines'
 				},
@@ -237,13 +163,13 @@ export const programme: ProgrammeDay[] = [
 				]
 			},
 			{
-				id: 'd3-coffee-1',
+				id: 'd2-coffee-1',
 				time: '10:30 – 11:00',
 				type: 'break',
 				title: { en: 'Coffee break', fr: 'Pause-café' }
 			},
 			{
-				id: 'd3-panel-f',
+				id: 'd2-panel-d',
 				time: '11:00 – 12:30',
 				type: 'panel',
 				title: {
@@ -261,13 +187,13 @@ export const programme: ProgrammeDay[] = [
 				]
 			},
 			{
-				id: 'd3-lunch',
+				id: 'd2-lunch',
 				time: '12:30 – 14:00',
 				type: 'break',
 				title: { en: 'Lunch', fr: 'Déjeuner' }
 			},
 			{
-				id: 'd3-visit-b',
+				id: 'd2-visit-a',
 				time: '14:00 – 18:00',
 				type: 'social',
 				title: { en: 'Data centre visit', fr: "Visite d'un centre de données" },
@@ -279,13 +205,87 @@ export const programme: ProgrammeDay[] = [
 				venueUrl: 'https://www.teraco.co.za/data-centre-locations/cape-town/'
 			},
 			{
-				id: 'd3-evening',
+				id: 'd2-evening',
 				time: '18:00',
 				type: 'social',
 				title: {
 					en: 'Return to Stellenbosch & free evening',
 					fr: 'Retour à Stellenbosch et soirée libre'
 				}
+			}
+		]
+	},
+	{
+		date: '2026-09-23',
+		dayLabel: { en: 'Day 3 · Wednesday 23 September', fr: 'Jour 3 · Mercredi 23 septembre' },
+		sessions: [
+			{
+				id: 'd3-panel-e',
+				time: '09:00 – 10:30',
+				type: 'panel',
+				title: {
+					en: 'Digital Archives, Metadata & Discovery',
+					fr: 'Archives numériques, métadonnées et découvrabilité'
+				},
+				description: {
+					en: 'AI-assisted metadata, entity linking and protocol-based access converge on a shared problem: making African heritage collections findable, connected and usable across institutions.',
+					fr: "Métadonnées assistées par l'IA, liage d'entités et accès fondé sur des protocoles convergent vers un même enjeu\u00a0: rendre les collections patrimoniales africaines repérables, connectées et exploitables d'une institution à l'autre."
+				},
+				presentationIds: [
+					'enriching-the-invisible',
+					'entity-linking-african-studies',
+					'mcp-servers-african-glams'
+				]
+			},
+			{
+				id: 'd3-coffee-1',
+				time: '10:30 – 11:00',
+				type: 'break',
+				title: { en: 'Coffee break', fr: 'Pause-café' }
+			},
+			{
+				id: 'd3-panel-f',
+				time: '11:00 – 12:30',
+				type: 'panel',
+				title: {
+					en: 'Language AI: Translation & Learning',
+					fr: 'IA des langues\u00a0: traduction et apprentissage'
+				},
+				description: {
+					en: 'Scaling language technologies for African languages — from a framework for inclusive language AI to rule-based machine translation and multimodal computer-assisted learning under infrastructural constraint.',
+					fr: "Passer à l'échelle les technologies langagières pour les langues africaines — d'un cadre pour une IA linguistique inclusive à la traduction automatique à base de règles et à l'apprentissage multimodal assisté par ordinateur en contexte de contraintes infrastructurelles."
+				},
+				presentationIds: [
+					'masakhane-4d-framework',
+					'french-ewondo-rbmt',
+					'multimodal-call-african-languages'
+				]
+			},
+			{
+				id: 'd3-lunch',
+				time: '12:30 – 14:00',
+				type: 'break',
+				title: { en: 'Lunch', fr: 'Déjeuner' }
+			},
+			{
+				id: 'd3-discussion',
+				time: '14:00 – 15:00',
+				type: 'discussion',
+				speakers: ['van-zaanen'],
+				presentationIds: ['networking-strategies']
+			},
+			{
+				id: 'd3-visit-b',
+				time: '15:00 – 19:00',
+				type: 'social',
+				title: { en: 'Excursion', fr: 'Excursion' },
+				description: { en: 'Destination to be confirmed.', fr: 'Destination à confirmer.' }
+			},
+			{
+				id: 'd3-evening',
+				time: '19:00',
+				type: 'social',
+				title: { en: 'Free evening', fr: 'Soirée libre' }
 			}
 		]
 	},
