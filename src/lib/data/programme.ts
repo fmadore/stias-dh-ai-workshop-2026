@@ -91,7 +91,8 @@ export const programme: ProgrammeDay[] = [
 					en: 'From decolonial computing to the measurement of citation practices and the digital life of Ajami manuscripts, these contributions move decolonisation from critique to method and infrastructure.',
 					fr: "Du calcul décolonial à la mesure des pratiques de citation et à la vie numérique des manuscrits ajami, ces contributions font passer la décolonisation de la critique à la méthode et à l'infrastructure."
 				},
-				presentationIds: ['before-the-algorithm', 'decolonising-citations', 'ajami-manuscripts']
+				presentationIds: ['before-the-algorithm', 'decolonising-citations', 'ajami-manuscripts'],
+				chair: 'ngue-um'
 			},
 			{
 				id: 'd1-lunch',
@@ -184,7 +185,8 @@ export const programme: ProgrammeDay[] = [
 					'ajami-nlp-infrastructure',
 					'precolonial-bead-trade',
 					'computational-ethnography-fulani'
-				]
+				],
+				chair: 'madore'
 			},
 			{
 				id: 'd2-lunch',
