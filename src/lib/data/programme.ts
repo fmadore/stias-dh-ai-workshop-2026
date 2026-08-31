@@ -276,14 +276,14 @@ export const programme: ProgrammeDay[] = [
 			},
 			{
 				id: 'd3-visit-b',
-				time: '15:30 – 19:00',
+				time: '15:30 – 18:00',
 				type: 'social',
 				title: { en: 'Excursion', fr: 'Excursion' },
 				description: { en: 'Destination to be confirmed.', fr: 'Destination à confirmer.' }
 			},
 			{
 				id: 'd3-evening',
-				time: '19:00',
+				time: '18:00',
 				type: 'social',
 				title: { en: 'Free evening', fr: 'Soirée libre' }
 			}
