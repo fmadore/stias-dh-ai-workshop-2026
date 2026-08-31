@@ -4,7 +4,7 @@ import type { ProgrammeDay } from '$lib/types';
  * Date the programme was last revised (ISO `yyyy-mm-dd`). Bump this whenever you
  * change the sessions below — it is shown as "Last updated" on the page.
  */
-export const programmeLastUpdated = '2026-08-21';
+export const programmeLastUpdated = '2026-08-31';
 
 /**
  * Workshop programme — STIAS, Stellenbosch, 21–24 September 2026.
@@ -84,18 +84,14 @@ export const programme: ProgrammeDay[] = [
 				time: '11:00 – 12:30',
 				type: 'panel',
 				title: {
-					en: 'Centring African Knowledge Systems',
-					fr: 'Centrer les systèmes de savoirs africains'
+					en: 'Decolonial Methods & Epistemic Justice',
+					fr: 'Méthodes décoloniales et justice épistémique'
 				},
 				description: {
-					en: 'These papers ground digital and AI methods in African epistemologies — reading folktales, Yorùbá thought and literary emotion as knowledge systems that reshape the very tools used to study them.',
-					fr: "Ces communications ancrent les méthodes numériques et l'IA dans les épistémologies africaines — lisant contes, pensée yorùbá et émotion littéraire comme des systèmes de savoirs qui reconfigurent les outils mêmes qui les étudient."
+					en: 'From decolonial computing to the measurement of citation practices and the digital life of Ajami manuscripts, these contributions move decolonisation from critique to method and infrastructure.',
+					fr: "Du calcul décolonial à la mesure des pratiques de citation et à la vie numérique des manuscrits ajami, ces contributions font passer la décolonisation de la critique à la méthode et à l'infrastructure."
 				},
-				presentationIds: [
-					'moral-ecology-folktales',
-					'recoding-yoruba-epistemologies',
-					'non-dit-emotions'
-				]
+				presentationIds: ['before-the-algorithm', 'decolonising-citations', 'ajami-manuscripts']
 			},
 			{
 				id: 'd1-lunch',
@@ -121,14 +117,18 @@ export const programme: ProgrammeDay[] = [
 				time: '16:00 – 17:30',
 				type: 'panel',
 				title: {
-					en: 'Decolonial Methods & Epistemic Justice',
-					fr: 'Méthodes décoloniales et justice épistémique'
+					en: 'Centring African Knowledge Systems',
+					fr: 'Centrer les systèmes de savoirs africains'
 				},
 				description: {
-					en: 'From decolonial computing to the measurement of citation practices and the digital life of Ajami manuscripts, these contributions move decolonisation from critique to method and infrastructure.',
-					fr: "Du calcul décolonial à la mesure des pratiques de citation et à la vie numérique des manuscrits ajami, ces contributions font passer la décolonisation de la critique à la méthode et à l'infrastructure."
+					en: 'These papers ground digital and AI methods in African epistemologies — reading folktales, Yorùbá thought and literary emotion as knowledge systems that reshape the very tools used to study them.',
+					fr: "Ces communications ancrent les méthodes numériques et l'IA dans les épistémologies africaines — lisant contes, pensée yorùbá et émotion littéraire comme des systèmes de savoirs qui reconfigurent les outils mêmes qui les étudient."
 				},
-				presentationIds: ['before-the-algorithm', 'decolonising-citations', 'ajami-manuscripts']
+				presentationIds: [
+					'recoding-yoruba-epistemologies',
+					'non-dit-emotions',
+					'moral-ecology-folktales'
+				]
 			},
 			{
 				id: 'd1-dinner',
