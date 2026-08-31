@@ -244,8 +244,21 @@ export const programme: ProgrammeDay[] = [
 				title: { en: 'Coffee break', fr: 'Pause-café' }
 			},
 			{
-				id: 'd3-panel-f',
+				id: 'd3-discussion',
 				time: '11:00 – 12:30',
+				type: 'discussion',
+				speakers: ['van-zaanen'],
+				presentationIds: ['networking-strategies']
+			},
+			{
+				id: 'd3-lunch',
+				time: '12:30 – 14:00',
+				type: 'break',
+				title: { en: 'Lunch', fr: 'Déjeuner' }
+			},
+			{
+				id: 'd3-panel-f',
+				time: '14:00 – 15:30',
 				type: 'panel',
 				title: {
 					en: 'Language AI: Translation & Learning',
@@ -262,21 +275,8 @@ export const programme: ProgrammeDay[] = [
 				]
 			},
 			{
-				id: 'd3-lunch',
-				time: '12:30 – 14:00',
-				type: 'break',
-				title: { en: 'Lunch', fr: 'Déjeuner' }
-			},
-			{
-				id: 'd3-discussion',
-				time: '14:00 – 15:00',
-				type: 'discussion',
-				speakers: ['van-zaanen'],
-				presentationIds: ['networking-strategies']
-			},
-			{
 				id: 'd3-visit-b',
-				time: '15:00 – 19:00',
+				time: '15:30 – 19:00',
 				type: 'social',
 				title: { en: 'Excursion', fr: 'Excursion' },
 				description: { en: 'Destination to be confirmed.', fr: 'Destination à confirmer.' }
