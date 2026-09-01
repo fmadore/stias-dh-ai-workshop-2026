@@ -280,10 +280,12 @@ export const programme: ProgrammeDay[] = [
 			},
 			{
 				id: 'd3-visit-b',
-				time: '15:30 – 18:00',
+				time: '16:00 – 18:00',
 				type: 'social',
-				title: { en: 'Excursion', fr: 'Excursion' },
-				description: { en: 'Destination to be confirmed.', fr: 'Destination à confirmer.' }
+				title: {
+					en: 'Walking tour of Stellenbosch',
+					fr: 'Visite guidée à pied de Stellenbosch'
+				}
 			},
 			{
 				id: 'd3-evening',
