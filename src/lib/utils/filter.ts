@@ -1,6 +1,7 @@
 import type { CountryCode, LocalizedString, Presentation } from '$lib/types';
 import { getParticipantPresentations, getPresentationAuthors } from '$lib/data/presentations';
 import { countrySearchTerms } from './country';
+import { abstractVariants } from './i18n';
 
 /** Search/filter state shared by the participants and papers pages. */
 export interface FilterOptions {
@@ -67,7 +68,7 @@ export function filterPeople<T extends FilterablePerson>(
 				...countrySearchTerms(p.country),
 				p.bio?.en ?? '',
 				p.bio?.fr ?? '',
-				...papers.flatMap((pp) => [pp.title, pp.abstract ?? ''])
+				...papers.flatMap((pp) => [pp.title, ...abstractVariants(pp.abstract)])
 			].join(' ')
 		);
 
@@ -97,7 +98,7 @@ export function filterPresentations(
 		const haystack = normalize(
 			[
 				p.title,
-				p.abstract ?? '',
+				...abstractVariants(p.abstract),
 				...authors.flatMap((a) => [a.name, a.affiliation.en, a.affiliation.fr])
 			].join(' ')
 		);

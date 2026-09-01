@@ -106,7 +106,7 @@
 				     to land in the outline without skipping a level. -->
 				<section>
 					<h2 class="text-eyebrow mb-4">{m.paper_abstract()}</h2>
-					<article class="prose" lang={presentation.language}>
+					<article class="prose" lang={data.abstractLang}>
 						<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 						{@html data.abstractHtml}
 					</article>

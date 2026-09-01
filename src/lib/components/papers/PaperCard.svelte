@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Presentation } from '$lib/types';
-	import { t, localePath } from '$lib/utils/i18n';
+	import { t, localePath, resolveAbstract } from '$lib/utils/i18n';
 	import { getPresentationAuthors } from '$lib/data/presentations';
 	import { getPlacements } from '$lib/utils/placement';
 	import { abstractToPlainText } from '$lib/utils/text';
@@ -18,7 +18,8 @@
 	);
 	// line-clamp rather than truncate(200): character truncation cut mid-word
 	// and left ragged card heights.
-	const excerpt = $derived(presentation.abstract ? abstractToPlainText(presentation.abstract) : '');
+	const abstract = $derived(resolveAbstract(presentation));
+	const excerpt = $derived(abstract ? abstractToPlainText(abstract.text) : '');
 	const href = $derived(localePath(`/papers/${presentation.id}`));
 	const placement = $derived(placements.get(presentation.id));
 </script>
@@ -56,8 +57,8 @@
 		{/if}
 	{/if}
 
-	{#if excerpt}
-		<p class="text-bio mt-3.5 line-clamp-3" lang={presentation.language}>{excerpt}</p>
+	{#if abstract}
+		<p class="text-bio mt-3.5 line-clamp-3" lang={abstract.lang}>{excerpt}</p>
 	{/if}
 </article>
 

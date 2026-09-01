@@ -106,7 +106,19 @@ export interface AffiliationLocation {
 export interface Presentation {
 	id: string;
 	title: string;
-	abstract?: string;
+	/**
+	 * A plain string in the usual case: one text, in whichever language its
+	 * author wrote it, shown to every reader whatever the page locale. A
+	 * `LocalizedString` when the author supplied both halves — then it follows
+	 * the reader, and the `lang` it renders under has to be resolved alongside
+	 * it rather than read off `language` below. `resolveAbstract` does both.
+	 */
+	abstract?: string | LocalizedString;
+	/**
+	 * The language the paper is *presented* in. It drives the card's corner
+	 * mark and the language filter, and it is not the language of the abstract:
+	 * an English talk can carry a French translation of its abstract.
+	 */
 	language: 'en' | 'fr';
 	/**
 	 * Ordered person ids (participants or organizers). This is the single
