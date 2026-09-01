@@ -180,7 +180,7 @@
 				{/if}
 
 				{#if showChair}
-					<!-- Two statements, not a label plus a placeholder. Nine of the ten
+					<!-- Two statements, not a label plus a placeholder. Several of the
 					     sessions that show this line have no chair yet, and "Chair:" is a
 					     colon that promises a name and then fails to supply one. -->
 					<p class="text-muted mt-2 text-xs">

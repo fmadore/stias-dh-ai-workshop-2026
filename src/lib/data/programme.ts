@@ -161,7 +161,8 @@ export const programme: ProgrammeDay[] = [
 					'fair-indigenous-languages',
 					'alphabet-without-borders',
 					'sustaining-african-languages'
-				]
+				],
+				chair: 'iginio-gagliardone'
 			},
 			{
 				id: 'd2-coffee-1',
@@ -274,7 +275,8 @@ export const programme: ProgrammeDay[] = [
 					'masakhane-4d-framework',
 					'french-ewondo-rbmt',
 					'multimodal-call-african-languages'
-				]
+				],
+				chair: 'van-zaanen'
 			},
 			{
 				id: 'd3-visit-b',
