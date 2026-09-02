@@ -4,7 +4,8 @@ const presentation: Presentation = {
 	id: 'entity-linking-african-studies',
 	language: 'en',
 	authors: ['jiayu-yang', 'durgesh-nandini'],
-	title: 'Linking African Studies Metadata to Wikidata: A Training-Free Pipeline and the Gaps It Measures',
+	title:
+		'Linking African Studies Metadata to Wikidata: A Training-Free Pipeline and the Gaps It Measures',
 	abstract: `Research databases in African Studies accumulate rich metadata, including subject keywords, themes, geographic and cultural references, but much of this description remains isolated. The key problem is semantic grounding: without shared identifiers, two databases describing the same cultural practice or geographic region have no way to recognise the overlap. Our work draws on 3,975 metadata records from five African Studies institutions across three continents.
 
 We present CAREL (Context-Aware Routing for Entity Linking), a training-free pipeline that links research metadata keywords to Wikidata identifiers through a four-layer cascade. The first three layers are rule-based, using cross-lingual retrieval signals to measure linking confidence without any model inference. Only genuinely ambiguous keywords reach the final layer, where a locally deployed open-source LLM disambiguates among the candidates using the record's own context and live Wikidata tools. Local deployment is a deliberate choice: research metadata never leaves the institution, and the communities behind the data keep control over how it is used.
