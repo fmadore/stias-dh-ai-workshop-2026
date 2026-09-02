@@ -4,7 +4,7 @@ import type { ProgrammeDay } from '$lib/types';
  * Date the programme was last revised (ISO `yyyy-mm-dd`). Bump this whenever you
  * change the sessions below — it is shown as "Last updated" on the page.
  */
-export const programmeLastUpdated = '2026-08-31';
+export const programmeLastUpdated = '2026-09-02';
 
 /**
  * Workshop programme — STIAS, Stellenbosch, 21–24 September 2026.
@@ -28,9 +28,10 @@ export const programmeLastUpdated = '2026-08-31';
  *
  * Sessions therefore cap at 90 minutes (panels = 3 papers × 30 min), no comfort
  * breaks are allowed mid-session, and anything past 17:30 is billed at R1200/h.
- * STIAS caters two coffee breaks only on full days on site (Days 1 and 4); Days
- * 2 and 3 leave for an excursion in the afternoon (Day 2 straight after lunch,
- * so both its panels sit in the morning), and get the 10:30 break only.
+ * Days 2 and 3 leave for an excursion in the afternoon: Day 2 straight after
+ * lunch, so both its panels sit in the morning, and it gets the 10:30 break
+ * only; Day 3 sits on site until 15:30, so it keeps both coffee breaks and the
+ * walking tour departs from STIAS at 16:00.
  * After-hours functions (the welcome dinner on Day 1 and the farewell dinner on
  * Day 4) start at 19:00, off site; Days 2 and 3 leave the evening free.
  */
@@ -279,12 +280,22 @@ export const programme: ProgrammeDay[] = [
 				chair: 'van-zaanen'
 			},
 			{
+				id: 'd3-coffee-2',
+				time: '15:30 – 16:00',
+				type: 'break',
+				title: { en: 'Coffee break', fr: 'Pause-café' }
+			},
+			{
 				id: 'd3-visit-b',
 				time: '16:00 – 18:00',
 				type: 'social',
 				title: {
 					en: 'Walking tour of Stellenbosch',
 					fr: 'Visite guidée à pied de Stellenbosch'
+				},
+				description: {
+					en: 'A guided walk through Stellenbosch’s layered history, departing from STIAS. The Social Justice Walk covers the Stellenbosch University grounds and the changes the university has made to make them welcoming to all cultures; it is followed by a walk through Die Vlakte, the streets surrounding the campus, from which residents were forcibly removed in 1964. Through significant sites, personal stories and creative installations, the tour traces the racial divides of the past alongside the transformation and visual redress initiatives reshaping the university today.',
+					fr: "Une visite guidée à pied de l'histoire stratifiée de Stellenbosch, au départ du STIAS. La Social Justice Walk parcourt le campus de l'Université de Stellenbosch et les transformations que l'université y a menées pour le rendre accueillant pour toutes les cultures\u00a0; elle est suivie d'une marche dans Die Vlakte, les rues qui entourent le campus, dont les habitant·es ont été expulsés de force en 1964. À travers des lieux marquants, des récits personnels et des installations artistiques, la visite retrace les clivages raciaux du passé ainsi que les initiatives de transformation et de réparation visuelle qui redessinent aujourd'hui l'université."
 				}
 			},
 			{
