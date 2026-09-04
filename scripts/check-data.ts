@@ -5,6 +5,7 @@ import { pathToFileURL } from 'node:url';
 import { organizers } from '../src/lib/data/organizers.ts';
 import { affiliationLocations } from '../src/lib/data/affiliations.ts';
 import { pointSud } from '../src/lib/data/point-sud.ts';
+import { coAuthors } from '../src/lib/data/co-authors.ts';
 import { programme } from '../src/lib/data/programme.ts';
 import { sponsors } from '../src/lib/data/sponsors.ts';
 import type { Participant, Presentation } from '../src/lib/types/index.ts';
@@ -69,8 +70,10 @@ const participantModules = await loadDefaultModules<Participant>('src/lib/data/p
 const presentationModules = await loadDefaultModules<Presentation>('src/lib/data/presentations');
 const participants = participantModules.map(({ value }) => value);
 const presentations = presentationModules.map(({ value }) => value);
+// Attendees are held to the full record; co-authors are names only, so they
+// join the id space (papers cite them) without joining the checks below.
 const people = [...organizers, ...pointSud, ...participants];
-const peopleById = uniqueById(people, 'person');
+const peopleById = uniqueById([...people, ...coAuthors], 'person');
 const presentationsById = uniqueById(presentations, 'presentation');
 uniqueById(affiliationLocations, 'affiliation');
 
@@ -92,10 +95,22 @@ for (const affiliation of affiliationLocations) {
 	for (const personId of affiliation.personIds) {
 		if (!peopleById.has(personId))
 			fail(`affiliation ${affiliation.id}: unknown person '${personId}'`);
+		// The map plots where the people coming to Stellenbosch work. We know no
+		// campus for a co-author, and pinning one would invent a fact.
+		if (coAuthors.some((coAuthor) => coAuthor.id === personId))
+			fail(`affiliation ${affiliation.id}: '${personId}' is a co-author and has no campus`);
 		if (mappedPersonIds.has(personId))
 			fail(`affiliation ${affiliation.id}: person '${personId}' is mapped twice`);
 		mappedPersonIds.add(personId);
 	}
+}
+
+for (const coAuthor of coAuthors) {
+	if (!coAuthor.name.trim()) fail(`co-author ${coAuthor.id}: empty name`);
+	// A co-author who turns out to be attending belongs in a list that carries an
+	// affiliation and a page, not in this one.
+	if (presentations.every((presentation) => !presentation.authors.includes(coAuthor.id)))
+		fail(`co-author ${coAuthor.id}: credited on no paper`);
 }
 
 for (const person of people) {
@@ -164,5 +179,5 @@ if (untranslatedBios.length)
 	);
 
 console.log(
-	`check-data: OK (${participants.length} participants, ${organizers.length} organizers, ${pointSud.length} Point Sud representatives, ${presentations.length} presentations, ${sessionIds.size} sessions)`
+	`check-data: OK (${participants.length} participants, ${organizers.length} organizers, ${pointSud.length} Point Sud representatives, ${coAuthors.length} co-authors, ${presentations.length} presentations, ${sessionIds.size} sessions)`
 );

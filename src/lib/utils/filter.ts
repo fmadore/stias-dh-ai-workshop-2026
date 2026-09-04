@@ -99,7 +99,7 @@ export function filterPresentations(
 			[
 				p.title,
 				...abstractVariants(p.abstract),
-				...authors.flatMap((a) => [a.name, a.affiliation.en, a.affiliation.fr])
+				...authors.flatMap((a) => [a.name, a.affiliation?.en ?? '', a.affiliation?.fr ?? ''])
 			].join(' ')
 		);
 
@@ -108,7 +108,11 @@ export function filterPresentations(
 }
 
 export function uniquePaperCountries(presentations: Presentation[]): CountryCode[] {
+	// Co-authors declare no country, so a paper is filed under the countries of
+	// the authors who are actually coming.
 	return uniqueCountries(
-		presentations.flatMap((p) => getPresentationAuthors(p).map((a) => a.country))
+		presentations.flatMap((p) =>
+			getPresentationAuthors(p).flatMap((a) => (a.country ? [a.country] : []))
+		)
 	);
 }

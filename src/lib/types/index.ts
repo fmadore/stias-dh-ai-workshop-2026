@@ -89,6 +89,20 @@ export interface Participant {
 	bioLanguage?: BioLanguage;
 }
 
+/**
+ * Someone credited on a paper who is not otherwise taking part: the presenting
+ * author is the one who travels, and a co-author is known to us by name alone.
+ * They carry no affiliation, country, bio or page of their own, so they are
+ * kept out of the directory, the map and every count of who is attending —
+ * they exist so that a paper can name everyone who wrote it.
+ */
+export interface CoAuthor {
+	id: string;
+	name: string;
+	website?: string;
+	orcid?: string;
+}
+
 /** A campus-based affiliation shown on the participants map. */
 export interface AffiliationLocation {
 	id: string;

@@ -30,11 +30,14 @@ export const GET: RequestHandler = () => {
 		priority: 0.6
 	}));
 
-	// Every organiser and participant has a citable page of their own.
-	const personEntries: Entry[] = people.map((person) => ({
-		path: `/participants/${person.id}`,
-		priority: 0.5
-	}));
+	// Every organiser and participant has a citable page of their own. Credited
+	// co-authors do not — they are names on a byline, with no page to index.
+	const personEntries: Entry[] = people
+		.filter((person) => person.group !== 'co-author')
+		.map((person) => ({
+			path: `/participants/${person.id}`,
+			priority: 0.5
+		}));
 
 	const all = [...staticEntries, ...paperEntries, ...personEntries];
 

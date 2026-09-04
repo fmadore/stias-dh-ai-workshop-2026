@@ -175,7 +175,9 @@
 						{#each speakers as speaker, i (speaker.id)}{i > 0 ? ', ' : ''}<a href={localePath(`/participants/${speaker.id}`)} class="session-link">{speaker.name}</a>{#if speaker.online}{@render onlineBadge()}{/if}{/each}
 					</p>
 					<p class="text-muted text-sm">
-						{Array.from(new Set(speakers.map((s) => t(s.affiliation)))).join(' · ')}
+						{Array.from(
+							new Set(speakers.flatMap((s) => (s.affiliation ? [t(s.affiliation)] : [])))
+						).join(' · ')}
 					</p>
 				{/if}
 
@@ -238,8 +240,10 @@
 									     4px under the title link, which leaves 23px of safe clickable
 									     space where SC 2.5.8 asks for 24. -->
 									<span class="text-muted mt-1.5 block text-xs">
+										<!-- A credited co-author has no page of their own — we hold only
+										     their name — so they print unlinked among the authors who do. -->
 										<!-- prettier-ignore -->
-										{#each authors as author, i (author.id)}{i > 0 ? ', ' : ''}<a href={localePath(`/participants/${author.id}`)} class="session-link">{author.name}</a>{#if author.online}{@render onlineBadge()}{/if}{/each}
+										{#each authors as author, i (author.id)}{i > 0 ? ', ' : ''}{#if author.group === 'co-author'}{author.name}{:else}<a href={localePath(`/participants/${author.id}`)} class="session-link">{author.name}</a>{#if author.online}{@render onlineBadge()}{/if}{/if}{/each}
 									</span>
 								{/if}
 							</li>

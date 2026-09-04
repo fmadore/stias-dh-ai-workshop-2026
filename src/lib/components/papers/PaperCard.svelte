@@ -13,8 +13,13 @@
 
 	const authors = $derived(getPresentationAuthors(presentation));
 	const authorNames = $derived(authors.map((a) => a.name).join(', '));
+	// Co-authors carry no affiliation, so the set is built over the authors that
+	// have one rather than over all of them — otherwise the line ends in a
+	// stranded separator.
 	const affiliations = $derived(
-		Array.from(new Set(authors.map((a) => t(a.affiliation)))).join(' · ')
+		Array.from(new Set(authors.flatMap((a) => (a.affiliation ? [t(a.affiliation)] : [])))).join(
+			' · '
+		)
 	);
 	// line-clamp rather than truncate(200): character truncation cut mid-word
 	// and left ragged card heights.

@@ -41,7 +41,7 @@
 		author: authors.map((a) => ({
 			'@type': 'Person',
 			name: a.name,
-			affiliation: { '@type': 'Organization', name: t(a.affiliation) }
+			...(a.affiliation ? { affiliation: { '@type': 'Organization', name: t(a.affiliation) } } : {})
 		}))
 	});
 </script>
@@ -82,16 +82,24 @@
 					<ul class="authors">
 						{#each authors as author (author.id)}
 							<li class="author">
-								<!-- Author names are links now: every person has a citable page. -->
-								<!-- The resting underline goes on the name, not the anchor: the
-								     anchor also wraps the affiliation, and underlining a second
-								     line of muted 14px reads as two links rather than one. -->
-								<a href={localePath(`/participants/${author.id}`)} class="author-link">
-									<span class="author-name font-display text-strong block text-lg">
-										{author.name}
-									</span>
-									<span class="text-muted block text-sm">{t(author.affiliation)}</span>
-								</a>
+								<!-- Author names are links now: every person attending has a citable
+								     page. A credited co-author has none — we hold only their name —
+								     so they read as plain text rather than as a link to nothing. -->
+								{#if author.group === 'co-author'}
+									<span class="font-display text-strong block text-lg">{author.name}</span>
+								{:else}
+									<!-- The resting underline goes on the name, not the anchor: the
+									     anchor also wraps the affiliation, and underlining a second
+									     line of muted 14px reads as two links rather than one. -->
+									<a href={localePath(`/participants/${author.id}`)} class="author-link">
+										<span class="author-name font-display text-strong block text-lg">
+											{author.name}
+										</span>
+										{#if author.affiliation}
+											<span class="text-muted block text-sm">{t(author.affiliation)}</span>
+										{/if}
+									</a>
+								{/if}
 							</li>
 						{/each}
 					</ul>
