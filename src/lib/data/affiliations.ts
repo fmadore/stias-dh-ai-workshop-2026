@@ -178,14 +178,26 @@ export const affiliationLocations: AffiliationLocation[] = [
 		// Tunisia, and leaving the country off a map of where this workshop
 		// draws from lost a real fact to a technicality about institutions.
 		// `name` repeats her own affiliation string so the map and her card
-		// say the same thing. Masakhane's two members stay off deliberately —
-		// a distributed collective has no single place to claim, which is
-		// what `affiliations_note` still describes.
+		// say the same thing. The entry below applies the same reasoning to
+		// Masakhane's Tajuddeen Gwadabe.
 		id: 'independent-tunisia',
 		name: { en: 'Unaffiliated scholar', fr: 'Chercheuse indépendante' },
 		city: { en: 'Tunis', fr: 'Tunis' },
 		country: 'TN',
 		coordinates: { lat: 36.8065, lng: 10.1815 },
 		personIds: ['khaoula-stiti']
+	},
+	{
+		// Masakhane is a distributed collective with no campus to pin, so its
+		// members are placed by where they work rather than by an institutional
+		// address; `name` repeats the affiliation string their cards carry.
+		// Lydia Kila Taban stays unpinned, which is what `affiliations_note`
+		// still describes.
+		id: 'masakhane-abuja',
+		name: { en: 'Masakhane', fr: 'Masakhane' },
+		city: { en: 'Abuja', fr: 'Abuja' },
+		country: 'NG',
+		coordinates: { lat: 9.0765, lng: 7.3986 },
+		personIds: ['tajuddeen-gwadabe']
 	}
 ];
