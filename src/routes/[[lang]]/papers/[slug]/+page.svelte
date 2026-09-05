@@ -83,10 +83,13 @@
 						{#each authors as author (author.id)}
 							<li class="author">
 								<!-- Author names are links now: every person attending has a citable
-								     page. A credited co-author has none — we hold only their name —
-								     so they read as plain text rather than as a link to nothing. -->
+								     page. A credited co-author has none, so they read as plain text
+								     rather than as a link to nothing. -->
 								{#if author.group === 'co-author'}
 									<span class="font-display text-strong block text-lg">{author.name}</span>
+									{#if author.affiliation}
+										<span class="text-muted block text-sm">{t(author.affiliation)}</span>
+									{/if}
 								{:else}
 									<!-- The resting underline goes on the name, not the anchor: the
 									     anchor also wraps the affiliation, and underlining a second

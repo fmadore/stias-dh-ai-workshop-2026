@@ -8,7 +8,9 @@ import { coAuthors } from './co-authors';
  * A unified, read-only view over organizers, Point Sud representatives,
  * participants and credited co-authors so that any part of the site (schedule,
  * paper authorship, …) can resolve a person by id without caring which list
- * they live in.
+ * they live in. Co-authors are still intentionally partial people: they have
+ * no country or participant profile, but their paper bylines include their
+ * affiliations.
  */
 export type PersonGroup = 'organizer' | 'point-sud' | 'participant' | 'co-author';
 
