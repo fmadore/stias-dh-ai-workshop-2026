@@ -10,6 +10,7 @@ export default defineConfig({
 	reporter: process.env.CI ? 'github' : 'list',
 	use: {
 		baseURL: 'http://127.0.0.1:4317',
+		locale: 'en-GB',
 		trace: 'on-first-retry',
 		screenshot: 'only-on-failure'
 	},
@@ -20,7 +21,7 @@ export default defineConfig({
 		}
 	],
 	webServer: {
-		command: 'npm run preview -- --host 127.0.0.1 --port 4317 --strictPort',
+		command: 'node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4317 --strictPort',
 		url: 'http://127.0.0.1:4317/stias-dh-ai-workshop-2026/',
 		reuseExistingServer: !process.env.CI,
 		timeout: 60_000

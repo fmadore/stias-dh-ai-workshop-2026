@@ -1096,6 +1096,23 @@ button:not(:disabled),
    circulated, so paper output is a real output target here.
    ============================================================ */
 @media print {
+	@page {
+		margin: 12mm;
+	}
+	/* Flex stacks and whole-day cards must fragment; keep individual sessions together. */
+	.programme-body,
+	.programme-body .block-flow {
+		display: block;
+	}
+	.programme-body .block-flow > section {
+		margin-top: 1.5rem;
+	}
+	.programme-body .card {
+		break-inside: auto !important;
+	}
+	.programme-body .card > div {
+		break-inside: avoid;
+	}
 	/* Without this, anything the reader has not scrolled past prints blank:
 	   the hidden state is only ever cleared by the IntersectionObserver. */
 	.js .scroll-reveal {
@@ -1113,6 +1130,48 @@ button:not(:disabled),
 		--color-paper-dark: #fff;
 		--color-deep: #fff;
 	}
+	:root,
+	.dark,
+	.on-inverse {
+		--surface-page: #fff;
+		--surface-raised: #fff;
+		--surface-sunken: #fff;
+		--ink-strong: #1d1a16;
+		--ink-body: #3a3630;
+		--ink-subtle: #56514a;
+		--border-subtle: #d8d2c6;
+		--border-strong: #56514a;
+		--border-accent: #7a5c15;
+		--accent-ink: #7a5c15;
+		--eyebrow-ink: #7a5c15;
+		--link: #0b6163;
+		--link-hover: #094e50;
+	}
+	/* Print must also override explicit inverse/dark utilities, independent
+	   of the browser's "background graphics" setting. Images keep their ink. */
+	body,
+	body * {
+		color: #1d1a16 !important;
+		background-color: transparent !important;
+		background-image: none !important;
+		text-shadow: none !important;
+		box-shadow: none !important;
+	}
+	body {
+		background: white !important;
+	}
+	body a {
+		color: #0b6163 !important;
+	}
+	.programme-day-nav,
+	.page-exits,
+	footer nav,
+	.filter-bar,
+	.venue-map-shell,
+	.affiliation-shell .map-frame {
+		display: none !important;
+	}
+
 	.dark body {
 		background-color: #fff;
 		color: var(--color-ink);

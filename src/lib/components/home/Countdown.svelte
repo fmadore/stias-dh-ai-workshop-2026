@@ -1,6 +1,7 @@
 <script lang="ts">
+	import { venueClock } from '$lib/utils/venue-clock';
 	import * as m from '$lib/paraglide/messages';
-	import { daysUntil, msUntilNextVenueMidnight } from '$lib/utils/milestones';
+	import { daysUntil } from '$lib/utils/milestones';
 
 	let {
 		/** ISO datetime the count runs to, e.g. 2026-08-31T23:59:59+02:00. */
@@ -12,30 +13,8 @@
 		milestone: string;
 	} = $props();
 
-	let now = $state(Date.now());
-
 	const targetMs = $derived(new Date(target).getTime());
-	const days = $derived(daysUntil(targetMs, now));
-
-	// Days, not seconds. A ticking seconds display re-rendered the page once a
-	// second for a date months out, and the number nobody can act on was the
-	// loudest thing on the home page.
-	//
-	// The value changes exactly once a day, at midnight in Stellenbosch, so that
-	// is when this wakes — one timer per day rather than the twenty-four an
-	// hourly interval spent to catch one of them. Re-armed after each firing,
-	// which also keeps it correct across a DST shift in the reader's own zone.
-	$effect(() => {
-		let timer: ReturnType<typeof setTimeout>;
-		const arm = () => {
-			timer = setTimeout(() => {
-				now = Date.now();
-				arm();
-			}, msUntilNextVenueMidnight(now));
-		};
-		arm();
-		return () => clearTimeout(timer);
-	});
+	const days = $derived(daysUntil(targetMs, $venueClock.now));
 </script>
 
 <!-- The count is a clause in the milestone line, not a metric. A 36px display

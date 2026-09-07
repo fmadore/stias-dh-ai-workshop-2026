@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { venueClock } from '$lib/utils/venue-clock';
 	import { cfpInfo } from '$lib/data/cfp';
 	import { organizers } from '$lib/data/organizers';
 	import { venueInfo } from '$lib/data/venue';
@@ -32,7 +33,13 @@
 	// all — on the one page whose whole subject is a deadline that has passed.
 	// The PDF and text exports build their own list in generate-cfp-downloads.ts
 	// and stay stateless, as a record of the call as published should.
-	const keyDates = $derived(getMilestones());
+	const keyDates = $derived(
+		getMilestones($venueClock.now).map((item) => ({
+			...item,
+			past: $venueClock.live && item.past,
+			next: $venueClock.live && item.next
+		}))
+	);
 </script>
 
 <div class="block-flow">

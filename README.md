@@ -17,7 +17,7 @@ The website is available in English and French.
 Requires Node 24 (see `.nvmrc`).
 
 ```bash
-npm install        # also compiles i18n messages via the `prepare` script
+npm ci             # installs locked dependencies and compiles i18n messages via the `prepare` script
 npm run dev        # dev server at http://localhost:5173
 npm run build      # static build into build/ + data & smoke checks
 npm run preview    # serve the production build locally
@@ -26,10 +26,26 @@ npm run lint       # eslint
 npm run format     # prettier --write
 ```
 
-`npm run build` also runs `scripts/check-data.mjs` (referential integrity of
+`npm run build` also runs `scripts/check-data.ts` (referential integrity of
 the content data — author ids, programme references, image paths) and
 `scripts/smoke-test.mjs` (French pages really prerendered in French, sitemap
-complete). Both fail the build on problems and run in CI.
+complete). Generated internal links and their HTML fragments are checked by `scripts/check-links.mjs`, and `scripts/check-bundle-size.mjs` enforces asset budgets. All four checks fail the build on problems and run in CI.
+
+## Testing
+
+```bash
+npx playwright install chromium
+npm run format:check
+npm run lint
+npm run check
+npm run test:unit
+npm run build
+npm run test:e2e
+```
+
+The browser suites cover navigation, programme, content, maps, accessibility and resilience. Routine map tests use the real renderer with a local empty style, so they do not require external tiles. Set `LIVE_MAPS=1` to enable the separate live-provider integration test. Print tests write PDFs to the ignored `test-results/` directory.
+
+The programme, hero and milestone lists share one venue clock, which refreshes at date boundaries and when a suspended page becomes visible. Static HTML publishes dates without relative live-status claims. Directory filters use `q`, `country`, `language` and (for participants) `group` query parameters; reload and locale switching preserve them.
 
 ## Content editing
 

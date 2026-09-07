@@ -12,6 +12,7 @@
 		actions,
 		/** Wide pages (the directory grid, the programme) need the full container. */
 		width = 'readable',
+		compact = false,
 		/**
 		 * The language `title` is actually written in, when it differs from the
 		 * page. A paper keeps its title in its language of delivery, so a French
@@ -26,13 +27,14 @@
 		meta?: string[];
 		actions?: Snippet;
 		width?: 'readable' | 'page';
+		compact?: boolean;
 		titleLang?: string;
 	} = $props();
 </script>
 
 <!-- A sunken band, so interior pages get the banding the home page has and
      chrome is visibly separated from content. -->
-<header class="bg-cream-dark border-subtle border-b">
+<header class="bg-cream-dark border-subtle border-b" class:compact>
 	<div class="{width === 'page' ? 'container-page' : 'container-readable'} pt-14 pb-10">
 		{#if eyebrow}
 			<p class="text-eyebrow mb-4">{eyebrow}</p>
@@ -73,6 +75,19 @@
 </header>
 
 <style>
+	@media (max-width: 639px) {
+		.compact > div {
+			padding-block: 1.5rem;
+		}
+		.compact .accent-rule {
+			display: none;
+		}
+		.compact .meta-row {
+			margin-top: 1rem;
+			padding-top: 0.75rem;
+		}
+	}
+
 	.meta-row {
 		overflow: hidden;
 	}

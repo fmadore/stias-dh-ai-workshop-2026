@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { venueClock } from '$lib/utils/venue-clock';
 	import * as m from '$lib/paraglide/messages';
 	import { getLocale } from '$lib/paraglide/runtime';
 	import { siteConfig } from '$lib/data/site-config';
@@ -20,13 +21,13 @@
 	);
 
 	/** Today's date in South African time, so "happening now" matches the venue. */
-	const todayAtVenue = dateAtVenue();
+	const todayAtVenue = $derived(dateAtVenue($venueClock.now));
 
 	// "Happening now" is a claim about the present, not about the date. The
 	// closing session ends at 18:00 on the fourth day and the badge sat on that
 	// day until midnight, so for six hours the programme said the workshop was
 	// under way while the home page said it had concluded.
-	const stillRunning = workshopPhase() !== 'after';
+	const stillRunning = $derived($venueClock.live && workshopPhase($venueClock.now) !== 'after');
 
 	// Panel numbers run across the whole programme, so each day needs to know
 	// how many panels preceded it.
@@ -58,6 +59,7 @@
 	title={m.section_programme()}
 	subtitle={m.hero_dates()}
 	width="page"
+	compact
 	meta={[m.hero_location(), m.hero_format()]}
 />
 
@@ -68,7 +70,7 @@
 		     the generated utility, but an alpha modifier is a different class name
 		     and falls through to the raw light-only token. -->
 		<nav
-			class="bg-page/90 border-subtle sticky top-[var(--nav-height)] z-30 border-b backdrop-blur-md"
+			class="programme-day-nav bg-page/90 border-subtle sticky top-[var(--nav-height)] z-30 border-b backdrop-blur-md"
 			aria-label={m.programme_jump_to_day()}
 		>
 			<!-- flex-nowrap, not flex-wrap: --day-bar-height is a declared constant
@@ -90,7 +92,7 @@
 			</div>
 		</nav>
 
-		<div class="container-page block-flow pt-10">
+		<div class="container-page programme-body block-flow pt-6 sm:pt-10">
 			<div class="callout">
 				<Info
 					size={18}
@@ -132,6 +134,14 @@
 </div>
 
 <style>
+	@media (max-width: 639px) {
+		.programme-body {
+			--space-block: 2rem;
+		}
+		.programme-body .callout {
+			padding: 0.875rem;
+		}
+	}
 	.day-pill {
 		/* The only in-page navigation on a four-day schedule, and the control most
 		   likely to be tapped while walking into a room — it rendered 33px against

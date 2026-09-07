@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { venueClock } from '$lib/utils/venue-clock';
 	import * as m from '$lib/paraglide/messages';
 	import { getMilestones } from '$lib/utils/milestones';
 	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
@@ -7,7 +8,13 @@
 	// Replaces Quick Links, which restated three navbar items and said
 	// "Learn more" three times. The current step is marked, so the band
 	// tells the reader where the workshop actually is.
-	const milestones = $derived(getMilestones());
+	const milestones = $derived(
+		getMilestones($venueClock.now).map((item) => ({
+			...item,
+			past: $venueClock.live && item.past,
+			next: $venueClock.live && item.next
+		}))
+	);
 </script>
 
 <section class="section-pad bg-cream-dark">

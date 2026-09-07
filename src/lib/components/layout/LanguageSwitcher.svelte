@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
 	import { getLocale, locales, baseLocale } from '$lib/paraglide/runtime';
 	import * as m from '$lib/paraglide/messages';
@@ -7,6 +8,10 @@
 	import { Languages } from '@lucide/svelte';
 
 	const currentLocale = $derived(getLocale());
+	let mounted = $state(false);
+	onMount(() => {
+		mounted = true;
+	});
 
 	/**
 	 * One control, not two. With exactly two locales, "EN / FR" spent a
@@ -30,13 +35,14 @@
 		if (!other) return undefined;
 		return {
 			locale: other,
-			href: switchLocalePath(
-				page.url.pathname,
-				currentLocale as SupportedLocale,
-				other,
-				base,
-				baseLocale as SupportedLocale
-			)
+			href:
+				switchLocalePath(
+					page.url.pathname,
+					currentLocale as SupportedLocale,
+					other,
+					base,
+					baseLocale as SupportedLocale
+				) + (mounted ? (page.state.directorySearch ?? page.url.search) + page.url.hash : '')
 		};
 	});
 </script>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { venueClock } from '$lib/utils/venue-clock';
 	import * as m from '$lib/paraglide/messages';
 	import { siteConfig } from '$lib/data/site-config';
 	import { t, localePath } from '$lib/utils/i18n';
@@ -16,9 +17,9 @@
 	// The call closed on 30 April 2026, so the primary ask is no longer
 	// "submit" — it is the programme. Derived rather than hard-coded so the
 	// hero is right at every stage of the workshop's life.
-	const cfpOpen = $derived(isCfpOpen());
-	const phase = $derived(workshopPhase());
-	const milestone = $derived(nextMilestone());
+	const cfpOpen = $derived($venueClock.live && isCfpOpen($venueClock.now));
+	const phase = $derived(workshopPhase($venueClock.now));
+	const milestone = $derived(nextMilestone($venueClock.now));
 
 	const primary = $derived(
 		cfpOpen
@@ -84,7 +85,13 @@
 	     the same label · value · count row the dates line above already uses,
 	     so the hero has one meta idiom rather than two, and the largest thing
 	     on this screen stays the title rather than a number counting down. -->
-	{#if milestone}
+	{#if !$venueClock.live}
+		<div class="relative z-10 border-t border-white/12">
+			<div class="container-wide text-primary-100 py-4.5 text-sm">
+				{m.workshop_dates()} · {m.hero_dates()}
+			</div>
+		</div>
+	{:else if milestone}
 		<div class="relative z-10 border-t border-white/12">
 			<div class="container-wide flex flex-wrap items-baseline gap-x-3 gap-y-1 py-4.5">
 				<span class="text-secondary-300 text-badge font-semibold tracking-[0.16em] uppercase">

@@ -16,12 +16,7 @@
 	import NoResults from '$lib/components/shared/NoResults.svelte';
 	import AffiliationMap from '$lib/components/participants/AffiliationMap.svelte';
 	import { filterPeople, uniquePersonCountries } from '$lib/utils/filter';
-	import type { CountryCode } from '$lib/types';
-
-	let query = $state('');
-	let country = $state<CountryCode | null>(null);
-	let language = $state<'en' | 'fr' | null>(null);
-	let grouping = $state<Grouping>('none');
+	import { createUrlFilters } from '$lib/utils/url-filters.svelte';
 
 	const groupingOptions: Array<{ value: Grouping; label: string }> = $derived([
 		{ value: 'none', label: m.directory_no_group() },
@@ -36,8 +31,13 @@
 	// seven people who were still on screen.
 	const everyone = [...organizers, ...pointSud, ...participants];
 	const countries = uniquePersonCountries(everyone);
+	const filters = createUrlFilters(countries);
 
-	const options = $derived({ query, country, language });
+	const options = $derived({
+		query: filters.query,
+		country: filters.country,
+		language: filters.language
+	});
 	const shownOrganizers = $derived(filterPeople(organizers, options));
 	const shownPointSud = $derived(filterPeople(pointSud, options));
 	const shownParticipants = $derived(filterPeople(participants, options));
@@ -46,9 +46,7 @@
 	);
 
 	function clearFilters() {
-		query = '';
-		country = null;
-		language = null;
+		filters.reset();
 	}
 </script>
 
@@ -82,15 +80,15 @@
 				{countries}
 				searchPlaceholder={m.participants_search_placeholder()}
 				languageLabel={m.filter_language_label_participants()}
-				bind:query
-				bind:country
-				bind:language
+				bind:query={filters.query}
+				bind:country={filters.country}
+				bind:language={filters.language}
 			>
 				{#snippet trailing()}
 					<SegmentedControl
 						label={m.directory_group_label()}
 						options={groupingOptions}
-						bind:value={grouping}
+						bind:value={filters.grouping}
 					/>
 				{/snippet}
 			</FilterBar>
@@ -136,7 +134,7 @@
 						<h2 class="text-section text-strong mb-8">
 							{m.section_participants()}
 						</h2>
-						<ParticipantGrid participants={shownParticipants} {grouping} />
+						<ParticipantGrid participants={shownParticipants} grouping={filters.grouping} />
 					</section>
 				{/if}
 			{/if}

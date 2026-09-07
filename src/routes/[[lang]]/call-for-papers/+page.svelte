@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { venueClock } from '$lib/utils/venue-clock';
 	import * as m from '$lib/paraglide/messages';
 	import { siteConfig } from '$lib/data/site-config';
 	import { cfpInfo } from '$lib/data/cfp';
@@ -14,7 +15,7 @@
 	// The call closed on 30 April 2026 and the page said so nowhere: it still
 	// opened "We invite proposals…" and listed four addresses to send them to.
 	// Derived, not asserted — the same rule the hero follows.
-	const closed = $derived(!isCfpOpen());
+	const closed = $derived($venueClock.live && !isCfpOpen($venueClock.now));
 	const closedOn = $derived(formatDate(cfpInfo.deadline));
 </script>
 

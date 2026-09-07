@@ -1,8 +1,17 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { daysUntil, dateAtVenue, workshopPhase } from '../src/lib/utils/milestones';
+import { daysUntil, dateAtVenue, workshopPhase, nextMilestone } from '../src/lib/utils/milestones';
+import { nextClockDelay } from '../src/lib/utils/venue-clock';
 
 const at = (iso: string) => Date.parse(iso);
+
+test('the shared clock wakes at opening, closing and venue midnight', () => {
+	assert.equal(nextClockDelay(at('2026-09-21T08:59:00+02:00')), 60_000);
+	assert.equal(nextClockDelay(at('2026-09-24T17:59:00+02:00')), 60_000);
+	assert.equal(nextClockDelay(at('2026-09-21T23:59:00+02:00')), 60_000);
+	assert.equal(nextMilestone(at('2026-09-21T09:00:00+02:00')), undefined);
+	assert.ok(nextClockDelay(at('2026-09-24T18:00:00+02:00')) > 1_000);
+});
 
 test('a deadline later the same day at the venue is today, not tomorrow', () => {
 	// Every milestone lapses at 23:59:59 SAST on its own date. Dividing the raw

@@ -8,23 +8,24 @@
 	import FilterBar from '$lib/components/shared/FilterBar.svelte';
 	import NoResults from '$lib/components/shared/NoResults.svelte';
 	import { filterPresentations, uniquePaperCountries } from '$lib/utils/filter';
-	import type { CountryCode } from '$lib/types';
+	import { createUrlFilters } from '$lib/utils/url-filters.svelte';
 
 	const sorted = [...presentations].sort((a, b) =>
 		a.title.localeCompare(b.title, undefined, { sensitivity: 'base' })
 	);
 
-	let query = $state('');
-	let country = $state<CountryCode | null>(null);
-	let language = $state<'en' | 'fr' | null>(null);
-
 	const countries = uniquePaperCountries(sorted);
-	const filtered = $derived(filterPresentations(sorted, { query, country, language }));
+	const filters = createUrlFilters(countries);
+	const filtered = $derived(
+		filterPresentations(sorted, {
+			query: filters.query,
+			country: filters.country,
+			language: filters.language
+		})
+	);
 
 	function clearFilters() {
-		query = '';
-		country = null;
-		language = null;
+		filters.reset();
 	}
 </script>
 
@@ -52,9 +53,9 @@
 					hasResults={filtered.length > 0}
 					{countries}
 					searchPlaceholder={m.papers_search_placeholder()}
-					bind:query
-					bind:country
-					bind:language
+					bind:query={filters.query}
+					bind:country={filters.country}
+					bind:language={filters.language}
 				/>
 			</div>
 			{#if filtered.length > 0}

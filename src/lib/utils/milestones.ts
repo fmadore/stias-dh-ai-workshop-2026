@@ -89,7 +89,7 @@ export function getMilestones(now: number = Date.now()): Milestone[] {
 
 	let seenUpcoming = false;
 	return raw.map((milestone) => {
-		const past = now > milestone.at;
+		const past = milestone.id === 'workshop' ? now >= milestone.at : now > milestone.at;
 		const next = !past && !seenUpcoming;
 		if (next) seenUpcoming = true;
 		return { ...milestone, past, next };

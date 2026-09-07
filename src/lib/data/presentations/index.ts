@@ -8,6 +8,15 @@ const modules = import.meta.glob<Presentation>(['./*.ts', '!./index.ts'], {
 
 export const presentations: Presentation[] = Object.values(modules);
 
+const byAuthor = new Map<string, Presentation[]>();
+for (const presentation of presentations) {
+	for (const author of presentation.authors) {
+		const papers = byAuthor.get(author) ?? [];
+		papers.push(presentation);
+		byAuthor.set(author, papers);
+	}
+}
+
 const byId = new Map(presentations.map((p) => [p.id, p]));
 
 export function getPresentation(id: string): Presentation | undefined {
@@ -20,7 +29,7 @@ export function getPresentation(id: string): Presentation | undefined {
  * directory filter runs over both.
  */
 export function getParticipantPresentations(person: { id: string }): Presentation[] {
-	return presentations.filter((p) => p.authors.includes(person.id));
+	return byAuthor.get(person.id) ?? [];
 }
 
 /**

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { venueClock } from '$lib/utils/venue-clock';
 	import { base } from '$app/paths';
 	import * as m from '$lib/paraglide/messages';
 	import { organizers } from '$lib/data/organizers';
@@ -28,7 +29,13 @@
 		}
 	]);
 
-	const milestones = $derived(getMilestones());
+	const milestones = $derived(
+		getMilestones($venueClock.now).map((item) => ({
+			...item,
+			past: $venueClock.live && item.past,
+			next: $venueClock.live && item.next
+		}))
+	);
 </script>
 
 <footer

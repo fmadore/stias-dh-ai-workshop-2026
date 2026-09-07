@@ -16,7 +16,12 @@
 				// Signal JS availability: CSS keeps scroll-reveal content visible
 				// for no-JS visitors, crawlers, and print (see .js .scroll-reveal).
 				document.documentElement.classList.replace('no-js', 'js');
-				const saved = localStorage.getItem('theme');
+				let saved = null;
+				try {
+					saved = localStorage.getItem('theme');
+				} catch {
+					/* Storage is optional. */
+				}
 				if (
 					saved === 'dark' ||
 					(!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)

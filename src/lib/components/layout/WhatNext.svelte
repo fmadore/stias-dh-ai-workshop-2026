@@ -78,7 +78,7 @@
 	const currentPath = $derived(page.url.pathname.replace(base, '') || '/');
 </script>
 
-<section class="bg-cream-dark border-subtle border-t" aria-labelledby="whats-next">
+<section class="page-exits bg-cream-dark border-subtle border-t" aria-labelledby="whats-next">
 	<div class="container-page section-pad">
 		<h2 id="whats-next" class="text-eyebrow mb-8">{m.whats_next()}</h2>
 		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
