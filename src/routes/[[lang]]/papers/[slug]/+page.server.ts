@@ -1,6 +1,9 @@
-import { error } from '@sveltejs/kit';
+import { base } from '$app/paths';
+import { error, redirect } from '@sveltejs/kit';
 import type { EntryGenerator, PageServerLoad } from './$types';
 import { presentations, getPresentation, getPresentationAuthors } from '$lib/data/presentations';
+import { paperRedirects } from '$lib/data/redirects';
+import { localizedPath } from '$lib/utils/localized-paths';
 import { renderAbstract } from '$lib/utils/markdown';
 import { resolveAbstract } from '$lib/utils/i18n';
 import { abstractToPlainText, truncate } from '$lib/utils/text';
@@ -9,7 +12,10 @@ export const prerender = true;
 
 export const entries: EntryGenerator = () => {
 	const langs = ['', 'fr'];
-	return presentations.flatMap((p) => langs.map((lang) => ({ lang, slug: p.id })));
+	// Retired ids prerender too, so that each one becomes a redirect page
+	// rather than a 404 on a host that cannot rewrite.
+	const slugs = [...presentations.map((p) => p.id), ...Object.keys(paperRedirects)];
+	return slugs.flatMap((slug) => langs.map((lang) => ({ lang, slug })));
 };
 
 // A server load (rather than a universal one) keeps `marked` out of the
@@ -17,6 +23,12 @@ export const entries: EntryGenerator = () => {
 export const load: PageServerLoad = ({ params }) => {
 	const presentation = getPresentation(params.slug);
 	if (!presentation) {
+		const current = paperRedirects[params.slug];
+		if (current) {
+			// Prerendering turns this into a small page that forwards the
+			// reader, keeping the locale they arrived in.
+			redirect(308, localizedPath(`/papers/${current}`, params.lang === 'fr' ? 'fr' : 'en', base));
+		}
 		error(404, 'Paper not found');
 	}
 

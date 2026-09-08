@@ -8,6 +8,7 @@ import { pointSud } from '../src/lib/data/point-sud.ts';
 import { coAuthors } from '../src/lib/data/co-authors.ts';
 import { programme } from '../src/lib/data/programme.ts';
 import { sponsors } from '../src/lib/data/sponsors.ts';
+import { paperRedirects } from '../src/lib/data/redirects.ts';
 import type { Participant, Presentation } from '../src/lib/types/index.ts';
 
 let failures = 0;
@@ -166,6 +167,15 @@ for (const presentation of presentations) {
 		fail(`presentation ${presentation.id}: scheduled ${appearances} times (expected once)`);
 }
 
+// A retired paper id must forward to one that exists, and must not shadow a
+// live paper — the redirect route would then answer instead of the paper.
+for (const [legacy, current] of Object.entries(paperRedirects)) {
+	if (presentationsById.has(legacy))
+		fail(`redirect '${legacy}': shadows a live paper of the same id`);
+	if (!presentationsById.has(current))
+		fail(`redirect '${legacy}': points at unknown paper '${current}'`);
+}
+
 for (const sponsor of sponsors) await expectStaticFile(sponsor.logo, `sponsor ${sponsor.id}`);
 
 if (failures) {
@@ -179,5 +189,5 @@ if (untranslatedBios.length)
 	);
 
 console.log(
-	`check-data: OK (${participants.length} participants, ${organizers.length} organizers, ${pointSud.length} Point Sud representatives, ${coAuthors.length} co-authors, ${presentations.length} presentations, ${sessionIds.size} sessions)`
+	`check-data: OK (${participants.length} participants, ${organizers.length} organizers, ${pointSud.length} Point Sud representatives, ${coAuthors.length} co-authors, ${presentations.length} presentations, ${Object.keys(paperRedirects).length} paper redirect(s), ${sessionIds.size} sessions)`
 );
