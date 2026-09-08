@@ -1,7 +1,7 @@
 import type { Presentation } from '$lib/types';
 
 const presentation: Presentation = {
-	id: 'computational-ethnography-fulani',
+	id: 'visual-narratives-fulani-whatsapp',
 	language: 'en',
 	authors: ['bruno-allahissem', 'mirjam-de-bruijn', 'luca-bruls', 'jelena-prokic', 'matthew-sung'],
 	title: 'Difference in Similarity: Visual Narratives in Fulani WhatsApp groups in the Sahel',

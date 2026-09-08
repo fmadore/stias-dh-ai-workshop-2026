@@ -180,13 +180,13 @@ export const programme: ProgrammeDay[] = [
 					fr: 'Manuscrits, histoires et méthodes computationnelles'
 				},
 				description: {
-					en: 'HTR for Ajami manuscripts, large language models reading historical codebooks and computational ethnography of Sahelian social media show what computation makes legible in African textual and social archives.',
-					fr: 'HTR des manuscrits ajami, grands modèles de langue lisant des codebooks historiques et ethnographie computationnelle des réseaux sociaux sahéliens\u00a0: ce que le calcul rend lisible dans les archives textuelles et sociales africaines.'
+					en: 'HTR for Ajami manuscripts, large language models reading historical codebooks and computer vision applied to images circulating in Sahelian WhatsApp groups show what computation makes legible in African textual and social archives.',
+					fr: 'HTR des manuscrits ajami, grands modèles de langue lisant des codebooks historiques et vision par ordinateur appliquée aux images circulant dans les groupes WhatsApp sahéliens\u00a0: ce que le calcul rend lisible dans les archives textuelles et sociales africaines.'
 				},
 				presentationIds: [
 					'ajami-nlp-infrastructure',
 					'precolonial-bead-trade',
-					'computational-ethnography-fulani'
+					'visual-narratives-fulani-whatsapp'
 				],
 				chair: 'madore'
 			},
