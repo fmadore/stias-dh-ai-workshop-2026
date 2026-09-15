@@ -67,13 +67,32 @@
 		menuToggle?.focus();
 	}
 
+	/**
+	 * The menu must not survive a jump to desktop: above 80rem its panel is
+	 * `display: none` and the summary that would close it goes with it, so a
+	 * menu still open there reappears intact the moment the window narrows
+	 * again — and meanwhile holds the header on its opaque open-state
+	 * background.
+	 *
+	 * Closing it has to be a consequence of the current state, not of the media
+	 * query's change event alone. `<details>` opens natively, before Svelte
+	 * hears about it: the `toggle` event that syncs `bind:open` is queued, and a
+	 * resize landing inside that gap found `mobileMenuOpen` still false, closed
+	 * nothing, and then watched the queued event set it back to true. Reading
+	 * both values here means the close runs whichever of the two arrives second.
+	 */
+	let wideViewport = $state(false);
+
 	$effect(() => {
 		const desktop = window.matchMedia('(min-width: 80rem)');
-		const closeOnDesktop = () => {
-			if (desktop.matches) mobileMenuOpen = false;
-		};
-		desktop.addEventListener('change', closeOnDesktop);
-		return () => desktop.removeEventListener('change', closeOnDesktop);
+		const sync = () => (wideViewport = desktop.matches);
+		sync();
+		desktop.addEventListener('change', sync);
+		return () => desktop.removeEventListener('change', sync);
+	});
+
+	$effect(() => {
+		if (wideViewport && mobileMenuOpen) mobileMenuOpen = false;
 	});
 
 	function isActive(href: string): boolean {
