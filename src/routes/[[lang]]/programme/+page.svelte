@@ -8,7 +8,8 @@
 	import { programme, programmeLastUpdated } from '$lib/data/programme';
 	import { dateAtVenue, workshopPhase } from '$lib/utils/milestones';
 	import ScheduleDay from '$lib/components/programme/ScheduleDay.svelte';
-	import { Calendar, Info } from '@lucide/svelte';
+	import { base } from '$app/paths';
+	import { Calendar, FileText } from '@lucide/svelte';
 
 	const intl = $derived(getLocale() === 'fr' ? 'fr-FR' : 'en-GB');
 
@@ -61,7 +62,16 @@
 	width="page"
 	compact
 	meta={[m.hero_location(), m.hero_format()]}
-/>
+>
+	{#snippet actions()}
+		<!-- One file for both locales: the printed programme is a single bilingual
+		     document, so unlike the call for papers there is no per-locale stem. -->
+		<a href={`${base}/downloads/Programme-STIAS-2026.pdf`} download class="btn btn-primary btn-sm">
+			<FileText size={15} strokeWidth={1.75} aria-hidden="true" />
+			{m.download_programme()}
+		</a>
+	{/snippet}
+</PageHeader>
 
 <div class="page-end">
 	{#if programme.length > 0}
@@ -93,22 +103,13 @@
 		</nav>
 
 		<div class="container-page programme-body block-flow pt-6 sm:pt-10">
-			<div class="callout">
-				<Info
-					size={18}
-					strokeWidth={1.75}
-					class="text-accent-ink mt-0.5 shrink-0"
-					aria-hidden="true"
-				/>
-				<div>
-					<p class="text-body measure-prose text-sm leading-relaxed">
-						{m.programme_preliminary()}
-					</p>
-					<p class="text-muted mt-1 text-xs">
-						{m.programme_last_updated({ date: lastUpdated })}
-					</p>
-				</div>
-			</div>
+			<!-- The revision date used to be the small print under a "this programme
+			     is preliminary" notice. With the notice gone it is a fact about the
+			     page, not a warning about it, so it drops the callout's amber frame
+			     and Info mark and sits as a quiet meta line above the schedule. -->
+			<p class="text-muted text-xs">
+				{m.programme_last_updated({ date: lastUpdated })}
+			</p>
 
 			<div class="block-flow">
 				{#each days as entry (entry.day.date)}
@@ -137,9 +138,6 @@
 	@media (max-width: 639px) {
 		.programme-body {
 			--space-block: 2rem;
-		}
-		.programme-body .callout {
-			padding: 0.875rem;
 		}
 	}
 	.day-pill {

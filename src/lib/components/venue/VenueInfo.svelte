@@ -79,9 +79,8 @@
 
 		<!-- What "transportation" in the covered list actually means for someone
 		     who has to get from a plane to Stellenbosch. Half of it is settled and
-		     half is not, so it takes the same callout the programme's "preliminary"
-		     notice does — the site's established idiom for information that is
-		     true now and not yet complete. -->
+		     half is not, so it takes the site's callout — the established idiom
+		     for information that is true now and not yet complete. -->
 		<div class="callout mt-8">
 			<Info
 				size={18}
