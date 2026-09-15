@@ -9,9 +9,7 @@
 	import * as m from '$lib/paraglide/messages';
 	import { venueInfo, venueStreet } from '$lib/data/venue';
 	import { accommodations } from '$lib/data/accommodation';
-	import { getLocale } from '$lib/paraglide/runtime';
 	import { createLazyMap } from '$lib/utils/map';
-	import { distanceMetres, formatDistance } from '$lib/utils/geo';
 
 	type Place = {
 		id: string;
@@ -21,11 +19,7 @@
 		coordinates: { lat: number; lng: number };
 		website: string;
 		isVenue: boolean;
-		/** Absent for the venue itself — nothing is 0 m from the venue. */
-		distance?: string;
 	};
-
-	const locale = getLocale() as 'en' | 'fr';
 
 	const places: Place[] = [
 		{
@@ -44,10 +38,7 @@
 			address: `${place.address}, ${place.city}`,
 			coordinates: place.coordinates,
 			website: place.website,
-			isVenue: false,
-			distance: m.accommodation_distance({
-				distance: formatDistance(distanceMetres(venueInfo.coordinates, place.coordinates), locale)
-			})
+			isVenue: false
 		}))
 	];
 
@@ -68,7 +59,7 @@
 	const selectionSummary = $derived.by(() => {
 		const place = selectedId ? places.find((entry) => entry.id === selectedId) : undefined;
 		if (!place) return '';
-		return [place.name, place.role, place.address, place.distance].filter(Boolean).join(' — ');
+		return [place.name, place.role, place.address].filter(Boolean).join(' — ');
 	});
 
 	function setSelectedMarker(id: string | null) {
@@ -94,7 +85,7 @@
 
 		const address = document.createElement('p');
 		address.className = 'venue-popup-meta';
-		address.textContent = place.distance ? `${place.address} · ${place.distance}` : place.address;
+		address.textContent = place.address;
 		content.appendChild(address);
 
 		const link = document.createElement('a');

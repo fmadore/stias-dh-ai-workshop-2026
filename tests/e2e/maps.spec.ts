@@ -43,24 +43,28 @@ test('the map stylesheet stays off the critical path until the map is wanted', a
 		.toBe(1);
 });
 
-test('the venue map places the venue and both guest houses', async ({ page }) => {
+test('the venue map places the venue and all three guest houses', async ({ page }) => {
 	await page.goto(`${BASE}/venue`);
 
 	await expect(page.getByRole('button', { name: 'Roosenwijn Guest House' })).toBeAttached();
-	await expect(page.getByRole('button', { name: 'De Haas Luxury Living' })).toBeAttached();
+	await expect(page.getByRole('button', { name: 'De Haas at Villa Grande' })).toBeAttached();
+	await expect(page.getByRole('button', { name: 'De Haas at Die Laan 40' })).toBeAttached();
 	await expect(page.getByText('750 m from STIAS')).toBeVisible();
 
 	await page.locator('.venue-map').scrollIntoViewIfNeeded();
-	await expect(page.locator('.venue-marker')).toHaveCount(3, { timeout: 15_000 });
+	await expect(page.locator('.venue-marker')).toHaveCount(4, { timeout: 15_000 });
 	await expect(page.locator('.map-loading')).toBeHidden();
 	// The venue is the reference point the distances are measured from, and reads
-	// differently from the two guest houses.
+	// differently from the three guest houses.
 	await expect(page.locator('.venue-marker.is-venue')).toHaveCount(1);
-	await expect(page.locator('.venue-marker.is-stay')).toHaveCount(2);
+	await expect(page.locator('.venue-marker.is-stay')).toHaveCount(3);
 
 	await page.getByRole('button', { name: 'Show Roosenwijn Guest House on the map' }).click();
 	const popup = page.locator('.venue-popup');
 	await expect(popup.getByRole('heading', { name: 'Roosenwijn Guest House' })).toBeVisible();
+	// The popup carries the address only: the distance belongs to the card below,
+	// where it is not competing with a pin the reader can already see.
+	await expect(popup.getByText('from STIAS')).toHaveCount(0);
 	await expect(popup.getByRole('link', { name: 'Visit website' })).toHaveAttribute(
 		'href',
 		'https://www.roosenwijn.co.za'
@@ -76,6 +80,7 @@ test('the venue map degrades without JavaScript', async ({ browser }) => {
 	// cannot arrive, and every address still readable as text.
 	await expect(page.locator('.map-loading')).toBeHidden();
 	await expect(page.getByText('14 Van Riebeeck Street, 7600 Stellenbosch')).toBeVisible();
-	await expect(page.getByText('Die Laan 2, 7600 Stellenbosch')).toBeVisible();
+	await expect(page.getByText('Die Laan 40, 7600 Stellenbosch')).toBeVisible();
+	await expect(page.getByText('1 Keerom Street, 7600 Stellenbosch')).toBeVisible();
 	await context.close();
 });

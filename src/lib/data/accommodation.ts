@@ -1,10 +1,42 @@
 import type { Accommodation } from '$lib/types';
 
 /**
- * The two guest houses Point Sud books for participants. Array order is
+ * The three guest houses Point Sud books for participants. Array order is
  * display order on the venue page and in the map's place list.
+ *
+ * Two of them are De Haas properties. De Haas runs a third, Die Laan 2, which
+ * is the address their homepage leads with and is *not* one of ours — do not
+ * "correct" Die Laan 40 to it.
  */
 export const accommodations: Accommodation[] = [
+	{
+		id: 'villa-grande',
+		name: 'De Haas at Villa Grande',
+		address: '1 Keerom Street',
+		city: 'Stellenbosch',
+		postalCode: '7600',
+		country: 'ZA',
+		coordinates: { lat: -33.93825, lng: 18.86592 },
+		description: {
+			en: 'A Tuscan-style villa of the 1920s at the end of a quiet cul-de-sac, with twelve en-suite rooms, alongside the Stellenbosch University Botanical Garden.',
+			fr: "Une villa de style toscan des années 1920, au bout d'une impasse tranquille, avec douze chambres avec salle de bains, en bordure du Jardin botanique de l'Université de Stellenbosch."
+		},
+		website: 'https://www.dehaasliving.co.za/villa-grande/'
+	},
+	{
+		id: 'de-haas',
+		name: 'De Haas at Die Laan 40',
+		address: 'Die Laan 40',
+		city: 'Stellenbosch',
+		postalCode: '7600',
+		country: 'ZA',
+		coordinates: { lat: -33.93743, lng: 18.86872 },
+		description: {
+			en: 'A five-bedroom guest house and a two-bedroom pool cottage, opposite the Coetzenburg sports grounds on the eastern edge of the historic centre.',
+			fr: "Une maison d'hôtes de cinq chambres et un cottage de deux chambres avec piscine, face au complexe sportif de Coetzenburg, en bordure est du centre historique."
+		},
+		website: 'https://www.dehaasliving.co.za/die-laan-40/'
+	},
 	{
 		id: 'roosenwijn',
 		name: 'Roosenwijn Guest House',
@@ -18,23 +50,5 @@ export const accommodations: Accommodation[] = [
 			fr: "Une maison victorienne de 1904, classée monument national, en bordure du centre historique et attenante au Jardin botanique de l'Université de Stellenbosch."
 		},
 		website: 'https://www.roosenwijn.co.za'
-	},
-	{
-		id: 'de-haas',
-		name: 'De Haas Luxury Living',
-		// De Haas runs three properties within a kilometre of each other — Die
-		// Laan 2, Die Laan 40 and Villa Grande. This is the confirmed one, not
-		// merely the address their homepage leads with; the pin and the distance
-		// below both follow from it, so do not "correct" it to another.
-		address: 'Die Laan 2',
-		city: 'Stellenbosch',
-		postalCode: '7600',
-		country: 'ZA',
-		coordinates: { lat: -33.93857, lng: 18.86494 },
-		description: {
-			en: 'Self-catering apartments on the banks of the Eerste River, a few minutes on foot from Dorp Street and the town centre.',
-			fr: "Des appartements avec cuisine sur les rives de l'Eerste River, à quelques minutes à pied de Dorp Street et du centre-ville."
-		},
-		website: 'https://www.dehaasliving.co.za'
 	}
 ];

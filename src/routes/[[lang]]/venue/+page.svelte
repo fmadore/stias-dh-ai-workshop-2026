@@ -25,7 +25,7 @@
 		</ScrollReveal>
 	</div>
 
-	<!-- Wider than the prose above it: the map carries three pins roughly a
+	<!-- Wider than the prose above it: the map carries four pins roughly a
 	     kilometre apart, and at 56rem the guest houses crowd the venue. -->
 	<div class="container-wide">
 		<ScrollReveal>
@@ -37,7 +37,7 @@
 
 				<VenueMap />
 
-				<div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+				<div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 					{#each accommodations as accommodation (accommodation.id)}
 						<AccommodationCard {accommodation} />
 					{/each}
