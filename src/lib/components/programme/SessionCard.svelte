@@ -5,7 +5,7 @@
 	import { getPeople } from '$lib/data/people';
 	import { getPresentation, getPresentationAuthors } from '$lib/data/presentations';
 	import { sessionAnchor } from '$lib/utils/placement';
-	import { Video, Link as LinkIcon, ExternalLink } from '@lucide/svelte';
+	import { Video, VideoOff, Link as LinkIcon, ExternalLink } from '@lucide/svelte';
 
 	let { session, panelNumber }: { session: Session; panelNumber?: number } = $props();
 
@@ -127,6 +127,17 @@
 			<div class="min-w-0 flex-1">
 				<div class="mb-1.5 flex flex-wrap items-center gap-x-2.5 gap-y-1">
 					<span class={treatment === 'social' ? 'text-meta' : 'text-eyebrow'}>{typeLabel}</span>
+					<!-- The site invites anyone to follow the workshop on Teams, so a
+					     slot that is not streamed has to say so here rather than let
+					     someone sit in an empty meeting waiting for it. Muted, like the
+					     room, not a gold badge: the gold pill means "taking part
+					     online", and this is its opposite. -->
+					{#if session.inPersonOnly}
+						<span class="text-muted inline-flex items-center gap-1 text-xs">
+							<VideoOff size={11} strokeWidth={2} aria-hidden="true" />
+							{m.session_in_person_only()}
+						</span>
+					{/if}
 					{#if session.room}
 						<span class="text-muted text-xs">{session.room}</span>
 					{/if}

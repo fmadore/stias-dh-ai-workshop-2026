@@ -110,6 +110,7 @@
   "session_discussion": "Discussion de groupe",
   "session_chair": "Présidence\u00a0:",
   "session_online": "En ligne",
+  "session_in_person_only": "Sur place uniquement",
   "programme_last_updated": "Dernière mise à jour\u00a0: {date}",
   "error_404_title": "Page introuvable",
   "error_404_text": "La page que vous cherchez n'existe pas ou a été déplacée.",

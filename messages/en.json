@@ -110,6 +110,7 @@
   "session_discussion": "Group discussion",
   "session_chair": "Chair:",
   "session_online": "Online",
+  "session_in_person_only": "In person only",
   "programme_last_updated": "Last updated: {date}",
   "error_404_title": "Page not found",
   "error_404_text": "The page you are looking for does not exist or has moved.",
