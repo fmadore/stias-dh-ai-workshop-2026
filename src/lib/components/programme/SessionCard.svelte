@@ -64,8 +64,13 @@
 </script>
 
 <!--
-	Marks a person taking part remotely. Rendered right after their name, so a
-	panel with both on-site and online authors stays unambiguous.
+	Marks remote participation. After a lone name — a keynote speaker, a chair —
+	it belongs to that person. After a paper it trails the whole author list
+	rather than the one author it applies to: wedged between the first author
+	and the second it split the list in two, and a four-author line already
+	wraps, so the badge landed mid-sentence with names either side of it. Only
+	one author per paper is ever remote, and at the end of the line the badge
+	reads as what a reader wants from it here — this paper is given online.
 -->
 {#snippet onlineBadge()}
 	<!-- No `title`: it read "Taking part online" against a badge that already
@@ -254,7 +259,7 @@
 										<!-- A credited co-author has no page of their own — we hold only
 										     their name — so they print unlinked among the authors who do. -->
 										<!-- prettier-ignore -->
-										{#each authors as author, i (author.id)}{i > 0 ? ', ' : ''}{#if author.group === 'co-author'}{author.name}{:else}<a href={localePath(`/participants/${author.id}`)} class="session-link">{author.name}</a>{#if author.online}{@render onlineBadge()}{/if}{/if}{/each}
+										{#each authors as author, i (author.id)}{i > 0 ? ', ' : ''}{#if author.group === 'co-author'}{author.name}{:else}<a href={localePath(`/participants/${author.id}`)} class="session-link">{author.name}</a>{/if}{/each}{#if authors.some((a) => a.online)}{@render onlineBadge()}{/if}
 									</span>
 								{/if}
 							</li>
