@@ -4,7 +4,7 @@ import type { ProgrammeDay } from '$lib/types';
  * Date the programme was last revised (ISO `yyyy-mm-dd`). Bump this whenever you
  * change the sessions below — it is shown as "Last updated" on the page.
  */
-export const programmeLastUpdated = '2026-09-15';
+export const programmeLastUpdated = '2026-09-18';
 
 /**
  * Workshop programme — STIAS, Stellenbosch, 21–24 September 2026.
@@ -56,12 +56,11 @@ export const programme: ProgrammeDay[] = [
 				type: 'plenary',
 				title: { en: 'Welcome addresses', fr: 'Mots de bienvenue' },
 				description: {
-					en: 'Short welcome addresses on behalf of STIAS — by Edward Kirumira, Director, or Christoff Pauw, Senior Programme Manager — and on behalf of the DFG programme Point Sud, by Issa Fofana (Point Sud, Bamako), followed by a brief framing of the workshop: its goals, themes and practical information.',
-					fr: "Brefs mots de bienvenue au nom du STIAS — par Edward Kirumira, directeur, ou Christoff Pauw, responsable principal des programmes — et au nom du programme DFG Point Sud, par Issa Fofana (Point Sud, Bamako), suivis d'un cadrage de l'atelier\u00a0: objectifs, thèmes et informations pratiques."
+					en: 'Short welcome addresses on behalf of STIAS — by Edward Kirumira, Director — and on behalf of the DFG programme Point Sud, by Issa Fofana (Point Sud, Bamako), followed by a brief framing of the workshop: its goals, themes and practical information.',
+					fr: "Brefs mots de bienvenue au nom du STIAS — par Edward Kirumira, directeur — et au nom du programme DFG Point Sud, par Issa Fofana (Point Sud, Bamako), suivis d'un cadrage de l'atelier\u00a0: objectifs, thèmes et informations pratiques."
 				},
 				links: [
-					{ label: 'Edward Kirumira', url: 'https://www.stias.ac.za/team/edward-k-kirumira/' },
-					{ label: 'Christoff Pauw', url: 'https://www.stias.ac.za/team/christoff-pauw/' }
+					{ label: 'Edward Kirumira', url: 'https://www.stias.ac.za/team/edward-k-kirumira/' }
 				]
 			},
 			{
