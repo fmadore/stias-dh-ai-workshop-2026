@@ -2,6 +2,7 @@ import { siteConfig } from './site-config';
 import { venueInfo, venueStreet } from './venue';
 import { organizers } from './organizers';
 import { sponsors } from './sponsors';
+import { onlineAccess, onlineAccessPublished } from './online-access';
 import { t } from '$lib/utils/i18n';
 
 /**
@@ -35,7 +36,10 @@ export function buildEventSchema(ogImage: string): object {
 			},
 			{
 				'@type': 'VirtualLocation',
-				url: siteConfig.url
+				// The public join link once there is one; until then the site itself,
+				// which is where the link will be announced.
+				name: onlineAccess.platform,
+				url: onlineAccessPublished ? onlineAccess.joinUrl : siteConfig.url
 			}
 		],
 		image: ogImage,

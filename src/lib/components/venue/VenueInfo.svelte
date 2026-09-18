@@ -5,6 +5,7 @@
 	import { Check, ExternalLink, Info, Minus } from '@lucide/svelte';
 	import { getLocale } from '$lib/paraglide/runtime';
 	import { countryName } from '$lib/utils/country';
+	import JoinOnline from '$lib/components/shared/JoinOnline.svelte';
 
 	const locale = $derived(getLocale() as 'en' | 'fr');
 
@@ -28,11 +29,16 @@
 			{t(venueInfo.description)}
 		</p>
 		<!-- The page that answers "where is this" is the page where someone asks
-		     whether they have to be there. The platform is a fact; no joining
-		     details are published yet, so none are promised. -->
-		<p class="text-prose text-body mb-4">
+		     whether they have to be there. The platform is a fact, and the join
+		     link follows it the moment there is one — the same `onlineAccess`
+		     record the home page and the programme read, so the three cannot
+		     disagree about whether a link exists. -->
+		<p class="text-prose text-body mb-2">
 			{m.venue_hybrid()}
 		</p>
+		<div class="mb-4">
+			<JoinOnline variant="inline" />
+		</div>
 		<p class="text-muted text-sm">
 			{venueStreet}, {venueInfo.postalCode}
 			{venueInfo.city}, {countryName(venueInfo.country, locale)}

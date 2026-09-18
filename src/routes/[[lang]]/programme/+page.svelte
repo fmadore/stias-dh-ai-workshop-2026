@@ -8,10 +8,16 @@
 	import { programme, programmeLastUpdated } from '$lib/data/programme';
 	import { dateAtVenue, workshopPhase } from '$lib/utils/milestones';
 	import ScheduleDay from '$lib/components/programme/ScheduleDay.svelte';
+	import JoinOnline from '$lib/components/shared/JoinOnline.svelte';
 	import { base } from '$app/paths';
-	import { Calendar, FileText } from '@lucide/svelte';
+	import { Calendar, CalendarPlus, FileText } from '@lucide/svelte';
 
 	const intl = $derived(getLocale() === 'fr' ? 'fr-FR' : 'en-GB');
+
+	// One calendar file per locale, unlike the PDF: an .ics carries the session
+	// titles themselves, and a calendar entry written in both languages at once
+	// is unreadable in the one line a day view gives it.
+	const icsFile = $derived(`Programme-STIAS-2026-${getLocale()}.ics`);
 
 	const lastUpdated = $derived(
 		new Date(`${programmeLastUpdated}T12:00:00`).toLocaleDateString(intl, {
@@ -70,6 +76,12 @@
 			<FileText size={15} strokeWidth={1.75} aria-hidden="true" />
 			{m.download_programme()}
 		</a>
+		<!-- Sessions only: meals, breaks and the two excursions are not things
+		     anyone needs in their calendar, and they would bury the papers. -->
+		<a href={`${base}/downloads/${icsFile}`} download class="btn btn-secondary btn-sm">
+			<CalendarPlus size={15} strokeWidth={1.75} aria-hidden="true" />
+			{m.download_programme_ics()}
+		</a>
 	{/snippet}
 </PageHeader>
 
@@ -103,6 +115,11 @@
 		</nav>
 
 		<div class="container-page programme-body block-flow pt-6 sm:pt-10">
+			<!-- Above the schedule, not beside the download buttons: someone who
+			     cannot travel needs to know the sessions are open to them before
+			     they start reading four days of panels. -->
+			<JoinOnline variant="callout" />
+
 			<!-- The revision date used to be the small print under a "this programme
 			     is preliminary" notice. With the notice gone it is a fact about the
 			     page, not a warning about it, so it drops the callout's amber frame

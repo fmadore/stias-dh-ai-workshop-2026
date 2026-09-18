@@ -6,6 +6,8 @@ node_modules
 # build; the programme PDF beside them is a supplied file and is committed.
 /static/downloads/Call-for-Papers-STIAS-2026.*
 /static/downloads/Appel-a-contributions-STIAS-2026.*
+# Likewise the calendar exports, generated from programme.ts.
+/static/downloads/Programme-STIAS-2026-*.ics
 /tmp/
 /test-results/
 /playwright-report/
