@@ -4,7 +4,7 @@ const presentation: Presentation = {
 	id: 'mcp-servers-african-glams',
 	language: 'fr',
 	authors: ['madore'],
-	title: 'Les serveurs MCP pour les GLAM africains : une voie d’avenir à l’ère de l’IA ?',
+	title: 'Les serveurs MCP pour les GLAM africains : ouvrir l’accès, garder la maîtrise ?',
 	abstract: `Depuis trois ans, les collections numériques ouvertes des galeries, bibliothèques, archives et musées (les « GLAM ») subissent une double pression. Des robots les moissonnent pour entraîner des modèles d’IA commerciaux tandis que le public délaisse de plus en plus la recherche par mots-clés et par facettes sur les sites et les bases de données au profit des chatbots.
 
 Cette communication présente une troisième voie à partir de deux serveurs Model Context Protocol (MCP), norme ouverte qui expose des outils à tout assistant IA sans céder les données. Le premier dessert la Collection Islam Afrique de l’Ouest (CIAO), près de 15 000 documents. Le second dessert l’Africa Multiple Interactive Research Atlas (AMIRA), la plateforme du Cluster Africa Multiple de l’Université de Bayreuth, et ses quelque 4 000 items (données de recherche, publications, podcasts et vidéos YouTube).
