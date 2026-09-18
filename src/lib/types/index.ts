@@ -170,6 +170,12 @@ export interface Session {
 	presentationIds?: string[];
 	/** Person id (participant or organizer) chairing the session. */
 	chair?: string;
+	/**
+	 * Set on a session that happens in the room only — an activity there is
+	 * nothing to follow of from a screen. It is dropped from the generated
+	 * calendar file, which exists for the people joining online.
+	 */
+	inPersonOnly?: boolean;
 	room?: string;
 	/** Off-site venue name, e.g. the restaurant hosting a dinner. */
 	venue?: string;

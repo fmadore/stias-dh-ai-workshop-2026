@@ -4,7 +4,10 @@
  * Only working sessions are written: panels, keynotes, discussions and
  * plenaries. Coffee breaks, lunches, the two dinners and the two excursions
  * (`break` and `social`) are deliberately left out — nobody needs a calendar
- * entry for lunch, and eighteen of them would bury the twenty-five papers.
+ * entry for lunch, and eighteen of them would bury the twenty-five papers. So
+ * is anything marked `inPersonOnly`: this calendar is what someone following
+ * the workshop remotely puts in their diary, so a slot they cannot join does
+ * not belong in it.
  *
  * Times in `programme.ts` are South African local time (UTC+2 year round, no
  * DST), and are emitted as UTC instants so every calendar shows the session at
@@ -212,7 +215,7 @@ function buildCalendar(locale: Locale, messages: Messages): string {
 	for (const day of programme) {
 		for (const session of day.sessions) {
 			if (session.type === 'panel') panelNumber++;
-			if (session.type === 'break' || session.type === 'social') continue;
+			if (session.type === 'break' || session.type === 'social' || session.inPersonOnly) continue;
 			const times = parseTimes(session.time);
 			if (!times) throw new Error(`session ${session.id}: unparseable time '${session.time}'`);
 

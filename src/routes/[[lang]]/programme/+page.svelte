@@ -76,8 +76,9 @@
 			<FileText size={15} strokeWidth={1.75} aria-hidden="true" />
 			{m.download_programme()}
 		</a>
-		<!-- Sessions only: meals, breaks and the two excursions are not things
-		     anyone needs in their calendar, and they would bury the papers. -->
+		<!-- Sessions that can be followed online: meals, breaks, the two
+		     excursions and the in-room ice-breaker are not things anyone needs in
+		     their calendar, and they would bury the papers. -->
 		<a href={`${base}/downloads/${icsFile}`} download class="btn btn-secondary btn-sm">
 			<CalendarPlus size={15} strokeWidth={1.75} aria-hidden="true" />
 			{m.download_programme_ics()}

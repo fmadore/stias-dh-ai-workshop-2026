@@ -68,6 +68,8 @@ export const programme: ProgrammeDay[] = [
 				time: '09:30 – 10:30',
 				type: 'plenary',
 				title: { en: 'Ice-breaker', fr: 'Brise-glace' },
+				// An activity in the room, not a session to watch: it is not streamed.
+				inPersonOnly: true,
 				description: {
 					en: 'An interactive ice-breaker activity and round of introductions to help participants get to know one another.',
 					fr: 'Une activité brise-glace interactive et un tour de présentations pour permettre aux participant·es de faire connaissance.'
