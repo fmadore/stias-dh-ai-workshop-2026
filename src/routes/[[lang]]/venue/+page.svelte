@@ -8,6 +8,7 @@
 	import VenueMap from '$lib/components/venue/VenueMap.svelte';
 	import AccommodationCard from '$lib/components/venue/AccommodationCard.svelte';
 	import { accommodations } from '$lib/data/accommodation';
+	import { Info } from '@lucide/svelte';
 </script>
 
 <SEO title="{m.nav_venue()} | {siteConfig.shortTitle}" description={m.seo_venue_description()} />
@@ -33,6 +34,22 @@
 				<div class="measure-prose mb-7">
 					<h2 class="text-section text-strong mb-2">{m.accommodation_title()}</h2>
 					<p class="text-prose">{m.accommodation_intro()}</p>
+
+					<!-- The one thing a participant has to act on here is that nobody is
+					     coming to collect them in the morning. The distances on the cards
+					     below state how far it is; only this says what that means for the
+					     daily commute, and it also settles the "local transport" bullet in
+					     the logistics list above, which reads like a shuttle until it is
+					     told apart from the airport transfer and the off-site visits. -->
+					<div class="callout mt-5">
+						<Info
+							size={18}
+							strokeWidth={1.75}
+							class="text-accent-ink mt-0.5 shrink-0"
+							aria-hidden="true"
+						/>
+						<p class="text-body text-sm leading-relaxed">{m.accommodation_no_transfer()}</p>
+					</div>
 				</div>
 
 				<VenueMap />
