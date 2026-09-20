@@ -17,7 +17,7 @@ The website is available in English and French.
 Requires Node 24 (see `.nvmrc`).
 
 ```bash
-npm ci             # installs locked dependencies and compiles i18n messages via the `prepare` script
+npm ci             # installs locked dependencies; the `prepare` script then compiles the i18n messages and runs `svelte-kit sync`, which generates `.svelte-kit/tsconfig.json` (the `$lib` alias and `$types`) that editors, `npm run check` and `npm run test:unit` all read
 npm run dev        # dev server at http://localhost:5173
 npm run build      # static build into build/ + data & smoke checks
 npm run preview    # serve the production build locally
