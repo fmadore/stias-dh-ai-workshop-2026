@@ -4,7 +4,7 @@ import type { ProgrammeDay } from '$lib/types';
  * Date the programme was last revised (ISO `yyyy-mm-dd`). Bump this whenever you
  * change the sessions below — it is shown as "Last updated" on the page.
  */
-export const programmeLastUpdated = '2026-09-18';
+export const programmeLastUpdated = '2026-09-22';
 
 /**
  * Workshop programme — STIAS, Stellenbosch, 21–24 September 2026.
@@ -131,7 +131,8 @@ export const programme: ProgrammeDay[] = [
 					'recoding-yoruba-epistemologies',
 					'non-dit-emotions',
 					'moral-ecology-folktales'
-				]
+				],
+				chair: 'van-zaanen'
 			},
 			{
 				id: 'd1-dinner',
