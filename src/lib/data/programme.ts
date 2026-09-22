@@ -199,7 +199,7 @@ export const programme: ProgrammeDay[] = [
 			},
 			{
 				id: 'd2-visit-a',
-				time: '14:00 – 18:00',
+				time: '13:30 – 17:00',
 				type: 'social',
 				title: { en: 'Data centre visit', fr: "Visite d'un centre de données" },
 				description: {
@@ -211,7 +211,7 @@ export const programme: ProgrammeDay[] = [
 			},
 			{
 				id: 'd2-evening',
-				time: '18:00',
+				time: '17:00',
 				type: 'social',
 				title: {
 					en: 'Return to Stellenbosch & free evening',
