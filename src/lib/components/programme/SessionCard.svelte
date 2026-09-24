@@ -46,7 +46,8 @@
 	// Panels and keynotes always show a chair line (falling back to "to be
 	// determined"); other session types only show one when a chair is set.
 	const chairPerson = $derived(session.chair ? getPeople([session.chair])[0] : undefined);
-	const showChair = $derived(isPanel || isKeynote || !!session.chair);
+	const chairName = $derived(chairPerson?.name ?? session.chairName);
+	const showChair = $derived(isPanel || isKeynote || !!session.chair || !!chairName);
 
 	// A keynote or group discussion that references a single paper derives its
 	// heading (and a link to the abstract) from it; everything else uses the
@@ -202,10 +203,10 @@
 					     sessions that show this line have no chair yet, and "Chair:" is a
 					     colon that promises a name and then fails to supply one. -->
 					<p class="text-muted mt-2 text-xs">
-						{#if chairPerson}
+						{#if chairName}
 							<span class="font-medium">{m.session_chair()}</span>
 							<!-- prettier-ignore -->
-							{chairPerson.name}{#if chairPerson.online}{@render onlineBadge()}{/if}
+							{chairName}{#if chairPerson?.online}{@render onlineBadge()}{/if}
 						{:else}
 							{m.session_chair_tbd()}
 						{/if}

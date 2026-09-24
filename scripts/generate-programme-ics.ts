@@ -188,7 +188,7 @@ function descriptionOf(session: Session, locale: Locale, messages: Messages): st
 		}
 	}
 
-	const chair = session.chair ? namesById.get(session.chair) : undefined;
+	const chair = (session.chair ? namesById.get(session.chair) : undefined) ?? session.chairName;
 	if (chair) lines.push(`${messages.session_chair} ${chair}`);
 
 	lines.push(`${siteConfig.url}/${locale === 'fr' ? 'fr/' : ''}programme#session-${session.id}`);

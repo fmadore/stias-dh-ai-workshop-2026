@@ -107,6 +107,7 @@ export const programme: ProgrammeDay[] = [
 				time: '14:00 – 15:30',
 				type: 'keynote',
 				speakers: ['sarah-oberbichler'],
+				chair: 'madore',
 				presentationIds: ['sustainable-responsible-ai-history']
 			},
 			{
@@ -318,6 +319,7 @@ export const programme: ProgrammeDay[] = [
 				time: '09:30 – 10:30',
 				type: 'keynote',
 				speakers: ['ngue-um'],
+				chair: 'madore',
 				presentationIds: ['que-sait-une-machine']
 			},
 			{
@@ -328,6 +330,7 @@ export const programme: ProgrammeDay[] = [
 			},
 			{
 				id: 'd4-panel-g',
+				chairName: 'Johannes Sibeko',
 				time: '11:00 – 12:30',
 				type: 'panel',
 				title: {
