@@ -1,12 +1,11 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages';
-	import { participants } from '$lib/data/participants';
-	import { organizers } from '$lib/data/organizers';
-	import { pointSud } from '$lib/data/point-sud';
-	import { presentations } from '$lib/data/presentations';
-	import { uniquePersonCountries } from '$lib/utils/filter';
 	import { localePath } from '$lib/utils/i18n';
 	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
+
+	/** Counted at prerender (`glanceStats`), so the page does not ship what it counts. */
+	let { glance }: { glance: { papers: number; participants: number; countries: number } } =
+		$props();
 
 	// Replaces Key Information, which restated the hero's dates and location.
 	// Every number here already exists in the data.
@@ -16,19 +15,15 @@
 	// "Format" stays plain — there is no page that is the hybrid format, and a
 	// link invented to even up a row is worse than a row that is uneven.
 	const stats = $derived([
-		{ value: String(presentations.length), label: m.glance_papers(), href: localePath('/papers') },
+		{ value: String(glance.papers), label: m.glance_papers(), href: localePath('/papers') },
 		{
-			value: String(participants.length),
+			value: String(glance.participants),
 			label: m.glance_participants(),
 			href: localePath('/participants')
 		},
 		{
-			// Counted over people, not papers. This figure links to the affiliation
-			// map, which plots where the 39 people work — and paper countries are a
-			// different set: Mali is here only because Point Sud's representative
-			// is, and he presents nothing. Counting papers made this read 16 while
-			// the page it points at said 17.
-			value: String(uniquePersonCountries([...organizers, ...pointSud, ...participants]).length),
+			// Over people, not papers — see `glanceStats` for why the two differ.
+			value: String(glance.countries),
 			label: m.glance_countries(),
 			href: `${localePath('/participants')}#affiliations`
 		},

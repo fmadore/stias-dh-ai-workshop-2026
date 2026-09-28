@@ -13,9 +13,9 @@
  * DST), and are emitted as UTC instants so every calendar shows the session at
  * the right moment in the reader's own zone without a VTIMEZONE to trust.
  */
-import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { loadDefaultModules } from './lib/load-modules.ts';
 import { programme, programmeLastUpdated } from '../src/lib/data/programme.ts';
 import { organizers } from '../src/lib/data/organizers.ts';
 import { pointSud } from '../src/lib/data/point-sud.ts';
@@ -23,6 +23,8 @@ import { coAuthors } from '../src/lib/data/co-authors.ts';
 import { onlineAccess, onlineAccessPublished } from '../src/lib/data/online-access.ts';
 import { siteConfig } from '../src/lib/data/site-config.ts';
 import { venueInfo, venueStreet } from '../src/lib/data/venue.ts';
+import { localizedAbsoluteUrl } from '../src/lib/utils/localized-paths.ts';
+import { panelNumbers, sessionAnchor, sessionTimes } from '../src/lib/utils/schedule.ts';
 import type {
 	LocalizedString,
 	Participant,
@@ -36,23 +38,12 @@ type Messages = Record<string, string>;
 const OUTPUT_DIR = path.resolve('static/downloads');
 const SAST_OFFSET_MINUTES = 120;
 
-/** The programme's own directory loaders use `import.meta.glob`, which is Vite's. */
-async function loadDefaultModules<T>(directory: string): Promise<T[]> {
-	const files = (await readdir(directory)).filter(
-		(file) => file.endsWith('.ts') && file !== 'index.ts'
-	);
-	return Promise.all(
-		files.map(async (file) => {
-			const module = (await import(pathToFileURL(path.resolve(directory, file)).href)) as {
-				default: T;
-			};
-			return module.default;
-		})
-	);
-}
-
-const participants = await loadDefaultModules<Participant>('src/lib/data/participants');
-const presentations = await loadDefaultModules<Presentation>('src/lib/data/presentations');
+const participants = (await loadDefaultModules<Participant>('src/lib/data/participants')).map(
+	({ value }) => value
+);
+const presentations = (await loadDefaultModules<Presentation>('src/lib/data/presentations')).map(
+	({ value }) => value
+);
 const presentationsById = new Map(presentations.map((paper) => [paper.id, paper]));
 const namesById = new Map(
 	[...organizers, ...pointSud, ...participants, ...coAuthors].map((person) => [
@@ -67,7 +58,7 @@ function pick(value: LocalizedString | undefined, locale: Locale): string {
 
 /** `'11:00 – 12:30'` → the two clock times, whichever dash the data uses. */
 function parseTimes(time: string): [string, string] | undefined {
-	const parts = time.split(/\s*[–—-]\s*/).map((part) => part.trim());
+	const parts = sessionTimes(time);
 	if (parts.length !== 2 || !/^\d{2}:\d{2}$/.test(parts[0]) || !/^\d{2}:\d{2}$/.test(parts[1]))
 		return undefined;
 	return [parts[0], parts[1]];
@@ -191,8 +182,13 @@ function descriptionOf(session: Session, locale: Locale, messages: Messages): st
 	const chair = (session.chair ? namesById.get(session.chair) : undefined) ?? session.chairName;
 	if (chair) lines.push(`${messages.session_chair} ${chair}`);
 
-	lines.push(`${siteConfig.url}/${locale === 'fr' ? 'fr/' : ''}programme#session-${session.id}`);
+	lines.push(sessionUrl(session, locale));
 	return lines.join('\n');
+}
+
+/** The session on the programme page, in the calendar's own language. */
+function sessionUrl(session: Session, locale: Locale): string {
+	return `${localizedAbsoluteUrl(siteConfig.url, '/programme', locale)}#${sessionAnchor(session.id)}`;
 }
 
 function buildCalendar(locale: Locale, messages: Messages): string {
@@ -210,11 +206,10 @@ function buildCalendar(locale: Locale, messages: Messages): string {
 		`X-WR-CALDESC:${escapeText(pick(siteConfig.description, locale))}`
 	];
 
-	let panelNumber = 0;
+	const panels = panelNumbers(programme);
 	let events = 0;
 	for (const day of programme) {
 		for (const session of day.sessions) {
-			if (session.type === 'panel') panelNumber++;
 			if (session.type === 'break' || session.type === 'social' || session.inPersonOnly) continue;
 			const times = parseTimes(session.time);
 			if (!times) throw new Error(`session ${session.id}: unparseable time '${session.time}'`);
@@ -231,10 +226,10 @@ function buildCalendar(locale: Locale, messages: Messages): string {
 				`DTSTAMP:${stamp}`,
 				`DTSTART:${utcStamp(day.date, times[0])}`,
 				`DTEND:${utcStamp(day.date, times[1])}`,
-				`SUMMARY:${escapeText(summaryOf(session, locale, messages, panelNumber))}`,
+				`SUMMARY:${escapeText(summaryOf(session, locale, messages, panels.get(session.id)))}`,
 				`DESCRIPTION:${escapeText(descriptionOf(session, locale, messages))}`,
 				`LOCATION:${escapeText(location)}`,
-				`URL:${siteConfig.url}/${locale === 'fr' ? 'fr/' : ''}programme#session-${session.id}`,
+				`URL:${sessionUrl(session, locale)}`,
 				'STATUS:CONFIRMED',
 				'SEQUENCE:0'
 			);

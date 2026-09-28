@@ -144,12 +144,39 @@ export interface Presentation {
 	authors: string[];
 }
 
+/**
+ * A paper as something to link to — title, language, id — without the
+ * abstract. The abstracts are most of the content's weight, and every route
+ * that only lists papers used to ship all twenty-five of them to the browser.
+ */
+export type PaperSummary = Pick<Presentation, 'id' | 'title' | 'language'>;
+
+/** Which of the four lists a person comes from. */
+export type PersonGroup = 'organizer' | 'point-sud' | 'participant' | 'co-author';
+
+/** A person as a byline or a speaker line shows them: no bio, no portrait. */
+export interface PersonRef {
+	id: string;
+	name: string;
+	group: PersonGroup;
+	online?: boolean;
+	affiliation?: LocalizedString;
+}
+
+/** The people and papers one session names, resolved ahead of the programme page. */
+export interface SessionCast {
+	speakers: PersonRef[];
+	chair?: PersonRef;
+	papers: Array<PaperSummary & { authors: PersonRef[] }>;
+}
+
 export interface ThematicAxis {
 	id: string;
 	number: number;
 	title: LocalizedString;
 	description: LocalizedString;
-	icon: string;
+	/** A Lucide icon name; `ThematicAxis.svelte` maps each one to its component. */
+	icon: 'Cpu' | 'Building2' | 'BookOpen';
 }
 
 export interface Session {

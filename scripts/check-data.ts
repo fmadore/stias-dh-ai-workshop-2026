@@ -1,7 +1,7 @@
 /** Referential and structural validation over the actual typed content modules. */
-import { access, readdir } from 'node:fs/promises';
+import { access } from 'node:fs/promises';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { loadDefaultModules } from './lib/load-modules.ts';
 import { organizers } from '../src/lib/data/organizers.ts';
 import { affiliationLocations } from '../src/lib/data/affiliations.ts';
 import { pointSud } from '../src/lib/data/point-sud.ts';
@@ -31,23 +31,6 @@ const ENGLISH_MARKERS =
 	/\b(the|of|and|in|is|for|with|his|her|at|she|their|on|a|an|to|research)\b/gi;
 const isProbablyEnglish = (text: string) =>
 	(text.match(ENGLISH_MARKERS) ?? []).length >= (text.match(FRENCH_MARKERS) ?? []).length;
-
-async function loadDefaultModules<T>(
-	directory: string
-): Promise<Array<{ file: string; value: T }>> {
-	const files = (await readdir(directory)).filter(
-		(file) => file.endsWith('.ts') && file !== 'index.ts'
-	);
-	return Promise.all(
-		files.map(async (file) => {
-			const module = (await import(pathToFileURL(path.resolve(directory, file)).href)) as {
-				default?: T;
-			};
-			if (!module.default) throw new Error(`${directory}/${file}: missing default export`);
-			return { file, value: module.default };
-		})
-	);
-}
 
 function uniqueById<T extends { id: string }>(items: T[], kind: string): Map<string, T> {
 	const byId = new Map<string, T>();

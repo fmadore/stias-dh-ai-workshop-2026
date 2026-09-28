@@ -1,12 +1,11 @@
 <script lang="ts">
-	import { venueClock } from '$lib/utils/venue-clock';
+	import { clockMilestones, venueClock } from '$lib/utils/venue-clock';
 	import { base } from '$app/paths';
 	import * as m from '$lib/paraglide/messages';
 	import { organizers } from '$lib/data/organizers';
 	import { sponsors } from '$lib/data/sponsors';
 	import { siteConfig } from '$lib/data/site-config';
 	import { localePath } from '$lib/utils/i18n';
-	import { getMilestones } from '$lib/utils/milestones';
 
 	// The footer used to be logos and a copyright line, so every route out of
 	// a page depended on the navbar and the sponsor row read as terminal.
@@ -29,13 +28,7 @@
 		}
 	]);
 
-	const milestones = $derived(
-		getMilestones($venueClock.now).map((item) => ({
-			...item,
-			past: $venueClock.live && item.past,
-			next: $venueClock.live && item.next
-		}))
-	);
+	const milestones = $derived(clockMilestones($venueClock));
 </script>
 
 <footer

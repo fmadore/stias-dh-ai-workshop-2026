@@ -1,5 +1,5 @@
 import { base } from '$app/paths';
-import { getLocale, baseLocale } from '$lib/paraglide/runtime';
+import { getLocale, baseLocale, locales } from '$lib/paraglide/runtime';
 import type { LocalizedString, Presentation } from '$lib/types';
 import { localizedPath, type SupportedLocale } from './localized-paths';
 
@@ -9,7 +9,7 @@ export function t(str: LocalizedString): string {
 }
 
 export function localePath(path: string): string {
-	return localizedPath(path, getLocale() as SupportedLocale, base, baseLocale as SupportedLocale);
+	return localizedPath(path, getLocale(), base, baseLocale);
 }
 
 /**
@@ -22,7 +22,7 @@ export function localePath(path: string): string {
  */
 export function resolveAbstract(
 	presentation: Pick<Presentation, 'abstract' | 'language'>,
-	locale: SupportedLocale = getLocale() as SupportedLocale
+	locale: SupportedLocale = getLocale()
 ): { text: string; lang: SupportedLocale } | undefined {
 	const { abstract } = presentation;
 	if (!abstract) return undefined;
@@ -43,4 +43,5 @@ export function abstractVariants(abstract: Presentation['abstract']): string[] {
  * Prerender entries for the optional `[[lang]]` segment — every localized
  * page re-exports this so both `/…` and `/fr/…` are generated.
  */
-export const langEntries = () => [{ lang: '' }, { lang: 'fr' }];
+export const langEntries = () =>
+	locales.map((locale) => ({ lang: locale === baseLocale ? '' : locale }));

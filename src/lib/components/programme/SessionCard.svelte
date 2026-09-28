@@ -1,13 +1,17 @@
 <script lang="ts">
-	import type { Session } from '$lib/types';
+	import type { Session, SessionCast } from '$lib/types';
 	import { t, localePath } from '$lib/utils/i18n';
 	import * as m from '$lib/paraglide/messages';
-	import { getPeople } from '$lib/data/people';
-	import { getPresentation, getPresentationAuthors } from '$lib/data/presentations';
-	import { sessionAnchor } from '$lib/utils/placement';
+	import { sessionLabel } from '$lib/utils/placement';
+	import { sessionAnchor, sessionTimes } from '$lib/utils/schedule';
 	import { Video, VideoOff, Link as LinkIcon, ExternalLink } from '@lucide/svelte';
 
-	let { session, panelNumber }: { session: Session; panelNumber?: number } = $props();
+	let {
+		session,
+		panelNumber,
+		/** The session's people and papers, resolved by the page's server load. */
+		cast = { speakers: [], papers: [] }
+	}: { session: Session; panelNumber?: number; cast?: SessionCast } = $props();
 
 	// Three treatments, not six tinted badges. Keynote gold, panel teal-10,
 	// plenary teal-5, discussion teal-8 and social gold-8 were three
@@ -17,27 +21,10 @@
 		session.type === 'break' ? 'interlude' : session.type === 'social' ? 'social' : 'session'
 	);
 
-	const typeLabels: Record<Session['type'], string> = {
-		keynote: m.session_keynote(),
-		panel: m.session_panel(),
-		plenary: m.session_plenary(),
-		break: m.session_break(),
-		social: m.session_social(),
-		discussion: m.session_discussion()
-	};
+	const typeLabel = $derived(sessionLabel(session.type, panelNumber));
 
-	const typeLabel = $derived(
-		session.type === 'panel' && panelNumber
-			? `${typeLabels.panel} ${panelNumber}`
-			: typeLabels[session.type]
-	);
-
-	const speakers = $derived(getPeople(session.speakers));
-	const papers = $derived(
-		(session.presentationIds ?? [])
-			.map((id) => getPresentation(id))
-			.filter((p): p is NonNullable<typeof p> => p !== undefined)
-	);
+	const speakers = $derived(cast.speakers);
+	const papers = $derived(cast.papers);
 
 	const isPanel = $derived(session.type === 'panel');
 	const isKeynote = $derived(session.type === 'keynote');
@@ -45,7 +32,7 @@
 
 	// Panels and keynotes always show a chair line (falling back to "to be
 	// determined"); other session types only show one when a chair is set.
-	const chairPerson = $derived(session.chair ? getPeople([session.chair])[0] : undefined);
+	const chairPerson = $derived(cast.chair);
 	const chairName = $derived(chairPerson?.name ?? session.chairName);
 	const showChair = $derived(isPanel || isKeynote || !!session.chair || !!chairName);
 
@@ -61,7 +48,7 @@
 	);
 
 	const anchor = $derived(sessionAnchor(session.id));
-	const times = $derived(session.time.split(/\s*[–—-]\s*/));
+	const times = $derived(sessionTimes(session.time));
 </script>
 
 <!--
@@ -240,7 +227,7 @@
 					     them, one pixel under SC 2.5.8's floor. 12px makes it 25px. -->
 					<ul class="mt-3 space-y-3">
 						{#each papers as paper (paper.id)}
-							{@const authors = getPresentationAuthors(paper)}
+							{@const authors = paper.authors}
 							<li class="session-paper">
 								<a
 									href={localePath(`/papers/${paper.id}`)}

@@ -1,4 +1,4 @@
-import type { Organizer } from '$lib/types';
+import type { Organizer, PersonGroup, PersonRef } from '$lib/types';
 import { organizers } from './organizers';
 import { pointSud } from './point-sud';
 import { participants } from './participants';
@@ -12,7 +12,7 @@ import { coAuthors } from './co-authors';
  * no country or participant profile, but their paper bylines include their
  * affiliations.
  */
-export type PersonGroup = 'organizer' | 'point-sud' | 'participant' | 'co-author';
+export type { PersonGroup };
 
 /**
  * `affiliation` and `country` are optional here and only here: everyone
@@ -40,4 +40,22 @@ export function getPerson(id: string): Person | undefined {
 
 export function getPeople(ids: readonly string[] = []): Person[] {
 	return ids.map((id) => byId.get(id)).filter((p): p is Person => p !== undefined);
+}
+
+/**
+ * The slice of a person a byline needs. The registry's entries are the source
+ * records spread out, bio and all, so handing one to a page's data serialised
+ * every co-author's full biography into a page that shows their name.
+ */
+export function personRef(
+	{ id, name, group, online, affiliation }: Person,
+	{ withAffiliation = true } = {}
+): PersonRef {
+	return {
+		id,
+		name,
+		group,
+		...(online ? { online } : {}),
+		...(withAffiliation && affiliation ? { affiliation } : {})
+	};
 }

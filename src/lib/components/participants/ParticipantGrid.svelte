@@ -1,9 +1,6 @@
-<script lang="ts" module>
-	export type Grouping = 'none' | 'alpha' | 'country';
-</script>
-
 <script lang="ts">
 	import type { Participant } from '$lib/types';
+	import type { DirectoryGrouping } from '$lib/utils/filter-params';
 	import ParticipantCard from './ParticipantCard.svelte';
 	import { getPlacements } from '$lib/utils/placement';
 	import { getLocale } from '$lib/paraglide/runtime';
@@ -11,8 +8,10 @@
 
 	// The switch itself lives in the filter row, alongside the other list
 	// controls — this component only consumes the choice.
-	let { participants, grouping = 'none' }: { participants: Participant[]; grouping?: Grouping } =
-		$props();
+	let {
+		participants,
+		grouping = 'none'
+	}: { participants: Participant[]; grouping?: DirectoryGrouping } = $props();
 
 	// Built once for the whole grid rather than walking the programme per card.
 	const placements = $derived(getPlacements());

@@ -5,15 +5,11 @@
 
 	let { axis, compact = false }: { axis: ThematicAxis; compact?: boolean } = $props();
 
-	const iconMap = {
-		Cpu,
-		Building2,
-		BookOpen
-	} as const;
+	// Keyed by the `icon` union, so a name with no component is a type error in
+	// the data file rather than a card that silently renders no icon.
+	const iconMap = { Cpu, Building2, BookOpen } satisfies Record<ThematicAxis['icon'], unknown>;
 
-	type IconKey = keyof typeof iconMap;
-
-	const IconComponent = $derived(iconMap[axis.icon as IconKey]);
+	const IconComponent = $derived(iconMap[axis.icon]);
 
 	// A bare title plus an icon and a big "01" made three cards that all
 	// looked the same and said almost nothing. The opening sentence of the
@@ -28,9 +24,7 @@
 			<div
 				class="bg-primary-50 dark:bg-primary-500/12 text-link flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg"
 			>
-				{#if IconComponent}
-					<IconComponent size={22} strokeWidth={1.75} />
-				{/if}
+				<IconComponent size={22} strokeWidth={1.75} />
 			</div>
 			<span
 				class="text-accent-ink font-display text-3xl leading-none opacity-80"
@@ -82,9 +76,7 @@
 					<div
 						class="bg-primary-50 dark:bg-primary-500/12 text-link flex h-10 w-10 items-center justify-center rounded-lg"
 					>
-						{#if IconComponent}
-							<IconComponent size={20} strokeWidth={1.75} />
-						{/if}
+						<IconComponent size={20} strokeWidth={1.75} />
 					</div>
 				</div>
 				<h3 class="text-card-title text-strong mb-4">

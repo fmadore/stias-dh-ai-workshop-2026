@@ -7,7 +7,7 @@
 	import { countryName } from '$lib/utils/country';
 	import JoinOnline from '$lib/components/shared/JoinOnline.svelte';
 
-	const locale = $derived(getLocale() as 'en' | 'fr');
+	const locale = $derived(getLocale());
 
 	// Two lists, not one sentence. See the comment on `logisticsCovered`.
 	const covered = $derived(venueInfo.logisticsCovered[locale] ?? venueInfo.logisticsCovered.en);

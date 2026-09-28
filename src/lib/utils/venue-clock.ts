@@ -1,5 +1,5 @@
 import { readable } from 'svelte/store';
-import { getMilestones, msUntilNextVenueMidnight, workshopEnd } from './milestones';
+import { getMilestones, msUntilNextVenueMidnight, workshopEnd, type Milestone } from './milestones';
 
 /** Wake only when a displayed date or event status can change. */
 export function nextClockDelay(now: number): number {
@@ -38,3 +38,16 @@ export const venueClock = readable({ now: Date.now(), live: false }, (set) => {
 		window.removeEventListener('pageshow', refresh);
 	};
 });
+
+/**
+ * The milestones as a clock reading may state them. Past/next are claims about
+ * the present, so they stay off until the clock is live: the prerendered HTML
+ * would otherwise freeze whatever was true on the day it was built.
+ */
+export function clockMilestones({ now, live }: { now: number; live: boolean }): Milestone[] {
+	return getMilestones(now).map((item) => ({
+		...item,
+		past: live && item.past,
+		next: live && item.next
+	}));
+}

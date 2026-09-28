@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { venueClock } from '$lib/utils/venue-clock';
+	import { clockMilestones, venueClock } from '$lib/utils/venue-clock';
 	import { cfpInfo } from '$lib/data/cfp';
 	import { organizers } from '$lib/data/organizers';
 	import { venueInfo } from '$lib/data/venue';
@@ -7,13 +7,12 @@
 	import { thematicAxes } from '$lib/data/thematic-axes';
 	import { contactEmails } from '$lib/data/contacts';
 	import { t } from '$lib/utils/i18n';
-	import { getMilestones } from '$lib/utils/milestones';
 	import { getLocale } from '$lib/paraglide/runtime';
 	import * as m from '$lib/paraglide/messages';
 	import { Send, ExternalLink, Check } from '@lucide/svelte';
 	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
 
-	const locale = $derived(getLocale() as 'en' | 'fr');
+	const locale = $derived(getLocale());
 
 	const JDHASA_NAME = 'Journal of the Digital Humanities Association of Southern Africa (JDHASA)';
 	const JDHASA_URL = 'https://upjournals.up.ac.za/index.php/dhasa';
@@ -28,18 +27,13 @@
 		};
 	});
 
-	// getMilestones, not getKeyDates: the same four dates render on the home
-	// page flagged past/next, and rendered here as a bare list with no state at
-	// all — on the one page whose whole subject is a deadline that has passed.
+	// The milestones, not a stateless key-dates list: the same four dates
+	// render on the home page flagged past/next, and rendered here as a bare
+	// list with no state at all — on the one page whose whole subject is a
+	// deadline that has passed.
 	// The PDF and text exports build their own list in generate-cfp-downloads.ts
 	// and stay stateless, as a record of the call as published should.
-	const keyDates = $derived(
-		getMilestones($venueClock.now).map((item) => ({
-			...item,
-			past: $venueClock.live && item.past,
-			next: $venueClock.live && item.next
-		}))
-	);
+	const keyDates = $derived(clockMilestones($venueClock));
 </script>
 
 <div class="block-flow">

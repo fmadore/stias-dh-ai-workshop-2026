@@ -12,6 +12,8 @@
 	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
 	import { thematicAxes } from '$lib/data/thematic-axes';
 	import { ArrowRight } from '@lucide/svelte';
+
+	let { data } = $props();
 </script>
 
 <SEO
@@ -25,7 +27,7 @@
      follow it, and that is the one fact a visitor cannot infer from the rest
      of the page. -->
 <JoinOnline />
-<AtAGlance />
+<AtAGlance glance={data.glance} />
 
 <!-- Thematic Axes Preview -->
 <section class="section-pad-lg bg-raised">

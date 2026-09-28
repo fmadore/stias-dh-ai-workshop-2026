@@ -8,17 +8,16 @@
 	import { participants } from '$lib/data/participants';
 	import OrganizerCard from '$lib/components/participants/OrganizerCard.svelte';
 	import PointSudCard from '$lib/components/participants/PointSudCard.svelte';
-	import ParticipantGrid, {
-		type Grouping
-	} from '$lib/components/participants/ParticipantGrid.svelte';
+	import ParticipantGrid from '$lib/components/participants/ParticipantGrid.svelte';
 	import FilterBar from '$lib/components/shared/FilterBar.svelte';
 	import SegmentedControl from '$lib/components/shared/SegmentedControl.svelte';
 	import NoResults from '$lib/components/shared/NoResults.svelte';
 	import AffiliationMap from '$lib/components/participants/AffiliationMap.svelte';
 	import { filterPeople, uniquePersonCountries } from '$lib/utils/filter';
 	import { createUrlFilters } from '$lib/utils/url-filters.svelte';
+	import type { DirectoryGrouping } from '$lib/utils/filter-params';
 
-	const groupingOptions: Array<{ value: Grouping; label: string }> = $derived([
+	const groupingOptions: Array<{ value: DirectoryGrouping; label: string }> = $derived([
 		{ value: 'none', label: m.directory_no_group() },
 		{ value: 'alpha', label: m.directory_group_alpha() },
 		{ value: 'country', label: m.directory_group_country() }

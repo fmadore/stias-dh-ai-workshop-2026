@@ -3,8 +3,6 @@
 	import { ArrowLeft, ArrowRight, CalendarClock } from '@lucide/svelte';
 	import { t, localePath } from '$lib/utils/i18n';
 	import { siteConfig } from '$lib/data/site-config';
-	import { getPresentation } from '$lib/data/presentations';
-	import { getPlacements, sessionAnchor } from '$lib/utils/placement';
 	import SEO from '$lib/components/SEO.svelte';
 	import PageHeader from '$lib/components/layout/PageHeader.svelte';
 
@@ -12,18 +10,11 @@
 
 	const presentation = $derived(data.presentation);
 	const authors = $derived(data.authors);
-	const canonicalPath = $derived(`/papers/${presentation.id}`);
 
-	// An abstract page used to have exactly one exit: "Back to papers". The
-	// data already supported linking to its session, its co-authors and the
-	// other papers in the same panel.
-	const placements = $derived(getPlacements());
-	const placement = $derived(placements.get(presentation.id));
-	const siblings = $derived(
-		(placement?.siblingIds ?? [])
-			.map((id) => getPresentation(id))
-			.filter((p): p is NonNullable<typeof p> => p !== undefined)
-	);
+	// Resolved by the server load, which is what keeps the registries of every
+	// abstract and bio out of this route's client bundle.
+	const placement = $derived(data.placement);
+	const siblings = $derived(data.siblings);
 
 	const schema = $derived({
 		'@context': 'https://schema.org',
@@ -50,7 +41,6 @@
 	title="{presentation.title} | {siteConfig.shortTitle}"
 	description={data.description}
 	type="article"
-	{canonicalPath}
 	additionalSchema={schema}
 />
 
@@ -127,7 +117,7 @@
 			{#if placement}
 				<section>
 					<a
-						href="{localePath('/programme')}#{sessionAnchor(placement.session.id)}"
+						href="{localePath('/programme')}#{placement.anchor}"
 						class="callout hover:border-accent block no-underline"
 						style="transition: border-color var(--duration-base) var(--ease-standard);"
 					>

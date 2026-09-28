@@ -7,25 +7,21 @@
 	import PageHeader from '$lib/components/layout/PageHeader.svelte';
 	import { programme, programmeLastUpdated } from '$lib/data/programme';
 	import { dateAtVenue, workshopPhase } from '$lib/utils/milestones';
+	import { formatDate, formatShortDay } from '$lib/utils/date';
+	import { panelNumbers } from '$lib/utils/schedule';
 	import ScheduleDay from '$lib/components/programme/ScheduleDay.svelte';
 	import JoinOnline from '$lib/components/shared/JoinOnline.svelte';
 	import { base } from '$app/paths';
 	import { Calendar, CalendarPlus, FileText } from '@lucide/svelte';
 
-	const intl = $derived(getLocale() === 'fr' ? 'fr-FR' : 'en-GB');
+	let { data } = $props();
 
 	// One calendar file per locale, unlike the PDF: an .ics carries the session
 	// titles themselves, and a calendar entry written in both languages at once
 	// is unreadable in the one line a day view gives it.
 	const icsFile = $derived(`Programme-STIAS-2026-${getLocale()}.ics`);
 
-	const lastUpdated = $derived(
-		new Date(`${programmeLastUpdated}T12:00:00`).toLocaleDateString(intl, {
-			day: 'numeric',
-			month: 'long',
-			year: 'numeric'
-		})
-	);
+	const lastUpdated = $derived(formatDate(programmeLastUpdated));
 
 	/** Today's date in South African time, so "happening now" matches the venue. */
 	const todayAtVenue = $derived(dateAtVenue($venueClock.now));
@@ -36,25 +32,16 @@
 	// under way while the home page said it had concluded.
 	const stillRunning = $derived($venueClock.live && workshopPhase($venueClock.now) !== 'after');
 
-	// Panel numbers run across the whole programme, so each day needs to know
-	// how many panels preceded it.
-	const days = $derived.by(() => {
-		let panels = 0;
-		return programme.map((day) => {
-			const offset = panels;
-			panels += day.sessions.filter((session) => session.type === 'panel').length;
-			return {
-				day,
-				panelOffset: offset,
-				isToday: day.date === todayAtVenue && stillRunning,
-				short: new Date(`${day.date}T12:00:00Z`).toLocaleDateString(intl, {
-					weekday: 'short',
-					day: 'numeric',
-					timeZone: 'UTC'
-				})
-			};
-		});
-	});
+	// Panel numbers run across the whole programme, not per day.
+	const panels = panelNumbers(programme);
+
+	const days = $derived(
+		programme.map((day) => ({
+			day,
+			isToday: day.date === todayAtVenue && stillRunning,
+			short: formatShortDay(day.date)
+		}))
+	);
 </script>
 
 <SEO
@@ -131,7 +118,7 @@
 
 			<div class="block-flow">
 				{#each days as entry (entry.day.date)}
-					<ScheduleDay day={entry.day} panelOffset={entry.panelOffset} isToday={entry.isToday} />
+					<ScheduleDay day={entry.day} {panels} casts={data.casts} isToday={entry.isToday} />
 				{/each}
 			</div>
 		</div>
