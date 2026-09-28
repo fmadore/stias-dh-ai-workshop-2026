@@ -4,6 +4,7 @@ import { organizers } from './organizers';
 import { sponsors } from './sponsors';
 import { onlineAccess, onlineAccessPublished } from './online-access';
 import { t } from '$lib/utils/i18n';
+import { workshopEnd, workshopStart } from '$lib/utils/milestones';
 
 /**
  * The canonical schema.org Event for the workshop. Emitted on the home page
@@ -16,9 +17,10 @@ export function buildEventSchema(ogImage: string): object {
 		'@type': 'Event',
 		name: t(siteConfig.title),
 		description: t(siteConfig.description),
-		// SAST is UTC+2 year-round.
-		startDate: `${siteConfig.dates.start}T08:30:00+02:00`,
-		endDate: `${siteConfig.dates.end}T17:00:00+02:00`,
+		// The same instants the site's own clock uses (`siteConfig.hours`). This
+		// said 08:30–17:00 while the clock said 09:00–18:00.
+		startDate: workshopStart(),
+		endDate: workshopEnd(),
 		// The workshop runs hybrid: in person at STIAS with remote access.
 		eventAttendanceMode: 'https://schema.org/MixedEventAttendanceMode',
 		eventStatus: 'https://schema.org/EventScheduled',

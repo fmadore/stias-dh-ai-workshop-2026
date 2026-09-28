@@ -302,6 +302,13 @@ export interface SiteConfig {
 	shortTitle: string;
 	description: LocalizedString;
 	dates: { start: string; end: string };
+	/**
+	 * The nominal working day, venue time (`HH:MM`). Each day's actual first
+	 * and last session differ — see `programme.ts` — so this is the one span
+	 * that stands for all four: the workshop opens at `start` on the first date
+	 * and closes at `end` on the last.
+	 */
+	hours: { start: string; end: string };
 	location: string;
 	url: string;
 }

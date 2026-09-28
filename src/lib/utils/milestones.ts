@@ -42,12 +42,14 @@ function endOfDay(isoDate: string): string {
 	return `${isoDate}T23:59:59${SAST}`;
 }
 
+/** When the workshop opens, as an ISO datetime at the venue — the hero, the Event JSON-LD. */
 export function workshopStart(): string {
-	return `${siteConfig.dates.start}T09:00:00${SAST}`;
+	return `${siteConfig.dates.start}T${siteConfig.hours.start}:00${SAST}`;
 }
 
+/** When the workshop closes, as an ISO datetime at the venue. */
 export function workshopEnd(): string {
-	return `${siteConfig.dates.end}T18:00:00${SAST}`;
+	return `${siteConfig.dates.end}T${siteConfig.hours.end}:00${SAST}`;
 }
 
 /**
