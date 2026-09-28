@@ -28,7 +28,7 @@
 			     instead. PointSudCard already carried it; this one did not. -->
 			<div class="flex min-w-0 flex-1 flex-col text-center sm:text-left">
 				<h3 class="text-card-title text-strong">
-					<a href={localePath(`/participants/${organizer.id}`)} class="person-link">
+					<a href={localePath(`/participants/${organizer.id}`)} class="link-quiet">
 						{organizer.name}
 					</a>
 				</h3>
@@ -53,16 +53,3 @@
 		</div>
 	</div>
 </article>
-
-<style>
-	.person-link {
-		color: inherit;
-		transition: color var(--duration-fast) var(--ease-standard);
-	}
-	.person-link:hover {
-		color: var(--color-primary-700);
-	}
-	:global(.dark) .person-link:hover {
-		color: var(--color-primary-300);
-	}
-</style>

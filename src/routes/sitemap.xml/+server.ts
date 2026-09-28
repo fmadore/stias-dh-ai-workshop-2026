@@ -44,13 +44,11 @@ export const GET: RequestHandler = () => {
 	const buildPair = (e: Entry) => {
 		const enLoc = localizedAbsoluteUrl(siteConfig.url, e.path, 'en');
 		const frLoc = localizedAbsoluteUrl(siteConfig.url, e.path, 'fr');
-		const enAlt = enLoc;
-		const frAlt = frLoc;
 		const block = (loc: string) => `  <url>
     <loc>${escapeXml(loc)}</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="${escapeXml(enAlt)}" />
-    <xhtml:link rel="alternate" hreflang="fr" href="${escapeXml(frAlt)}" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(enAlt)}" />
+    <xhtml:link rel="alternate" hreflang="en" href="${escapeXml(enLoc)}" />
+    <xhtml:link rel="alternate" hreflang="fr" href="${escapeXml(frLoc)}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(enLoc)}" />
     <priority>${e.priority.toFixed(1)}</priority>
   </url>`;
 		return [block(enLoc), block(frLoc)].join('\n');

@@ -11,6 +11,7 @@ export const siteConfig: SiteConfig = {
 		fr: "Un atelier au STIAS, Stellenbosch, explorant comment les HN et l'IA transforment la recherche en études africaines."
 	},
 	dates: { start: '2026-09-21', end: '2026-09-24' },
+	hours: { start: '09:00', end: '18:00' },
 	location: 'STIAS, Stellenbosch, South Africa',
 	url: 'https://fmadore.github.io/stias-dh-ai-workshop-2026'
 };

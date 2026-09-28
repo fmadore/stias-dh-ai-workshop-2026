@@ -4,7 +4,7 @@
 	import { base } from '$app/paths';
 	import { getLocale, locales, baseLocale } from '$lib/paraglide/runtime';
 	import * as m from '$lib/paraglide/messages';
-	import { switchLocalePath, type SupportedLocale } from '$lib/utils/localized-paths';
+	import { switchLocalePath } from '$lib/utils/localized-paths';
 	import { Languages } from '@lucide/svelte';
 
 	const currentLocale = $derived(getLocale());
@@ -29,20 +29,13 @@
 	 * in play.
 	 */
 	const target = $derived.by(() => {
-		const other = (locales as readonly SupportedLocale[]).find(
-			(locale) => locale !== currentLocale
-		);
+		const other = locales.find((locale) => locale !== currentLocale);
 		if (!other) return undefined;
 		return {
 			locale: other,
 			href:
-				switchLocalePath(
-					page.url.pathname,
-					currentLocale as SupportedLocale,
-					other,
-					base,
-					baseLocale as SupportedLocale
-				) + (mounted ? (page.state.directorySearch ?? page.url.search) + page.url.hash : '')
+				switchLocalePath(page.url.pathname, currentLocale, other, base, baseLocale) +
+				(mounted ? (page.state.directorySearch ?? page.url.search) + page.url.hash : '')
 		};
 	});
 </script>

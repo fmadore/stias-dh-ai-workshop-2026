@@ -5,8 +5,11 @@ import { replaceState } from '$app/navigation';
 import type { CountryCode } from '$lib/types';
 import { parseFilters, filterUrl, type UrlFilters } from './filter-params';
 
-/** Static HTML contains the full directory; URL filters apply after hydration. */
-export function createUrlFilters(countries: CountryCode[]) {
+/**
+ * Static HTML contains the full directory; URL filters apply after hydration.
+ * `countries` is a getter because the list comes from the page's load data.
+ */
+export function createUrlFilters(countries: () => CountryCode[]) {
 	let mounted = $state(false);
 	onMount(() => {
 		mounted = true;
@@ -14,7 +17,7 @@ export function createUrlFilters(countries: CountryCode[]) {
 	const filters = $derived(
 		parseFilters(
 			new SvelteURLSearchParams(mounted ? (page.state.directorySearch ?? page.url.search) : ''),
-			countries
+			countries()
 		)
 	);
 	function update(values: Partial<UrlFilters>) {

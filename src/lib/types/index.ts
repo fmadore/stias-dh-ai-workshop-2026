@@ -144,12 +144,59 @@ export interface Presentation {
 	authors: string[];
 }
 
+/**
+ * A paper as something to link to — title, language, id — without the
+ * abstract. The abstracts are most of the content's weight, and every route
+ * that only lists papers used to ship all twenty-five of them to the browser.
+ */
+export type PaperSummary = Pick<Presentation, 'id' | 'title' | 'language'>;
+
+/** Which of the four lists a person comes from. */
+export type PersonGroup = 'organizer' | 'point-sud' | 'participant' | 'co-author';
+
+/** A person as a byline or a speaker line shows them: no bio, no portrait. */
+export interface PersonRef {
+	id: string;
+	name: string;
+	group: PersonGroup;
+	online?: boolean;
+	affiliation?: LocalizedString;
+}
+
+/** A paper as the papers directory lists it: everything but the full abstract. */
+export interface PaperListing extends PaperSummary {
+	authors: PersonRef[];
+	/** Countries of the authors who are attending — what the country filter matches. */
+	countries: CountryCode[];
+	/** The abstract's opening as plain text, in the language it is written in. */
+	excerpt?: { text: string; lang: 'en' | 'fr' };
+}
+
+/**
+ * A participant as the directory lists them. The bio is left out: the card
+ * does not show it, and search reaches it through the lazily loaded full text.
+ */
+export type ParticipantListing = Omit<Participant, 'bio' | 'bioLanguage'>;
+
+/** A campus on the affiliations map, with the people it pins resolved in place of their ids. */
+export interface MappedAffiliation extends Omit<AffiliationLocation, 'personIds'> {
+	people: PersonRef[];
+}
+
+/** The people and papers one session names, resolved ahead of the programme page. */
+export interface SessionCast {
+	speakers: PersonRef[];
+	chair?: PersonRef;
+	papers: Array<PaperSummary & { authors: PersonRef[] }>;
+}
+
 export interface ThematicAxis {
 	id: string;
 	number: number;
 	title: LocalizedString;
 	description: LocalizedString;
-	icon: string;
+	/** A Lucide icon name; `ThematicAxis.svelte` maps each one to its component. */
+	icon: 'Cpu' | 'Building2' | 'BookOpen';
 }
 
 export interface Session {
@@ -275,6 +322,13 @@ export interface SiteConfig {
 	shortTitle: string;
 	description: LocalizedString;
 	dates: { start: string; end: string };
+	/**
+	 * The nominal working day, venue time (`HH:MM`). Each day's actual first
+	 * and last session differ — see `programme.ts` — so this is the one span
+	 * that stands for all four: the workshop opens at `start` on the first date
+	 * and closes at `end` on the last.
+	 */
+	hours: { start: string; end: string };
 	location: string;
 	url: string;
 }

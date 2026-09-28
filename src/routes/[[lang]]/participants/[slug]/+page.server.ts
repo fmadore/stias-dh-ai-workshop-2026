@@ -3,9 +3,11 @@ import type { EntryGenerator, PageServerLoad } from './$types';
 import { participants } from '$lib/data/participants';
 import { organizers } from '$lib/data/organizers';
 import { pointSud } from '$lib/data/point-sud';
+import { getPerson } from '$lib/data/people';
 import { getParticipantPresentations } from '$lib/data/presentations';
-import type { PersonGroup } from '$lib/data/people';
-import { programme } from '$lib/data/programme';
+import { paperSummary } from '$lib/server/views';
+import { langEntries } from '$lib/utils/i18n';
+import { getPlacements } from '$lib/utils/placement';
 
 export const prerender = true;
 
@@ -17,10 +19,8 @@ export const prerender = true;
  */
 const everyone = [...organizers, ...pointSud, ...participants];
 
-export const entries: EntryGenerator = () => {
-	const langs = ['', 'fr'];
-	return everyone.flatMap((person) => langs.map((lang) => ({ lang, slug: person.id })));
-};
+export const entries: EntryGenerator = () =>
+	everyone.flatMap((person) => langEntries().map(({ lang }) => ({ lang, slug: person.id })));
 
 // Server-only loading keeps the complete people registries out of this detail route's client bundle.
 export const load: PageServerLoad = ({ params }) => {
@@ -30,41 +30,19 @@ export const load: PageServerLoad = ({ params }) => {
 	}
 
 	const titled = [...organizers, ...pointSud].find((candidate) => candidate.id === person.id);
-	const group: PersonGroup = organizers.some((candidate) => candidate.id === person.id)
-		? 'organizer'
-		: pointSud.some((candidate) => candidate.id === person.id)
-			? 'point-sud'
-			: 'participant';
-	const presentations = getParticipantPresentations(person);
-	let panelNumber = 0;
-	const placementByPresentation = new Map<
-		string,
-		{ sessionId: string; sessionType: string; panelNumber?: number; date: string; time: string }
-	>();
-	for (const day of programme) {
-		for (const session of day.sessions) {
-			if (session.type === 'panel') panelNumber++;
-			for (const presentationId of session.presentationIds ?? []) {
-				placementByPresentation.set(presentationId, {
-					sessionId: session.id,
-					sessionType: session.type,
-					panelNumber: session.type === 'panel' ? panelNumber : undefined,
-					date: day.date,
-					time: session.time
-				});
-			}
-		}
-	}
+	// Labels in the locale of the page being written: server loads run before
+	// the layout load sets the Paraglide global (see `getPlacements`).
+	const placements = getPlacements(params.lang === 'fr' ? 'fr' : 'en');
 
 	return {
 		person,
-		group,
+		group: getPerson(person.id)?.group ?? 'participant',
 		// Surfaced here rather than narrowed in the template: `'role' in person`
 		// on the union widens the value to unknown.
 		role: titled?.role,
-		presentationItems: presentations.map((presentation) => ({
-			presentation,
-			placement: placementByPresentation.get(presentation.id)
+		presentationItems: getParticipantPresentations(person).map((presentation) => ({
+			presentation: paperSummary(presentation),
+			placement: placements.get(presentation.id)
 		}))
 	};
 };

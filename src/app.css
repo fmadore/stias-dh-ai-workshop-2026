@@ -1091,6 +1091,65 @@ button:not(:disabled),
 }
 
 /* ============================================================
+   RESTING LINK AFFORDANCES
+   A link on a phone has no hover to announce it, so the dense surfaces carry
+   a faint teal underline at a generous offset — scholarly citation styling
+   rather than web-blue — that goes solid on hover and keyboard focus. The
+   mixes are the measured ones: 65% light, 60% dark, both clearing 3:1 (SC
+   1.4.11) on the raised card, where 35% measured 1.78:1.
+
+   This used to be written out seven times in scoped blocks — the programme's
+   session, paper and author links, the paper card title, the home figures,
+   the paper page's author names — each with its own :global(.dark) twins.
+
+   UNLAYERED on purpose, like .bg-cream: the hover colour has to outrank a
+   text-colour utility on the same element (`text-strong` on the paper page's
+   author names, on the programme's paper titles), and anything inside
+   @layer components loses to @layer utilities. The resting colour is left to
+   inheritance or to such a utility, so this block never fights one at rest.
+
+   --link-underline-weight steps up with the type: 1px under body text reads
+   as an underline, under a 23px card title or a 48px serif figure it reads
+   as a hairline artefact.
+   ============================================================ */
+.link-underline {
+	text-decoration-line: underline;
+	text-decoration-color: color-mix(in oklab, var(--color-primary-600) 65%, transparent);
+	text-decoration-thickness: var(--link-underline-weight, 1px);
+	text-underline-offset: var(--link-underline-offset, 0.2em);
+	transition:
+		color var(--duration-fast) var(--ease-standard),
+		text-decoration-color var(--duration-fast) var(--ease-standard);
+}
+.dark .link-underline {
+	text-decoration-color: color-mix(in oklab, var(--color-primary-300) 60%, transparent);
+}
+/* `.link-group` puts the state on an ancestor: the paper page's author link
+   wraps the name and the affiliation, and only the name is ruled. */
+.link-underline:is(:hover, :focus-visible),
+.link-group:is(:hover, :focus-visible) .link-underline {
+	color: var(--color-primary-700);
+	text-decoration-color: currentColor;
+}
+.dark .link-underline:is(:hover, :focus-visible),
+.dark .link-group:is(:hover, :focus-visible) .link-underline {
+	color: var(--color-primary-300);
+}
+
+/* The quiet variant: no rule, just the colour change — for names that are
+   already headings, and for links whose external-link glyph is the resting
+   cue (an underline would run straight through it). */
+.link-quiet {
+	transition: color var(--duration-fast) var(--ease-standard);
+}
+.link-quiet:is(:hover, :focus-visible) {
+	color: var(--color-primary-700);
+}
+.dark .link-quiet:is(:hover, :focus-visible) {
+	color: var(--color-primary-300);
+}
+
+/* ============================================================
    PRINT
    The Call for Papers is the page most likely to be printed and
    circulated, so paper output is a real output target here.

@@ -1,25 +1,22 @@
 <script lang="ts">
-	import type { ProgrammeDay } from '$lib/types';
+	import type { ProgrammeDay, SessionCast } from '$lib/types';
 	import * as m from '$lib/paraglide/messages';
 	import { t } from '$lib/utils/i18n';
 	import SessionCard from './SessionCard.svelte';
 
 	let {
 		day,
-		/** Running panel number at the start of this day, so labels continue across days. */
-		panelOffset = 0,
+		/** Session id → panel number, counted across the whole programme (`panelNumbers`). */
+		panels,
+		/** Session id → the people and papers it names (`sessionCasts`). */
+		casts,
 		isToday = false
-	}: { day: ProgrammeDay; panelOffset?: number; isToday?: boolean } = $props();
-
-	/** Panel numbers, resolved per session so SessionCard stays presentational. */
-	const panelNumbers = $derived.by((): Record<string, number> => {
-		const numbers: Record<string, number> = {};
-		let n = panelOffset;
-		for (const session of day.sessions) {
-			if (session.type === 'panel') numbers[session.id] = ++n;
-		}
-		return numbers;
-	});
+	}: {
+		day: ProgrammeDay;
+		panels: ReadonlyMap<string, number>;
+		casts: Record<string, SessionCast>;
+		isToday?: boolean;
+	} = $props();
 </script>
 
 <!-- scroll-mt derived, not guessed: scroll-padding-top clears the fixed
@@ -38,7 +35,7 @@
 	</div>
 	<div class="card px-4 py-1 sm:px-6 sm:py-2">
 		{#each day.sessions as session (session.id)}
-			<SessionCard {session} panelNumber={panelNumbers[session.id]} />
+			<SessionCard {session} panelNumber={panels.get(session.id)} cast={casts[session.id]} />
 		{/each}
 	</div>
 </section>

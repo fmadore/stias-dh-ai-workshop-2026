@@ -1,7 +1,6 @@
 <script lang="ts">
-	import type { Participant } from '$lib/types';
+	import type { PaperSummary, ParticipantListing } from '$lib/types';
 	import { t, localePath } from '$lib/utils/i18n';
-	import { getParticipantPresentations } from '$lib/data/presentations';
 	import { getPlacements } from '$lib/utils/placement';
 	import AvatarSmall from '$lib/components/shared/AvatarSmall.svelte';
 	import { getLocale } from '$lib/paraglide/runtime';
@@ -9,10 +8,16 @@
 
 	let {
 		participant,
+		/** Their papers, resolved by the page's load rather than from the registries. */
+		papers,
 		placements = getPlacements()
-	}: { participant: Participant; placements?: ReturnType<typeof getPlacements> } = $props();
+	}: {
+		participant: ParticipantListing;
+		papers: PaperSummary[];
+		placements?: ReturnType<typeof getPlacements>;
+	} = $props();
 
-	const presentations = $derived(getParticipantPresentations(participant));
+	const presentations = $derived(papers);
 	const href = $derived(localePath(`/participants/${participant.id}`));
 </script>
 
@@ -26,7 +31,7 @@
 	<AvatarSmall name={participant.name} image={participant.image} />
 
 	<h3 class="text-card-title text-strong mt-3.5">
-		<a {href} class="card-link participant-link">{participant.name}</a>
+		<a {href} class="card-link link-quiet">{participant.name}</a>
 	</h3>
 
 	<p class="text-muted text-caption mt-1 leading-snug">
@@ -46,16 +51,3 @@
 		{/if}
 	{/each}
 </article>
-
-<style>
-	.participant-link {
-		color: inherit;
-		transition: color var(--duration-fast) var(--ease-standard);
-	}
-	.participant-link:hover {
-		color: var(--color-primary-700);
-	}
-	:global(.dark) .participant-link:hover {
-		color: var(--color-primary-300);
-	}
-</style>

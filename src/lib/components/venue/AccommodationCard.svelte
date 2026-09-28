@@ -10,7 +10,7 @@
 
 	let { accommodation }: { accommodation: Accommodation } = $props();
 
-	const locale = $derived(getLocale() as 'en' | 'fr');
+	const locale = $derived(getLocale());
 	const distance = $derived(
 		m.accommodation_distance({
 			distance: formatDistance(

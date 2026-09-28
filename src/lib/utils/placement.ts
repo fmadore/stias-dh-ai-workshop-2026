@@ -1,11 +1,11 @@
 import * as m from '$lib/paraglide/messages';
-import { getLocale } from '$lib/paraglide/runtime';
+import { getLocale, type Locale } from '$lib/paraglide/runtime';
 import { programme } from '$lib/data/programme';
-import type { ProgrammeDay, Session } from '$lib/types';
+import type { Session } from '$lib/types';
+import { formatShortDay } from './date';
+import { panelNumbers, sessionAnchor, sessionTimes } from './schedule';
 
 export interface Placement {
-	session: Session;
-	day: ProgrammeDay;
 	/** "Panel 3" / "Keynote" — the session's name in the running order. */
 	sessionLabel: string;
 	/** "Mon 21 · 14:00" — where it sits in the week. */
@@ -16,38 +16,28 @@ export interface Placement {
 	siblingIds: string[];
 }
 
-/** Anchor id for a session, shared by the programme page and every link to it. */
-export function sessionAnchor(sessionId: string): string {
-	return `session-${sessionId}`;
-}
-
-function shortDay(isoDate: string): string {
-	// Noon UTC so the weekday never slips in a negative-offset timezone.
-	return new Date(`${isoDate}T12:00:00Z`).toLocaleDateString(
-		getLocale() === 'fr' ? 'fr-FR' : 'en-GB',
-		{ weekday: 'short', day: 'numeric', timeZone: 'UTC' }
-	);
-}
-
-/** "14:00 – 15:30" → "14:00" */
-function startTime(time: string): string {
-	return time.split(/[–—-]/)[0].trim();
-}
-
-function sessionLabel(session: Session, panelNumber: number | undefined): string {
-	switch (session.type) {
+/** "Panel 3", "Keynote", … — a session type as the running order names it. */
+export function sessionLabel(
+	type: Session['type'],
+	panelNumber?: number,
+	locale: Locale = getLocale()
+): string {
+	const options = { locale };
+	switch (type) {
 		case 'panel':
-			return panelNumber ? `${m.session_panel()} ${panelNumber}` : m.session_panel();
+			return panelNumber
+				? `${m.session_panel({}, options)} ${panelNumber}`
+				: m.session_panel({}, options);
 		case 'keynote':
-			return m.session_keynote();
+			return m.session_keynote({}, options);
 		case 'discussion':
-			return m.session_discussion();
+			return m.session_discussion({}, options);
 		case 'plenary':
-			return m.session_plenary();
+			return m.session_plenary({}, options);
 		case 'social':
-			return m.session_social();
+			return m.session_social({}, options);
 		case 'break':
-			return m.session_break();
+			return m.session_break({}, options);
 	}
 }
 
@@ -59,23 +49,21 @@ function sessionLabel(session: Session, panelNumber: number | undefined): string
  * cards led with "English" instead of "Panel 3 · Tue 14:00".
  *
  * Rebuilt per call rather than cached at module scope because the labels are
- * localised and the locale can change between renders.
+ * localised and the locale can change between renders. A server load passes
+ * the locale explicitly: it runs before the layout load sets the global.
  */
-export function getPlacements(): Map<string, Placement> {
+export function getPlacements(locale: Locale = getLocale()): Map<string, Placement> {
 	const placements = new Map<string, Placement>();
-	let panelCount = 0;
+	const panels = panelNumbers(programme);
 
 	for (const day of programme) {
 		for (const session of day.sessions) {
-			if (session.type === 'panel') panelCount += 1;
 			const ids = session.presentationIds ?? [];
 			if (ids.length === 0) continue;
 
 			const placement = {
-				session,
-				day,
-				sessionLabel: sessionLabel(session, session.type === 'panel' ? panelCount : undefined),
-				slotLabel: `${shortDay(day.date)} · ${startTime(session.time)}`,
+				sessionLabel: sessionLabel(session.type, panels.get(session.id), locale),
+				slotLabel: `${formatShortDay(day.date, locale)} · ${sessionTimes(session.time)[0]}`,
 				anchor: sessionAnchor(session.id)
 			};
 
@@ -86,8 +74,4 @@ export function getPlacements(): Map<string, Placement> {
 	}
 
 	return placements;
-}
-
-export function getPlacement(presentationId: string): Placement | undefined {
-	return getPlacements().get(presentationId);
 }

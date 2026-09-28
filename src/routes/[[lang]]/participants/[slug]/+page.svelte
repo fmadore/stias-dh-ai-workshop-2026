@@ -10,6 +10,7 @@
 	import { getLocale } from '$lib/paraglide/runtime';
 	import { countryName } from '$lib/utils/country';
 	import { localizedAbsoluteUrl } from '$lib/utils/localized-paths';
+	import { truncate } from '$lib/utils/text';
 
 	let { data } = $props();
 
@@ -37,33 +38,11 @@
 		...(person.orcid ? { identifier: person.orcid } : {}),
 		...(person.website ? { sameAs: [person.website] } : {})
 	});
-
-	function placementLabel(placement: (typeof presentationItems)[number]['placement']): string {
-		if (!placement) return '';
-		const sessionLabel =
-			placement.sessionType === 'panel'
-				? `${m.session_panel()} ${placement.panelNumber}`
-				: placement.sessionType === 'keynote'
-					? m.session_keynote()
-					: placement.sessionType === 'discussion'
-						? m.session_discussion()
-						: placement.sessionType === 'plenary'
-							? m.session_plenary()
-							: placement.sessionType === 'social'
-								? m.session_social()
-								: m.session_break();
-		const day = new Date(`${placement.date}T12:00:00Z`).toLocaleDateString(
-			getLocale() === 'fr' ? 'fr-FR' : 'en-GB',
-			{ weekday: 'short', day: 'numeric', timeZone: 'UTC' }
-		);
-		return `${sessionLabel} · ${day} · ${placement.time.split(/[–—-]/)[0].trim()}`;
-	}
 </script>
 
 <SEO
 	title="{person.name} | {siteConfig.shortTitle}"
-	description={bio || `${person.name} — ${t(person.affiliation)}`}
-	{canonicalPath}
+	description={bio ? truncate(bio) : `${person.name} — ${t(person.affiliation)}`}
 	additionalSchema={schema}
 />
 
@@ -122,7 +101,7 @@
 								>
 									{#if placement}
 										<span class="text-meta mb-2 block">
-											{placementLabel(placement)}
+											{placement.sessionLabel} · {placement.slotLabel}
 										</span>
 									{/if}
 									<span class="text-card-title text-strong block" lang={presentation.language}>
@@ -131,7 +110,7 @@
 								</a>
 								{#if placement}
 									<a
-										href="{localePath('/programme')}#session-{placement.sessionId}"
+										href="{localePath('/programme')}#{placement.anchor}"
 										class="link-arrow mt-2 inline-flex text-sm"
 									>
 										{m.paper_in_programme()}

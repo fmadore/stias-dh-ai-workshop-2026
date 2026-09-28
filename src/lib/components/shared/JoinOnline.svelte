@@ -16,10 +16,17 @@
 
 	let { variant = 'band' }: Props = $props();
 
-	// Prerendered output makes no live claim, so the static HTML always carries
-	// the invitation. Once the clock is live it withdraws the moment the
-	// workshop closes, rather than inviting people into a meeting that ended.
-	const show = $derived(!$venueClock.live || workshopPhase($venueClock.now) !== 'after');
+	// Nothing to invite anyone to without a link: the component renders only
+	// while `onlineAccess.joinUrl` is set. It used to fall back to "the link
+	// will be published here shortly", which was right before the workshop and
+	// would have been a false promise once the link was retired after it.
+	//
+	// With a link, prerendered output makes no live claim, so the static HTML
+	// carries the invitation. Once the clock is live it withdraws the moment
+	// the workshop closes, rather than inviting people into a meeting that ended.
+	const show = $derived(
+		onlineAccessPublished && (!$venueClock.live || workshopPhase($venueClock.now) !== 'after')
+	);
 
 	const joinLabel = $derived(m.online_join({ platform: onlineAccess.platform }));
 </script>
@@ -27,34 +34,28 @@
 <!-- The join control and whatever qualifies it. One snippet, so the three
      variants cannot drift on the only thing a reader came for. -->
 {#snippet joinAction(size: 'md' | 'sm')}
-	{#if onlineAccessPublished}
-		<a
-			href={onlineAccess.joinUrl}
-			target="_blank"
-			rel="noopener noreferrer"
-			class="btn btn-primary {size === 'sm' ? 'btn-sm' : ''}"
-		>
-			<Video size={size === 'sm' ? 15 : 16} strokeWidth={1.75} aria-hidden="true" />
-			{joinLabel}
-			<ExternalLink size={14} strokeWidth={1.75} aria-hidden="true" />
-		</a>
-		{#if onlineAccess.meetingId || onlineAccess.passcode}
-			<p class="text-muted text-caption">
-				{#if onlineAccess.meetingId}
-					<span class="tabular-nums">{m.online_meeting_id({ id: onlineAccess.meetingId })}</span>
-				{/if}
-				{#if onlineAccess.meetingId && onlineAccess.passcode}
-					<span aria-hidden="true">·</span>
-				{/if}
-				{#if onlineAccess.passcode}
-					<span class="tabular-nums">{m.online_passcode({ code: onlineAccess.passcode })}</span>
-				{/if}
-			</p>
-		{/if}
-	{:else}
-		<!-- No disabled button standing in for a link that does not exist yet:
-		     a control that cannot be pressed is a worse promise than a sentence. -->
-		<p class="text-muted text-sm">{m.online_pending()}</p>
+	<a
+		href={onlineAccess.joinUrl}
+		target="_blank"
+		rel="noopener noreferrer"
+		class="btn btn-primary {size === 'sm' ? 'btn-sm' : ''}"
+	>
+		<Video size={size === 'sm' ? 15 : 16} strokeWidth={1.75} aria-hidden="true" />
+		{joinLabel}
+		<ExternalLink size={14} strokeWidth={1.75} aria-hidden="true" />
+	</a>
+	{#if onlineAccess.meetingId || onlineAccess.passcode}
+		<p class="text-muted text-caption">
+			{#if onlineAccess.meetingId}
+				<span class="tabular-nums">{m.online_meeting_id({ id: onlineAccess.meetingId })}</span>
+			{/if}
+			{#if onlineAccess.meetingId && onlineAccess.passcode}
+				<span aria-hidden="true">·</span>
+			{/if}
+			{#if onlineAccess.passcode}
+				<span class="tabular-nums">{m.online_passcode({ code: onlineAccess.passcode })}</span>
+			{/if}
+		</p>
 	{/if}
 {/snippet}
 
@@ -98,7 +99,7 @@
 				{@render joinAction('sm')}
 			</div>
 		</div>
-	{:else if onlineAccessPublished}
+	{:else}
 		<a
 			href={onlineAccess.joinUrl}
 			target="_blank"
@@ -108,8 +109,6 @@
 			<Video size={14} strokeWidth={1.75} aria-hidden="true" />
 			{joinLabel}
 		</a>
-	{:else}
-		<p class="text-muted text-sm">{m.online_pending()}</p>
 	{/if}
 {/if}
 

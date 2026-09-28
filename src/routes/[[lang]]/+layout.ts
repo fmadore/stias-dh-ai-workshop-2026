@@ -1,4 +1,4 @@
-import { setLocale, baseLocale } from '$lib/paraglide/runtime';
+import { setLocale, baseLocale, isLocale } from '$lib/paraglide/runtime';
 import type { LayoutLoad } from './$types';
 
 /**
@@ -15,7 +15,7 @@ import type { LayoutLoad } from './$types';
  * which is why LanguageSwitcher's links carry `data-sveltekit-reload`.
  */
 export const load: LayoutLoad = ({ params }) => {
-	const lang = params.lang || baseLocale;
-	setLocale(lang as 'en' | 'fr', { reload: false });
+	const lang = isLocale(params.lang) ? params.lang : baseLocale;
+	setLocale(lang, { reload: false });
 	return { lang };
 };
