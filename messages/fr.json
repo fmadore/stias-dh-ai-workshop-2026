@@ -59,7 +59,6 @@
   "online_title": "Suivre l’atelier sur {platform}",
   "online_open_to_all": "Toutes les sessions sont diffusées en direct et le lien est ouvert à tou·tes.",
   "online_join": "Rejoindre sur {platform}",
-  "online_pending": "Le lien de connexion sera publié ici prochainement.",
   "online_timezone": "Toutes les heures sont données à l’heure sud-africaine (UTC+2).",
   "online_meeting_id": "ID de réunion : {id}",
   "online_passcode": "Code d’accès : {code}",

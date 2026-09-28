@@ -59,7 +59,6 @@
   "online_title": "Follow the workshop on {platform}",
   "online_open_to_all": "Every session is streamed live, and the link is open to all.",
   "online_join": "Join on {platform}",
-  "online_pending": "The joining link will be published here shortly.",
   "online_timezone": "All times are South African Standard Time (UTC+2).",
   "online_meeting_id": "Meeting ID: {id}",
   "online_passcode": "Passcode: {code}",
