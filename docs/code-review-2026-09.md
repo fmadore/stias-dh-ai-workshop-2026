@@ -131,12 +131,12 @@ return 404 and show the error page in the right language. No change was needed.
 
 ---
 
-## Part 2 — Recommended, not done
+## Part 2 — Recommended
 
-In rough priority order. Items 1 and 5 need a decision from the owners.
-Item 3 needs a visual check this pass could not do.
+In rough priority order. Items 2.1, 2.2, 2.3 and 2.5 were done in a follow-up
+pass on 28 September (Part 3). The rest are still open.
 
-### 2.1 Post-event: retire the public Teams link
+### 2.1 Post-event: retire the public Teams link — done (§3.1)
 
 The workshop ended on 24 September. The public meeting URL, including its `?p=`
 passcode, is still in the static HTML of 6 pages, in all 13 events of each
@@ -148,7 +148,7 @@ and the link disappears everywhere. After that, the site could get a light
 "archive" framing ("held 21–24 September 2026"). `eventStatus` can stay
 `EventScheduled`, which is correct for an event that took place as planned.
 
-### 2.2 Directory search still loads every bio and abstract up front
+### 2.2 Directory search still loads every bio and abstract up front — done (§3.2)
 
 `/papers` and `/participants` load the 37.6 KB gzip chunk on first paint, only
 because the search box can match inside abstracts and bios. Two independent
@@ -163,7 +163,7 @@ improvements:
   every bio and abstract on each input event. Build the normalised haystack
   once per item (a module-level `Map`) and the filter becomes one `includes`.
 
-### 2.3 One CSS pattern, written seven times
+### 2.3 One CSS pattern, written seven times — done (§3.3)
 
 The resting-underline link is copied in scoped styles: `.session-link` and
 `.session-paper-link` (SessionCard), `.paper-title-link` (PaperCard),
@@ -184,7 +184,7 @@ It needs a visual pass in both themes.
 The two files differ only in size classes, radius, text size and `alt`
 behaviour. A `size: 'sm' | 'lg'` prop would merge them (July review, §5).
 
-### 2.5 Three different workshop hours
+### 2.5 Three different workshop hours — done (§3.4)
 
 - The Event JSON-LD says 08:30–17:00 (`event-schema.ts`).
 - `workshopStart()` and `workshopEnd()` say 09:00–18:00 (`milestones.ts`).
@@ -206,9 +206,9 @@ scripts share them.
 
 ### 2.7 Deterministic sorting and output
 
-- `participants/index.ts` and the papers page sort with
-  `localeCompare(…, undefined, …)`, and `ParticipantGrid` sorts its group
-  headings with no locale at all. The result depends on the build machine's
+- `participants/index.ts` sorts with `localeCompare(…, undefined, …)`, and
+  `ParticipantGrid` sorts its group headings with no locale at all. (The papers
+  list now sorts with `'en'` on the server, §3.2.) The result depends on the build machine's
   default locale. Pass `'en'` (or the page locale for the headings).
   Participants still sort by given name. For an academic roster, surname order
   is the convention (July review, §5).
@@ -230,3 +230,103 @@ describe phases that have finished. Moving them to `docs/archive/` would keep
 `docs/` for material that is still current. The README could also mention
 `$lib/server/views.ts` as the place for anything a page needs from the
 registries.
+
+---
+
+## Part 3 — Follow-up, 28 September
+
+Four of the recommendations above, done at the owners' request.
+
+**How it was checked:** the same method as Part 1, against a snapshot of the
+build before this pass.
+
+- **Rendered markup.** Class names were ignored this time, since §3.3 renames
+  them. Only the home, papers, programme and venue pages changed (in both
+  locales), plus the two `.ics` files, each for a reason given below.
+- **Link styles.** Computed styles were compared for 11 kinds of link, in the
+  resting, hover and keyboard-focus states, in both themes (§3.3).
+- **Tests.** The Playwright suite passed: 71 tests, with 1 skipped (the opt-in
+  `LIVE_MAPS` test). That includes a new test (§3.2), which was confirmed to
+  fail against the previous build.
+
+### 3.1 The Teams link is retired
+
+`onlineAccess.joinUrl` is now empty. Nothing in the build contains
+`teams.microsoft.com` any more:
+
+- The home page band, the programme callout and the venue page link are gone,
+  in both locales.
+- Both `.ics` files no longer carry the join line or the `CONFERENCE` property.
+- The Event JSON-LD keeps its `VirtualLocation`, because the workshop was
+  hybrid, but it now points at the site instead of the meeting.
+
+Emptying the URL alone was not enough. `JoinOnline` used to fall back to "The
+joining link will be published here shortly", which would have been false
+after the event. It now renders only when a link is set, and the unused
+`online_pending` message is removed.
+
+### 3.2 Directory search fetches bios and abstracts only when someone searches
+
+`/papers` and `/participants` now get their lists from `+page.server.ts` loads,
+as the other routes already did:
+
+- **Papers** come without abstracts. Each card gets a 480-character excerpt;
+  the most any card was measured to show in its three clamped lines is 308
+  characters (one column, 767px wide, either locale).
+- **Participants** come without bios.
+- **The affiliation map** receives its people already resolved.
+
+Bios and abstracts are now in a separate module, `utils/full-text.ts`. It is
+fetched with `import()` the first time the search field gets focus, or when a
+query arrives in the URL. Until it arrives, or if it never does (offline), a
+query still matches names, affiliations, countries and titles.
+
+Each record's own searchable text is also normalised once and cached, instead
+of being rebuilt on every keystroke (July review, §3).
+
+| Page         | JS before (gzip) | JS after (gzip) | HTML before (gzip) | HTML after (gzip) |
+| ------------ | ---------------- | --------------- | ------------------ | ----------------- |
+| Papers       | 107.7 KiB        | 70.9 KiB        | 32.7 KB            | 22.3 KB           |
+| Participants | 117.1 KiB        | 78.8 KiB        | 12.7 KB            | 16.5 KB           |
+
+The full text is one 37.0 KB gzip chunk, fetched once, on the first search.
+
+- **Unchanged:** all 25 paper cards render in the same order with the same
+  bylines. The clamp shows exactly what it did.
+- **One behaviour change:** screen readers used to hear each card's whole
+  abstract, because `line-clamp` hides overflow only visually. They now hear
+  up to 480 characters. The title links to the full text.
+- **New test:** "search reaches abstracts and bios, fetched only once someone
+  searches". It fails against the previous build ("bios and abstracts fetched
+  before anyone searched").
+
+### 3.3 Link styling merged
+
+Two unlayered classes in `app.css` replace the scoped copies:
+
+- **`.link-underline`** (with `.link-group`, for the paper page's author link,
+  where the hover belongs to the anchor but only the name is underlined).
+- **`.link-quiet`**, for links that change colour but carry no underline.
+
+Line thickness and offset are set per use with `--link-underline-weight` and
+`--link-underline-offset`. The programme's paper titles now take their resting
+colour from the `text-strong` utility instead of a scoped rule. The scoped rule
+would have tied with the shared hover rule on specificity and, loading later,
+won.
+
+The computed-style comparison (11 kinds of link × resting, hover and keyboard
+focus × light and dark) matches the previous build except for two things:
+
+- **Organiser, Point Sud and participant names** on the directory cards now
+  also change colour on keyboard focus, as every other link on the site
+  already did. They used to change on hover only.
+- **The programme's external venue links** no longer list a transition for
+  underline colour. They have no underline, so it never did anything.
+
+### 3.4 One set of workshop hours: 09:00–18:00
+
+Each day's first and last session differ, so `siteConfig.hours` now holds the
+one span that stands for all four days: 09:00–18:00. It drives
+`workshopStart()` and `workshopEnd()`, which already used those times, and the
+Event JSON-LD, which said 08:30–17:00. The site's clock behaves exactly as
+before.
