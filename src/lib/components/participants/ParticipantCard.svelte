@@ -26,7 +26,7 @@
 	<AvatarSmall name={participant.name} image={participant.image} />
 
 	<h3 class="text-card-title text-strong mt-3.5">
-		<a {href} class="card-link participant-link">{participant.name}</a>
+		<a {href} class="card-link link-quiet">{participant.name}</a>
 	</h3>
 
 	<p class="text-muted text-caption mt-1 leading-snug">
@@ -46,16 +46,3 @@
 		{/if}
 	{/each}
 </article>
-
-<style>
-	.participant-link {
-		color: inherit;
-		transition: color var(--duration-fast) var(--ease-standard);
-	}
-	.participant-link:hover {
-		color: var(--color-primary-700);
-	}
-	:global(.dark) .participant-link:hover {
-		color: var(--color-primary-300);
-	}
-</style>

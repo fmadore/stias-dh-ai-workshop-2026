@@ -21,7 +21,7 @@
 
 	<div class="min-w-0 flex-1">
 		<h3 class="text-card-title text-strong">
-			<a href={localePath(`/participants/${person.id}`)} class="person-link">
+			<a href={localePath(`/participants/${person.id}`)} class="link-quiet">
 				{person.name}
 			</a>
 		</h3>
@@ -38,16 +38,3 @@
 		{/if}
 	</div>
 </article>
-
-<style>
-	.person-link {
-		color: inherit;
-		transition: color var(--duration-fast) var(--ease-standard);
-	}
-	.person-link:hover {
-		color: var(--color-primary-700);
-	}
-	:global(.dark) .person-link:hover {
-		color: var(--color-primary-300);
-	}
-</style>

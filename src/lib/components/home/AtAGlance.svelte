@@ -49,7 +49,7 @@
 								: 'text-4xl tabular-nums sm:text-5xl'}"
 						>
 							{#if stat.href}
-								<a href={stat.href} class="stat-link">{stat.value}</a>
+								<a href={stat.href} class="stat-link link-underline">{stat.value}</a>
 							{:else}
 								{stat.value}
 							{/if}
@@ -62,12 +62,12 @@
 </section>
 
 <style>
-	/* The same resting affordance the programme carries: a faint teal underline
-	   at a generous offset, going solid on hover and focus. The mixes are the
-	   ones measured there — 65% light, 60% dark — because below that a resting
-	   cue does not clear 3:1 and is not a cue. Thickness steps up with the type:
-	   a 1px rule under a 48px serif numeral reads as a hairline artefact. */
+	/* The programme's resting affordance (.link-underline, app.css), with the
+	   rule stepped up to 2px: 1px under a 48px serif numeral reads as a
+	   hairline artefact. */
 	.stat-link {
+		--link-underline-weight: 2px;
+		--link-underline-offset: 0.16em;
 		/* SC 2.5.8's floor on the narrow axis. The figures are already 47px tall
 		   and 35–38px wide at "25" and "33", so this binds on exactly one of
 		   them: "17" set 21.4px at 375px and 320px, which is the width a
@@ -77,25 +77,5 @@
 		display: inline-block;
 		min-width: 1.5rem;
 		text-align: center;
-		color: inherit;
-		text-decoration: underline;
-		text-decoration-color: color-mix(in oklab, var(--color-primary-600) 65%, transparent);
-		text-decoration-thickness: 2px;
-		text-underline-offset: 0.16em;
-		transition:
-			color var(--duration-fast) var(--ease-standard),
-			text-decoration-color var(--duration-fast) var(--ease-standard);
-	}
-	:global(.dark) .stat-link {
-		text-decoration-color: color-mix(in oklab, var(--color-primary-300) 60%, transparent);
-	}
-	.stat-link:hover,
-	.stat-link:focus-visible {
-		color: var(--color-primary-700);
-		text-decoration-color: currentColor;
-	}
-	:global(.dark) .stat-link:hover,
-	:global(.dark) .stat-link:focus-visible {
-		color: var(--color-primary-300);
 	}
 </style>

@@ -141,7 +141,7 @@
 									href={session.venueUrl}
 									target="_blank"
 									rel="noopener noreferrer"
-									class="session-external inline-flex items-center gap-1"
+									class="link-quiet inline-flex items-center gap-1"
 								>
 									{session.venue}<ExternalLink size={11} strokeWidth={2} aria-hidden="true" />
 								</a>
@@ -165,7 +165,8 @@
 					     the h3 base step. -->
 					<h3 class="text-strong font-display text-reading">
 						{#if headingHref}
-							<a href={headingHref} class="session-link" lang={featuredPaper?.language}>{heading}</a
+							<a href={headingHref} class="link-underline" lang={featuredPaper?.language}
+								>{heading}</a
 							>
 						{:else}
 							{heading}
@@ -176,7 +177,7 @@
 				{#if (isKeynote || isDiscussion) && speakers.length > 0}
 					<p class="text-strong mt-1 text-sm font-medium">
 						<!-- prettier-ignore -->
-						{#each speakers as speaker, i (speaker.id)}{i > 0 ? ', ' : ''}<a href={localePath(`/participants/${speaker.id}`)} class="session-link">{speaker.name}</a>{#if speaker.online}{@render onlineBadge()}{/if}{/each}
+						{#each speakers as speaker, i (speaker.id)}{i > 0 ? ', ' : ''}<a href={localePath(`/participants/${speaker.id}`)} class="link-underline">{speaker.name}</a>{#if speaker.online}{@render onlineBadge()}{/if}{/each}
 					</p>
 					<p class="text-muted text-sm">
 						{Array.from(
@@ -213,7 +214,7 @@
 								href={link.url}
 								target="_blank"
 								rel="noopener noreferrer"
-								class="session-external inline-flex items-center gap-1"
+								class="link-quiet inline-flex items-center gap-1"
 							>
 								{link.label}<ExternalLink size={11} strokeWidth={2} aria-hidden="true" />
 							</a>
@@ -231,7 +232,7 @@
 							<li class="session-paper">
 								<a
 									href={localePath(`/papers/${paper.id}`)}
-									class="session-paper-link"
+									class="session-paper-link link-underline text-strong"
 									lang={paper.language}
 								>
 									{paper.title}
@@ -247,7 +248,7 @@
 										<!-- A credited co-author has no page of their own — we hold only
 										     their name — so they print unlinked among the authors who do. -->
 										<!-- prettier-ignore -->
-										{#each authors as author, i (author.id)}{i > 0 ? ', ' : ''}{#if author.group === 'co-author'}{author.name}{:else}<a href={localePath(`/participants/${author.id}`)} class="session-link">{author.name}</a>{/if}{/each}{#if authors.some((a) => a.online)}{@render onlineBadge()}{/if}
+										{#each authors as author, i (author.id)}{i > 0 ? ', ' : ''}{#if author.group === 'co-author'}{author.name}{:else}<a href={localePath(`/participants/${author.id}`)} class="link-underline">{author.name}</a>{/if}{/each}{#if authors.some((a) => a.online)}{@render onlineBadge()}{/if}
 									</span>
 								{/if}
 							</li>
@@ -382,70 +383,25 @@
 		color: var(--color-primary-300);
 	}
 
-	.session-link,
-	.session-paper-link,
-	.session-external {
-		color: inherit;
-		transition:
-			color var(--duration-fast) var(--ease-standard),
-			text-decoration-color var(--duration-fast) var(--ease-standard);
-	}
-
-	/* 67 of this page's 91 links were indistinguishable from the text around
-	   them at rest: colour: inherit, no underline, and a colour change on :hover
-	   alone. Hover does not exist on the phone this page is read on in a
-	   conference room, so the most link-dense surface on the site offered no
-	   resting cue that 91 destinations were there at all. A faint teal underline
-	   at a generous offset reads as scholarly citation styling rather than
-	   web-blue, and goes solid on hover and focus. The mixes are 65% / 60%
-	   rather than the 35% first tried: measured on the tightest surface each
-	   theme puts them on, 35% came out at 1.78:1 light and 40% at 2.18:1 dark,
-	   which is a resting cue you cannot resolve on a phone — the same defect in
-	   a new form. 65% light and 60% dark clear 3:1. .session-external opts out:
-	   it carries an external-link glyph, which is already a resting cue, and an
-	   underline would run straight through it. */
-	.session-link,
-	.session-paper-link {
-		text-decoration: underline;
-		text-decoration-color: color-mix(in oklab, var(--color-primary-600) 65%, transparent);
-		text-decoration-thickness: 1px;
-		text-underline-offset: 0.2em;
-	}
-	:global(.dark) .session-link,
-	:global(.dark) .session-paper-link {
-		text-decoration-color: color-mix(in oklab, var(--color-primary-300) 60%, transparent);
-	}
-
-	.session-link:hover,
-	.session-link:focus-visible,
-	.session-paper-link:hover,
-	.session-paper-link:focus-visible,
-	.session-external:hover,
-	.session-external:focus-visible {
-		color: var(--color-primary-700);
-		text-decoration-color: currentColor;
-	}
-	:global(.dark) .session-link:hover,
-	:global(.dark) .session-link:focus-visible,
-	:global(.dark) .session-paper-link:hover,
-	:global(.dark) .session-paper-link:focus-visible,
-	:global(.dark) .session-external:hover,
-	:global(.dark) .session-external:focus-visible {
-		color: var(--color-primary-300);
-		text-decoration-color: currentColor;
-	}
+	/* The links here take .link-underline (sessions, papers, people) and
+	   .link-quiet (the external venue and profile links, whose glyph is the
+	   resting cue) from app.css. 67 of this page's 91 links were once
+	   indistinguishable from the text around them at rest, on the surface most
+	   often read on a phone, which is where that treatment started. */
 
 	.session-paper {
 		padding-left: 0.75rem;
 		border-left: 2px solid color-mix(in oklab, var(--color-secondary-500) 55%, transparent);
 	}
 
+	/* Colour comes from `text-strong` in the markup, not from here: a scoped
+	   colour ties with .link-underline's hover on specificity and, loading
+	   later, would win. */
 	.session-paper-link {
 		font-family: var(--font-sans);
 		font-size: var(--text-ui);
 		font-weight: 500;
 		line-height: 1.4;
-		color: var(--ink-strong);
 	}
 
 	.session-lang {
