@@ -1,7 +1,5 @@
-import type { CountryCode, LocalizedString, Presentation } from '$lib/types';
-import { getParticipantPresentations, getPresentationAuthors } from '$lib/data/presentations';
+import type { CountryCode, LocalizedString, PaperListing, PaperSummary } from '$lib/types';
 import { countrySearchTerms } from './country';
-import { abstractVariants } from './i18n';
 
 /** Search/filter state shared by the participants and papers pages. */
 export interface FilterOptions {
@@ -11,11 +9,34 @@ export interface FilterOptions {
 }
 
 /** Case- and diacritic-insensitive normalisation for search matching. */
-function normalize(input: string): string {
+export function normalize(input: string): string {
 	return input
 		.toLowerCase()
 		.normalize('NFD')
 		.replace(/\p{Diacritic}/gu, '');
+}
+
+/**
+ * Bios or abstracts, normalised, by person or paper id — the heavy half of
+ * search, which `full-text.ts` builds once it has been fetched. Until then a
+ * query matches names, affiliations, countries and titles only.
+ */
+export type FullText = ReadonlyMap<string, string>;
+
+/**
+ * Each record's own searchable text, normalised once and kept. It used to be
+ * re-joined and NFD-normalised for every record on every keystroke — bios and
+ * abstracts included — to produce a string that never changes.
+ */
+const haystacks = new WeakMap<object, string>();
+
+function haystack(record: object, fields: () => string[]): string {
+	let text = haystacks.get(record);
+	if (text === undefined) {
+		text = normalize(fields().join(' '));
+		haystacks.set(record, text);
+	}
+	return text;
 }
 
 /**
@@ -40,39 +61,35 @@ export interface FilterablePerson {
 	name: string;
 	affiliation: LocalizedString;
 	country: CountryCode;
-	bio?: LocalizedString;
 }
 
 export function filterPeople<T extends FilterablePerson>(
 	people: T[],
-	{ query, country, language }: FilterOptions
+	{ query, country, language }: FilterOptions,
+	/** A person's papers by id, so organisers match on what they present too. */
+	papersOf: (personId: string) => readonly PaperSummary[],
+	fullText?: FullText
 ): T[] {
 	const q = normalize(query.trim());
 
 	return people.filter((p) => {
 		if (country && p.country !== country) return false;
 
-		// Resolved by id, so it works for anyone in the registry, not only for
-		// people who live in the participants list.
-		const papers = getParticipantPresentations(p);
+		const papers = papersOf(p.id);
 
 		if (language && !papers.some((pp) => pp.language === language)) return false;
 
 		if (!q) return true;
 
-		const haystack = normalize(
-			[
-				p.name,
-				p.affiliation.en,
-				p.affiliation.fr,
-				...countrySearchTerms(p.country),
-				p.bio?.en ?? '',
-				p.bio?.fr ?? '',
-				...papers.flatMap((pp) => [pp.title, ...abstractVariants(pp.abstract)])
-			].join(' ')
-		);
+		const own = haystack(p, () => [
+			p.name,
+			p.affiliation.en,
+			p.affiliation.fr,
+			...countrySearchTerms(p.country),
+			...papers.map((pp) => pp.title)
+		]);
 
-		return haystack.includes(q);
+		return own.includes(q) || (fullText?.get(p.id)?.includes(q) ?? false);
 	});
 }
 
@@ -81,38 +98,28 @@ export function uniquePersonCountries(people: FilterablePerson[]): CountryCode[]
 }
 
 export function filterPresentations(
-	presentations: Presentation[],
-	{ query, country, language }: FilterOptions
-): Presentation[] {
+	papers: PaperListing[],
+	{ query, country, language }: FilterOptions,
+	fullText?: FullText
+): PaperListing[] {
 	const q = normalize(query.trim());
 
-	return presentations.filter((p) => {
+	return papers.filter((p) => {
 		if (language && p.language !== language) return false;
 
-		const authors = getPresentationAuthors(p);
-
-		if (country && !authors.some((a) => a.country === country)) return false;
+		if (country && !p.countries.includes(country)) return false;
 
 		if (!q) return true;
 
-		const haystack = normalize(
-			[
-				p.title,
-				...abstractVariants(p.abstract),
-				...authors.flatMap((a) => [a.name, a.affiliation?.en ?? '', a.affiliation?.fr ?? ''])
-			].join(' ')
-		);
+		const own = haystack(p, () => [
+			p.title,
+			...p.authors.flatMap((a) => [a.name, a.affiliation?.en ?? '', a.affiliation?.fr ?? ''])
+		]);
 
-		return haystack.includes(q);
+		return own.includes(q) || (fullText?.get(p.id)?.includes(q) ?? false);
 	});
 }
 
-export function uniquePaperCountries(presentations: Presentation[]): CountryCode[] {
-	// Co-authors declare no country, so a paper is filed under the countries of
-	// the authors who are actually coming.
-	return uniqueCountries(
-		presentations.flatMap((p) =>
-			getPresentationAuthors(p).flatMap((a) => (a.country ? [a.country] : []))
-		)
-	);
+export function uniquePaperCountries(papers: PaperListing[]): CountryCode[] {
+	return uniqueCountries(papers.flatMap((p) => p.countries));
 }

@@ -163,6 +163,26 @@ export interface PersonRef {
 	affiliation?: LocalizedString;
 }
 
+/** A paper as the papers directory lists it: everything but the full abstract. */
+export interface PaperListing extends PaperSummary {
+	authors: PersonRef[];
+	/** Countries of the authors who are attending — what the country filter matches. */
+	countries: CountryCode[];
+	/** The abstract's opening as plain text, in the language it is written in. */
+	excerpt?: { text: string; lang: 'en' | 'fr' };
+}
+
+/**
+ * A participant as the directory lists them. The bio is left out: the card
+ * does not show it, and search reaches it through the lazily loaded full text.
+ */
+export type ParticipantListing = Omit<Participant, 'bio' | 'bioLanguage'>;
+
+/** A campus on the affiliations map, with the people it pins resolved in place of their ids. */
+export interface MappedAffiliation extends Omit<AffiliationLocation, 'personIds'> {
+	people: PersonRef[];
+}
+
 /** The people and papers one session names, resolved ahead of the programme page. */
 export interface SessionCast {
 	speakers: PersonRef[];

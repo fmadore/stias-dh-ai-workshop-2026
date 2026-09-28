@@ -1,17 +1,15 @@
 <script lang="ts">
-	import type { Presentation } from '$lib/types';
-	import { t, localePath, resolveAbstract } from '$lib/utils/i18n';
-	import { getPresentationAuthors } from '$lib/data/presentations';
+	import type { PaperListing } from '$lib/types';
+	import { t, localePath } from '$lib/utils/i18n';
 	import { getPlacements } from '$lib/utils/placement';
-	import { abstractToPlainText } from '$lib/utils/text';
 
 	let {
 		presentation,
 		/** Passed down from the grid so the map is built once, not once per card. */
 		placements = getPlacements()
-	}: { presentation: Presentation; placements?: ReturnType<typeof getPlacements> } = $props();
+	}: { presentation: PaperListing; placements?: ReturnType<typeof getPlacements> } = $props();
 
-	const authors = $derived(getPresentationAuthors(presentation));
+	const authors = $derived(presentation.authors);
 	const authorNames = $derived(authors.map((a) => a.name).join(', '));
 	// Co-authors carry no affiliation, so the set is built over the authors that
 	// have one rather than over all of them — otherwise the line ends in a
@@ -22,9 +20,9 @@
 		)
 	);
 	// line-clamp rather than truncate(200): character truncation cut mid-word
-	// and left ragged card heights.
-	const abstract = $derived(resolveAbstract(presentation));
-	const excerpt = $derived(abstract ? abstractToPlainText(abstract.text) : '');
+	// and left ragged card heights. The excerpt is still cut, server-side, but
+	// well past what three lines can hold, so the clamp is what the reader sees.
+	const excerpt = $derived(presentation.excerpt);
 	const href = $derived(localePath(`/papers/${presentation.id}`));
 	const placement = $derived(placements.get(presentation.id));
 </script>
@@ -62,8 +60,8 @@
 		{/if}
 	{/if}
 
-	{#if abstract}
-		<p class="text-bio mt-3.5 line-clamp-3" lang={abstract.lang}>{excerpt}</p>
+	{#if excerpt}
+		<p class="text-bio mt-3.5 line-clamp-3" lang={excerpt.lang}>{excerpt.text}</p>
 	{/if}
 </article>
 

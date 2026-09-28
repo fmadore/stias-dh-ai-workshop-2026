@@ -7,30 +7,32 @@
 		Popup as MapLibrePopup
 	} from 'maplibre-gl';
 	import * as m from '$lib/paraglide/messages';
-	import { affiliationLocations } from '$lib/data/affiliations';
-	import { getPeople, type Person } from '$lib/data/people';
-	import type { AffiliationLocation } from '$lib/types';
+	import type { MappedAffiliation } from '$lib/types';
 	import { countryName } from '$lib/utils/country';
 	import { localePath, t } from '$lib/utils/i18n';
 	import { getLocale } from '$lib/paraglide/runtime';
 	import { createLazyMap } from '$lib/utils/map';
 
-	type LocationView = AffiliationLocation & {
+	let {
+		/** The campuses and who works at each, resolved by the page's load. */
+		affiliations
+	}: { affiliations: MappedAffiliation[] } = $props();
+
+	type LocationView = MappedAffiliation & {
 		label: string;
 		place: string;
-		people: Person[];
 	};
 
 	const locale = getLocale();
-	const locations: LocationView[] = affiliationLocations
-		.map((location) => ({
-			...location,
-			label: t(location.name),
-			place: `${t(location.city)}, ${countryName(location.country, locale)}`,
-			people: getPeople(location.personIds)
-		}))
-		.filter((location) => location.people.length > 0)
-		.sort((a, b) => a.label.localeCompare(b.label, locale));
+	const locations: LocationView[] = $derived(
+		affiliations
+			.map((location) => ({
+				...location,
+				label: t(location.name),
+				place: `${t(location.city)}, ${countryName(location.country, locale)}`
+			}))
+			.sort((a, b) => a.label.localeCompare(b.label, locale))
+	);
 
 	let mapHost: HTMLDivElement;
 	let map: MapLibreMap | undefined;

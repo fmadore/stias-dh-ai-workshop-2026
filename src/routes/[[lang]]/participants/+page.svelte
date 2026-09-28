@@ -5,7 +5,6 @@
 	import PageHeader from '$lib/components/layout/PageHeader.svelte';
 	import { organizers } from '$lib/data/organizers';
 	import { pointSud } from '$lib/data/point-sud';
-	import { participants } from '$lib/data/participants';
 	import OrganizerCard from '$lib/components/participants/OrganizerCard.svelte';
 	import PointSudCard from '$lib/components/participants/PointSudCard.svelte';
 	import ParticipantGrid from '$lib/components/participants/ParticipantGrid.svelte';
@@ -15,6 +14,7 @@
 	import AffiliationMap from '$lib/components/participants/AffiliationMap.svelte';
 	import { filterPeople, uniquePersonCountries } from '$lib/utils/filter';
 	import { createUrlFilters } from '$lib/utils/url-filters.svelte';
+	import { fullText, loadFullText } from '$lib/utils/search-text.svelte';
 	import type { DirectoryGrouping } from '$lib/utils/filter-params';
 
 	const groupingOptions: Array<{ value: DirectoryGrouping; label: string }> = $derived([
@@ -28,18 +28,31 @@
 	// rendered raw, so searching a convenor's name reported "1 of 33" with the
 	// convenor visible and unmatched, and the "no results" line rendered below
 	// seven people who were still on screen.
-	const everyone = [...organizers, ...pointSud, ...participants];
-	const countries = uniquePersonCountries(everyone);
-	const filters = createUrlFilters(countries);
+	//
+	// The participants arrive from the server load without their bios, which
+	// the cards never print; search fetches those on demand.
+	let { data } = $props();
 
+	const participants = $derived(data.participants);
+	const everyone = $derived([...organizers, ...pointSud, ...participants]);
+	const countries = $derived(uniquePersonCountries(everyone));
+	const filters = createUrlFilters(() => countries);
+
+	const papersOf = (personId: string) => data.papersByPerson[personId] ?? [];
 	const options = $derived({
 		query: filters.query,
 		country: filters.country,
 		language: filters.language
 	});
-	const shownOrganizers = $derived(filterPeople(organizers, options));
-	const shownPointSud = $derived(filterPeople(pointSud, options));
-	const shownParticipants = $derived(filterPeople(participants, options));
+	const bios = $derived(fullText.current?.people);
+	const shownOrganizers = $derived(filterPeople(organizers, options, papersOf, bios));
+	const shownPointSud = $derived(filterPeople(pointSud, options, papersOf, bios));
+	const shownParticipants = $derived(filterPeople(participants, options, papersOf, bios));
+
+	// A query restored from the URL needs the bios as much as a typed one.
+	$effect(() => {
+		if (filters.query) loadFullText();
+	});
 	const shownCount = $derived(
 		shownOrganizers.length + shownPointSud.length + shownParticipants.length
 	);
@@ -82,6 +95,7 @@
 				bind:query={filters.query}
 				bind:country={filters.country}
 				bind:language={filters.language}
+				onsearchfocus={loadFullText}
 			>
 				{#snippet trailing()}
 					<SegmentedControl
@@ -133,7 +147,11 @@
 						<h2 class="text-section text-strong mb-8">
 							{m.section_participants()}
 						</h2>
-						<ParticipantGrid participants={shownParticipants} grouping={filters.grouping} />
+						<ParticipantGrid
+							participants={shownParticipants}
+							papersByPerson={data.papersByPerson}
+							grouping={filters.grouping}
+						/>
 					</section>
 				{/if}
 			{/if}
@@ -143,7 +161,7 @@
 		     The id is the landing point for the home page's countries figure —
 		     a number whose evidence is this map, not the grid above it. -->
 			<section id="affiliations">
-				<AffiliationMap />
+				<AffiliationMap affiliations={data.affiliations} />
 			</section>
 		</div>
 	</div>

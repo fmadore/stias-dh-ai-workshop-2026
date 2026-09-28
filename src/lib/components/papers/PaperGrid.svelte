@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { Presentation } from '$lib/types';
+	import type { PaperListing } from '$lib/types';
 	import PaperCard from './PaperCard.svelte';
 	import { getPlacements } from '$lib/utils/placement';
 
-	let { presentations }: { presentations: Presentation[] } = $props();
+	let { presentations }: { presentations: PaperListing[] } = $props();
 
 	// Built once for the whole grid rather than walking the programme per card.
 	const placements = $derived(getPlacements());

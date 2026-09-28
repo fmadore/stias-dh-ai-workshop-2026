@@ -1,11 +1,26 @@
-import type { PaperSummary, SessionCast } from '$lib/types';
+import type { Locale } from '$lib/paraglide/runtime';
+import type {
+	MappedAffiliation,
+	PaperListing,
+	PaperSummary,
+	ParticipantListing,
+	SessionCast
+} from '$lib/types';
+import { affiliationLocations } from '$lib/data/affiliations';
 import { programme } from '$lib/data/programme';
 import { organizers } from '$lib/data/organizers';
 import { pointSud } from '$lib/data/point-sud';
 import { participants } from '$lib/data/participants';
 import { getPeople, getPerson, personRef } from '$lib/data/people';
-import { presentations, getPresentation, getPresentationAuthors } from '$lib/data/presentations';
+import {
+	presentations,
+	getParticipantPresentations,
+	getPresentation,
+	getPresentationAuthors
+} from '$lib/data/presentations';
 import { uniquePersonCountries } from '$lib/utils/filter';
+import { resolveAbstract } from '$lib/utils/i18n';
+import { abstractToPlainText, truncate } from '$lib/utils/text';
 
 /**
  * The content registries, reduced at prerender to what a page renders.
@@ -13,8 +28,8 @@ import { uniquePersonCountries } from '$lib/utils/filter';
  * Server-only on purpose (`$lib/server` cannot be imported by client code).
  * The people and presentations registries carry every bio and every abstract —
  * one 123 KB chunk, 37 KB gzipped — and a component that imported them to
- * print a count or a byline shipped all of it. Only the two directories, whose
- * search runs over bios and abstracts, still need the whole thing.
+ * print a count or a byline shipped all of it. The one client consumer left
+ * is directory search, which fetches them on demand (`utils/full-text.ts`).
  */
 
 export function paperSummary({ id, title, language }: PaperSummary): PaperSummary {
@@ -66,4 +81,72 @@ export function sessionCasts(): Record<string, SessionCast> {
 		}
 	}
 	return casts;
+}
+
+/**
+ * How much of an abstract a paper card carries. The card clamps it to three
+ * lines, and the most any card was measured to show in them is 308 characters
+ * (one column, 767px wide, either locale). The margin keeps the clamp — and
+ * its ellipsis — engaged at any width; the rest of the abstract no longer
+ * travels in the page, where it sat inside every card and again in the data.
+ */
+const EXCERPT_LENGTH = 480;
+
+/** The papers directory, sorted by title, with excerpts in the page's locale. */
+export function paperListings(locale: Locale): PaperListing[] {
+	return presentations
+		.map((paper) => {
+			const authors = getPresentationAuthors(paper);
+			const abstract = resolveAbstract(paper, locale);
+			return {
+				...paperSummary(paper),
+				authors: authors.map((author) => personRef(author)),
+				// Co-authors declare no country, so a paper is filed under the
+				// countries of the authors who are actually coming.
+				countries: Array.from(
+					new Set(authors.flatMap((author) => (author.country ? [author.country] : [])))
+				),
+				...(abstract
+					? {
+							excerpt: {
+								text: truncate(abstractToPlainText(abstract.text), EXCERPT_LENGTH),
+								lang: abstract.lang
+							}
+						}
+					: {})
+			};
+		})
+		.sort((a, b) => a.title.localeCompare(b.title, 'en', { sensitivity: 'base' }));
+}
+
+/**
+ * The participants directory: the attendees without their bios, everyone's
+ * papers by person id, and the campuses for the map.
+ */
+export function directoryListings(): {
+	participants: ParticipantListing[];
+	papersByPerson: Record<string, PaperSummary[]>;
+	affiliations: MappedAffiliation[];
+} {
+	// One summary object per paper, shared by all its authors: the page data is
+	// serialised with devalue, which writes a repeated reference once.
+	const summaries = new Map(presentations.map((paper) => [paper.id, paperSummary(paper)]));
+	const papersByPerson: Record<string, PaperSummary[]> = {};
+	for (const person of [...organizers, ...pointSud, ...participants]) {
+		const papers = getParticipantPresentations(person);
+		if (papers.length > 0)
+			papersByPerson[person.id] = papers.map((paper) => summaries.get(paper.id)!);
+	}
+	return {
+		participants: participants.map(
+			({ bio: _bio, bioLanguage: _bioLanguage, ...listing }) => listing
+		),
+		papersByPerson,
+		affiliations: affiliationLocations
+			.map(({ personIds, ...location }) => ({
+				...location,
+				people: getPeople(personIds).map((person) => personRef(person, { withAffiliation: false }))
+			}))
+			.filter((location) => location.people.length > 0)
+	};
 }

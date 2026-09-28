@@ -3,26 +3,36 @@
 	import { siteConfig } from '$lib/data/site-config';
 	import SEO from '$lib/components/SEO.svelte';
 	import PageHeader from '$lib/components/layout/PageHeader.svelte';
-	import { presentations } from '$lib/data/presentations';
 	import PaperGrid from '$lib/components/papers/PaperGrid.svelte';
 	import FilterBar from '$lib/components/shared/FilterBar.svelte';
 	import NoResults from '$lib/components/shared/NoResults.svelte';
 	import { filterPresentations, uniquePaperCountries } from '$lib/utils/filter';
 	import { createUrlFilters } from '$lib/utils/url-filters.svelte';
+	import { fullText, loadFullText } from '$lib/utils/search-text.svelte';
 
-	const sorted = [...presentations].sort((a, b) =>
-		a.title.localeCompare(b.title, undefined, { sensitivity: 'base' })
-	);
+	let { data } = $props();
 
-	const countries = uniquePaperCountries(sorted);
-	const filters = createUrlFilters(countries);
+	// Sorted by title and trimmed to what a card shows, by the server load.
+	const sorted = $derived(data.papers);
+
+	const countries = $derived(uniquePaperCountries(sorted));
+	const filters = createUrlFilters(() => countries);
 	const filtered = $derived(
-		filterPresentations(sorted, {
-			query: filters.query,
-			country: filters.country,
-			language: filters.language
-		})
+		filterPresentations(
+			sorted,
+			{
+				query: filters.query,
+				country: filters.country,
+				language: filters.language
+			},
+			fullText.current?.papers
+		)
 	);
+
+	// A query restored from the URL needs the abstracts as much as a typed one.
+	$effect(() => {
+		if (filters.query) loadFullText();
+	});
 
 	function clearFilters() {
 		filters.reset();
@@ -56,6 +66,7 @@
 					bind:query={filters.query}
 					bind:country={filters.country}
 					bind:language={filters.language}
+					onsearchfocus={loadFullText}
 				/>
 			</div>
 			{#if filtered.length > 0}

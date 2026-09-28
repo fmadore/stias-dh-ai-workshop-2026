@@ -37,6 +37,8 @@
 		language?: 'en' | 'fr' | null;
 		/** Extra field for the same row — the participants grouping switch. */
 		trailing?: Snippet;
+		/** The reader is about to search: the page's cue to fetch its full text. */
+		onsearchfocus?: () => void;
 	};
 
 	let {
@@ -48,7 +50,8 @@
 		query = $bindable(''),
 		country = $bindable(null),
 		language = $bindable(null),
-		trailing
+		trailing,
+		onsearchfocus
 	}: Props = $props();
 
 	const uid = $props.id();
@@ -85,6 +88,7 @@
 					id="{uid}-search"
 					type="search"
 					bind:value={query}
+					onfocus={onsearchfocus}
 					placeholder={searchPlaceholder}
 					class="filter-input"
 				/>

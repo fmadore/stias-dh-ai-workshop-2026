@@ -108,6 +108,38 @@ test('paper filters survive reload, locale switching and clearing', async ({ pag
 	await expect(page.locator('.paper-title-link')).toHaveCount(25);
 });
 
+test('search reaches abstracts and bios, fetched only once someone searches', async ({ page }) => {
+	// The full text is most of the directories' weight, so it is loaded on
+	// demand. Scripts are identified by content, not by hashed file name: one
+	// phrase from a bio, which no script these pages load up front may carry.
+	// Their bodies are fetched separately because a modulepreload response
+	// does not reliably expose its own.
+	const scripts = new Set<string>();
+	page.on('request', (request) => {
+		if (request.url().endsWith('.js')) scripts.add(request.url());
+	});
+	const loadedBios = async () => {
+		for (const url of scripts) {
+			if ((await (await page.request.get(url)).text()).includes('GERiiCO')) return true;
+		}
+		return false;
+	};
+
+	await page.goto(`${BASE}/papers`);
+	await expect(page.locator('.paper-title-link')).toHaveCount(25);
+	await page.waitForLoadState('networkidle');
+	expect(await loadedBios(), 'bios and abstracts fetched before anyone searched').toBe(false);
+
+	// A phrase from inside an abstract, in no title, author or affiliation.
+	await page.getByRole('searchbox', { name: 'Search' }).fill('lingua africa');
+	await expect(page.locator('.filter-count')).toHaveText('1 of 25 papers');
+	expect(await loadedBios()).toBe(true);
+
+	// A query arriving in the URL has to fetch it too; this one is in a bio.
+	await page.goto(`${BASE}/participants?q=geriico`);
+	await expect(page.locator('.filter-count')).toHaveText('1 of 39 people');
+});
+
 test('directory filters and grouping restore from a shared URL', async ({ page }) => {
 	await page.goto(`${BASE}/participants?q=Tajuddeen&group=country`);
 	await expect(page.getByRole('searchbox')).toHaveValue('Tajuddeen');
