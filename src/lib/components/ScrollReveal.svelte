@@ -50,22 +50,36 @@
 	const ROOT_MARGIN = '100000px 0px 0px 0px';
 
 	$effect(() => {
-		if (!element) return;
+		if (!element || !('IntersectionObserver' in window)) return;
+		const target = element;
+		let observer: IntersectionObserver | undefined;
 
-		const observer = new IntersectionObserver(
-			(entries) => {
-				for (const entry of entries) {
-					if (!entry.isIntersecting) continue;
-					entry.target.classList.add('visible');
-					observer.unobserve(entry.target);
-				}
-			},
-			{ threshold: THRESHOLD, rootMargin: ROOT_MARGIN }
-		);
+		try {
+			observer = new IntersectionObserver(
+				(entries) => {
+					for (const entry of entries) {
+						if (!entry.isIntersecting) continue;
+						entry.target.classList.add('visible');
+						observer?.unobserve(entry.target);
+					}
+				},
+				{ threshold: THRESHOLD, rootMargin: ROOT_MARGIN }
+			);
 
-		observer.observe(element);
+			observer.observe(target);
+			// Only a working observer may hide content. Static HTML stays readable
+			// when the application bundle fails to arrive or initialization fails.
+			target.classList.add('reveal-pending');
+		} catch {
+			observer?.disconnect();
+			target.classList.remove('reveal-pending');
+			return;
+		}
 
-		return () => observer.disconnect();
+		return () => {
+			observer?.disconnect();
+			target.classList.remove('reveal-pending');
+		};
 	});
 </script>
 

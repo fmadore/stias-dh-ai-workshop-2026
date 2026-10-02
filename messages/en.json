@@ -45,7 +45,7 @@
   "participants_filter_no_results": "No one matches these filters.",
   "filter_clear": "Clear filters",
   "paper_back_to_papers": "Back to papers",
-  "paper_presented_by": "Presented by",
+  "paper_presented_by": "Authors",
   "paper_abstract": "Abstract",
   "format_value": "Hybrid workshop",
   "logistics_label": "Logistics",
@@ -185,5 +185,12 @@
   "cfp_closed_notice": "The call for papers closed on {date}. This page keeps the call as it was published; the contributions selected from it are now in the programme.",
   "cfp_closed_cta": "See the papers",
   "venue_page_subtitle": "The Stellenbosch Institute for Advanced Study, and what the Point Sud programme covers for participants travelling there.",
-  "footer_licence": "Content under CC BY 4.0; paper titles, abstracts and biographies remain their authors'."
+  "footer_licence": "Content under CC BY 4.0; paper titles, abstracts and biographies remain their authors'.",
+  "paper_cite_heading": "Cite this presentation",
+  "paper_cite_description": "Download a citation for this workshop presentation.",
+  "paper_download_bibtex": "Download BibTeX",
+  "paper_download_ris": "Download RIS",
+  "filter_search_loading": "Loading full search. Results currently cover names, affiliations and titles.",
+  "filter_search_partial": "Full search is unavailable. Results cover names, affiliations and titles only.",
+  "filter_search_retry": "Retry full search"
 }

@@ -20,7 +20,7 @@
 		<div class="flex flex-1 flex-col items-center gap-5 sm:flex-row sm:items-stretch">
 			<div class="flex-shrink-0 self-center sm:self-start">
 				<!-- Organizers render at the top of the page, so load eagerly. -->
-				<Avatar name={organizer.name} image={organizer.image} loading="eager" />
+				<Avatar name={organizer.name} image={organizer.image} loading="eager" decorative />
 			</div>
 
 			<!-- min-w-0: a flex child defaults to min-width:auto, so without this the

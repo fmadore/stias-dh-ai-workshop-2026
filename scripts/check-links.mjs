@@ -5,6 +5,9 @@ import path from 'node:path';
 const BUILD_DIR = path.resolve(process.argv[2] ?? 'build');
 const DEPLOY_BASE = '/stias-dh-ai-workshop-2026';
 const SITE_ORIGIN = 'https://fmadore.github.io';
+// Same-origin links to another site need an explicit exception. Keep them
+// absolute: a bare "/" is almost always a forgotten project deployment base.
+const EXTERNAL_OWNER_URLS = new Set(['https://fmadore.github.io/']);
 const failures = new Map();
 
 async function walk(directory) {
@@ -31,11 +34,7 @@ function decodeEntities(value) {
 function publicUrl(value, sourceUrl) {
 	try {
 		const url = new URL(decodeEntities(value), sourceUrl);
-		if (
-			url.origin !== SITE_ORIGIN ||
-			(url.pathname !== DEPLOY_BASE && !url.pathname.startsWith(`${DEPLOY_BASE}/`))
-		)
-			return null;
+		if (url.origin !== SITE_ORIGIN) return null;
 		return url;
 	} catch {
 		return null;
@@ -55,11 +54,38 @@ function resolveFile(route, files) {
 	return candidates.map((file) => path.resolve(BUILD_DIR, file)).find((file) => files.has(file));
 }
 
-function references(source) {
+function references(source, filename) {
 	const values = [];
-	for (const match of source.matchAll(/\b(?:href|src)=(?:"([^"]+)"|'([^']+)')/gi))
+	const urlProperties = new Set(['url', 'contentUrl', 'embedUrl', 'thumbnailUrl', 'image']);
+	function structuredReferences(value, key = '') {
+		if (typeof value === 'string' && urlProperties.has(key)) values.push(value);
+		else if (Array.isArray(value)) {
+			for (const item of value) structuredReferences(item, key);
+		} else if (value && typeof value === 'object') {
+			for (const [property, item] of Object.entries(value)) {
+				// An entity identifier is not a navigation link or a promised DOM anchor.
+				if (property !== '@id') structuredReferences(item, property);
+			}
+		}
+	}
+	const markup = source.replace(
+		/<script\b([^>]*)>([\s\S]*?)<\/script>/gi,
+		(_script, attributes, body) => {
+			if (/\btype=(?:"application\/ld\+json"|'application\/ld\+json')/i.test(attributes)) {
+				try {
+					structuredReferences(JSON.parse(body));
+				} catch {
+					failures.set(`${filename} (invalid JSON-LD)`, true);
+				}
+			}
+			// Svelte's hydration payload also contains these identifiers and source
+			// text. Only its actual script src is a link, not every string in its code.
+			return `<script${attributes}></script>`;
+		}
+	);
+	for (const match of markup.matchAll(/\b(?:href|src)=(?:"([^"]+)"|'([^']+)')/gi))
 		values.push(match[1] ?? match[2]);
-	for (const match of source.matchAll(
+	for (const match of markup.matchAll(
 		/https:\/\/fmadore\.github\.io\/stias-dh-ai-workshop-2026[^"<>\s\\]*/g
 	))
 		values.push(match[0]);
@@ -89,9 +115,18 @@ for (const [file, source] of documents) {
 	const relative = path.relative(BUILD_DIR, file).split(path.sep).join('/');
 	const route = relative.replace(/(?:^|\/)index\.html$/, '/').replace(/\.html$/, '');
 	const sourceUrl = `${SITE_ORIGIN}${DEPLOY_BASE}/${route.replace(/^\//, '')}`;
-	for (const reference of references(source)) {
+	for (const reference of references(source, relative)) {
 		const url = publicUrl(reference, sourceUrl);
 		if (!url) continue;
+		if (url.pathname !== DEPLOY_BASE && !url.pathname.startsWith(`${DEPLOY_BASE}/`)) {
+			if (
+				reference.startsWith(`${SITE_ORIGIN}/`) &&
+				EXTERNAL_OWNER_URLS.has(`${url.origin}${url.pathname}`)
+			)
+				continue;
+			failures.set(`${reference} -> ${relative} (missing deployment base ${DEPLOY_BASE})`, true);
+			continue;
+		}
 		try {
 			const target = resolveFile(
 				decodeURIComponent(url.pathname.slice(DEPLOY_BASE.length) || '/'),

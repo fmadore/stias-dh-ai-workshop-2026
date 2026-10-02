@@ -15,34 +15,28 @@
 	// abstract and bio out of this route's client bundle.
 	const placement = $derived(data.placement);
 	const siblings = $derived(data.siblings);
-
-	const schema = $derived({
-		'@context': 'https://schema.org',
-		'@type': 'ScholarlyArticle',
-		headline: presentation.title,
-		name: presentation.title,
-		abstract: data.abstractText || undefined,
-		inLanguage: presentation.language,
-		isPartOf: {
-			'@type': 'Event',
-			name: siteConfig.shortTitle,
-			startDate: siteConfig.dates.start,
-			endDate: siteConfig.dates.end
-		},
-		author: authors.map((a) => ({
-			'@type': 'Person',
-			name: a.name,
-			...(a.affiliation ? { affiliation: { '@type': 'Organization', name: t(a.affiliation) } } : {})
-		}))
-	});
 </script>
 
 <SEO
 	title="{presentation.title} | {siteConfig.shortTitle}"
 	description={data.description}
-	type="article"
-	additionalSchema={schema}
+	additionalSchema={data.citationSchema}
 />
+
+<svelte:head>
+	<link
+		rel="alternate"
+		type="application/x-bibtex"
+		href={data.citationDownloads.bibtex}
+		title="BibTeX"
+	/>
+	<link
+		rel="alternate"
+		type="application/x-research-info-systems"
+		href={data.citationDownloads.ris}
+		title="RIS"
+	/>
+</svelte:head>
 
 <PageHeader
 	title={presentation.title}
@@ -113,6 +107,25 @@
 					</article>
 				</section>
 			{/if}
+
+			<section aria-labelledby="cite-presentation">
+				<h2 id="cite-presentation" class="text-eyebrow mb-3">{m.paper_cite_heading()}</h2>
+				<p class="text-muted text-sm">{m.paper_cite_description()}</p>
+				<div class="mt-3 flex flex-wrap gap-x-6 gap-y-2">
+					<a
+						href={data.citationDownloads.bibtex}
+						download
+						class="link-underline inline-flex min-h-11 items-center text-sm"
+						>{m.paper_download_bibtex()}</a
+					>
+					<a
+						href={data.citationDownloads.ris}
+						download
+						class="link-underline inline-flex min-h-11 items-center text-sm"
+						>{m.paper_download_ris()}</a
+					>
+				</div>
+			</section>
 
 			{#if placement}
 				<section>

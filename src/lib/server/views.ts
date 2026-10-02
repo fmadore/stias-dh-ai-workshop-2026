@@ -28,8 +28,8 @@ import { abstractToPlainText, truncate } from '$lib/utils/text';
  * Server-only on purpose (`$lib/server` cannot be imported by client code).
  * The people and presentations registries carry every bio and every abstract —
  * one 123 KB chunk, 37 KB gzipped — and a component that imported them to
- * print a count or a byline shipped all of it. The one client consumer left
- * is directory search, which fetches them on demand (`utils/full-text.ts`).
+ * print a count or a byline shipped all of it. Directory search now fetches a
+ * static text index on demand; these registries stay on the build side.
  */
 
 export function paperSummary({ id, title, language }: PaperSummary): PaperSummary {

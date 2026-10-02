@@ -5,11 +5,8 @@
 	import { localizedPath, localeFromPath } from '$lib/utils/localized-paths';
 	import { ArrowLeft } from '@lucide/svelte';
 
-	// This route sits outside [[lang]], so no layout load has set the locale for
-	// it. Messages take an explicit one rather than reading the global, which on
-	// a cold load of a bad French URL still held the base locale — and after a
-	// client navigation held the previous page's, which is how the document
-	// title and the heading ended up in different languages.
+	// Error routes have no lang parameter. Resolve their messages and recovery
+	// link from the URL, just as the root layout does for the shared shell.
 	const locale = $derived(localeFromPath(page.url.pathname, base));
 	const homeHref = $derived(localizedPath('/', locale, base));
 </script>

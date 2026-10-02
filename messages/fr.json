@@ -45,7 +45,7 @@
   "participants_filter_no_results": "Personne ne correspond à ces filtres.",
   "filter_clear": "Réinitialiser les filtres",
   "paper_back_to_papers": "Retour aux communications",
-  "paper_presented_by": "Présenté par",
+  "paper_presented_by": "Auteur·es",
   "paper_abstract": "Résumé",
   "format_value": "Atelier hybride",
   "logistics_label": "Logistique",
@@ -185,5 +185,12 @@
   "cfp_closed_notice": "L’appel à contributions s’est clôturé le {date}. Cette page conserve l’appel tel qu’il a été publié\u202f; les contributions retenues figurent désormais au programme.",
   "cfp_closed_cta": "Voir les communications",
   "venue_page_subtitle": "Le Stellenbosch Institute for Advanced Study, et ce que le programme Point Sud prend en charge pour les participant·es qui s’y rendent.",
-  "footer_licence": "Contenu sous licence CC BY 4.0\u202f; les titres, résumés et notices biographiques restent la propriété de leurs auteur·es."
+  "footer_licence": "Contenu sous licence CC BY 4.0\u202f; les titres, résumés et notices biographiques restent la propriété de leurs auteur·es.",
+  "paper_cite_heading": "Citer cette communication",
+  "paper_cite_description": "Télécharger une référence bibliographique pour cette communication à l’atelier.",
+  "paper_download_bibtex": "Télécharger le fichier BibTeX",
+  "paper_download_ris": "Télécharger le fichier RIS",
+  "filter_search_loading": "Chargement de la recherche complète. Les résultats portent actuellement sur les noms, les affiliations et les titres.",
+  "filter_search_partial": "La recherche complète est indisponible. Les résultats portent uniquement sur les noms, les affiliations et les titres.",
+  "filter_search_retry": "Réessayer la recherche complète"
 }

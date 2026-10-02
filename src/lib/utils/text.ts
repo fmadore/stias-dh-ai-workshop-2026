@@ -1,4 +1,11 @@
 /** Plain-text helpers shared by cards and SEO descriptions (no heavy deps). */
+import type { Presentation } from '$lib/types';
+
+/** All supplied language variants, without depending on the current UI locale. */
+export function abstractVariants(abstract: Presentation['abstract']): string[] {
+	if (!abstract) return [];
+	return typeof abstract === 'string' ? [abstract] : [abstract.en, abstract.fr];
+}
 
 export function getInitials(name: string): string {
 	return name

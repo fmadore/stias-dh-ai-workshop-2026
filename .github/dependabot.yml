@@ -2,7 +2,7 @@
 # Docs: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 #
 # Noise-reduction strategy:
-#   * MINOR + PATCH updates are bundled into a single PR per ecosystem.
+#   * MINOR + PATCH updates are bundled per ecosystem, except MapLibre.
 #   * npm MAJOR bumps stay ungrouped so each lands in its own PR for review
 #     (they can carry breaking changes).
 #   * GitHub Actions are pinned to immutable release SHAs; Dependabot updates
@@ -32,10 +32,20 @@ updates:
       - dependency-name: 'typescript'
         versions: ['7.x']
     groups:
-      # All low-risk updates in one PR; major bumps come separately.
+      # Renderer updates need their own bundle-budget review. They must not
+      # hold up unrelated fixes when upstream adds substantial bundle weight.
+      maplibre:
+        patterns:
+          - 'maplibre-gl'
+        update-types:
+          - 'minor'
+          - 'patch'
+      # Other low-risk updates in one PR; major bumps come separately.
       npm-minor-and-patch:
         patterns:
           - '*'
+        exclude-patterns:
+          - 'maplibre-gl'
         update-types:
           - 'minor'
           - 'patch'

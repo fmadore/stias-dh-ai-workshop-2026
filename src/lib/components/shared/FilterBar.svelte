@@ -3,6 +3,7 @@
 	import { getLocale } from '$lib/paraglide/runtime';
 	import { countryName, sortCountriesByName } from '$lib/utils/country';
 	import type { CountryCode } from '$lib/types';
+	import type { SearchStatus } from '$lib/utils/search-text.svelte';
 	import type { Snippet } from 'svelte';
 	import SegmentedControl from './SegmentedControl.svelte';
 	import { Search, X } from '@lucide/svelte';
@@ -39,6 +40,8 @@
 		trailing?: Snippet;
 		/** The reader is about to search: the page's cue to fetch its full text. */
 		onsearchfocus?: () => void;
+		searchStatus?: SearchStatus;
+		onsearchretry?: () => void;
 	};
 
 	let {
@@ -51,7 +54,9 @@
 		country = $bindable(null),
 		language = $bindable(null),
 		trailing,
-		onsearchfocus
+		onsearchfocus,
+		searchStatus = 'ready',
+		onsearchretry
 	}: Props = $props();
 
 	const uid = $props.id();
@@ -67,6 +72,7 @@
 	const sortedCountries = $derived(sortCountriesByName(countries, getLocale()));
 
 	const hasActiveFilter = $derived(query.trim() !== '' || country !== null || language !== null);
+	const partialSearch = $derived(query.trim() !== '' && searchStatus !== 'ready');
 
 	function reset() {
 		query = '';
@@ -114,13 +120,25 @@
 		<span class="filter-count" role="status" aria-live="polite" aria-atomic="true">
 			{countLabel}
 		</span>
-		{#if hasActiveFilter && hasResults}
+		{#if hasActiveFilter && (hasResults || partialSearch)}
 			<button type="button" class="filter-reset" onclick={reset}>
 				<X size={14} strokeWidth={1.75} aria-hidden="true" />
 				{m.filter_clear()}
 			</button>
 		{/if}
 	</div>
+	{#if partialSearch}
+		<div class="search-status text-muted text-sm" role="status" aria-live="polite">
+			<p>
+				{searchStatus === 'error' ? m.filter_search_partial() : m.filter_search_loading()}
+			</p>
+			{#if searchStatus === 'error' && onsearchretry}
+				<button type="button" class="btn btn-secondary btn-sm mt-2" onclick={onsearchretry}>
+					{m.filter_search_retry()}
+				</button>
+			{/if}
+		</div>
+	{/if}
 </div>
 
 <style>

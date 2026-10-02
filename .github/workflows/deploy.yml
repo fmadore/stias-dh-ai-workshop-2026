@@ -17,7 +17,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -46,14 +46,42 @@ jobs:
       - name: Audit production dependencies
         run: npm audit --omit=dev --audit-level=moderate
 
+      # Include build tooling in maintenance triage. The production gate above
+      # remains blocking; this broader report can include development-only
+      # advisories with no fix or no path into the static site.
+      - name: Report all dependency advisories for triage
+        continue-on-error: true
+        shell: bash
+        run: npm audit --audit-level=low --json | tee dependency-audit.json
+
       - name: Build
         run: npm run build
 
-      - name: Install browser for end-to-end tests
-        run: npx playwright install --with-deps chromium
+      - name: Install browsers for end-to-end tests
+        run: npx playwright install --with-deps chromium firefox webkit
 
       - name: End-to-end and accessibility tests
         run: npm run test:e2e
+
+      - name: Preserve browser failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: browser-failure-diagnostics
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Preserve dependency audit report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: dependency-audit
+          path: dependency-audit.json
+          if-no-files-found: ignore
+          retention-days: 14
 
       - name: Upload artifact
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'

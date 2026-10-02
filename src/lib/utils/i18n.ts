@@ -34,10 +34,7 @@ export function resolveAbstract(
  * Every text an abstract carries, for search haystacks: a reader typing a
  * French word should reach a bilingual abstract from the English page too.
  */
-export function abstractVariants(abstract: Presentation['abstract']): string[] {
-	if (!abstract) return [];
-	return typeof abstract === 'string' ? [abstract] : [abstract.en, abstract.fr];
-}
+export { abstractVariants } from './text';
 
 /**
  * Prerender entries for the optional `[[lang]]` segment — every localized

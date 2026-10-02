@@ -188,7 +188,8 @@
 			onReady() {
 				mapReady = true;
 				mapFailed = false;
-				showAllPlaces(false);
+				if (selectedId) selectPlace(selectedId);
+				else showAllPlaces(false);
 			},
 			onFail() {
 				mapFailed = true;

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PointSudRepresentative } from '$lib/types';
 	import { t, localePath } from '$lib/utils/i18n';
-	import AvatarSmall from '$lib/components/shared/AvatarSmall.svelte';
+	import Avatar from '$lib/components/shared/Avatar.svelte';
 	import PersonLinks from '$lib/components/shared/PersonLinks.svelte';
 	import { getLocale } from '$lib/paraglide/runtime';
 	import { countryName } from '$lib/utils/country';
@@ -16,7 +16,7 @@
 -->
 <article class="card flex items-start gap-4 p-5">
 	<div class="flex-shrink-0">
-		<AvatarSmall name={person.name} image={person.image} />
+		<Avatar name={person.name} image={person.image} size="small" decorative />
 	</div>
 
 	<div class="min-w-0 flex-1">

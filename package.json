@@ -7,61 +7,70 @@
     "predev": "npm run downloads",
     "build": "vite build",
     "prebuild": "npm run downloads",
-    "postbuild": "tsx scripts/check-data.ts && node scripts/smoke-test.mjs && node scripts/check-links.mjs && node scripts/check-bundle-size.mjs",
+    "postbuild": "node --import tsx scripts/check-data.ts && node scripts/smoke-test.mjs && node scripts/check-links.mjs && node scripts/check-bundle-size.mjs",
     "preview": "vite preview",
     "images": "node scripts/optimize-images.mjs",
-    "og": "tsx scripts/generate-og.ts",
-    "downloads": "tsx scripts/generate-cfp-downloads.ts && tsx scripts/generate-programme-ics.ts",
+    "og": "node --import tsx scripts/generate-og.ts",
+    "downloads": "node --import tsx scripts/generate-cfp-downloads.ts && node --import tsx scripts/generate-programme-ics.ts",
     "messages": "paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide --strategy globalVariable baseLocale",
     "prepare": "npm run messages && svelte-kit sync",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json && npm run check:scripts",
     "test": "npm run test:unit && npm run build && npm run test:e2e",
-    "test:unit": "svelte-kit sync && tsx --test tests/*.test.ts",
-    "test:e2e": "playwright test",
+    "test:unit": "svelte-kit sync && node --import tsx --test tests/*.test.ts",
+    "test:e2e": "playwright test --project=chromium --project=firefox-smoke --project=webkit-smoke",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "check:scripts": "tsc --noEmit --project tsconfig.scripts.json",
+    "test:e2e:live": "playwright test --project=live-maps"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@eslint/js": "^10.0.1",
-    "@inlang/paraglide-js": "^2.25.0",
-    "@inlang/plugin-message-format": "^4.4.3",
+    "@inlang/paraglide-js": "^2.25.4",
+    "@inlang/plugin-message-format": "^4.4.4",
     "@pdf-lib/fontkit": "^1.1.1",
-    "@playwright/test": "^1.62.1",
+    "@playwright/test": "^1.63.0",
     "@sveltejs/adapter-static": "^3.0.10",
     "@sveltejs/kit": "^2.70.3",
-    "@sveltejs/vite-plugin-svelte": "^7.3.0",
+    "@sveltejs/vite-plugin-svelte": "^7.3.1",
     "@tailwindcss/vite": "^4.3.3",
-    "@types/node": "^26.4.0",
-    "eslint": "^10.9.1",
+    "@types/node": "^24.19.1",
+    "eslint": "^10.11.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.23.0",
-    "globals": "^17.11.0",
+    "globals": "^17.13.0",
+    "ical.js": "^2.2.1",
     "pdf-lib": "^1.17.1",
-    "prettier": "^3.9.6",
+    "prettier": "^3.9.9",
     "prettier-plugin-svelte": "^4.1.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
-    "sharp": "^0.35.4",
-    "svelte": "^5.57.0",
+    "sharp": "^0.35.5",
+    "svelte": "^5.57.1",
     "svelte-check": "^4.7.6",
-    "tailwindcss": "^4.2.1",
-    "tsx": "^4.23.12",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.15",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.68.0",
-    "vite": "^8.2.2"
+    "typescript-eslint": "^8.71.0",
+    "vite": "^8.3.2"
   },
   "dependencies": {
     "@fontsource/instrument-serif": "^5.3.0",
     "@fontsource/outfit": "^5.3.0",
-    "@lucide/svelte": "^1.35.0",
-    "maplibre-gl": "^6.6.0",
-    "marked": "^18.0.11"
+    "@lucide/svelte": "^1.49.0",
+    "maplibre-gl": "6.6.0",
+    "marked": "^18.0.14"
   },
   "type": "module",
   "overrides": {
     "@tailwindcss/vite": {
       "vite": "$vite"
+    },
+    "@sveltejs/kit": {
+      "cookie": "0.7.2"
     }
+  },
+  "engines": {
+    "node": ">=24 <25"
   }
 }

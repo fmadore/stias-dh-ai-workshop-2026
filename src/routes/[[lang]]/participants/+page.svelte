@@ -14,7 +14,7 @@
 	import AffiliationMap from '$lib/components/participants/AffiliationMap.svelte';
 	import { filterPeople, uniquePersonCountries } from '$lib/utils/filter';
 	import { createUrlFilters } from '$lib/utils/url-filters.svelte';
-	import { fullText, loadFullText } from '$lib/utils/search-text.svelte';
+	import { fullText, loadFullText, retryFullText } from '$lib/utils/search-text.svelte';
 	import type { DirectoryGrouping } from '$lib/utils/filter-params';
 
 	const groupingOptions: Array<{ value: DirectoryGrouping; label: string }> = $derived([
@@ -37,6 +37,7 @@
 	const everyone = $derived([...organizers, ...pointSud, ...participants]);
 	const countries = $derived(uniquePersonCountries(everyone));
 	const filters = createUrlFilters(() => countries);
+	const partialSearch = $derived(filters.query.trim() !== '' && fullText.status !== 'ready');
 
 	const papersOf = (personId: string) => data.papersByPerson[personId] ?? [];
 	const options = $derived({
@@ -96,6 +97,8 @@
 				bind:country={filters.country}
 				bind:language={filters.language}
 				onsearchfocus={loadFullText}
+				searchStatus={fullText.status}
+				onsearchretry={retryFullText}
 			>
 				{#snippet trailing()}
 					<SegmentedControl
@@ -108,7 +111,7 @@
 		</div>
 
 		<div class="block-flow">
-			{#if shownCount === 0}
+			{#if shownCount === 0 && !partialSearch}
 				<NoResults message={m.participants_filter_no_results()} onclear={clearFilters} />
 			{:else}
 				<!-- The convenors keep the editorial two-column card: four people whose

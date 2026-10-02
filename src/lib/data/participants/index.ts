@@ -5,6 +5,7 @@ const modules = import.meta.glob<Participant>(['./*.ts', '!./index.ts'], {
 	import: 'default'
 });
 
-export const participants: Participant[] = Object.values(modules).sort((a, b) =>
-	a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+export const participants: Participant[] = Object.values(modules).sort(
+	(a, b) =>
+		a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }) || a.id.localeCompare(b.id, 'en')
 );
