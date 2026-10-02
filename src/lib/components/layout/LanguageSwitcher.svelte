@@ -2,12 +2,12 @@
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
-	import { getLocale, locales, baseLocale } from '$lib/paraglide/runtime';
+	import { locales, baseLocale } from '$lib/paraglide/runtime';
 	import * as m from '$lib/paraglide/messages';
-	import { switchLocalePath } from '$lib/utils/localized-paths';
+	import { localeFromPath, switchLocalePath } from '$lib/utils/localized-paths';
 	import { Languages } from '@lucide/svelte';
 
-	const currentLocale = $derived(getLocale());
+	const currentLocale = $derived(localeFromPath(page.url.pathname, base));
 	let mounted = $state(false);
 	onMount(() => {
 		mounted = true;

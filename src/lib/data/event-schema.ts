@@ -15,6 +15,7 @@ export function buildEventSchema(ogImage: string): object {
 	return {
 		'@context': 'https://schema.org',
 		'@type': 'Event',
+		'@id': `${siteConfig.url}#event`,
 		name: t(siteConfig.title),
 		description: t(siteConfig.description),
 		// The same instants the site's own clock uses (`siteConfig.hours`). This

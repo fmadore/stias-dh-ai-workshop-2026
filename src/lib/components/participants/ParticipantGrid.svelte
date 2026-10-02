@@ -22,10 +22,10 @@
 	// Built once for the whole grid rather than walking the programme per card.
 	const placements = $derived(getPlacements());
 
-	/** Surname initial — the list is already sorted by it upstream. */
+	/** Match the display-name sort without guessing how a person's name is structured. */
 	function initial(participant: ParticipantListing): string {
-		const surname = participant.name.trim().split(/\s+/).at(-1) ?? participant.name;
-		return surname
+		return participant.name
+			.trim()
 			.normalize('NFD')
 			.replace(/\p{Diacritic}/gu, '')
 			.charAt(0)
@@ -45,7 +45,7 @@
 		}
 		return Object.entries(keyed)
 			.map(([key, items]) => ({ key, items }))
-			.sort((a, b) => a.key.localeCompare(b.key));
+			.sort((a, b) => a.key.localeCompare(b.key, getLocale()));
 	});
 </script>
 

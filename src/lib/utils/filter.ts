@@ -1,5 +1,12 @@
-import type { CountryCode, LocalizedString, PaperListing, PaperSummary } from '$lib/types';
+import type {
+	CountryCode,
+	LocalizedString,
+	PaperListing,
+	PaperSummary,
+	Presentation
+} from '$lib/types';
 import { countrySearchTerms } from './country';
+import { abstractToPlainText, abstractVariants } from './text';
 
 /** Search/filter state shared by the participants and papers pages. */
 export interface FilterOptions {
@@ -13,7 +20,14 @@ export function normalize(input: string): string {
 	return input
 		.toLowerCase()
 		.normalize('NFD')
-		.replace(/\p{Diacritic}/gu, '');
+		.replace(/\p{Diacritic}/gu, '')
+		.replace(/\s+/g, ' ')
+		.trim();
+}
+
+/** Search what readers see, including phrases across Markdown boundaries. */
+export function abstractSearchText(abstract: Presentation['abstract']): string {
+	return normalize(abstractVariants(abstract).map(abstractToPlainText).join(' '));
 }
 
 /**

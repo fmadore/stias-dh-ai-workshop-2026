@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "types": ["node", "vite/client"]
+  },
+  "include": ["scripts/**/*.ts", "tests/**/*.ts", "*.config.ts", "src/app.d.ts"],
+  "exclude": ["node_modules", "build", ".svelte-kit"]
+}

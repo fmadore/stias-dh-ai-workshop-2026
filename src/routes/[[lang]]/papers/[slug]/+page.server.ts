@@ -4,7 +4,10 @@ import type { EntryGenerator, PageServerLoad } from './$types';
 import { presentations, getPresentation, getPresentationAuthors } from '$lib/data/presentations';
 import { personRef } from '$lib/data/people';
 import { paperRedirects } from '$lib/data/redirects';
+import { programme } from '$lib/data/programme';
+import { siteConfig } from '$lib/data/site-config';
 import { paperSummary } from '$lib/server/views';
+import { createPresentationCitation, presentationSchema } from '$lib/utils/citations';
 import { langEntries, resolveAbstract } from '$lib/utils/i18n';
 import { localizedPath } from '$lib/utils/localized-paths';
 import { renderAbstract } from '$lib/utils/markdown';
@@ -48,14 +51,20 @@ export const load: PageServerLoad = ({ params }) => {
 	const abstract = resolveAbstract(presentation, locale);
 	const abstractText = abstract ? abstractToPlainText(abstract.text) : '';
 	const placement = getPlacements(locale).get(presentation.id);
+	const authors = getPresentationAuthors(presentation);
+	const citation = createPresentationCitation(presentation, authors, programme, siteConfig);
 
 	return {
 		presentation: paperSummary(presentation),
-		authors: getPresentationAuthors(presentation).map((author) => personRef(author)),
+		authors: authors.map((author) => personRef(author)),
+		citationSchema: presentationSchema(citation, abstractText, locale),
+		citationDownloads: {
+			bibtex: `${base}/citations/${presentation.id}.bib`,
+			ris: `${base}/citations/${presentation.id}.ris`
+		},
 		abstractHtml: abstract ? renderAbstract(abstract.text) : '',
 		abstractLang: abstract?.lang ?? presentation.language,
 		description: abstractText ? truncate(abstractText) : presentation.title,
-		abstractText,
 		// An abstract page used to have exactly one exit: "Back to papers". The
 		// programme already knows its session and the other papers in it.
 		placement: placement && {

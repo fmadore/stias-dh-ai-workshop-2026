@@ -10,9 +10,9 @@ web
 
 Two audiences of equal standing; no design may serve one at the cost of the other.
 
-**Accepted participants and organisers** (33 participants, 4 organisers, 2 Point Sud representatives). Before the workshop they check the programme, find their own page and paper, read venue and logistics information, and confirm what is expected of them — pre-circulated draft papers, bilingual slides, a one-page terminology handout. During the workshop (21–24 September 2026) they consult the day's schedule, often on a phone, in a room at STIAS. Many are Africa-based and travelling internationally; some join remotely by Microsoft Teams.
+**Participants and organisers named in the programme** (33 participant records, 4 organisers, 2 Point Sud representatives). They can revisit their pages, abstracts, programme slots and workshop information. These are programme records, not verified attendance figures. The original mobile and low-bandwidth use cases still matter for readers consulting the record.
 
-**The wider scholarly public** — African Studies and digital humanities researchers who encounter the workshop through search, citation, or colleagues. They read the abstract and thematic axes, browse the 25 papers as a body of work, look up who is taking part, and decide whether to follow the event or attend remotely.
+**The wider scholarly public** — African Studies and digital humanities researchers who encounter the workshop through search, citation, or colleagues. They read the abstract and thematic axes, browse the 25 paper records as a body of work, and follow the relationships between authors, people and programme sessions.
 
 Funders and partner institutions (DFG, Point Sud, STIAS, and the partner universities) are a real but secondary audience: they need the programme and the acknowledgement of support to be legible, not a surface of their own.
 
@@ -20,29 +20,30 @@ Funders and partner institutions (DFG, Point Sud, STIAS, and the partner univers
 
 The public site for the DFG Programme Point Sud workshop _Digital Humanities and Artificial Intelligence in African Studies: Towards Sustainable and Equitable Practices_, held at the Stellenbosch Institute for Advanced Study (STIAS), South Africa, 21–24 September 2026.
 
-It exists to make the workshop findable, intelligible, and attendable: to present the intellectual argument, publish the programme and the papers, identify the people taking part, and give attendees what they need to arrive and participate. Success is that a participant never has to email an organiser to find out where to be or what is expected, and that a scholar who has never heard of the workshop can understand its argument and its contribution in a few minutes.
+It preserves a findable, intelligible scholarly record: the intellectual argument, programme, paper abstracts and people named in the workshop materials. A scholar who has never heard of the workshop should be able to understand its scope and locate a paper or contributor in a few minutes. The practical information remains part of that record, not an invitation to a future event.
 
 ## Positioning
 
 A bilingual (English/French) scholarly workshop site whose content model is the workshop itself: papers, people, and programme are typed data with referential integrity, cross-linked in both directions. A paper resolves its authors; a participant resolves their paper and its slot in the schedule; the programme references both by id. The site is a small, honest scholarly record rather than a conference marketing page — there is no registration funnel, no ticketing, no sponsorship tiers.
 
-The bilingualism is substantive, not decorative: the workshop itself runs bilingually, papers are delivered in either language, and the site carries French and English as equals.
+The bilingualism is substantive, not decorative: the workshop materials include papers in either language, and the site carries French and English as equals.
 
 ## Operating Context
 
 - **Static and free to host.** SvelteKit 2 / Svelte 5, fully prerendered via `@sveltejs/adapter-static`, deployed to GitHub Pages under the `/stias-dh-ai-workshop-2026` base path. No server, no database, no runtime API.
 - **Content lives in typed TypeScript files** under `src/lib/data/` — one file per participant and per presentation, auto-discovered by `import.meta.glob`. Editing content means editing code, and `scripts/check-data.ts` enforces referential integrity (author ids, programme references, image paths) at build time.
+- **Build-time server views keep page payloads small.** `src/lib/server/views.ts` and route server loaders derive the counts, listings, bylines and session casts each page renders. Full abstracts and biographies stay off unrelated routes; directory search loads the full-text index on demand. These modules run during prerendering, not on a deployed server.
 - **Workshop state is derived, never hardcoded.** `src/lib/utils/milestones.ts` computes `isCfpOpen()`, `nextMilestone()`, and `workshopPhase()` from four dates in `cfp.ts` and `site-config.ts`, in South African Standard Time. Any design that implies a phase — an open call, a countdown, a "register now" — must read from these functions rather than assuming. A previous design review assumed the call for papers was open three months after it had closed; this indirection exists because of that.
 - **Two locales, URL-prefixed.** English at the base path, French under `/fr/`. Both are fully prerendered; `scripts/smoke-test.mjs` verifies French pages are genuinely prerendered in French.
-- **The workshop is hybrid** — in-person at STIAS with remote access on **Microsoft Teams** — and operates bilingually, with near-real-time AI captioning and, where possible, a bilingual chair providing consecutive interpretation. The call for papers said Zoom, and `cfp.ts` still does: that page is an archival record of the call as published, so it keeps the platform the call named. Anything forward-looking says Teams. No joining details are published yet.
+- **The hybrid workshop information names Microsoft Teams.** The call for papers said Zoom, and `cfp.ts` still does: that page is an archival record of the call as published, so it keeps the platform the call named. The public Teams joining details were removed after the workshop closed; `online-access.ts` keeps the platform metadata with an empty `joinUrl`. Do not republish expired meeting credentials.
 
 ## Capabilities and Constraints
 
 - Surfaces: home, about, programme, papers (index and per-paper), participants (index and per-person), venue, call for papers.
 - The call for papers **closed on 30 April 2026**; that page is now an archival record of the call, not an invitation.
-- The programme is **preliminary** and carries a last-updated date (`programmeLastUpdated`). It is 4 days: 7 thematic panels of 3 papers, 2 keynotes, 2 group discussions, and 2 excursions. The Day 2 visit is to Teraco CT2 in Brackenfell; the Day 3 walking tour departs STIAS at 16:00. Day 4 ends with synthesis and a farewell dinner. Unassigned chairs render as "To be determined".
-- Content is language-mixed by design: paper titles retain their language of delivery; abstracts can have bilingual variants, so a French abstract appears on an English page and vice versa. Participant affiliations are localised; biographies are single-language.
-- **After the workshop the site becomes a frozen record.** No slides, recordings, or photo galleries are planned. The `after` phase needs only a modest copy shift, not new surfaces. (Confirmed decision, August 2026.)
+- The programme preserves the published schedule and carries a last-updated date (`programmeLastUpdated`). It covers 4 days: 7 thematic panels of 3 papers, 2 keynotes, 2 group discussions, and 2 excursions. These are scheduled activities, not independently verified outcomes. Unassigned chairs render as "To be determined".
+- Content is language-mixed by design: paper titles retain their language of delivery; abstracts can have bilingual variants, so a French abstract appears on an English page and vice versa. Participant affiliations and biography fields are localised; where no biography translation exists, both fields retain the supplied source text and its language.
+- **The site is now a frozen workshop record.** No slides, recordings, or photo galleries are planned. Maintenance fixes and supported content corrections remain appropriate; new outcome claims need evidence. (Scope confirmed August 2026.)
 - Licensing is split: code MIT, content CC BY 4.0, **except** paper titles, abstracts, and biographies, which belong to their authors, and participant photographs and funder logos, which are used by permission only.
 
 ## Brand Commitments
@@ -71,9 +72,9 @@ Absences that must not be invented:
 
 1. **Derive workshop state; never assert it.** Every phase-dependent element reads from `milestones.ts`. The site must stay correct as dates pass without anyone editing it.
 2. **Both languages are the site.** French is not a translation layer over an English product. A design that reads well in English and awkwardly in French is unfinished.
-3. **The programme is the product during the event.** On 21–24 September, a participant with a phone and poor signal needs the day's schedule fast. That scenario outranks every expressive consideration on that surface.
+3. **The programme remains easy to consult.** Readers on phones and constrained connections need dates, sessions and paper links quickly. That scenario outranks every expressive consideration on that surface.
 4. **Scholarly restraint.** The register is an academic workshop, not a conference brand. Personality lives in precision and typography, not in ornament or persuasion tactics.
-5. **Say only what is true.** Incomplete content — unassigned chairs, a TBD excursion, a missing photograph, a preliminary programme — is shown honestly rather than hidden or invented.
+5. **Say only what is true.** Incomplete content — unassigned chairs, a missing biography or a missing photograph — is shown honestly. Programme records do not establish attendance or prove that a scheduled activity occurred.
 
 ## Accessibility & Inclusion
 

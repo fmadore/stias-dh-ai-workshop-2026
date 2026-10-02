@@ -1,5 +1,5 @@
 import fontkit from '@pdf-lib/fontkit';
-import { PDFDocument, type PDFFont, type PDFImage, type PDFPage, rgb } from 'pdf-lib';
+import { PDFDocument, type PDFFont, type PDFImage, rgb } from 'pdf-lib';
 import sharp from 'sharp';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -11,6 +11,8 @@ import { sponsors } from '../src/lib/data/sponsors.ts';
 import { thematicAxes } from '../src/lib/data/thematic-axes.ts';
 import { venueInfo } from '../src/lib/data/venue.ts';
 import { joinLogisticsList } from '../src/lib/utils/logistics.ts';
+import { formatDate, formatDateRange } from '../src/lib/utils/date-format.ts';
+import { wrapPlainText } from './lib/plain-text.ts';
 import type { LocalizedString } from '../src/lib/types/index.ts';
 
 type Locale = 'en' | 'fr';
@@ -61,29 +63,6 @@ const MUTED = rgb(112 / 255, 112 / 255, 112 / 255);
 
 function localize(value: LocalizedString, locale: Locale): string {
 	return value[locale] ?? value.en;
-}
-
-function formatDate(isoDate: string, locale: Locale): string {
-	return new Date(`${isoDate}T00:00:00Z`).toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-GB', {
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric',
-		timeZone: 'UTC'
-	});
-}
-
-function formatDateRange(startIso: string, endIso: string, locale: Locale): string {
-	const start = new Date(`${startIso}T00:00:00Z`);
-	const end = new Date(`${endIso}T00:00:00Z`);
-	const intlLocale = locale === 'fr' ? 'fr-FR' : 'en-GB';
-	if (
-		start.getUTCMonth() === end.getUTCMonth() &&
-		start.getUTCFullYear() === end.getUTCFullYear()
-	) {
-		const month = start.toLocaleDateString(intlLocale, { month: 'long', timeZone: 'UTC' });
-		return `${start.getUTCDate()}–${end.getUTCDate()} ${month} ${start.getUTCFullYear()}`;
-	}
-	return `${formatDate(startIso, locale)} – ${formatDate(endIso, locale)}`;
 }
 
 async function loadLabels(locale: Locale): Promise<Labels> {
@@ -216,13 +195,12 @@ async function createPdf(labels: Labels, locale: Locale): Promise<Uint8Array> {
 	const semibold = await pdf.embedFont(semiboldBytes, { subset: true });
 	const logos = await loadLogos(pdf);
 
-	let page: PDFPage;
-	let y = 0;
+	let page = pdf.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
+	let y = PAGE_HEIGHT - MARGIN;
 	const addPage = () => {
 		page = pdf.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
 		y = PAGE_HEIGHT - MARGIN;
 	};
-	addPage();
 
 	const ensureSpace = (needed: number) => {
 		if (y - needed < 58) addPage();
@@ -432,21 +410,6 @@ async function createPdf(labels: Labels, locale: Locale): Promise<Uint8Array> {
 	}
 
 	return pdf.save();
-}
-
-function wrapPlainText(text: string, width = 72): string {
-	const lines: string[] = [];
-	let current = '';
-	for (const word of text.split(/\s+/)) {
-		if (current && `${current} ${word}`.length > width) {
-			lines.push(current);
-			current = word;
-		} else {
-			current = current ? `${current} ${word}` : word;
-		}
-	}
-	if (current) lines.push(current);
-	return lines.join('\n');
 }
 
 function createText(labels: Labels): string {

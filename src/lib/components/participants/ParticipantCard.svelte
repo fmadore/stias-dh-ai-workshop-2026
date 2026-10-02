@@ -2,7 +2,7 @@
 	import type { PaperSummary, ParticipantListing } from '$lib/types';
 	import { t, localePath } from '$lib/utils/i18n';
 	import { getPlacements } from '$lib/utils/placement';
-	import AvatarSmall from '$lib/components/shared/AvatarSmall.svelte';
+	import Avatar from '$lib/components/shared/Avatar.svelte';
 	import { getLocale } from '$lib/paraglide/runtime';
 	import { countryName } from '$lib/utils/country';
 
@@ -28,7 +28,7 @@
 	What the card carries now is what people scan for — name, place, paper, slot.
 -->
 <article class="card card-hover flex h-full flex-col p-5">
-	<AvatarSmall name={participant.name} image={participant.image} />
+	<Avatar name={participant.name} image={participant.image} size="small" decorative />
 
 	<h3 class="text-card-title text-strong mt-3.5">
 		<a {href} class="card-link link-quiet">{participant.name}</a>

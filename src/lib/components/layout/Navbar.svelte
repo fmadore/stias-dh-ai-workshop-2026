@@ -117,7 +117,7 @@
 			<a href={localePath('/')} class="flex min-w-0 flex-col leading-none">
 				<span class="text-link font-display text-xl tracking-tight"> DH &amp; AI </span>
 
-				<span class="text-meta text-badge mt-1 line-clamp-3 tracking-[0.14em]">
+				<span class="text-meta text-badge mt-1 line-clamp-3 leading-[1.15] tracking-[0.14em]">
 					{m.brand_qualifier()}
 				</span>
 			</a>

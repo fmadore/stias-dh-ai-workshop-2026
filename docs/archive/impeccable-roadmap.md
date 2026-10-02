@@ -12,7 +12,7 @@
   - _Judgement calls, conventional as they stand:_ **P2-15** (at 667×375, 35.5% of the viewport is sticky chrome — 242px of reading area; unfixable without a sitewide header decision) and **P3-35** ("Programme" is the primary action twice in the home page's first viewport, in two different colours ~600px apart).
   - _Dead code:_ **P3-39** (a `.abstract` selector in the print stylesheet that nothing has carried since the abstract moved to `.prose`).
 - **Two were assessed and closed by decision, not fix:** **P3-26** (Outfit has no italic, so nine emphases render as a synthesised oblique — inspected, and the serif alternative reads worse) and **P3-17**, whose premise did not survive inspection.
-- **The current spec is [`DESIGN.md`](../DESIGN.md)**, refreshed by item 18 against the shipped tree. It, not this file, is what new work should read first. The prioritised defect backlog and every pass's findings live in [`docs/design-findings-2026-08.md`](design-findings-2026-08.md); the final sweep is [`docs/audit-2026-08-24.md`](audit-2026-08-24.md).
+- **The current spec is [`DESIGN.md`](../../DESIGN.md)**, refreshed by item 18 against the shipped tree. It, not this file, is what new work should read first. The prioritised defect backlog and every pass's findings live in [`docs/design-findings-2026-08.md`](design-findings-2026-08.md); the final sweep is [`docs/audit-2026-08-24.md`](audit-2026-08-24.md).
 
 **The constraints that shaped every pass**, and still bind anything that touches the site:
 
@@ -44,7 +44,7 @@ Impeccable assigns each surface a _mode_ (what visitor success looks like). Gett
 
 Goal: give every later command durable, correct context.
 
-**Done:** [`PRODUCT.md`](../PRODUCT.md), [`DESIGN.md`](../DESIGN.md), the `.impeccable/design.json` sidecar, and live-mode config (`.impeccable/live/config.json`; no CSP in this project, so no patch was needed). Decisions confirmed in the interviews, which later phases must honour:
+**Done:** [`PRODUCT.md`](../../PRODUCT.md), [`DESIGN.md`](../../DESIGN.md), the `.impeccable/design.json` sidecar, and live-mode config (`.impeccable/live/config.json`; no CSP in this project, so no patch was needed). Decisions confirmed in the interviews, which later phases must honour:
 
 - **Two audiences of equal standing** — accepted participants and the wider scholarly public. Neither may be served at the other's cost, so no surface gets optimised purely for discovery or purely for logistics.
 - **After 24 September the site is a frozen record.** No slides, recordings, or galleries. The `after` phase needs a copy shift, not new surfaces — this removes any argument for building post-event surfaces now.

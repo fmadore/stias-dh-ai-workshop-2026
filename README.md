@@ -4,7 +4,10 @@ Website for the DFG Programme Point Sud workshop **"Digital Humanities and Artif
 
 **Live site:** [fmadore.github.io/stias-dh-ai-workshop-2026](https://fmadore.github.io/stias-dh-ai-workshop-2026)
 
-The website is available in English and French.
+The website is available in English and French. It now preserves the workshop
+programme, abstracts, people and practical information as a scholarly record.
+Maintenance fixes and documented content corrections remain welcome; new
+recordings, galleries or attendance claims are outside its agreed scope.
 
 ## Stack
 
@@ -21,20 +24,22 @@ npm ci             # installs locked dependencies; the `prepare` script then com
 npm run dev        # dev server at http://localhost:5173
 npm run build      # static build into build/ + data & smoke checks
 npm run preview    # serve the production build locally
-npm run check      # svelte-check (types + templates)
+npm run check      # svelte-check + script, test and configuration TypeScript checks
+npm run check:scripts # script/test/config TypeScript checks only (after npm ci)
 npm run lint       # eslint
 npm run format     # prettier --write
 ```
 
 `npm run build` also runs `scripts/check-data.ts` (referential integrity of
-the content data — author ids, programme references, image paths) and
+the content data — author ids, programme references, image paths and valid
+schedule dates/times) and
 `scripts/smoke-test.mjs` (French pages really prerendered in French, sitemap
 complete). Generated internal links and their HTML fragments are checked by `scripts/check-links.mjs`, and `scripts/check-bundle-size.mjs` enforces asset budgets. All four checks fail the build on problems and run in CI.
 
 ## Testing
 
 ```bash
-npx playwright install chromium
+npx playwright install chromium firefox webkit
 npm run format:check
 npm run lint
 npm run check
@@ -43,9 +48,29 @@ npm run build
 npm run test:e2e
 ```
 
-The browser suites cover navigation, programme, content, maps, accessibility and resilience. Routine map tests use the real renderer with a local empty style, so they do not require external tiles. Set `LIVE_MAPS=1` to enable the separate live-provider integration test. Print tests write PDFs to the ignored `test-results/` directory.
+The Chromium suite covers navigation, programme, content, maps, accessibility
+and resilience. Firefox and WebKit run seven focused navigation, language,
+storage and filter checks each. PDF export tests run in Chromium only.
+Routine map tests use the real renderer with a local empty style, so they do
+not require external tiles. Run `npm run test:e2e:live` after a build to test
+the actual provider, or dispatch the separate **Live map provider integration**
+workflow. That integration is intentionally outside deployment checks.
+
+Playwright writes an HTML report to `playwright-report/` and diagnostics to
+`test-results/`, both ignored. Open a report with `npx playwright show-report`.
+CI retains reports, traces and screenshots from failures for 14 days.
 
 The programme, hero and milestone lists share one venue clock, which refreshes at date boundaries and when a suspended page becomes visible. Static HTML publishes dates without relative live-status claims. Directory filters use `q`, `country`, `language` and (for participants) `group` query parameters; reload and locale switching preserve them.
+
+## Data and rendering
+
+Content registries live in `src/lib/data/`. Build-time server loaders reduce
+them through `src/lib/server/views.ts` into the counts, listings, bylines and
+programme casts needed by each page. Detail pages render Markdown at build
+time; full biographies and abstracts are not sent to unrelated routes.
+Directory search loads its full-text index only when a reader searches.
+These are SvelteKit **build-time** server modules: the deployed site has no
+running application server or database.
 
 ## Content editing
 
@@ -72,7 +97,27 @@ The programme, hero and milestone lists share one venue clock, which refreshes a
 
 Pushes to `main` build and deploy via GitHub Actions
 (`.github/workflows/deploy.yml`). PRs run the same format/lint/type/build
-checks without deploying.
+checks and browser suites without deploying.
+
+## Dependency maintenance
+
+CI blocks moderate-or-higher production advisories with
+`npm audit --omit=dev --audit-level=moderate`. It also records a full
+`npm audit --audit-level=low` report as a visible maintenance check and keeps
+the JSON artifact for 14 days. Review that report for tooling exposure as
+well as browser exposure; a development-only advisory is not automatically
+an exploitable vulnerability in the static deployment.
+
+MapLibre is pinned to 6.6.0 and has its own Dependabot group. Later releases
+need an explicit renderer/worker size review against the existing 260/130 KiB
+gzip limits; do not raise those limits just to unblock routine dependency
+updates. The `@sveltejs/kit`-scoped `cookie` override fixes the transitive
+advisory while preserving the parser/serializer API. Remove the override
+once a framework update supplies a patched compatible version itself.
+
+Current product constraints are in [PRODUCT.md](PRODUCT.md), visual guidance
+in [DESIGN.md](DESIGN.md), and historical plans and audits in
+[docs/archive](docs/archive/README.md).
 
 ## Citation
 

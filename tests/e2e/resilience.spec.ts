@@ -109,14 +109,13 @@ test('paper filters survive reload, locale switching and clearing', async ({ pag
 });
 
 test('search reaches abstracts and bios, fetched only once someone searches', async ({ page }) => {
-	// The full text is most of the directories' weight, so it is loaded on
-	// demand. Scripts are identified by content, not by hashed file name: one
-	// phrase from a bio, which no script these pages load up front may carry.
-	// Their bodies are fetched separately because a modulepreload response
-	// does not reliably expose its own.
+	// The static index is fetched on demand; the full content registries must
+	// never travel as JavaScript, even after search starts.
 	const scripts = new Set<string>();
+	const indexRequests: string[] = [];
 	page.on('request', (request) => {
 		if (request.url().endsWith('.js')) scripts.add(request.url());
+		if (request.url().endsWith('/search-index.json')) indexRequests.push(request.url());
 	});
 	const loadedBios = async () => {
 		for (const url of scripts) {
@@ -128,12 +127,14 @@ test('search reaches abstracts and bios, fetched only once someone searches', as
 	await page.goto(`${BASE}/papers`);
 	await expect(page.locator('.paper-title-link')).toHaveCount(25);
 	await page.waitForLoadState('networkidle');
+	expect(indexRequests).toHaveLength(0);
 	expect(await loadedBios(), 'bios and abstracts fetched before anyone searched').toBe(false);
 
 	// A phrase from inside an abstract, in no title, author or affiliation.
 	await page.getByRole('searchbox', { name: 'Search' }).fill('lingua africa');
 	await expect(page.locator('.filter-count')).toHaveText('1 of 25 papers');
-	expect(await loadedBios()).toBe(true);
+	expect(indexRequests).toHaveLength(1);
+	expect(await loadedBios(), 'search must fetch text data rather than content modules').toBe(false);
 
 	// A query arriving in the URL has to fetch it too; this one is in a bio.
 	await page.goto(`${BASE}/participants?q=geriico`);

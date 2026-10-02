@@ -1,4 +1,5 @@
 import { getLocale, type Locale } from '$lib/paraglide/runtime';
+import * as dates from './date-format';
 
 /**
  * Every formatter takes the locale as an optional last argument. Components
@@ -7,7 +8,7 @@ import { getLocale, type Locale } from '$lib/paraglide/runtime';
  * global (see `papers/[slug]/+page.server.ts`).
  */
 export function intlLocale(locale: Locale = getLocale()): string {
-	return locale === 'fr' ? 'fr-FR' : 'en-GB';
+	return dates.intlLocale(locale);
 }
 
 /**
@@ -16,12 +17,7 @@ export function intlLocale(locale: Locale = getLocale()): string {
  * never see the previous day.
  */
 export function formatDate(isoDate: string, locale: Locale = getLocale()): string {
-	return new Date(isoDate + 'T00:00:00Z').toLocaleDateString(intlLocale(locale), {
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric',
-		timeZone: 'UTC'
-	});
+	return dates.formatDate(isoDate, locale);
 }
 
 export function formatDateRange(
@@ -29,23 +25,10 @@ export function formatDateRange(
 	endIso: string,
 	locale: Locale = getLocale()
 ): string {
-	const start = new Date(startIso + 'T00:00:00Z');
-	const end = new Date(endIso + 'T00:00:00Z');
-	if (
-		start.getUTCMonth() === end.getUTCMonth() &&
-		start.getUTCFullYear() === end.getUTCFullYear()
-	) {
-		const month = start.toLocaleDateString(intlLocale(locale), { month: 'long', timeZone: 'UTC' });
-		return `${start.getUTCDate()}–${end.getUTCDate()} ${month} ${start.getUTCFullYear()}`;
-	}
-	return `${formatDate(startIso, locale)} – ${formatDate(endIso, locale)}`;
+	return dates.formatDateRange(startIso, endIso, locale);
 }
 
 /** "Mon 21" / "lun. 21" — a programme day where the month goes without saying. */
 export function formatShortDay(isoDate: string, locale: Locale = getLocale()): string {
-	return new Date(isoDate + 'T00:00:00Z').toLocaleDateString(intlLocale(locale), {
-		weekday: 'short',
-		day: 'numeric',
-		timeZone: 'UTC'
-	});
+	return dates.formatShortDay(isoDate, locale);
 }

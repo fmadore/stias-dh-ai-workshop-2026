@@ -13,8 +13,8 @@
 		<link rel="me" href="https://www.frederickmadore.com" />
 		<script>
 			(function () {
-				// Signal JS availability: CSS keeps scroll-reveal content visible
-				// for no-JS visitors, crawlers, and print (see .js .scroll-reveal).
+				// Signal script availability for controls with no native fallback.
+				// Scroll reveals enable themselves only after their observer starts.
 				document.documentElement.classList.replace('no-js', 'js');
 				let saved = null;
 				try {

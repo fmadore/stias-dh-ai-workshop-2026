@@ -202,7 +202,8 @@
 			onReady() {
 				mapReady = true;
 				mapFailed = false;
-				showAllLocations(false);
+				if (selectedId) selectLocation(selectedId);
+				else showAllLocations(false);
 			},
 			onFail() {
 				mapFailed = true;

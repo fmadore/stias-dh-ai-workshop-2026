@@ -11,6 +11,7 @@ node_modules
 /tmp/
 /test-results/
 /playwright-report/
+/dependency-audit.json
 .env
 .env.*
 !.env.example

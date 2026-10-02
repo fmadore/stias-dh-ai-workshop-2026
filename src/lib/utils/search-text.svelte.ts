@@ -1,32 +1,56 @@
-import type { FullText } from './filter';
+import { base } from '$app/paths';
+import { parseSearchIndex, type SearchIndex } from './search-index';
 
-let loaded = $state.raw<{ people: FullText; papers: FullText }>();
+export type SearchStatus = 'idle' | 'loading' | 'ready' | 'error';
+
+let loaded = $state.raw<SearchIndex>();
+let status = $state<SearchStatus>('idle');
 let requested = false;
+let inFlight = false;
 
 /** The bios and abstracts directory search can match, once they have arrived. */
 export const fullText = {
 	get current() {
 		return loaded;
+	},
+	get status() {
+		return status;
 	}
 };
 
 /**
  * Fetch the full text the first time someone reaches for the search box —
- * focus, or a query already in the URL — rather than on every visit. It is
- * 37 KB gzipped, most of the directories' weight, and most visitors never
- * search. Until it lands, and if it never does (offline), queries still match
- * names, affiliations, countries and titles.
+ * focus, or a query already in the URL — rather than on every visit. The index
+ * is static JSON, so retrying a failed download does not reuse a browser's
+ * cached module-import failure. Until it arrives, queries still match names,
+ * affiliations, countries and titles.
  */
 export function loadFullText(): void {
 	if (requested) return;
 	requested = true;
-	import('./full-text').then(
-		(module) => {
-			loaded = { people: module.personText, papers: module.paperText };
-		},
-		() => {
-			// Let the next focus try again.
-			requested = false;
-		}
-	);
+	inFlight = true;
+	status = 'loading';
+	fetch(`${base}/search-index.json`, { headers: { Accept: 'application/json' } })
+		.then(async (response) => {
+			if (!response.ok) throw new Error(`Search index request failed: ${response.status}`);
+			return parseSearchIndex(await response.json());
+		})
+		.then(
+			(index) => {
+				loaded = index;
+				status = 'ready';
+				inFlight = false;
+			},
+			() => {
+				status = 'error';
+				inFlight = false;
+			}
+		);
+}
+
+/** Retry only on request, so a failed download cannot trigger an effect loop. */
+export function retryFullText(): void {
+	if (inFlight || loaded) return;
+	requested = false;
+	loadFullText();
 }

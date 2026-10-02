@@ -956,11 +956,10 @@ button:not(:disabled),
 
 	/* ============================================================
    SCROLL REVEAL — respects reduced motion.
-   The hidden initial state only applies once the inline script in
-   app.html has swapped .no-js for .js on <html>: without JavaScript
-   the IntersectionObserver never fires, so content must stay visible.
+   Content is visible until its own observer has started. Merely running
+   the inline theme script must not hide it if an application chunk fails.
    ============================================================ */
-	.js .scroll-reveal {
+	.scroll-reveal.reveal-pending {
 		opacity: 0;
 		transform: translateY(16px);
 		transition:
@@ -968,7 +967,7 @@ button:not(:disabled),
 			transform var(--duration-reveal) var(--ease-expressive);
 		will-change: opacity, transform;
 	}
-	.js .scroll-reveal.visible {
+	.scroll-reveal.reveal-pending.visible {
 		opacity: 1;
 		transform: translate(0, 0);
 		will-change: auto;
@@ -1012,7 +1011,7 @@ button:not(:disabled),
 		scroll-behavior: auto;
 	}
 
-	.js .scroll-reveal {
+	.scroll-reveal.reveal-pending {
 		opacity: 1;
 		transform: none;
 	}
@@ -1174,7 +1173,7 @@ button:not(:disabled),
 	}
 	/* Without this, anything the reader has not scrolled past prints blank:
 	   the hidden state is only ever cleared by the IntersectionObserver. */
-	.js .scroll-reveal {
+	.scroll-reveal.reveal-pending {
 		opacity: 1 !important;
 		transform: none !important;
 	}
@@ -1227,8 +1226,19 @@ button:not(:disabled),
 	footer nav,
 	.filter-bar,
 	.venue-map-shell,
-	.affiliation-shell .map-frame {
+	.affiliation-shell .map-frame,
+	.affiliation-panel-header .btn {
 		display: none !important;
+	}
+
+	/* Every affiliation must print, including those outside the screen's list viewport. */
+	.affiliation-shell,
+	.affiliation-shell .affiliation-list {
+		max-height: none !important;
+		overflow: visible !important;
+	}
+	.affiliation-shell {
+		display: block;
 	}
 
 	.dark body {

@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { readStorage, writeStorage } from '$lib/utils/storage';
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
 	import * as m from '$lib/paraglide/messages';
@@ -23,9 +21,9 @@
 	import Footer from '$lib/components/layout/Footer.svelte';
 	import WhatNext from '$lib/components/layout/WhatNext.svelte';
 	import BackToTop from '$lib/components/layout/BackToTop.svelte';
-	import { localizedPath, localeFromPath } from '$lib/utils/localized-paths';
+	import { localeFromPath } from '$lib/utils/localized-paths';
 
-	let { children } = $props();
+	let { children, data } = $props();
 
 	// Keep <html lang> in sync after client-side navigation — the server only
 	// sets it on the initially requested document (see hooks.server.ts). Read
@@ -33,23 +31,6 @@
 	// params.lang is undefined there and a French 404 declared itself English.
 	$effect(() => {
 		document.documentElement.lang = localeFromPath(page.url.pathname, base);
-	});
-
-	onMount(() => {
-		// Auto-detect browser language on first visit (only if not already on a French page).
-		const hasVisited = readStorage('sessionStorage', 'locale_detected');
-		if (!hasVisited) {
-			writeStorage('sessionStorage', 'locale_detected', '1');
-			const browserLang = navigator.language || navigator.languages?.[0] || '';
-			const pathname = base
-				? window.location.pathname.slice(base.length) || '/'
-				: window.location.pathname;
-			const isAlreadyFr = pathname.startsWith('/fr');
-			if (browserLang.startsWith('fr') && !isAlreadyFr) {
-				window.location.href =
-					localizedPath(pathname, 'fr', base) + window.location.search + window.location.hash;
-			}
-		}
 	});
 </script>
 
@@ -63,14 +44,19 @@
 	/>
 </svelte:head>
 
-<a class="skip-link" href="#main">{m.skip_to_content()}</a>
+<!-- A URL is an explicit language choice, including when browser storage is
+     unavailable. Recreate the shell if a client navigation changes that locale:
+     Paraglide's global itself is not reactive. -->
+{#key data.lang}
+	<a class="skip-link" href="#main">{m.skip_to_content()}</a>
 
-<div class="bg-cream flex min-h-screen flex-col">
-	<Navbar />
-	<main id="main" class="flex-1 pt-[var(--nav-height)]">
-		{@render children()}
-	</main>
-	<WhatNext />
-	<Footer />
-	<BackToTop />
-</div>
+	<div class="bg-cream flex min-h-screen flex-col">
+		<Navbar />
+		<main id="main" class="flex-1 pt-[var(--nav-height)]">
+			{@render children()}
+		</main>
+		<WhatNext />
+		<Footer />
+		<BackToTop />
+	</div>
+{/key}

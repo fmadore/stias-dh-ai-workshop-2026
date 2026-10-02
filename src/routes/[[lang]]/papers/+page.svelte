@@ -8,7 +8,7 @@
 	import NoResults from '$lib/components/shared/NoResults.svelte';
 	import { filterPresentations, uniquePaperCountries } from '$lib/utils/filter';
 	import { createUrlFilters } from '$lib/utils/url-filters.svelte';
-	import { fullText, loadFullText } from '$lib/utils/search-text.svelte';
+	import { fullText, loadFullText, retryFullText } from '$lib/utils/search-text.svelte';
 
 	let { data } = $props();
 
@@ -17,6 +17,7 @@
 
 	const countries = $derived(uniquePaperCountries(sorted));
 	const filters = createUrlFilters(() => countries);
+	const partialSearch = $derived(filters.query.trim() !== '' && fullText.status !== 'ready');
 	const filtered = $derived(
 		filterPresentations(
 			sorted,
@@ -67,11 +68,13 @@
 					bind:country={filters.country}
 					bind:language={filters.language}
 					onsearchfocus={loadFullText}
+					searchStatus={fullText.status}
+					onsearchretry={retryFullText}
 				/>
 			</div>
 			{#if filtered.length > 0}
 				<PaperGrid presentations={filtered} />
-			{:else}
+			{:else if !partialSearch}
 				<NoResults message={m.papers_filter_no_results()} onclear={clearFilters} />
 			{/if}
 		{/if}
