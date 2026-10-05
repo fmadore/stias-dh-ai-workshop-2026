@@ -11,6 +11,7 @@ import { coAuthors } from '../src/lib/data/co-authors.ts';
 import { programme, programmeLastUpdated } from '../src/lib/data/programme.ts';
 import { sponsors } from '../src/lib/data/sponsors.ts';
 import { paperRedirects } from '../src/lib/data/redirects.ts';
+import { resourceSections } from '../src/lib/data/resources.ts';
 import type { Participant, Presentation } from '../src/lib/types/index.ts';
 
 let failures = 0;
@@ -124,6 +125,8 @@ for (const person of people) {
 
 for (const presentation of presentations) {
 	for (const error of presentationAuthorErrors(presentation, peopleById)) fail(error);
+	if (presentation.slides && !presentation.slides.startsWith('https://'))
+		fail(`presentation ${presentation.id}: slides '${presentation.slides}' is not an https URL`);
 }
 
 const sessionIds = new Set<string>();
@@ -168,6 +171,40 @@ for (const [legacy, current] of Object.entries(paperRedirects)) {
 
 for (const sponsor of sponsors) await expectStaticFile(sponsor.logo, `sponsor ${sponsor.id}`);
 
+// Resources are links out, so what can be checked here is their shape: ids
+// unique (each section's is a page anchor, and `slides` is taken by the
+// section listed from papers), every URL absolute and https, every author
+// someone in the registry, and dates that parse and run forwards. A meeting
+// is the entry with a place, and is listed by its dates.
+uniqueById(resourceSections, 'resource section');
+if (resourceSections.some((section) => section.id === 'slides'))
+	fail(`resource section: 'slides' is the id of the section listed from papers`);
+const resources = resourceSections.flatMap((section) => section.resources);
+uniqueById(resources, 'resource');
+const ISO_DAY = /^\d{4}-\d{2}-\d{2}$/;
+const ISO_DAY_OR_MONTH = /^\d{4}-\d{2}(-\d{2})?$/;
+for (const resource of resources) {
+	for (const url of [resource.url, ...(resource.links ?? []).map((link) => link.url)]) {
+		if (!url.startsWith('https://')) fail(`resource ${resource.id}: '${url}' is not an https URL`);
+	}
+	for (const author of resource.authors ?? []) {
+		if (!peopleById.has(author)) fail(`resource ${resource.id}: unknown author '${author}'`);
+	}
+	// Optional on the type only for the slide decks the page lists from papers.
+	if (!resource.description) fail(`resource ${resource.id}: missing description`);
+	if (resource.paper && !presentationsById.has(resource.paper))
+		fail(`resource ${resource.id}: unknown paper '${resource.paper}'`);
+	if (resource.date && !ISO_DAY_OR_MONTH.test(resource.date))
+		fail(`resource ${resource.id}: date '${resource.date}' is not YYYY-MM-DD or YYYY-MM`);
+	if (resource.endDate) {
+		if (!resource.date || !ISO_DAY.test(resource.date) || !ISO_DAY.test(resource.endDate))
+			fail(`resource ${resource.id}: a date range needs two full YYYY-MM-DD dates`);
+		else if (resource.endDate < resource.date)
+			fail(`resource ${resource.id}: ends before it starts`);
+	}
+	if (resource.place && !resource.date) fail(`resource ${resource.id}: a meeting needs its dates`);
+}
+
 if (failures) {
 	console.error(`\ncheck-data: ${failures} problem(s) found`);
 	process.exit(1);
@@ -179,5 +216,5 @@ if (untranslatedBios.length)
 	);
 
 console.log(
-	`check-data: OK (${participants.length} participants, ${organizers.length} organizers, ${pointSud.length} Point Sud representatives, ${coAuthors.length} co-authors, ${presentations.length} presentations, ${Object.keys(paperRedirects).length} paper redirect(s), ${sessionIds.size} sessions)`
+	`check-data: OK (${participants.length} participants, ${organizers.length} organizers, ${pointSud.length} Point Sud representatives, ${coAuthors.length} co-authors, ${presentations.length} presentations, ${Object.keys(paperRedirects).length} paper redirect(s), ${sessionIds.size} sessions, ${resources.length} resources)`
 );

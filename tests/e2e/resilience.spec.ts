@@ -13,8 +13,18 @@ test('each locale identifies only the active section, including detail routes', 
 		]) {
 			await page.goto(`${BASE}${locale}${route || (locale ? '' : '/')}`);
 			const nav = page.locator('header nav').first();
-			await expect(nav.locator('[aria-current="page"]')).toHaveCount(1);
 			const section = route.split('/')[1];
+			if (!section) {
+				// The desktop row has no Home link; the wordmark, first in the
+				// header, carries the state instead.
+				await expect(nav.locator('[aria-current="page"]')).toHaveCount(0);
+				await expect(page.locator('header a[aria-current="page"]').first()).toHaveAttribute(
+					'href',
+					`${BASE}${locale || '/'}`
+				);
+				continue;
+			}
+			await expect(nav.locator('[aria-current="page"]')).toHaveCount(1);
 			await expect(nav.locator('[aria-current="page"]')).toHaveAttribute(
 				'href',
 				`${BASE}${locale}${section ? `/${section}` : locale ? '' : '/'}`

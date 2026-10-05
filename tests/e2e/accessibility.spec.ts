@@ -111,6 +111,8 @@ for (const colorScheme of ['light', 'dark'] as const) {
 		'/fr/venue',
 		'/fr/about',
 		'/fr/call-for-papers',
+		'/resources',
+		'/fr/resources',
 		'/papers/frugal-infrastructures',
 		'/fr/papers/frugal-infrastructures',
 		'/participants/tajuddeen-gwadabe',

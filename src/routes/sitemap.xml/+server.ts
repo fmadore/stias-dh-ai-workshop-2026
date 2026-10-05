@@ -18,6 +18,7 @@ const staticEntries: Entry[] = [
 	{ path: '/participants', priority: 0.8 },
 	{ path: '/papers', priority: 0.8 },
 	{ path: '/venue', priority: 0.7 },
+	{ path: '/resources', priority: 0.6 },
 	{ path: '/call-for-papers', priority: 0.9 }
 ];
 

@@ -20,7 +20,8 @@
 		'/[[lang]]/papers/[slug]': ['programme', 'papers', 'contact'],
 		'/[[lang]]/participants': ['papers', 'programme', 'contact'],
 		'/[[lang]]/venue': ['programme', 'participants', 'contact'],
-		'/[[lang]]/call-for-papers': ['papers', 'programme', 'contact']
+		'/[[lang]]/call-for-papers': ['papers', 'programme', 'contact'],
+		'/[[lang]]/resources': ['papers', 'programme', 'contact']
 	};
 
 	const DEFAULT_EXITS: Destination[] = ['about', 'programme', 'contact'];

@@ -142,6 +142,12 @@ export interface Presentation {
 	 * from it, never stored on the participant.
 	 */
 	authors: string[];
+	/**
+	 * Where the presenters have published their slides, if they have. It puts
+	 * a button on the paper's page and an entry under Slides on the resources
+	 * page, so a deck is added here and nowhere else.
+	 */
+	slides?: string;
 }
 
 /**
@@ -181,6 +187,15 @@ export type ParticipantListing = Omit<Participant, 'bio' | 'bioLanguage'>;
 /** A campus on the affiliations map, with the people it pins resolved in place of their ids. */
 export interface MappedAffiliation extends Omit<AffiliationLocation, 'personIds'> {
 	people: PersonRef[];
+}
+
+/** A resource as its page renders it: authors resolved from ids to bylines. */
+export interface ResourceListing extends Omit<Resource, 'authors'> {
+	authors: PersonRef[];
+}
+
+export interface ResourceListingSection extends Omit<ResourceSection, 'resources'> {
+	resources: ResourceListing[];
 }
 
 /** The people and papers one session names, resolved ahead of the programme page. */
@@ -303,6 +318,66 @@ export interface Sponsor {
 	width?: number;
 	height?: number;
 	url: string;
+}
+
+/**
+ * Something outside the workshop that it points to: a piece written about it,
+ * or an archive, model, network or meeting that came up in its discussions.
+ * None of these belong to the workshop, so the record is a citation — what it
+ * is, who made it, where it lives — plus one sentence on what it offers.
+ */
+export interface Resource {
+	id: string;
+	/** The resource's own name, never translated. */
+	title: string;
+	/**
+	 * The language `title` is written in. Required rather than defaulted: an
+	 * English title on the French page needs `lang="en"` as much as the reverse
+	 * does, or a screen reader voices it with French phonemes. WCAG 3.1.2.
+	 */
+	lang: 'en' | 'fr';
+	/** A descriptive line the resource gives itself, in the same language. */
+	subtitle?: string;
+	url: string;
+	/** Workshop people who wrote it (registry ids) — linked to their pages. */
+	authors?: string[];
+	/**
+	 * Who made, runs or publishes it, joined into one phrase in the reader's
+	 * language ("A, B and C" / "A, B et C"). A plain string is a name both
+	 * locales share; a `LocalizedString` is an institution with an official
+	 * name in each, as with `Participant.affiliation`.
+	 */
+	source?: (string | LocalizedString)[];
+	/** ISO date: `YYYY-MM-DD`, or `YYYY-MM` when only the month is known. */
+	date?: string;
+	/** ISO end date, for a meeting that runs over several days. */
+	endDate?: string;
+	/** Where a meeting is held. */
+	place?: LocalizedString;
+	/**
+	 * What it offers, in a sentence. Every entry in `resources.ts` has one; a
+	 * presenter's slides, listed from the paper, need none — the paper's title
+	 * already says what they are about.
+	 */
+	description?: LocalizedString;
+	/** The workshop paper it belongs to — linked to that paper's page. */
+	paper?: string;
+	/** Further links that belong to the entry — a video tour, a companion film. */
+	links?: ResourceLink[];
+}
+
+export interface ResourceLink {
+	label: LocalizedString;
+	url: string;
+	/** The language of what is behind the link, when it is one language only. */
+	hreflang?: 'en' | 'fr';
+}
+
+export interface ResourceSection {
+	id: string;
+	title: LocalizedString;
+	intro?: LocalizedString;
+	resources: Resource[];
 }
 
 export interface CFPInfo {

@@ -4,6 +4,7 @@ const presentation: Presentation = {
 	id: 'mcp-servers-african-glams',
 	language: 'fr',
 	authors: ['madore'],
+	slides: 'https://slides.frederickmadore.com/talks/2026-09-23-stellenbosch-mcp-glam-africains/',
 	title: 'Les serveurs MCP pour les GLAM africains : ouvrir l’accès, garder la maîtrise ?',
 	abstract: `Depuis trois ans, les collections numériques ouvertes des galeries, bibliothèques, archives et musées (les « GLAM ») subissent une double pression. Des robots les moissonnent pour entraîner des modèles d’IA commerciaux tandis que le public délaisse de plus en plus la recherche par mots-clés et par facettes sur les sites et les bases de données au profit des chatbots.
 

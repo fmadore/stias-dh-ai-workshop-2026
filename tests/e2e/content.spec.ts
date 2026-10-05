@@ -194,3 +194,24 @@ test("an abstract's own section headings are in the document outline", async ({ 
 		}
 	}
 });
+
+test('a shared deck shows on its paper and under Resources, and nowhere it was not shared', async ({
+	page
+}) => {
+	await page.goto(`${BASE}/papers/fair-indigenous-languages`);
+	const slides = page.getByRole('link', { name: /View the slides/ });
+	await expect(slides).toHaveAttribute('href', /^https:\/\/docs\.google\.com\/presentation\//);
+	await expect(slides).toHaveAttribute('target', '_blank');
+
+	await page.goto(`${BASE}/papers/frugal-infrastructures`);
+	await expect(page.getByRole('link', { name: /View the slides/ })).toHaveCount(0);
+
+	// Listed from the papers, each with its way back to the abstract — and with
+	// both authors named once, joined by the formatter rather than by a dot.
+	await page.goto(`${BASE}/resources`);
+	const section = page.locator('section#slides');
+	await expect(section.getByRole('link', { name: 'Read the abstract' })).toHaveCount(2);
+	await expect(section).toContainText('Benito Trollip and Sanjin Muftić');
+	await page.goto(`${BASE}/fr/resources`);
+	await expect(page.locator('section#slides')).toContainText('Benito Trollip et Sanjin Muftić');
+});

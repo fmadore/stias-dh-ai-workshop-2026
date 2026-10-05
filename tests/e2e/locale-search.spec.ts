@@ -33,17 +33,16 @@ test('a cold French 404 localizes the entire shell and preserves its language wh
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Page introuvable');
 	const navigation = page.getByRole('navigation', { name: 'Navigation principale' });
 	await expect(navigation).toBeVisible();
-	await expect(navigation.getByRole('link', { name: 'Accueil', exact: true })).toHaveAttribute(
-		'href',
-		`${BASE}/fr`
-	);
+	// Home is the wordmark: the desktop row has no Home link of its own.
+	const home = page.locator('header').getByRole('link', { name: /^DH & AI/ });
+	await expect(home).toHaveAttribute('href', `${BASE}/fr`);
 	await expect(page.locator('footer a[href$="/fr/programme"]')).toBeVisible();
 	await expect(page.locator('header a[hreflang="en"]')).toHaveAttribute(
 		'href',
 		`${BASE}/no-such-page`
 	);
 	await expect(page.locator('header a[href*="/fr/fr/"]')).toHaveCount(0);
-	await navigation.getByRole('link', { name: 'Accueil', exact: true }).click();
+	await home.click();
 	await expect(page).toHaveURL(`${BASE}/fr`);
 	await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
 });

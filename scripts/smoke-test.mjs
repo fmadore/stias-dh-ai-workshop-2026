@@ -45,7 +45,15 @@ if (fr) {
 }
 
 // 3. Key pages exist in both languages
-for (const page of ['about', 'programme', 'participants', 'papers', 'call-for-papers', 'venue']) {
+for (const page of [
+	'about',
+	'programme',
+	'participants',
+	'papers',
+	'call-for-papers',
+	'venue',
+	'resources'
+]) {
 	await read(`build/${page}.html`);
 	await read(`build/fr/${page}.html`);
 }

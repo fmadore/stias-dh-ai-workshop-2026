@@ -4,6 +4,7 @@ const presentation: Presentation = {
 	id: 'fair-indigenous-languages',
 	language: 'en',
 	authors: ['benito-trollip', 'sanjin-muftic'],
+	slides: 'https://docs.google.com/presentation/d/1YleeZMvpiVlTrunROVeTj5SF8vR0VPD0JCPhTxH-qQM/',
 	title: 'Preserving Linguistic Memory through FAIR Practices: Lessons from SADiLaR and Ibali',
 	abstract: `Barriers to research engagement in South Africa, including awareness of available resources, institutional support, and socio-economic factors, shape how scholars in the Global South produce and share knowledge. Platforms such as the SADiLaR repository and the Ibali digital collections at the University of Cape Town (UCT) have been developed to facilitate the sharing and reuse of indigenous language resources. Yet a critical question remains: to what extent do FAIR-compliant platforms translate into meaningful preservation and reuse of indigenous language resources in Southern Africa?
 

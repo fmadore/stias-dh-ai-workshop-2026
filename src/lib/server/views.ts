@@ -4,10 +4,14 @@ import type {
 	PaperListing,
 	PaperSummary,
 	ParticipantListing,
+	Resource,
+	ResourceListing,
+	ResourceListingSection,
 	SessionCast
 } from '$lib/types';
 import { affiliationLocations } from '$lib/data/affiliations';
 import { programme } from '$lib/data/programme';
+import { resourceSections } from '$lib/data/resources';
 import { organizers } from '$lib/data/organizers';
 import { pointSud } from '$lib/data/point-sud';
 import { participants } from '$lib/data/participants';
@@ -148,5 +152,52 @@ export function directoryListings(): {
 				people: getPeople(personIds).map((person) => personRef(person, { withAffiliation: false }))
 			}))
 			.filter((location) => location.people.length > 0)
+	};
+}
+
+function resourceListing({ authors = [], ...resource }: Resource): ResourceListing {
+	return {
+		...resource,
+		authors: getPeople(authors).map((person) => personRef(person, { withAffiliation: false }))
+	};
+}
+
+/**
+ * The resources page: presenters' slides, then the reading list.
+ *
+ * Slides are not kept in resources.ts but on the paper they belong to, so a
+ * deck is added in one place and shows on the paper's page too. They are
+ * listed in the programme's running order.
+ */
+export function resourcesPage(): {
+	slideDecks: ResourceListing[];
+	sections: ResourceListingSection[];
+} {
+	const runningOrder = programme.flatMap((day) =>
+		day.sessions.flatMap((session) => session.presentationIds ?? [])
+	);
+	const rank = (id: string) => {
+		const index = runningOrder.indexOf(id);
+		return index === -1 ? runningOrder.length : index;
+	};
+
+	return {
+		slideDecks: presentations
+			.filter((paper) => paper.slides)
+			.sort((a, b) => rank(a.id) - rank(b.id))
+			.map((paper) =>
+				resourceListing({
+					id: `slides-${paper.id}`,
+					title: paper.title,
+					lang: paper.language,
+					url: paper.slides!,
+					authors: paper.authors,
+					paper: paper.id
+				})
+			),
+		sections: resourceSections.map((section) => ({
+			...section,
+			resources: section.resources.map(resourceListing)
+		}))
 	};
 }

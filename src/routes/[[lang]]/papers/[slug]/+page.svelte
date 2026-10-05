@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages';
-	import { ArrowLeft, ArrowRight, CalendarClock } from '@lucide/svelte';
+	import { ArrowLeft, ArrowRight, CalendarClock, Presentation as SlidesIcon } from '@lucide/svelte';
 	import { t, localePath } from '$lib/utils/i18n';
 	import { siteConfig } from '$lib/data/site-config';
 	import SEO from '$lib/components/SEO.svelte';
@@ -38,6 +38,16 @@
 	/>
 </svelte:head>
 
+<!-- In the header with the other page-level actions (the programme's
+     downloads). Passed only when there is a deck, because PageHeader sets out
+     a gap for any snippet it is given, empty or not. -->
+{#snippet slidesAction()}
+	<a href={data.slides} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+		<SlidesIcon size={15} strokeWidth={1.75} aria-hidden="true" />
+		{m.paper_view_slides()}<span class="sr-only">{m.opens_new_tab()}</span>
+	</a>
+{/snippet}
+
 <PageHeader
 	title={presentation.title}
 	titleLang={presentation.language}
@@ -45,6 +55,7 @@
 	meta={placement
 		? [placement.sessionLabel, placement.slotLabel, presentation.language === 'fr' ? 'FR' : 'EN']
 		: [presentation.language === 'fr' ? 'FR' : 'EN']}
+	actions={data.slides ? slidesAction : undefined}
 />
 
 <div class="page-end page-body">

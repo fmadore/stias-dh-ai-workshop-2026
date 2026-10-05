@@ -192,5 +192,14 @@
   "paper_download_ris": "Télécharger le fichier RIS",
   "filter_search_loading": "Chargement de la recherche complète. Les résultats portent actuellement sur les noms, les affiliations et les titres.",
   "filter_search_partial": "La recherche complète est indisponible. Les résultats portent uniquement sur les noms, les affiliations et les titres.",
-  "filter_search_retry": "Réessayer la recherche complète"
+  "filter_search_retry": "Réessayer la recherche complète",
+  "nav_resources": "Ressources",
+  "seo_resources_description": "Diapositives et textes issus de l'atelier HN & IA en études africaines, et les archives, données, outils d'IA, lieux de publication et réseaux évoqués au fil de ses discussions.",
+  "resources_page_subtitle": "Les diapositives et les textes issus de l'atelier, et les archives, outils, lieux de publication et réseaux évoqués au fil de ses discussions.",
+  "opens_new_tab": "(s'ouvre dans un nouvel onglet)",
+  "paper_view_slides": "Voir les diapositives",
+  "resources_slides_title": "Diapositives",
+  "resources_slides_intro": "Les diapositives partagées par les présentateur·rices, dans l'ordre du programme.",
+  "resources_read_abstract": "Lire le résumé",
+  "resources_contents": "Sur cette page"
 }

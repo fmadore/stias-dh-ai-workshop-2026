@@ -28,20 +28,26 @@
 			: { href: localePath('/programme'), label: m.nav_programme() }
 	);
 
+	// The desktop row has no Home link: the wordmark beside it already goes
+	// there, and the row could not afford both once Resources joined it — at
+	// 1280px the French links ran 14px over and three of them broke onto two
+	// lines. The mobile menu is a list read on its own, so it keeps one.
+	const homeLink = $derived({ href: localePath('/'), label: m.nav_home() });
+
 	const navLinks = $derived(
 		[
-			{ href: localePath('/'), label: m.nav_home() },
 			{ href: localePath('/about'), label: m.nav_about() },
 			{ href: localePath('/programme'), label: m.nav_programme() },
 			{ href: localePath('/participants'), label: m.nav_participants() },
 			{ href: localePath('/papers'), label: m.nav_papers() },
 			{ href: localePath('/venue'), label: m.nav_venue() },
+			{ href: localePath('/resources'), label: m.nav_resources() },
 			{ href: localePath('/call-for-papers'), label: m.nav_cfp() }
 		].filter((link) => link.href !== primaryAction.href)
 	);
 
 	/** Every link, including the promoted one — the mobile menu keeps one list. */
-	const allLinks = $derived([...navLinks, primaryAction]);
+	const allLinks = $derived([homeLink, ...navLinks, primaryAction]);
 
 	function toggleDarkMode() {
 		explicitTheme = true;
@@ -114,7 +120,11 @@
 >
 	<div class="container-page">
 		<div class="flex h-[calc(var(--nav-height)-1px)] items-center justify-between gap-4">
-			<a href={localePath('/')} class="flex min-w-0 flex-col leading-none">
+			<a
+				href={homeLink.href}
+				aria-current={isActive(homeLink.href) ? 'page' : undefined}
+				class="flex min-w-0 flex-col leading-none"
+			>
 				<span class="text-link font-display text-xl tracking-tight"> DH &amp; AI </span>
 
 				<span class="text-meta text-badge mt-1 line-clamp-3 leading-[1.15] tracking-[0.14em]">

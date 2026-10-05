@@ -32,3 +32,8 @@ export function formatDateRange(
 export function formatShortDay(isoDate: string, locale: Locale = getLocale()): string {
 	return dates.formatShortDay(isoDate, locale);
 }
+
+/** "April 2026" for a month-only date; a full date formats as `formatDate`. */
+export function formatPartialDate(iso: string, locale: Locale = getLocale()): string {
+	return dates.formatPartialDate(iso, locale);
+}

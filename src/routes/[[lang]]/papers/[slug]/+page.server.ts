@@ -56,6 +56,8 @@ export const load: PageServerLoad = ({ params }) => {
 
 	return {
 		presentation: paperSummary(presentation),
+		// Outside the summary, which siblings share and which has no use for it.
+		slides: presentation.slides ?? null,
 		authors: authors.map((author) => personRef(author)),
 		citationSchema: presentationSchema(citation, abstractText, locale),
 		citationDownloads: {

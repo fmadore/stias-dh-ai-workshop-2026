@@ -15,7 +15,8 @@
 			links: [
 				{ href: localePath('/about'), label: m.nav_about() },
 				{ href: localePath('/programme'), label: m.nav_programme() },
-				{ href: localePath('/papers'), label: m.nav_papers() }
+				{ href: localePath('/papers'), label: m.nav_papers() },
+				{ href: localePath('/resources'), label: m.nav_resources() }
 			]
 		},
 		{
