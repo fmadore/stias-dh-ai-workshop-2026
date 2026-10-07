@@ -194,12 +194,14 @@
   "filter_search_partial": "Full search is unavailable. Results cover names, affiliations and titles only.",
   "filter_search_retry": "Retry full search",
   "nav_resources": "Resources",
-  "seo_resources_description": "Slides and writing from the DH & AI in African Studies workshop, and the archives, data, AI tools, publishing venues and networks that came up in its discussions.",
-  "resources_page_subtitle": "Slides and writing from the workshop, and the archives, tools, publishing venues and networks that came up in its discussions.",
+  "seo_resources_description": "Slides, writing and software from the DH & AI in African Studies workshop, and the archives, data, AI tools, publishing venues and networks that came up in its discussions.",
+  "resources_page_subtitle": "Slides, writing and software from the workshop, and the archives, tools, publishing venues and networks that came up in its discussions.",
   "opens_new_tab": "(opens in a new tab)",
   "paper_view_slides": "View the slides",
   "resources_slides_title": "Slides",
   "resources_slides_intro": "Slides that presenters have shared, in programme order.",
   "resources_read_abstract": "Read the abstract",
-  "resources_contents": "On this page"
+  "resources_contents": "On this page",
+  "about_languages_title": "Two working languages",
+  "about_languages_body": "Presenters spoke in English or French. Every session ran both in the room at STIAS and on {platform}, and was captioned live in English and French with Live Translation & Subtitles, an open-source app made for the workshop."
 }

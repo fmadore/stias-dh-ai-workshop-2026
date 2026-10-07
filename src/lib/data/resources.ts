@@ -1,7 +1,8 @@
 import type { ResourceSection } from '$lib/types';
 
 /**
- * The resources page: writing about the workshop, and the archives, models,
+ * The resources page: writing about the workshop and software made for it,
+ * and the archives, models,
  * networks and meetings that came up in its discussions. Section order and
  * array order are display order; meetings run in date order.
  *
@@ -31,6 +32,33 @@ export const resourceSections: ResourceSection[] = [
 					en: 'A walk through the STIAS garden, from its ordered vineyard to its wilder corners, becomes a way of thinking about structured data and the messier material humanities scholars work with — and about whether AI curation leaves room to challenge the colonial biases archives carry.',
 					fr: "Une promenade dans le jardin du STIAS, de son vignoble ordonné à ses recoins plus sauvages, devient une manière de penser l'écart entre données structurées et matériaux plus désordonnés des sciences humaines — et de se demander si la curation par l'IA laisse encore place à la critique des biais coloniaux que portent les archives."
 				}
+			}
+		]
+	},
+	{
+		// The About page links here by this id, to say how the sessions were
+		// captioned; check-links fails the build if the anchor goes missing.
+		id: 'made-for-the-workshop',
+		title: { en: 'Made for the workshop', fr: "Conçu pour l'atelier" },
+		resources: [
+			{
+				id: 'live-translation',
+				title: 'Live Translation & Subtitles',
+				lang: 'en',
+				url: 'https://apps.microsoft.com/detail/9PFB8LR3RR9X',
+				authors: ['madore'],
+				source: ['Microsoft Store'],
+				description: {
+					en: 'A Windows app that shows live captions in a transparent overlay above slides or a call. It was written for the workshop and captioned its sessions in English and French. Whisper transcribes speech on the computer itself, with no account or internet connection; translation, into one or two languages at once, goes through Gemini or OpenAI with your own API key. Transcripts export as text, SRT or WebVTT. Free, for Windows 11, under the MIT licence.',
+					fr: "Une application Windows qui affiche des sous-titres en direct dans une fenêtre transparente, au-dessus des diapositives ou d'un appel. Écrite pour l'atelier, elle en a sous-titré les séances en anglais et en français. Whisper transcrit la parole sur l'ordinateur même, sans compte ni connexion internet ; la traduction, vers une ou deux langues à la fois, passe par Gemini ou OpenAI avec sa propre clé d'API. Les transcriptions s'exportent en texte, SRT ou WebVTT. Gratuite, pour Windows 11, sous licence MIT."
+				},
+				links: [
+					{
+						label: { en: 'Source code on GitHub', fr: 'Code source sur GitHub' },
+						url: 'https://github.com/fmadore/Live-translation',
+						hreflang: 'en'
+					}
+				]
 			}
 		]
 	},

@@ -194,12 +194,14 @@
   "filter_search_partial": "La recherche complète est indisponible. Les résultats portent uniquement sur les noms, les affiliations et les titres.",
   "filter_search_retry": "Réessayer la recherche complète",
   "nav_resources": "Ressources",
-  "seo_resources_description": "Diapositives et textes issus de l'atelier HN & IA en études africaines, et les archives, données, outils d'IA, lieux de publication et réseaux évoqués au fil de ses discussions.",
-  "resources_page_subtitle": "Les diapositives et les textes issus de l'atelier, et les archives, outils, lieux de publication et réseaux évoqués au fil de ses discussions.",
+  "seo_resources_description": "Diapositives, textes et application issus de l'atelier HN & IA en études africaines, et les archives, données, outils d'IA, lieux de publication et réseaux évoqués au fil de ses discussions.",
+  "resources_page_subtitle": "Les diapositives, les textes et l'application issus de l'atelier, et les archives, outils, lieux de publication et réseaux évoqués au fil de ses discussions.",
   "opens_new_tab": "(s'ouvre dans un nouvel onglet)",
   "paper_view_slides": "Voir les diapositives",
   "resources_slides_title": "Diapositives",
   "resources_slides_intro": "Les diapositives partagées par les présentateur·rices, dans l'ordre du programme.",
   "resources_read_abstract": "Lire le résumé",
-  "resources_contents": "Sur cette page"
+  "resources_contents": "Sur cette page",
+  "about_languages_title": "Deux langues de travail",
+  "about_languages_body": "Les intervenant·es se sont exprimé·es en anglais ou en français. Chaque séance s'est tenue à la fois dans la salle du STIAS et sur {platform}, sous-titrée en direct en anglais et en français avec Live Translation & Subtitles, une application libre conçue pour l'atelier."
 }
