@@ -1,6 +1,12 @@
 import { expect, test, BASE } from './fixtures';
 
 test('locale switching uses the canonical French homepage', async ({ page }) => {
+	// Wide enough for the desktop row on every engine. The device default is
+	// 1280px, exactly the 80rem breakpoint, and WebKit with a classic scrollbar
+	// evaluates the query against the width beside it (1270px): the row showed
+	// for a moment after load and was gone once the scrollbar appeared, so the
+	// check below passed only when it ran inside that moment.
+	await page.setViewportSize({ width: 1440, height: 900 });
 	await page.goto(`${BASE}/`);
 	await page
 		.getByRole('navigation', { name: 'Language' })
