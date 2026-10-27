@@ -1,4 +1,4 @@
-import type { CountryCode } from '$lib/types';
+import type { CountryCode } from '#lib/types/index.ts';
 
 export type CountryLocale = 'en' | 'fr';
 

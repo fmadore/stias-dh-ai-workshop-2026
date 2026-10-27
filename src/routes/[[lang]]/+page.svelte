@@ -1,16 +1,16 @@
 <script lang="ts">
-	import * as m from '$lib/paraglide/messages';
-	import { siteConfig } from '$lib/data/site-config';
-	import { buildEventSchema } from '$lib/data/event-schema';
-	import { t, localePath } from '$lib/utils/i18n';
-	import SEO from '$lib/components/SEO.svelte';
-	import Hero from '$lib/components/home/Hero.svelte';
-	import AtAGlance from '$lib/components/home/AtAGlance.svelte';
-	import JoinOnline from '$lib/components/shared/JoinOnline.svelte';
-	import KeyDatesTimeline from '$lib/components/home/KeyDatesTimeline.svelte';
-	import ThematicAxis from '$lib/components/about/ThematicAxis.svelte';
-	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
-	import { thematicAxes } from '$lib/data/thematic-axes';
+	import * as m from '#lib/paraglide/messages.js';
+	import { siteConfig } from '#lib/data/site-config.ts';
+	import { buildEventSchema } from '#lib/data/event-schema.ts';
+	import { t, localePath } from '#lib/utils/i18n.ts';
+	import SEO from '#lib/components/SEO.svelte';
+	import Hero from '#lib/components/home/Hero.svelte';
+	import AtAGlance from '#lib/components/home/AtAGlance.svelte';
+	import JoinOnline from '#lib/components/shared/JoinOnline.svelte';
+	import KeyDatesTimeline from '#lib/components/home/KeyDatesTimeline.svelte';
+	import ThematicAxis from '#lib/components/about/ThematicAxis.svelte';
+	import ScrollReveal from '#lib/components/ScrollReveal.svelte';
+	import { thematicAxes } from '#lib/data/thematic-axes.ts';
 	import { ArrowRight } from '@lucide/svelte';
 
 	let { data } = $props();

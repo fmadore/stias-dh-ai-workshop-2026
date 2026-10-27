@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { base } from '$app/paths';
-	import { getLocale } from '$lib/paraglide/runtime';
-	import { siteConfig } from '$lib/data/site-config';
-	import { localizedAbsoluteUrl, unlocalizedPath } from '$lib/utils/localized-paths';
+	import { base } from '#lib/utils/base-path.ts';
+	import { getLocale } from '#lib/paraglide/runtime.js';
+	import { siteConfig } from '#lib/data/site-config.ts';
+	import { localizedAbsoluteUrl, unlocalizedPath } from '#lib/utils/localized-paths.ts';
 
 	interface Props {
 		title: string;
@@ -47,7 +47,7 @@
 
 	// Every page describes itself as a WebPage. The Event entity for the
 	// workshop is emitted once, on the home page, via `additionalSchema`
-	// (see $lib/data/event-schema.ts).
+	// (see #lib/data/event-schema.ts).
 	const jsonLd = $derived(
 		serialize({
 			'@context': 'https://schema.org',

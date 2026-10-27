@@ -1,8 +1,8 @@
 <script lang="ts">
-	import * as m from '$lib/paraglide/messages';
-	import { t } from '$lib/utils/i18n';
-	import { topicObjectives } from '$lib/data/topic-objectives';
-	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
+	import * as m from '#lib/paraglide/messages.js';
+	import { t } from '#lib/utils/i18n.ts';
+	import { topicObjectives } from '#lib/data/topic-objectives.ts';
+	import ScrollReveal from '#lib/components/ScrollReveal.svelte';
 </script>
 
 <section class="section-pad">

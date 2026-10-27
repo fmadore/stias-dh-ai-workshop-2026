@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { PaperListing } from '$lib/types';
-	import { t, localePath } from '$lib/utils/i18n';
-	import { getPlacements } from '$lib/utils/placement';
+	import type { PaperListing } from '#lib/types/index.ts';
+	import { t, localePath } from '#lib/utils/i18n.ts';
+	import { getPlacements } from '#lib/utils/placement.ts';
 
 	let {
 		presentation,

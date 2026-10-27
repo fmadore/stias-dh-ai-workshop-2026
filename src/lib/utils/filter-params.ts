@@ -1,4 +1,4 @@
-import type { CountryCode } from '$lib/types';
+import type { CountryCode } from '#lib/types/index.ts';
 import type { FilterOptions } from './filter';
 
 export type DirectoryGrouping = 'none' | 'alpha' | 'country';

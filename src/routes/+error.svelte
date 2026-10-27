@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { base } from '$app/paths';
-	import * as m from '$lib/paraglide/messages';
-	import { localizedPath, localeFromPath } from '$lib/utils/localized-paths';
+	import { base } from '#lib/utils/base-path.ts';
+	import * as m from '#lib/paraglide/messages.js';
+	import { localizedPath, localeFromPath } from '#lib/utils/localized-paths.ts';
 	import { ArrowLeft } from '@lucide/svelte';
 
 	// Error routes have no lang parameter. Resolve their messages and recovery

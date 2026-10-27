@@ -1,14 +1,14 @@
 <script lang="ts">
-	import * as m from '$lib/paraglide/messages';
-	import { siteConfig } from '$lib/data/site-config';
-	import SEO from '$lib/components/SEO.svelte';
-	import PageHeader from '$lib/components/layout/PageHeader.svelte';
-	import AbstractSection from '$lib/components/about/AbstractSection.svelte';
-	import ThematicAxis from '$lib/components/about/ThematicAxis.svelte';
-	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
-	import { thematicAxes } from '$lib/data/thematic-axes';
-	import { onlineAccess } from '$lib/data/online-access';
-	import { localePath } from '$lib/utils/i18n';
+	import * as m from '#lib/paraglide/messages.js';
+	import { siteConfig } from '#lib/data/site-config.ts';
+	import SEO from '#lib/components/SEO.svelte';
+	import PageHeader from '#lib/components/layout/PageHeader.svelte';
+	import AbstractSection from '#lib/components/about/AbstractSection.svelte';
+	import ThematicAxis from '#lib/components/about/ThematicAxis.svelte';
+	import ScrollReveal from '#lib/components/ScrollReveal.svelte';
+	import { thematicAxes } from '#lib/data/thematic-axes.ts';
+	import { onlineAccess } from '#lib/data/online-access.ts';
+	import { localePath } from '#lib/utils/i18n.ts';
 
 	// The app's name is the link, so the sentence is cut around it, as the call
 	// for papers does for its journal. It stays English inside the French

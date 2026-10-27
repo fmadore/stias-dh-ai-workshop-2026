@@ -30,7 +30,7 @@ The bilingualism is substantive, not decorative: the workshop materials include 
 
 ## Operating Context
 
-- **Static and free to host.** SvelteKit 2 / Svelte 5, fully prerendered via `@sveltejs/adapter-static`, deployed to GitHub Pages under the `/stias-dh-ai-workshop-2026` base path. No server, no database, no runtime API.
+- **Static and free to host.** SvelteKit 3 / Svelte 5, fully prerendered via `@sveltejs/adapter-static`, deployed to GitHub Pages under the `/stias-dh-ai-workshop-2026` base path. No server, no database, no runtime API.
 - **Content lives in typed TypeScript files** under `src/lib/data/` — one file per participant and per presentation, auto-discovered by `import.meta.glob`. Editing content means editing code, and `scripts/check-data.ts` enforces referential integrity (author ids, programme references, image paths) at build time.
 - **Build-time server views keep page payloads small.** `src/lib/server/views.ts` and route server loaders derive the counts, listings, bylines and session casts each page renders. Full abstracts and biographies stay off unrelated routes; directory search loads the full-text index on demand. These modules run during prerendering, not on a deployed server.
 - **Workshop state is derived, never hardcoded.** `src/lib/utils/milestones.ts` computes `isCfpOpen()`, `nextMilestone()`, and `workshopPhase()` from four dates in `cfp.ts` and `site-config.ts`, in South African Standard Time. Any design that implies a phase — an open call, a countdown, a "register now" — must read from these functions rather than assuming. A previous design review assumed the call for papers was open three months after it had closed; this indirection exists because of that.

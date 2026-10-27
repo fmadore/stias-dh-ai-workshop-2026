@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types';
-import { resourcesPage } from '$lib/server/views';
+import { resourcesPage } from '#lib/server/views.ts';
 
 export const prerender = true;
 

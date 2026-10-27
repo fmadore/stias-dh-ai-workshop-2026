@@ -1,7 +1,7 @@
 <script lang="ts">
-	import * as m from '$lib/paraglide/messages';
-	import { localePath } from '$lib/utils/i18n';
-	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
+	import * as m from '#lib/paraglide/messages.js';
+	import { localePath } from '#lib/utils/i18n.ts';
+	import ScrollReveal from '#lib/components/ScrollReveal.svelte';
 
 	/** Counted at prerender (`glanceStats`), so the page does not ship what it counts. */
 	let { glance }: { glance: { papers: number; participants: number; countries: number } } =

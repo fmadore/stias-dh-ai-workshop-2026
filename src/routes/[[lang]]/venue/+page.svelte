@@ -1,13 +1,13 @@
 <script lang="ts">
-	import * as m from '$lib/paraglide/messages';
-	import { siteConfig } from '$lib/data/site-config';
-	import SEO from '$lib/components/SEO.svelte';
-	import PageHeader from '$lib/components/layout/PageHeader.svelte';
-	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
-	import VenueInfo from '$lib/components/venue/VenueInfo.svelte';
-	import VenueMap from '$lib/components/venue/VenueMap.svelte';
-	import AccommodationCard from '$lib/components/venue/AccommodationCard.svelte';
-	import { accommodations } from '$lib/data/accommodation';
+	import * as m from '#lib/paraglide/messages.js';
+	import { siteConfig } from '#lib/data/site-config.ts';
+	import SEO from '#lib/components/SEO.svelte';
+	import PageHeader from '#lib/components/layout/PageHeader.svelte';
+	import ScrollReveal from '#lib/components/ScrollReveal.svelte';
+	import VenueInfo from '#lib/components/venue/VenueInfo.svelte';
+	import VenueMap from '#lib/components/venue/VenueMap.svelte';
+	import AccommodationCard from '#lib/components/venue/AccommodationCard.svelte';
+	import { accommodations } from '#lib/data/accommodation.ts';
 	import { Info } from '@lucide/svelte';
 </script>
 

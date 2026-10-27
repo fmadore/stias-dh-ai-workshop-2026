@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { clockMilestones, venueClock } from '$lib/utils/venue-clock';
-	import { base } from '$app/paths';
-	import * as m from '$lib/paraglide/messages';
-	import { organizers } from '$lib/data/organizers';
-	import { sponsors } from '$lib/data/sponsors';
-	import { siteConfig } from '$lib/data/site-config';
-	import { localePath } from '$lib/utils/i18n';
+	import { clockMilestones, venueClock } from '#lib/utils/venue-clock.ts';
+	import { staticAsset } from '#lib/utils/base-path.ts';
+	import * as m from '#lib/paraglide/messages.js';
+	import { organizers } from '#lib/data/organizers.ts';
+	import { sponsors } from '#lib/data/sponsors.ts';
+	import { siteConfig } from '#lib/data/site-config.ts';
+	import { localePath } from '#lib/utils/i18n.ts';
 
 	// The footer used to be logos and a copyright line, so every route out of
 	// a page depended on the navbar and the sponsor row read as terminal.
@@ -101,7 +101,7 @@
 						class="bg-paper rounded-md px-4 py-2 opacity-75 transition-opacity duration-300 ease-out hover:opacity-100"
 					>
 						<img
-							src="{base}{sponsor.logo}"
+							src={staticAsset(sponsor.logo)}
 							alt={sponsor.name}
 							width={sponsor.width}
 							height={sponsor.height}

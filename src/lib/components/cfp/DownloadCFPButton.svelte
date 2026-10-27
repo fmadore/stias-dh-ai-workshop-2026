@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { base } from '$app/paths';
-	import * as m from '$lib/paraglide/messages';
-	import { getLocale } from '$lib/paraglide/runtime';
+	import { staticAsset } from '#lib/utils/base-path.ts';
+	import * as m from '#lib/paraglide/messages.js';
+	import { getLocale } from '#lib/paraglide/runtime.js';
 	import { FileText } from '@lucide/svelte';
 
 	interface Props {
@@ -29,11 +29,11 @@
 		{m.download_cfp()}
 	</span>
 	<div class="flex flex-wrap items-center gap-2">
-		<a href={`${base}/downloads/${stem}.pdf`} download class={buttonClass}>
+		<a href={staticAsset(`downloads/${stem}.pdf`)} download class={buttonClass}>
 			<FileText size={15} strokeWidth={1.75} aria-hidden="true" />
 			{m.download_cfp_pdf()}
 		</a>
-		<a href={`${base}/downloads/${stem}.txt`} download class={buttonClass}>
+		<a href={staticAsset(`downloads/${stem}.txt`)} download class={buttonClass}>
 			<FileText size={15} strokeWidth={1.75} aria-hidden="true" />
 			{m.download_cfp_text()}
 		</a>

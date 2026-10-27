@@ -1,6 +1,6 @@
-import { base } from '$app/paths';
-import { setLocale } from '$lib/paraglide/runtime';
-import { localeFromPath } from '$lib/utils/localized-paths';
+import { base } from '#lib/utils/base-path.ts';
+import { setLocale } from '#lib/paraglide/runtime.js';
+import { localeFromPath } from '#lib/utils/localized-paths.ts';
 import type { LayoutLoad } from './$types';
 
 export const prerender = true;

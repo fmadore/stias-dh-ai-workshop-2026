@@ -1,5 +1,5 @@
 /** Plain-text helpers shared by cards and SEO descriptions (no heavy deps). */
-import type { Presentation } from '$lib/types';
+import type { Presentation } from '#lib/types/index.ts';
 
 /** All supplied language variants, without depending on the current UI locale. */
 export function abstractVariants(abstract: Presentation['abstract']): string[] {

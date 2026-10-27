@@ -1,9 +1,9 @@
 <script lang="ts">
-	import * as m from '$lib/paraglide/messages';
-	import { getLocale } from '$lib/paraglide/runtime';
-	import { countryName, sortCountriesByName } from '$lib/utils/country';
-	import type { CountryCode } from '$lib/types';
-	import type { SearchStatus } from '$lib/utils/search-text.svelte';
+	import * as m from '#lib/paraglide/messages.js';
+	import { getLocale } from '#lib/paraglide/runtime.js';
+	import { countryName, sortCountriesByName } from '#lib/utils/country.ts';
+	import type { CountryCode } from '#lib/types/index.ts';
+	import type { SearchStatus } from '#lib/utils/search-text.svelte.ts';
 	import type { Snippet } from 'svelte';
 	import SegmentedControl from './SegmentedControl.svelte';
 	import { Search, X } from '@lucide/svelte';

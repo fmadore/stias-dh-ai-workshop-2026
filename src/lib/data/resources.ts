@@ -1,4 +1,4 @@
-import type { ResourceSection } from '$lib/types';
+import type { ResourceSection } from '#lib/types/index.ts';
 
 /**
  * The resources page: writing about the workshop and software made for it,

@@ -1,11 +1,11 @@
 <script lang="ts">
-	import * as m from '$lib/paraglide/messages';
-	import { siteConfig } from '$lib/data/site-config';
-	import { t } from '$lib/utils/i18n';
-	import SEO from '$lib/components/SEO.svelte';
-	import PageHeader from '$lib/components/layout/PageHeader.svelte';
-	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
-	import ResourceEntry from '$lib/components/resources/ResourceEntry.svelte';
+	import * as m from '#lib/paraglide/messages.js';
+	import { siteConfig } from '#lib/data/site-config.ts';
+	import { t } from '#lib/utils/i18n.ts';
+	import SEO from '#lib/components/SEO.svelte';
+	import PageHeader from '#lib/components/layout/PageHeader.svelte';
+	import ScrollReveal from '#lib/components/ScrollReveal.svelte';
+	import ResourceEntry from '#lib/components/resources/ResourceEntry.svelte';
 
 	let { data } = $props();
 

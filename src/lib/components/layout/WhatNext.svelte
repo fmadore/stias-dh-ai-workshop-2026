@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { base } from '$app/paths';
-	import * as m from '$lib/paraglide/messages';
-	import { localePath } from '$lib/utils/i18n';
-	import { contactEmails } from '$lib/data/contacts';
-	import { organizers } from '$lib/data/organizers';
+	import { base } from '#lib/utils/base-path.ts';
+	import * as m from '#lib/paraglide/messages.js';
+	import { localePath } from '#lib/utils/i18n.ts';
+	import { contactEmails } from '#lib/data/contacts.ts';
+	import { organizers } from '#lib/data/organizers.ts';
 
 	type Destination =
 		'about' | 'programme' | 'papers' | 'participants' | 'venue' | 'cfp' | 'contact';

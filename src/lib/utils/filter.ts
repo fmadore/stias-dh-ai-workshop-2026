@@ -4,7 +4,7 @@ import type {
 	PaperListing,
 	PaperSummary,
 	Presentation
-} from '$lib/types';
+} from '#lib/types/index.ts';
 import { countrySearchTerms } from './country';
 import { abstractToPlainText, abstractVariants } from './text';
 

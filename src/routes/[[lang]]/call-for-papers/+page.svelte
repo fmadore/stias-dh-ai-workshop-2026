@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { venueClock } from '$lib/utils/venue-clock';
-	import * as m from '$lib/paraglide/messages';
-	import { siteConfig } from '$lib/data/site-config';
-	import { cfpInfo } from '$lib/data/cfp';
-	import { t, localePath } from '$lib/utils/i18n';
-	import { isCfpOpen } from '$lib/utils/milestones';
-	import { formatDate } from '$lib/utils/date';
+	import { venueClock } from '#lib/utils/venue-clock.ts';
+	import * as m from '#lib/paraglide/messages.js';
+	import { siteConfig } from '#lib/data/site-config.ts';
+	import { cfpInfo } from '#lib/data/cfp.ts';
+	import { t, localePath } from '#lib/utils/i18n.ts';
+	import { isCfpOpen } from '#lib/utils/milestones.ts';
+	import { formatDate } from '#lib/utils/date.ts';
 	import { Archive, ArrowRight } from '@lucide/svelte';
-	import SEO from '$lib/components/SEO.svelte';
-	import PageHeader from '$lib/components/layout/PageHeader.svelte';
-	import CFPSection from '$lib/components/cfp/CFPSection.svelte';
-	import DownloadCFPButton from '$lib/components/cfp/DownloadCFPButton.svelte';
+	import SEO from '#lib/components/SEO.svelte';
+	import PageHeader from '#lib/components/layout/PageHeader.svelte';
+	import CFPSection from '#lib/components/cfp/CFPSection.svelte';
+	import DownloadCFPButton from '#lib/components/cfp/DownloadCFPButton.svelte';
 
 	// The call closed on 30 April 2026 and the page said so nowhere: it still
 	// opened "We invite proposals…" and listed four addresses to send them to.

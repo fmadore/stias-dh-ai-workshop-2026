@@ -1,6 +1,6 @@
-import { base } from '$app/paths';
-import { getLocale, baseLocale, locales } from '$lib/paraglide/runtime';
-import type { LocalizedString, Presentation } from '$lib/types';
+import { getLocale, baseLocale, locales } from '#lib/paraglide/runtime.js';
+import type { LocalizedString, Presentation } from '#lib/types/index.ts';
+import { base } from './base-path';
 import { localizedPath, type SupportedLocale } from './localized-paths';
 
 export function t(str: LocalizedString): string {

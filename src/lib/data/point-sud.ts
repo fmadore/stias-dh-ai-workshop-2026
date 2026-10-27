@@ -1,4 +1,4 @@
-import type { PointSudRepresentative } from '$lib/types';
+import type { PointSudRepresentative } from '#lib/types/index.ts';
 
 /**
  * Point Sud runs the DFG programme that funds this workshop. Its

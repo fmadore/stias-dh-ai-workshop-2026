@@ -6,12 +6,12 @@
 		Marker as MapLibreMarker,
 		Popup as MapLibrePopup
 	} from 'maplibre-gl';
-	import * as m from '$lib/paraglide/messages';
-	import type { MappedAffiliation } from '$lib/types';
-	import { countryName } from '$lib/utils/country';
-	import { localePath, t } from '$lib/utils/i18n';
-	import { getLocale } from '$lib/paraglide/runtime';
-	import { createLazyMap } from '$lib/utils/map';
+	import * as m from '#lib/paraglide/messages.js';
+	import type { MappedAffiliation } from '#lib/types/index.ts';
+	import { countryName } from '#lib/utils/country.ts';
+	import { localePath, t } from '#lib/utils/i18n.ts';
+	import { getLocale } from '#lib/paraglide/runtime.js';
+	import { createLazyMap } from '#lib/utils/map.ts';
 
 	let {
 		/** The campuses and who works at each, resolved by the page's load. */

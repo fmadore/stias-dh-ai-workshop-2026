@@ -1,4 +1,4 @@
-import type { ProgrammeDay } from '$lib/types';
+import type { ProgrammeDay } from '#lib/types/index.ts';
 
 /**
  * Date the programme was last revised (ISO `yyyy-mm-dd`). Bump this whenever you

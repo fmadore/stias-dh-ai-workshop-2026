@@ -1,8 +1,8 @@
 import type { RequestHandler } from './$types';
-import { presentations } from '$lib/data/presentations';
-import { people } from '$lib/data/people';
-import { siteConfig } from '$lib/data/site-config';
-import { localizedAbsoluteUrl } from '$lib/utils/localized-paths';
+import { presentations } from '#lib/data/presentations/index.ts';
+import { people } from '#lib/data/people.ts';
+import { siteConfig } from '#lib/data/site-config.ts';
+import { localizedAbsoluteUrl } from '#lib/utils/localized-paths.ts';
 
 export const prerender = true;
 

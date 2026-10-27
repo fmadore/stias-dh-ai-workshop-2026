@@ -3,7 +3,7 @@ import type { ProgrammeDay } from '../types/index.ts';
 /**
  * How the running order is numbered, timed and linked.
  *
- * Deliberately free of Paraglide, `$lib` aliases and Svelte, like
+ * Deliberately free of Paraglide, `$app` modules and Svelte, like
  * `logistics.ts`: the calendar export is a plain Node script, and it has to
  * name "Panel 3" and link `#session-…` exactly as the programme page does.
  * Panel numbering used to be counted separately in five places — the

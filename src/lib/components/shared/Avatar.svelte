@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { base } from '$app/paths';
-	import { getInitials } from '$lib/utils/text';
+	import { staticAsset } from '#lib/utils/base-path.ts';
+	import { getInitials } from '#lib/utils/text.ts';
 
 	let {
 		name,
@@ -37,7 +37,7 @@
 >
 	{#if image && !failed}
 		<img
-			src="{base}{image}"
+			src={staticAsset(image)}
 			alt={decorative ? '' : name}
 			class="h-full w-full object-cover"
 			{loading}

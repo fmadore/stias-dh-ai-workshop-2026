@@ -1,5 +1,4 @@
-import { json } from '@sveltejs/kit';
-import { paperText, personText } from '$lib/server/full-text';
+import { paperText, personText } from '#lib/server/full-text.ts';
 import type { RequestHandler } from './$types';
 
 // A non-dynamic route is included by SvelteKit's default '*' prerender entry,
@@ -7,4 +6,4 @@ import type { RequestHandler } from './$types';
 export const prerender = true;
 
 export const GET: RequestHandler = () =>
-	json({ people: Object.fromEntries(personText), papers: Object.fromEntries(paperText) });
+	Response.json({ people: Object.fromEntries(personText), papers: Object.fromEntries(paperText) });

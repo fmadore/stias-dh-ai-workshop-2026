@@ -1,4 +1,4 @@
-import type { VenueInfo } from '$lib/types';
+import type { VenueInfo } from '#lib/types/index.ts';
 
 export const venueInfo: VenueInfo = {
 	name: 'STIAS',

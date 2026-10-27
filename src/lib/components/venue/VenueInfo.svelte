@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { venueInfo, venueStreet } from '$lib/data/venue';
-	import { t } from '$lib/utils/i18n';
-	import * as m from '$lib/paraglide/messages';
+	import { venueInfo, venueStreet } from '#lib/data/venue.ts';
+	import { t } from '#lib/utils/i18n.ts';
+	import * as m from '#lib/paraglide/messages.js';
 	import { Check, ExternalLink, Info, Minus } from '@lucide/svelte';
-	import { getLocale } from '$lib/paraglide/runtime';
-	import { countryName } from '$lib/utils/country';
-	import JoinOnline from '$lib/components/shared/JoinOnline.svelte';
-	import { onlineAccessPublished } from '$lib/data/online-access';
+	import { getLocale } from '#lib/paraglide/runtime.js';
+	import { countryName } from '#lib/utils/country.ts';
+	import JoinOnline from '#lib/components/shared/JoinOnline.svelte';
+	import { onlineAccessPublished } from '#lib/data/online-access.ts';
 
 	const locale = $derived(getLocale());
 

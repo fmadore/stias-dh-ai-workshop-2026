@@ -1,5 +1,5 @@
 import type { Map as MapLibreMap, MapOptions } from 'maplibre-gl';
-import * as m from '$lib/paraglide/messages';
+import * as m from '#lib/paraglide/messages.js';
 
 type MapLibre = typeof import('maplibre-gl');
 

@@ -1,4 +1,4 @@
-import type { CFPInfo } from '$lib/types';
+import type { CFPInfo } from '#lib/types/index.ts';
 
 export const cfpInfo: CFPInfo = {
 	deadline: '2026-04-30',

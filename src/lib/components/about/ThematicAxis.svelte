@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { ThematicAxis } from '$lib/types';
-	import { t } from '$lib/utils/i18n';
+	import type { ThematicAxis } from '#lib/types/index.ts';
+	import { t } from '#lib/utils/i18n.ts';
 	import { Cpu, Building2, BookOpen } from '@lucide/svelte';
 
 	let { axis, compact = false }: { axis: ThematicAxis; compact?: boolean } = $props();

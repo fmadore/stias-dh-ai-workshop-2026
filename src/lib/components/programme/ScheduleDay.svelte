@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { ProgrammeDay, SessionCast } from '$lib/types';
-	import * as m from '$lib/paraglide/messages';
-	import { t } from '$lib/utils/i18n';
+	import type { ProgrammeDay, SessionCast } from '#lib/types/index.ts';
+	import * as m from '#lib/paraglide/messages.js';
+	import { t } from '#lib/utils/i18n.ts';
 	import SessionCard from './SessionCard.svelte';
 
 	let {

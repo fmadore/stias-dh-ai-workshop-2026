@@ -1,6 +1,6 @@
-import * as m from '$lib/paraglide/messages';
-import { cfpInfo } from '$lib/data/cfp';
-import { siteConfig } from '$lib/data/site-config';
+import * as m from '#lib/paraglide/messages.js';
+import { cfpInfo } from '#lib/data/cfp.ts';
+import { siteConfig } from '#lib/data/site-config.ts';
 import { formatDate, formatDateRange } from './date';
 
 export type MilestoneId = 'proposals' | 'notification' | 'full-papers' | 'workshop';

@@ -1,4 +1,4 @@
-import type { Organizer, PersonGroup, PersonRef } from '$lib/types';
+import type { Organizer, PersonGroup, PersonRef } from '#lib/types/index.ts';
 import { organizers } from './organizers';
 import { pointSud } from './point-sud';
 import { participants } from './participants';

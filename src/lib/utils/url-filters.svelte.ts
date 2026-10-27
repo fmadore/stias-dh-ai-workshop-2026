@@ -1,8 +1,8 @@
 import { onMount } from 'svelte';
 import { SvelteURL, SvelteURLSearchParams } from 'svelte/reactivity';
 import { page } from '$app/state';
-import { replaceState } from '$app/navigation';
-import type { CountryCode } from '$lib/types';
+import { goto } from '$app/navigation';
+import type { CountryCode } from '#lib/types/index.ts';
 import { parseFilters, filterUrl, type UrlFilters } from './filter-params';
 
 /**
@@ -14,16 +14,27 @@ export function createUrlFilters(countries: () => CountryCode[]) {
 	onMount(() => {
 		mounted = true;
 	});
+	// A shallow goto() lands a microtask or more later, and a reset sets three
+	// fields in a row: without this, the second and third would rebuild the URL
+	// from the filters the first had just cleared, and put them back.
+	let pendingSearch = $state<string | null>(null);
 	const filters = $derived(
 		parseFilters(
-			new SvelteURLSearchParams(mounted ? (page.state.directorySearch ?? page.url.search) : ''),
+			new SvelteURLSearchParams(
+				// Shallow routing leaves page.url on the URL that was rendered; the
+				// address bar's is page.shallow.url.
+				mounted ? (pendingSearch ?? (page.shallow?.url ?? page.url).search) : ''
+			),
 			countries()
 		)
 	);
 	function update(values: Partial<UrlFilters>) {
 		const url = filterUrl(new SvelteURL(window.location.href), { ...filters, ...values });
-		// SvelteKit shallow routing updates page.state, not page.url.
-		replaceState(url, { ...page.state, directorySearch: url.search });
+		const search = url.search;
+		pendingSearch = search;
+		goto(url, { shallow: true, replace: true }).finally(() => {
+			if (pendingSearch === search) pendingSearch = null;
+		});
 	}
 	return {
 		get query() {

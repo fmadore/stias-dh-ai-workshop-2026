@@ -1,5 +1,5 @@
-import type { Presentation } from '$lib/types';
-import { getPeople, type Person } from '$lib/data/people';
+import type { Presentation } from '#lib/types/index.ts';
+import { getPeople, type Person } from '#lib/data/people.ts';
 
 const modules = import.meta.glob<Presentation>(['./*.ts', '!./index.ts'], {
 	eager: true,

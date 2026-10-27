@@ -1,4 +1,4 @@
-import type { Presentation } from '$lib/types';
+import type { Presentation } from '#lib/types/index.ts';
 
 const presentation: Presentation = {
 	id: 'teaching-digital-methods-african-histories',

@@ -1,4 +1,4 @@
-import type { Sponsor } from '$lib/types';
+import type { Sponsor } from '#lib/types/index.ts';
 
 /**
  * Single source of truth for the funders/supporters shown in the footer,

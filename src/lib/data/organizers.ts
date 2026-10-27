@@ -1,4 +1,4 @@
-import type { Organizer } from '$lib/types';
+import type { Organizer } from '#lib/types/index.ts';
 
 export const organizers: Organizer[] = [
 	{

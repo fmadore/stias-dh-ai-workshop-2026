@@ -1,8 +1,8 @@
-import { organizers } from '$lib/data/organizers';
-import { pointSud } from '$lib/data/point-sud';
-import { participants } from '$lib/data/participants';
-import { presentations, getParticipantPresentations } from '$lib/data/presentations';
-import { abstractSearchText, normalize, type FullText } from '$lib/utils/filter';
+import { organizers } from '#lib/data/organizers.ts';
+import { pointSud } from '#lib/data/point-sud.ts';
+import { participants } from '#lib/data/participants/index.ts';
+import { presentations, getParticipantPresentations } from '#lib/data/presentations/index.ts';
+import { abstractSearchText, normalize, type FullText } from '#lib/utils/filter.ts';
 
 /**
  * Every abstract and every bio, normalised at build time for the static

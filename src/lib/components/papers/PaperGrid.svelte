@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { PaperListing } from '$lib/types';
+	import type { PaperListing } from '#lib/types/index.ts';
 	import PaperCard from './PaperCard.svelte';
-	import { getPlacements } from '$lib/utils/placement';
+	import { getPlacements } from '#lib/utils/placement.ts';
 
 	let { presentations }: { presentations: PaperListing[] } = $props();
 

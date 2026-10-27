@@ -1,13 +1,17 @@
 import { error } from '@sveltejs/kit';
 import type { EntryGenerator, RequestHandler } from './$types';
-import { presentations, getPresentation, getPresentationAuthors } from '$lib/data/presentations';
-import { programme } from '$lib/data/programme';
-import { siteConfig } from '$lib/data/site-config';
+import {
+	presentations,
+	getPresentation,
+	getPresentationAuthors
+} from '#lib/data/presentations/index.ts';
+import { programme } from '#lib/data/programme.ts';
+import { siteConfig } from '#lib/data/site-config.ts';
 import {
 	createPresentationCitation,
 	presentationBibtex,
 	presentationRis
-} from '$lib/utils/citations';
+} from '#lib/utils/citations.ts';
 
 export const prerender = true;
 

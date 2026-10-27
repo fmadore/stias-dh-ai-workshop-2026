@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { PaperSummary, ParticipantListing } from '$lib/types';
-	import type { DirectoryGrouping } from '$lib/utils/filter-params';
+	import type { PaperSummary, ParticipantListing } from '#lib/types/index.ts';
+	import type { DirectoryGrouping } from '#lib/utils/filter-params.ts';
 	import ParticipantCard from './ParticipantCard.svelte';
-	import { getPlacements } from '$lib/utils/placement';
-	import { getLocale } from '$lib/paraglide/runtime';
-	import { countryName } from '$lib/utils/country';
+	import { getPlacements } from '#lib/utils/placement.ts';
+	import { getLocale } from '#lib/paraglide/runtime.js';
+	import { countryName } from '#lib/utils/country.ts';
 
 	// The switch itself lives in the filter row, alongside the other list
 	// controls — this component only consumes the choice.

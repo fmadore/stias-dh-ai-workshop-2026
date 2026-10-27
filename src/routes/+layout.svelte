@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { base } from '$app/paths';
+	import { base } from '#lib/utils/base-path.ts';
 	import { page } from '$app/state';
-	import * as m from '$lib/paraglide/messages';
+	import * as m from '#lib/paraglide/messages.js';
 	import '../app.css';
 	// Preloaded, not merely imported. Instrument Serif has no metric-compatible
 	// fallback: its mean advance is 0.3366em against Georgia's 0.4384em, so with
@@ -17,11 +17,11 @@
 	// page loads on a site whose brief puts low bandwidth first, and earn a
 	// "preloaded but not used" warning on each. It still loads on demand.
 	import instrumentSerifLatin from '@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2?url';
-	import Navbar from '$lib/components/layout/Navbar.svelte';
-	import Footer from '$lib/components/layout/Footer.svelte';
-	import WhatNext from '$lib/components/layout/WhatNext.svelte';
-	import BackToTop from '$lib/components/layout/BackToTop.svelte';
-	import { localeFromPath } from '$lib/utils/localized-paths';
+	import Navbar from '#lib/components/layout/Navbar.svelte';
+	import Footer from '#lib/components/layout/Footer.svelte';
+	import WhatNext from '#lib/components/layout/WhatNext.svelte';
+	import BackToTop from '#lib/components/layout/BackToTop.svelte';
+	import { localeFromPath } from '#lib/utils/localized-paths.ts';
 
 	let { children, data } = $props();
 

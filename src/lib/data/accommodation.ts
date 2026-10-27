@@ -1,4 +1,4 @@
-import type { Accommodation } from '$lib/types';
+import type { Accommodation } from '#lib/types/index.ts';
 
 /**
  * The three guest houses Point Sud books for participants. Array order is

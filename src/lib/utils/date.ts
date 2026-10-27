@@ -1,4 +1,4 @@
-import { getLocale, type Locale } from '$lib/paraglide/runtime';
+import { getLocale, type Locale } from '#lib/paraglide/runtime.js';
 import * as dates from './date-format';
 
 /**

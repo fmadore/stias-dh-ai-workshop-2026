@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types';
-import { paperListings } from '$lib/server/views';
+import { paperListings } from '#lib/server/views.ts';
 
 // Titles, bylines and a card's worth of each abstract. The full abstracts
 // arrive only if someone searches (`loadFullText`). The locale comes off the

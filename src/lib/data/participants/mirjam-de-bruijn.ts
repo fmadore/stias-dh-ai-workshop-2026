@@ -1,4 +1,4 @@
-import type { Participant } from '$lib/types';
+import type { Participant } from '#lib/types/index.ts';
 
 const participant: Participant = {
 	id: 'mirjam-de-bruijn',

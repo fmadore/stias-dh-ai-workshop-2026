@@ -1,7 +1,7 @@
-import * as m from '$lib/paraglide/messages';
-import { getLocale, type Locale } from '$lib/paraglide/runtime';
-import { programme } from '$lib/data/programme';
-import type { Session } from '$lib/types';
+import * as m from '#lib/paraglide/messages.js';
+import { getLocale, type Locale } from '#lib/paraglide/runtime.js';
+import { programme } from '#lib/data/programme.ts';
+import type { Session } from '#lib/types/index.ts';
 import { formatShortDay } from './date';
 import { panelNumbers, sessionAnchor, sessionTimes } from './schedule';
 

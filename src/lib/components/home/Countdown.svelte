@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { venueClock } from '$lib/utils/venue-clock';
-	import * as m from '$lib/paraglide/messages';
-	import { daysUntil } from '$lib/utils/milestones';
+	import { venueClock } from '#lib/utils/venue-clock.ts';
+	import * as m from '#lib/paraglide/messages.js';
+	import { daysUntil } from '#lib/utils/milestones.ts';
 
 	let {
 		/** ISO datetime the count runs to, e.g. 2026-08-31T23:59:59+02:00. */

@@ -35,7 +35,7 @@ export default ts.config(
 			'@typescript-eslint/no-explicit-any': 'warn',
 			// Static data arrays don't benefit from keyed each blocks
 			'svelte/require-each-key': 'off',
-			// We use ${base}/path for navigation which is correct for static sites
+			// Links are built by localePath(), which prefixes the base path itself
 			'svelte/no-navigation-without-resolve': 'off'
 		}
 	},

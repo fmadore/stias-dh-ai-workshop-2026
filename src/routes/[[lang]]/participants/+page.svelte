@@ -1,21 +1,21 @@
 <script lang="ts">
-	import * as m from '$lib/paraglide/messages';
-	import { siteConfig } from '$lib/data/site-config';
-	import SEO from '$lib/components/SEO.svelte';
-	import PageHeader from '$lib/components/layout/PageHeader.svelte';
-	import { organizers } from '$lib/data/organizers';
-	import { pointSud } from '$lib/data/point-sud';
-	import OrganizerCard from '$lib/components/participants/OrganizerCard.svelte';
-	import PointSudCard from '$lib/components/participants/PointSudCard.svelte';
-	import ParticipantGrid from '$lib/components/participants/ParticipantGrid.svelte';
-	import FilterBar from '$lib/components/shared/FilterBar.svelte';
-	import SegmentedControl from '$lib/components/shared/SegmentedControl.svelte';
-	import NoResults from '$lib/components/shared/NoResults.svelte';
-	import AffiliationMap from '$lib/components/participants/AffiliationMap.svelte';
-	import { filterPeople, uniquePersonCountries } from '$lib/utils/filter';
-	import { createUrlFilters } from '$lib/utils/url-filters.svelte';
-	import { fullText, loadFullText, retryFullText } from '$lib/utils/search-text.svelte';
-	import type { DirectoryGrouping } from '$lib/utils/filter-params';
+	import * as m from '#lib/paraglide/messages.js';
+	import { siteConfig } from '#lib/data/site-config.ts';
+	import SEO from '#lib/components/SEO.svelte';
+	import PageHeader from '#lib/components/layout/PageHeader.svelte';
+	import { organizers } from '#lib/data/organizers.ts';
+	import { pointSud } from '#lib/data/point-sud.ts';
+	import OrganizerCard from '#lib/components/participants/OrganizerCard.svelte';
+	import PointSudCard from '#lib/components/participants/PointSudCard.svelte';
+	import ParticipantGrid from '#lib/components/participants/ParticipantGrid.svelte';
+	import FilterBar from '#lib/components/shared/FilterBar.svelte';
+	import SegmentedControl from '#lib/components/shared/SegmentedControl.svelte';
+	import NoResults from '#lib/components/shared/NoResults.svelte';
+	import AffiliationMap from '#lib/components/participants/AffiliationMap.svelte';
+	import { filterPeople, uniquePersonCountries } from '#lib/utils/filter.ts';
+	import { createUrlFilters } from '#lib/utils/url-filters.svelte.ts';
+	import { fullText, loadFullText, retryFullText } from '#lib/utils/search-text.svelte.ts';
+	import type { DirectoryGrouping } from '#lib/utils/filter-params.ts';
 
 	const groupingOptions: Array<{ value: DirectoryGrouping; label: string }> = $derived([
 		{ value: 'none', label: m.directory_no_group() },

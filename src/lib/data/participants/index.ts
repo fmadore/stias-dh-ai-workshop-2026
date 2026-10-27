@@ -1,4 +1,4 @@
-import type { Participant } from '$lib/types';
+import type { Participant } from '#lib/types/index.ts';
 
 const modules = import.meta.glob<Participant>(['./*.ts', '!./index.ts'], {
 	eager: true,

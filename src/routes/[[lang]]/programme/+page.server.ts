@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types';
-import { sessionCasts } from '$lib/server/views';
+import { sessionCasts } from '#lib/server/views.ts';
 
 // Names, titles and bylines resolved at prerender, so the schedule does not
 // ship the bios and abstracts it never shows. Locale-free: affiliations stay

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { ResourceListing } from '$lib/types';
-	import * as m from '$lib/paraglide/messages';
-	import { getLocale } from '$lib/paraglide/runtime';
-	import { t, localePath } from '$lib/utils/i18n';
-	import { formatDateRange, formatPartialDate } from '$lib/utils/date';
+	import type { ResourceListing } from '#lib/types/index.ts';
+	import * as m from '#lib/paraglide/messages.js';
+	import { getLocale } from '#lib/paraglide/runtime.js';
+	import { t, localePath } from '#lib/utils/i18n.ts';
+	import { formatDateRange, formatPartialDate } from '#lib/utils/date.ts';
 	import { ArrowRight, ExternalLink } from '@lucide/svelte';
 
 	let { resource }: { resource: ResourceListing } = $props();

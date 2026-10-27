@@ -11,7 +11,7 @@ recordings, galleries or attendance claims are outside its agreed scope.
 
 ## Stack
 
-- [SvelteKit 2](https://svelte.dev/docs/kit) with Svelte 5, prerendered to a fully static site (`@sveltejs/adapter-static`) and deployed to GitHub Pages
+- [SvelteKit 3](https://svelte.dev/docs/kit) with Svelte 5, prerendered to a fully static site (`@sveltejs/adapter-static`) and deployed to GitHub Pages
 - [Tailwind CSS 4](https://tailwindcss.com) with a custom design-token theme in `src/app.css`
 - [Paraglide JS](https://inlang.com/m/gerre34r/library-inlang-paraglideJs) for EN/FR i18n (messages in `messages/{en,fr}.json`, compiled by the `prepare` script)
 
@@ -20,7 +20,7 @@ recordings, galleries or attendance claims are outside its agreed scope.
 Requires Node 24 (see `.nvmrc`).
 
 ```bash
-npm ci             # installs locked dependencies; the `prepare` script then compiles the i18n messages and runs `svelte-kit sync`, which generates `.svelte-kit/tsconfig.json` (the `$lib` alias and `$types`) that editors, `npm run check` and `npm run test:unit` all read
+npm ci             # installs locked dependencies; the `prepare` script then compiles the i18n messages and runs `svelte-kit sync`, which generates the `$app/tsconfig` base config and the route `$types` that editors, `npm run check` and `npm run test:unit` all read
 npm run dev        # dev server at http://localhost:5173
 npm run build      # static build into build/ + data & smoke checks
 npm run preview    # serve the production build locally

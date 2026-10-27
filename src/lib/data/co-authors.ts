@@ -1,4 +1,4 @@
-import type { CoAuthor } from '$lib/types';
+import type { CoAuthor } from '#lib/types/index.ts';
 
 /**
  * People credited on a paper who are not themselves coming to Stellenbosch.

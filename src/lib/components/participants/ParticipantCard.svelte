@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { PaperSummary, ParticipantListing } from '$lib/types';
-	import { t, localePath } from '$lib/utils/i18n';
-	import { getPlacements } from '$lib/utils/placement';
-	import Avatar from '$lib/components/shared/Avatar.svelte';
-	import { getLocale } from '$lib/paraglide/runtime';
-	import { countryName } from '$lib/utils/country';
+	import type { PaperSummary, ParticipantListing } from '#lib/types/index.ts';
+	import { t, localePath } from '#lib/utils/i18n.ts';
+	import { getPlacements } from '#lib/utils/placement.ts';
+	import Avatar from '#lib/components/shared/Avatar.svelte';
+	import { getLocale } from '#lib/paraglide/runtime.js';
+	import { countryName } from '#lib/utils/country.ts';
 
 	let {
 		participant,

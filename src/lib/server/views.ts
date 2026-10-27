@@ -1,4 +1,4 @@
-import type { Locale } from '$lib/paraglide/runtime';
+import type { Locale } from '#lib/paraglide/runtime.js';
 import type {
 	MappedAffiliation,
 	PaperListing,
@@ -8,28 +8,28 @@ import type {
 	ResourceListing,
 	ResourceListingSection,
 	SessionCast
-} from '$lib/types';
-import { affiliationLocations } from '$lib/data/affiliations';
-import { programme } from '$lib/data/programme';
-import { resourceSections } from '$lib/data/resources';
-import { organizers } from '$lib/data/organizers';
-import { pointSud } from '$lib/data/point-sud';
-import { participants } from '$lib/data/participants';
-import { getPeople, getPerson, personRef } from '$lib/data/people';
+} from '#lib/types/index.ts';
+import { affiliationLocations } from '#lib/data/affiliations.ts';
+import { programme } from '#lib/data/programme.ts';
+import { resourceSections } from '#lib/data/resources.ts';
+import { organizers } from '#lib/data/organizers.ts';
+import { pointSud } from '#lib/data/point-sud.ts';
+import { participants } from '#lib/data/participants/index.ts';
+import { getPeople, getPerson, personRef } from '#lib/data/people.ts';
 import {
 	presentations,
 	getParticipantPresentations,
 	getPresentation,
 	getPresentationAuthors
-} from '$lib/data/presentations';
-import { uniquePersonCountries } from '$lib/utils/filter';
-import { resolveAbstract } from '$lib/utils/i18n';
-import { abstractToPlainText, truncate } from '$lib/utils/text';
+} from '#lib/data/presentations/index.ts';
+import { uniquePersonCountries } from '#lib/utils/filter.ts';
+import { resolveAbstract } from '#lib/utils/i18n.ts';
+import { abstractToPlainText, truncate } from '#lib/utils/text.ts';
 
 /**
  * The content registries, reduced at prerender to what a page renders.
  *
- * Server-only on purpose (`$lib/server` cannot be imported by client code).
+ * Server-only on purpose (a `server` directory cannot be imported by client code).
  * The people and presentations registries carry every bio and every abstract —
  * one 123 KB chunk, 37 KB gzipped — and a component that imported them to
  * print a count or a byline shipped all of it. Directory search now fetches a

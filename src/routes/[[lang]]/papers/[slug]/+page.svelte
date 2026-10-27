@@ -1,10 +1,10 @@
 <script lang="ts">
-	import * as m from '$lib/paraglide/messages';
+	import * as m from '#lib/paraglide/messages.js';
 	import { ArrowLeft, ArrowRight, CalendarClock, Presentation as SlidesIcon } from '@lucide/svelte';
-	import { t, localePath } from '$lib/utils/i18n';
-	import { siteConfig } from '$lib/data/site-config';
-	import SEO from '$lib/components/SEO.svelte';
-	import PageHeader from '$lib/components/layout/PageHeader.svelte';
+	import { t, localePath } from '#lib/utils/i18n.ts';
+	import { siteConfig } from '#lib/data/site-config.ts';
+	import SEO from '#lib/components/SEO.svelte';
+	import PageHeader from '#lib/components/layout/PageHeader.svelte';
 
 	let { data } = $props();
 

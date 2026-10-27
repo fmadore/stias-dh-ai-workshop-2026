@@ -1,4 +1,4 @@
-import type { AffiliationLocation } from '$lib/types';
+import type { AffiliationLocation } from '#lib/types/index.ts';
 
 /**
  * Campus coordinates are stored with the content rather than geocoded in the

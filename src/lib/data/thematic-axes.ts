@@ -1,4 +1,4 @@
-import type { ThematicAxis } from '$lib/types';
+import type { ThematicAxis } from '#lib/types/index.ts';
 
 export const thematicAxes: ThematicAxis[] = [
 	{

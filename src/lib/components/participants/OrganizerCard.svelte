@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { Organizer } from '$lib/types';
-	import { t, localePath } from '$lib/utils/i18n';
-	import Avatar from '$lib/components/shared/Avatar.svelte';
-	import PersonLinks from '$lib/components/shared/PersonLinks.svelte';
-	import { getLocale } from '$lib/paraglide/runtime';
-	import { countryName } from '$lib/utils/country';
+	import type { Organizer } from '#lib/types/index.ts';
+	import { t, localePath } from '#lib/utils/i18n.ts';
+	import Avatar from '#lib/components/shared/Avatar.svelte';
+	import PersonLinks from '#lib/components/shared/PersonLinks.svelte';
+	import { getLocale } from '#lib/paraglide/runtime.js';
+	import { countryName } from '#lib/utils/country.ts';
 
 	let { organizer }: { organizer: Organizer } = $props();
 </script>

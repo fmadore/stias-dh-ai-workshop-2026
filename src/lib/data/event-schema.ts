@@ -3,8 +3,8 @@ import { venueInfo, venueStreet } from './venue';
 import { organizers } from './organizers';
 import { sponsors } from './sponsors';
 import { onlineAccess, onlineAccessPublished } from './online-access';
-import { t } from '$lib/utils/i18n';
-import { workshopEnd, workshopStart } from '$lib/utils/milestones';
+import { t } from '#lib/utils/i18n.ts';
+import { workshopEnd, workshopStart } from '#lib/utils/milestones.ts';
 
 /**
  * The canonical schema.org Event for the workshop. Emitted on the home page

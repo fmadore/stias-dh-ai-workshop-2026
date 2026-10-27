@@ -1,4 +1,4 @@
-import type { SiteConfig } from '$lib/types';
+import type { SiteConfig } from '#lib/types/index.ts';
 
 export const siteConfig: SiteConfig = {
 	title: {

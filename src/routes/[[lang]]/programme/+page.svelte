@@ -1,17 +1,18 @@
 <script lang="ts">
-	import { venueClock } from '$lib/utils/venue-clock';
-	import * as m from '$lib/paraglide/messages';
-	import { getLocale } from '$lib/paraglide/runtime';
-	import { siteConfig } from '$lib/data/site-config';
-	import SEO from '$lib/components/SEO.svelte';
-	import PageHeader from '$lib/components/layout/PageHeader.svelte';
-	import { programme, programmeLastUpdated } from '$lib/data/programme';
-	import { dateAtVenue, workshopPhase } from '$lib/utils/milestones';
-	import { formatDate, formatShortDay } from '$lib/utils/date';
-	import { panelNumbers } from '$lib/utils/schedule';
-	import ScheduleDay from '$lib/components/programme/ScheduleDay.svelte';
-	import JoinOnline from '$lib/components/shared/JoinOnline.svelte';
-	import { base } from '$app/paths';
+	import { venueClock } from '#lib/utils/venue-clock.ts';
+	import * as m from '#lib/paraglide/messages.js';
+	import { getLocale } from '#lib/paraglide/runtime.js';
+	import { siteConfig } from '#lib/data/site-config.ts';
+	import SEO from '#lib/components/SEO.svelte';
+	import PageHeader from '#lib/components/layout/PageHeader.svelte';
+	import { programme, programmeLastUpdated } from '#lib/data/programme.ts';
+	import { dateAtVenue, workshopPhase } from '#lib/utils/milestones.ts';
+	import { formatDate, formatShortDay } from '#lib/utils/date.ts';
+	import { panelNumbers } from '#lib/utils/schedule.ts';
+	import ScheduleDay from '#lib/components/programme/ScheduleDay.svelte';
+	import JoinOnline from '#lib/components/shared/JoinOnline.svelte';
+	import { asset } from '$app/paths';
+	import { staticAsset } from '#lib/utils/base-path.ts';
 	import { Calendar, CalendarPlus, FileText } from '@lucide/svelte';
 
 	let { data } = $props();
@@ -59,14 +60,14 @@
 	{#snippet actions()}
 		<!-- One file for both locales: the printed programme is a single bilingual
 		     document, so unlike the call for papers there is no per-locale stem. -->
-		<a href={`${base}/downloads/Programme-STIAS-2026.pdf`} download class="btn btn-primary btn-sm">
+		<a href={asset('downloads/Programme-STIAS-2026.pdf')} download class="btn btn-primary btn-sm">
 			<FileText size={15} strokeWidth={1.75} aria-hidden="true" />
 			{m.download_programme()}
 		</a>
 		<!-- Sessions that can be followed online: meals, breaks, the two
 		     excursions and the in-room ice-breaker are not things anyone needs in
 		     their calendar, and they would bury the papers. -->
-		<a href={`${base}/downloads/${icsFile}`} download class="btn btn-secondary btn-sm">
+		<a href={staticAsset(`downloads/${icsFile}`)} download class="btn btn-secondary btn-sm">
 			<CalendarPlus size={15} strokeWidth={1.75} aria-hidden="true" />
 			{m.download_programme_ics()}
 		</a>

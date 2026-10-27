@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { venueClock } from '$lib/utils/venue-clock';
-	import * as m from '$lib/paraglide/messages';
-	import { onlineAccess, onlineAccessPublished } from '$lib/data/online-access';
-	import { workshopPhase } from '$lib/utils/milestones';
+	import { venueClock } from '#lib/utils/venue-clock.ts';
+	import * as m from '#lib/paraglide/messages.js';
+	import { onlineAccess, onlineAccessPublished } from '#lib/data/online-access.ts';
+	import { workshopPhase } from '#lib/utils/milestones.ts';
 	import { ExternalLink, Video } from '@lucide/svelte';
 
 	interface Props {

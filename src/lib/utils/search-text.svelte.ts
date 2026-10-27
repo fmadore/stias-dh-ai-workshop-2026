@@ -1,4 +1,4 @@
-import { base } from '$app/paths';
+import { resolve } from '$app/paths';
 import { parseSearchIndex, type SearchIndex } from './search-index';
 
 export type SearchStatus = 'idle' | 'loading' | 'ready' | 'error';
@@ -30,7 +30,7 @@ export function loadFullText(): void {
 	requested = true;
 	inFlight = true;
 	status = 'loading';
-	fetch(`${base}/search-index.json`, { headers: { Accept: 'application/json' } })
+	fetch(resolve('search-index.json'), { headers: { Accept: 'application/json' } })
 		.then(async (response) => {
 			if (!response.ok) throw new Error(`Search index request failed: ${response.status}`);
 			return parseSearchIndex(await response.json());

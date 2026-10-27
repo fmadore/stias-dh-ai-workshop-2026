@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { venueClock } from '$lib/utils/venue-clock';
-	import * as m from '$lib/paraglide/messages';
-	import { siteConfig } from '$lib/data/site-config';
-	import { t, localePath } from '$lib/utils/i18n';
-	import { isCfpOpen, nextMilestone, workshopPhase } from '$lib/utils/milestones';
+	import { venueClock } from '#lib/utils/venue-clock.ts';
+	import * as m from '#lib/paraglide/messages.js';
+	import { siteConfig } from '#lib/data/site-config.ts';
+	import { t, localePath } from '#lib/utils/i18n.ts';
+	import { isCfpOpen, nextMilestone, workshopPhase } from '#lib/utils/milestones.ts';
 	import Countdown from './Countdown.svelte';
 	import { ArrowRight } from '@lucide/svelte';
 

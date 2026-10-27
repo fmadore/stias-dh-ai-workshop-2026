@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { clockMilestones, venueClock } from '$lib/utils/venue-clock';
-	import { cfpInfo } from '$lib/data/cfp';
-	import { organizers } from '$lib/data/organizers';
-	import { venueInfo } from '$lib/data/venue';
-	import { joinLogisticsList } from '$lib/utils/logistics';
-	import { thematicAxes } from '$lib/data/thematic-axes';
-	import { contactEmails } from '$lib/data/contacts';
-	import { t } from '$lib/utils/i18n';
-	import { getLocale } from '$lib/paraglide/runtime';
-	import * as m from '$lib/paraglide/messages';
+	import { clockMilestones, venueClock } from '#lib/utils/venue-clock.ts';
+	import { cfpInfo } from '#lib/data/cfp.ts';
+	import { organizers } from '#lib/data/organizers.ts';
+	import { venueInfo } from '#lib/data/venue.ts';
+	import { joinLogisticsList } from '#lib/utils/logistics.ts';
+	import { thematicAxes } from '#lib/data/thematic-axes.ts';
+	import { contactEmails } from '#lib/data/contacts.ts';
+	import { t } from '#lib/utils/i18n.ts';
+	import { getLocale } from '#lib/paraglide/runtime.js';
+	import * as m from '#lib/paraglide/messages.js';
 	import { Send, ExternalLink, Check } from '@lucide/svelte';
-	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
+	import ScrollReveal from '#lib/components/ScrollReveal.svelte';
 
 	const locale = $derived(getLocale());
 

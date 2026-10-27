@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { Accommodation } from '$lib/types';
-	import { t } from '$lib/utils/i18n';
-	import * as m from '$lib/paraglide/messages';
+	import type { Accommodation } from '#lib/types/index.ts';
+	import { t } from '#lib/utils/i18n.ts';
+	import * as m from '#lib/paraglide/messages.js';
 	import { ExternalLink } from '@lucide/svelte';
-	import { getLocale } from '$lib/paraglide/runtime';
-	import { countryName } from '$lib/utils/country';
-	import { venueInfo } from '$lib/data/venue';
-	import { distanceMetres, formatDistance } from '$lib/utils/geo';
+	import { getLocale } from '#lib/paraglide/runtime.js';
+	import { countryName } from '#lib/utils/country.ts';
+	import { venueInfo } from '#lib/data/venue.ts';
+	import { distanceMetres, formatDistance } from '#lib/utils/geo.ts';
 
 	let { accommodation }: { accommodation: Accommodation } = $props();
 

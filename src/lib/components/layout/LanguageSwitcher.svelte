@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
-	import { base } from '$app/paths';
-	import { locales, baseLocale } from '$lib/paraglide/runtime';
-	import * as m from '$lib/paraglide/messages';
-	import { localeFromPath, switchLocalePath } from '$lib/utils/localized-paths';
+	import { base } from '#lib/utils/base-path.ts';
+	import { locales, baseLocale } from '#lib/paraglide/runtime.js';
+	import * as m from '#lib/paraglide/messages.js';
+	import { localeFromPath, switchLocalePath } from '#lib/utils/localized-paths.ts';
 	import { Languages } from '@lucide/svelte';
 
 	const currentLocale = $derived(localeFromPath(page.url.pathname, base));
@@ -28,6 +28,9 @@
 	 * during prerender, so a client-side route change would leave the old one
 	 * in play.
 	 */
+	// Directory filters rewrite the address bar by shallow routing, which
+	// leaves page.url on the URL that was rendered.
+	const visibleUrl = $derived(page.shallow?.url ?? page.url);
 	const target = $derived.by(() => {
 		const other = locales.find((locale) => locale !== currentLocale);
 		if (!other) return undefined;
@@ -35,7 +38,7 @@
 			locale: other,
 			href:
 				switchLocalePath(page.url.pathname, currentLocale, other, base, baseLocale) +
-				(mounted ? (page.state.directorySearch ?? page.url.search) + page.url.hash : '')
+				(mounted ? visibleUrl.search + visibleUrl.hash : '')
 		};
 	});
 </script>

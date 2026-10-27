@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { clockMilestones, venueClock } from '$lib/utils/venue-clock';
-	import * as m from '$lib/paraglide/messages';
-	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
+	import { clockMilestones, venueClock } from '#lib/utils/venue-clock.ts';
+	import * as m from '#lib/paraglide/messages.js';
+	import ScrollReveal from '#lib/components/ScrollReveal.svelte';
 	import { Check } from '@lucide/svelte';
 
 	// Replaces Quick Links, which restated three navbar items and said

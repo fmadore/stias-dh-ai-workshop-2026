@@ -1,4 +1,4 @@
-import type { LocalizedString } from '$lib/types';
+import type { LocalizedString } from '#lib/types/index.ts';
 
 export const topicObjectives: LocalizedString[] = [
 	{

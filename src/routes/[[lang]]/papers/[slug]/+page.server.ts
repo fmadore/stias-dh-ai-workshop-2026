@@ -1,18 +1,23 @@
-import { base } from '$app/paths';
+import { resolve } from '$app/paths';
+import { base } from '#lib/utils/base-path.ts';
 import { error, redirect } from '@sveltejs/kit';
 import type { EntryGenerator, PageServerLoad } from './$types';
-import { presentations, getPresentation, getPresentationAuthors } from '$lib/data/presentations';
-import { personRef } from '$lib/data/people';
-import { paperRedirects } from '$lib/data/redirects';
-import { programme } from '$lib/data/programme';
-import { siteConfig } from '$lib/data/site-config';
-import { paperSummary } from '$lib/server/views';
-import { createPresentationCitation, presentationSchema } from '$lib/utils/citations';
-import { langEntries, resolveAbstract } from '$lib/utils/i18n';
-import { localizedPath } from '$lib/utils/localized-paths';
-import { renderAbstract } from '$lib/utils/markdown';
-import { getPlacements } from '$lib/utils/placement';
-import { abstractToPlainText, truncate } from '$lib/utils/text';
+import {
+	presentations,
+	getPresentation,
+	getPresentationAuthors
+} from '#lib/data/presentations/index.ts';
+import { personRef } from '#lib/data/people.ts';
+import { paperRedirects } from '#lib/data/redirects.ts';
+import { programme } from '#lib/data/programme.ts';
+import { siteConfig } from '#lib/data/site-config.ts';
+import { paperSummary } from '#lib/server/views.ts';
+import { createPresentationCitation, presentationSchema } from '#lib/utils/citations.ts';
+import { langEntries, resolveAbstract } from '#lib/utils/i18n.ts';
+import { localizedPath } from '#lib/utils/localized-paths.ts';
+import { renderAbstract } from '#lib/utils/markdown.ts';
+import { getPlacements } from '#lib/utils/placement.ts';
+import { abstractToPlainText, truncate } from '#lib/utils/text.ts';
 
 export const prerender = true;
 
@@ -61,8 +66,8 @@ export const load: PageServerLoad = ({ params }) => {
 		authors: authors.map((author) => personRef(author)),
 		citationSchema: presentationSchema(citation, abstractText, locale),
 		citationDownloads: {
-			bibtex: `${base}/citations/${presentation.id}.bib`,
-			ris: `${base}/citations/${presentation.id}.ris`
+			bibtex: resolve('/citations/[slug].[format]', { slug: presentation.id, format: 'bib' }),
+			ris: resolve('/citations/[slug].[format]', { slug: presentation.id, format: 'ris' })
 		},
 		abstractHtml: abstract ? renderAbstract(abstract.text) : '',
 		abstractLang: abstract?.lang ?? presentation.language,

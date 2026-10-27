@@ -1,4 +1,4 @@
-import type { PersonRef, Presentation, ProgrammeDay, SiteConfig } from '$lib/types';
+import type { PersonRef, Presentation, ProgrammeDay, SiteConfig } from '#lib/types/index.ts';
 import { localizedAbsoluteUrl } from './localized-paths';
 
 export interface PresentationCitation {

@@ -1,14 +1,14 @@
 <script lang="ts">
-	import * as m from '$lib/paraglide/messages';
-	import { siteConfig } from '$lib/data/site-config';
-	import SEO from '$lib/components/SEO.svelte';
-	import PageHeader from '$lib/components/layout/PageHeader.svelte';
-	import PaperGrid from '$lib/components/papers/PaperGrid.svelte';
-	import FilterBar from '$lib/components/shared/FilterBar.svelte';
-	import NoResults from '$lib/components/shared/NoResults.svelte';
-	import { filterPresentations, uniquePaperCountries } from '$lib/utils/filter';
-	import { createUrlFilters } from '$lib/utils/url-filters.svelte';
-	import { fullText, loadFullText, retryFullText } from '$lib/utils/search-text.svelte';
+	import * as m from '#lib/paraglide/messages.js';
+	import { siteConfig } from '#lib/data/site-config.ts';
+	import SEO from '#lib/components/SEO.svelte';
+	import PageHeader from '#lib/components/layout/PageHeader.svelte';
+	import PaperGrid from '#lib/components/papers/PaperGrid.svelte';
+	import FilterBar from '#lib/components/shared/FilterBar.svelte';
+	import NoResults from '#lib/components/shared/NoResults.svelte';
+	import { filterPresentations, uniquePaperCountries } from '#lib/utils/filter.ts';
+	import { createUrlFilters } from '#lib/utils/url-filters.svelte.ts';
+	import { fullText, loadFullText, retryFullText } from '#lib/utils/search-text.svelte.ts';
 
 	let { data } = $props();
 

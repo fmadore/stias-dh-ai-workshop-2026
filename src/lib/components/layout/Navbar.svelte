@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { venueClock } from '$lib/utils/venue-clock';
+	import { venueClock } from '#lib/utils/venue-clock.ts';
 	import { page } from '$app/state';
-	import { base } from '$app/paths';
-	import { unlocalizedPath } from '$lib/utils/localized-paths';
-	import { readStorage, writeStorage } from '$lib/utils/storage';
-	import { getLocale } from '$lib/paraglide/runtime';
-	import * as m from '$lib/paraglide/messages';
-	import { localePath } from '$lib/utils/i18n';
-	import { isCfpOpen } from '$lib/utils/milestones';
+	import { base } from '#lib/utils/base-path.ts';
+	import { unlocalizedPath } from '#lib/utils/localized-paths.ts';
+	import { readStorage, writeStorage } from '#lib/utils/storage.ts';
+	import { getLocale } from '#lib/paraglide/runtime.js';
+	import * as m from '#lib/paraglide/messages.js';
+	import { localePath } from '#lib/utils/i18n.ts';
+	import { isCfpOpen } from '#lib/utils/milestones.ts';
 	import LanguageSwitcher from './LanguageSwitcher.svelte';
 	import { Menu, X, Sun, Moon } from '@lucide/svelte';
 

@@ -1,13 +1,13 @@
 import { error } from '@sveltejs/kit';
 import type { EntryGenerator, PageServerLoad } from './$types';
-import { participants } from '$lib/data/participants';
-import { organizers } from '$lib/data/organizers';
-import { pointSud } from '$lib/data/point-sud';
-import { getPerson } from '$lib/data/people';
-import { getParticipantPresentations } from '$lib/data/presentations';
-import { paperSummary } from '$lib/server/views';
-import { langEntries } from '$lib/utils/i18n';
-import { getPlacements } from '$lib/utils/placement';
+import { participants } from '#lib/data/participants/index.ts';
+import { organizers } from '#lib/data/organizers.ts';
+import { pointSud } from '#lib/data/point-sud.ts';
+import { getPerson } from '#lib/data/people.ts';
+import { getParticipantPresentations } from '#lib/data/presentations/index.ts';
+import { paperSummary } from '#lib/server/views.ts';
+import { langEntries } from '#lib/utils/i18n.ts';
+import { getPlacements } from '#lib/utils/placement.ts';
 
 export const prerender = true;
 

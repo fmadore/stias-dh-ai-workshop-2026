@@ -6,10 +6,10 @@
 		Marker as MapLibreMarker,
 		Popup as MapLibrePopup
 	} from 'maplibre-gl';
-	import * as m from '$lib/paraglide/messages';
-	import { venueInfo, venueStreet } from '$lib/data/venue';
-	import { accommodations } from '$lib/data/accommodation';
-	import { createLazyMap } from '$lib/utils/map';
+	import * as m from '#lib/paraglide/messages.js';
+	import { venueInfo, venueStreet } from '#lib/data/venue.ts';
+	import { accommodations } from '#lib/data/accommodation.ts';
+	import { createLazyMap } from '#lib/utils/map.ts';
 
 	type Place = {
 		id: string;

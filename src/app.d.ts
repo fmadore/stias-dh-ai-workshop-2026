@@ -1,9 +1,12 @@
+// See https://svelte.dev/docs/kit/types#app.d.ts
+// for information about these interfaces
 declare global {
 	namespace App {
-		interface PageState {
-			/** Query string associated with a shallow directory-filter update. */
-			directorySearch?: string;
-		}
+		// interface Error {}
+		// interface Locals {}
+		// interface PageData {}
+		// interface PageState {}
+		// interface Platform {}
 	}
 }
 
