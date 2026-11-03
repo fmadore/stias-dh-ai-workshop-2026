@@ -108,9 +108,10 @@ the JSON artifact for 14 days. Review that report for tooling exposure as
 well as browser exposure; a development-only advisory is not automatically
 an exploitable vulnerability in the static deployment.
 
-MapLibre is pinned to 6.6.0 and has its own Dependabot group. Later releases
-need an explicit renderer/worker size review against the existing 260/130 KiB
-gzip limits; do not raise those limits just to unblock routine dependency
+MapLibre is pinned to 6.16.0 and has its own Dependabot group. Later releases
+need an explicit renderer/worker size review against the 300/150 KiB gzip
+limits (raised from 260/130 after reviewing 6.16.0, which measures
+288.6/144.7 KiB); do not raise those limits just to unblock routine dependency
 updates. The `@sveltejs/kit`-scoped `cookie` override fixes the transitive
 advisory while preserving the parser/serializer API. Remove the override
 once a framework update supplies a patched compatible version itself.

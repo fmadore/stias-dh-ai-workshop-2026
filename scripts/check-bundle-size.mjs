@@ -17,8 +17,11 @@ const budgets = {
 	routeBlockingCssGzip: 20 * 1024,
 	// MapLibre is a deliberately lazy feature: keep its renderer and Web Worker
 	// out of the core-site budget, but give both their own regression ceilings.
-	mapLibreRendererGzip: 260 * 1024,
-	mapLibreWorkerGzip: 130 * 1024,
+	// Reviewed for 6.16.0 (renderer 288.6 KiB, worker 144.7 KiB, up from
+	// under 260/130 on 6.6.0): upstream ships one prebuilt bundle, so the
+	// weight cannot be trimmed here, and it only loads with the venue map.
+	mapLibreRendererGzip: 300 * 1024,
+	mapLibreWorkerGzip: 150 * 1024,
 	// The footer logos, which every page carries. They were supplied at up to
 	// 2250px wide to render 40px tall — 280 KB on every page load against a
 	// stated hard constraint on image budgets. Raw bytes, not gzip: these are
