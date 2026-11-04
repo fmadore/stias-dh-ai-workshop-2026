@@ -7,6 +7,7 @@
 	import Hero from '#lib/components/home/Hero.svelte';
 	import AtAGlance from '#lib/components/home/AtAGlance.svelte';
 	import JoinOnline from '#lib/components/shared/JoinOnline.svelte';
+	import WorkshopPhotos from '#lib/components/home/WorkshopPhotos.svelte';
 	import KeyDatesTimeline from '#lib/components/home/KeyDatesTimeline.svelte';
 	import ThematicAxis from '#lib/components/about/ThematicAxis.svelte';
 	import ScrollReveal from '#lib/components/ScrollReveal.svelte';
@@ -28,6 +29,7 @@
      of the page. -->
 <JoinOnline />
 <AtAGlance glance={data.glance} />
+<WorkshopPhotos />
 
 <!-- Thematic Axes Preview -->
 <section class="section-pad-lg bg-raised">
