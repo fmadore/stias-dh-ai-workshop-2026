@@ -32,6 +32,19 @@ export const resourceSections: ResourceSection[] = [
 					en: 'A walk through the STIAS garden, from its ordered vineyard to its wilder corners, becomes a way of thinking about structured data and the messier material humanities scholars work with — and about whether AI curation leaves room to challenge the colonial biases archives carry.',
 					fr: "Une promenade dans le jardin du STIAS, de son vignoble ordonné à ses recoins plus sauvages, devient une manière de penser l'écart entre données structurées et matériaux plus désordonnés des sciences humaines — et de se demander si la curation par l'IA laisse encore place à la critique des biais coloniaux que portent les archives."
 				}
+			},
+			{
+				id: 'workshop-of-hope',
+				title: 'A workshop of hope',
+				lang: 'en',
+				url: 'https://benitotrollip.substack.com/p/a-workshop-of-hope',
+				authors: ['benito-trollip'],
+				source: ['Substack'],
+				date: '2026-11-10',
+				description: {
+					en: 'A participant looks back on co-presenting with Sanjin Muftić on South African digital infrastructures, on the range of the discussions — from what AI can do for research to the call to build African digital resources rather than only consume them — and on the network the four days opened up.',
+					fr: "Un participant revient sur sa présentation, avec Sanjin Muftić, des infrastructures numériques sud-africaines, sur l'étendue des discussions — de ce que l'IA peut apporter à la recherche à l'appel à créer des ressources numériques africaines plutôt qu'à seulement les consommer — et sur le réseau que ces quatre jours lui ont ouvert."
+				}
 			}
 		]
 	},
