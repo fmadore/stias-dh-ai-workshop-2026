@@ -1,6 +1,6 @@
 import { siteConfig } from './site-config';
 import { venueInfo, venueStreet } from './venue';
-import { organizers } from './organizers';
+import { organizerRefs } from './organizer-refs';
 import { sponsors } from './sponsors';
 import { onlineAccess, onlineAccessPublished } from './online-access';
 import { t } from '#lib/utils/i18n.ts';
@@ -18,11 +18,13 @@ export function buildEventSchema(ogImage: string): object {
 		'@id': `${siteConfig.url}#event`,
 		name: t(siteConfig.title),
 		description: t(siteConfig.description),
-		// The same instants the site's own clock uses (`siteConfig.hours`). This
-		// said 08:30–17:00 while the clock said 09:00–18:00.
+		// The opening and closing instants from `siteConfig.hours`, at the venue's
+		// offset. This once said 08:30–17:00 while the site said 09:00–18:00.
 		startDate: workshopStart(),
 		endDate: workshopEnd(),
-		// The workshop runs hybrid: in person at STIAS with remote access.
+		// The workshop ran hybrid: in person at STIAS with remote access. That
+		// stays true of the event after it, so the mode stays Mixed even though
+		// the virtual location below is no longer advertised.
 		eventAttendanceMode: 'https://schema.org/MixedEventAttendanceMode',
 		eventStatus: 'https://schema.org/EventScheduled',
 		location: [
@@ -37,17 +39,16 @@ export function buildEventSchema(ogImage: string): object {
 					addressCountry: 'ZA'
 				}
 			},
-			{
-				'@type': 'VirtualLocation',
-				// The public join link once there is one; until then the site itself,
-				// which is where the link will be announced.
-				name: onlineAccess.platform,
-				url: onlineAccessPublished ? onlineAccess.joinUrl : siteConfig.url
-			}
+			// Only while there is a join link to point at. Without one it used to
+			// name the platform and give the site's own URL, telling search engines
+			// the meeting could be joined from a page that has no way in.
+			...(onlineAccessPublished
+				? [{ '@type': 'VirtualLocation', name: onlineAccess.platform, url: onlineAccess.joinUrl }]
+				: [])
 		],
 		image: ogImage,
 		url: siteConfig.url,
-		organizer: organizers.map((o) => ({
+		organizer: organizerRefs.map((o) => ({
 			'@type': 'Person',
 			name: o.name,
 			...(o.website ? { url: o.website } : {}),

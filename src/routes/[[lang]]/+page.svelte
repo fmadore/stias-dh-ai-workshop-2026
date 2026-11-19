@@ -6,9 +6,7 @@
 	import SEO from '#lib/components/SEO.svelte';
 	import Hero from '#lib/components/home/Hero.svelte';
 	import AtAGlance from '#lib/components/home/AtAGlance.svelte';
-	import JoinOnline from '#lib/components/shared/JoinOnline.svelte';
 	import WorkshopPhotos from '#lib/components/home/WorkshopPhotos.svelte';
-	import KeyDatesTimeline from '#lib/components/home/KeyDatesTimeline.svelte';
 	import ThematicAxis from '#lib/components/about/ThematicAxis.svelte';
 	import ScrollReveal from '#lib/components/ScrollReveal.svelte';
 	import { thematicAxes } from '#lib/data/thematic-axes.ts';
@@ -24,10 +22,6 @@
 />
 
 <Hero />
-<!-- Directly under the hero: the workshop is open to anyone who wants to
-     follow it, and that is the one fact a visitor cannot infer from the rest
-     of the page. -->
-<JoinOnline />
 <AtAGlance glance={data.glance} />
 <WorkshopPhotos />
 
@@ -61,4 +55,6 @@
 	</div>
 </section>
 
-<KeyDatesTimeline />
+<!-- No key-dates band any more: on an archive it was four tiles reading
+     "Passed", which told a visitor nothing the hero's status line had not.
+     The dates stay on the record in the footer and on the call for papers. -->

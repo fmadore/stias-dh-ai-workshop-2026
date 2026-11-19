@@ -384,7 +384,6 @@ export interface CFPInfo {
 	deadline: string;
 	notificationDate: string;
 	fullPapersDeadline: string;
-	submissionUrl?: string;
 	rationale: LocalizedString;
 	guidelines: LocalizedString;
 	selectionCriteria: LocalizedString;
