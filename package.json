@@ -65,11 +65,6 @@
   "imports": {
     "#lib/*": "./src/lib/*"
   },
-  "overrides": {
-    "@tailwindcss/vite": {
-      "vite": "$vite"
-    }
-  },
   "engines": {
     "node": ">=24 <25"
   }
