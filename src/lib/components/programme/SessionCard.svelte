@@ -2,7 +2,7 @@
 	import type { Session, SessionCast } from '#lib/types/index.ts';
 	import { t, localePath } from '#lib/utils/i18n.ts';
 	import * as m from '#lib/paraglide/messages.js';
-	import { sessionLabel } from '#lib/utils/placement.ts';
+	import { sessionLabel } from '#lib/utils/session-label.ts';
 	import { sessionAnchor, sessionTimes } from '#lib/utils/schedule.ts';
 	import { Video, VideoOff, Link as LinkIcon, ExternalLink } from '@lucide/svelte';
 

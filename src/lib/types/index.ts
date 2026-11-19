@@ -169,8 +169,24 @@ export interface PersonRef {
 	affiliation?: LocalizedString;
 }
 
+/**
+ * Where a paper sits in the running order, in the page's locale. Resolved by
+ * the server load, so a card can print it without the programme registry.
+ */
+export interface PlacementLabel {
+	/** "Panel 3" / "Keynote" — the session's name in the running order. */
+	sessionLabel: string;
+	/** "Mon 21 · 14:00" — where it sits in the week. */
+	slotLabel: string;
+}
+
+/** A paper summary with its slot, as a participant card lists it. */
+export interface PlacedPaperSummary extends PaperSummary {
+	placement?: PlacementLabel;
+}
+
 /** A paper as the papers directory lists it: everything but the full abstract. */
-export interface PaperListing extends PaperSummary {
+export interface PaperListing extends PlacedPaperSummary {
 	authors: PersonRef[];
 	/** Countries of the authors who are attending — what the country filter matches. */
 	countries: CountryCode[];

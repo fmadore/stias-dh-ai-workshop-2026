@@ -4,6 +4,7 @@ import type {
 	PaperListing,
 	PaperSummary,
 	ParticipantListing,
+	PlacedPaperSummary,
 	Resource,
 	ResourceListing,
 	ResourceListingSection,
@@ -25,6 +26,7 @@ import {
 import { uniquePersonCountries } from '#lib/utils/filter.ts';
 import { resolveAbstract } from '#lib/utils/i18n.ts';
 import { abstractToPlainText, truncate } from '#lib/utils/text.ts';
+import { getPlacements, placementLabel } from '#lib/server/placement.ts';
 
 /**
  * The content registries, reduced at prerender to what a page renders.
@@ -96,14 +98,20 @@ export function sessionCasts(): Record<string, SessionCast> {
  */
 const EXCERPT_LENGTH = 480;
 
-/** The papers directory, sorted by title, with excerpts in the page's locale. */
+/**
+ * The papers directory, sorted by title, with excerpts and slot labels in the
+ * page's locale.
+ */
 export function paperListings(locale: Locale): PaperListing[] {
+	const placements = getPlacements(locale);
 	return presentations
 		.map((paper) => {
 			const authors = getPresentationAuthors(paper);
 			const abstract = resolveAbstract(paper, locale);
+			const placement = placementLabel(placements.get(paper.id));
 			return {
 				...paperSummary(paper),
+				...(placement ? { placement } : {}),
 				authors: authors.map((author) => personRef(author)),
 				// Co-authors declare no country, so a paper is filed under the
 				// countries of the authors who are actually coming.
@@ -125,17 +133,24 @@ export function paperListings(locale: Locale): PaperListing[] {
 
 /**
  * The participants directory: the attendees without their bios, everyone's
- * papers by person id, and the campuses for the map.
+ * papers (with their slot, in the page's locale) by person id, and the
+ * campuses for the map.
  */
-export function directoryListings(): {
+export function directoryListings(locale: Locale): {
 	participants: ParticipantListing[];
-	papersByPerson: Record<string, PaperSummary[]>;
+	papersByPerson: Record<string, PlacedPaperSummary[]>;
 	affiliations: MappedAffiliation[];
 } {
+	const placements = getPlacements(locale);
 	// One summary object per paper, shared by all its authors: the page data is
 	// serialised with devalue, which writes a repeated reference once.
-	const summaries = new Map(presentations.map((paper) => [paper.id, paperSummary(paper)]));
-	const papersByPerson: Record<string, PaperSummary[]> = {};
+	const summaries = new Map(
+		presentations.map((paper): [string, PlacedPaperSummary] => {
+			const placement = placementLabel(placements.get(paper.id));
+			return [paper.id, { ...paperSummary(paper), ...(placement ? { placement } : {}) }];
+		})
+	);
+	const papersByPerson: Record<string, PlacedPaperSummary[]> = {};
 	for (const person of [...organizers, ...pointSud, ...participants]) {
 		const papers = getParticipantPresentations(person);
 		if (papers.length > 0)

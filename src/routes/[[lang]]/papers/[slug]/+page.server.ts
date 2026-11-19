@@ -16,7 +16,7 @@ import { createPresentationCitation, presentationSchema } from '#lib/utils/citat
 import { langEntries, resolveAbstract } from '#lib/utils/i18n.ts';
 import { localizedPath } from '#lib/utils/localized-paths.ts';
 import { renderAbstract } from '#lib/utils/markdown.ts';
-import { getPlacements } from '#lib/utils/placement.ts';
+import { getPlacements } from '#lib/server/placement.ts';
 import { abstractToPlainText, truncate } from '#lib/utils/text.ts';
 
 export const prerender = true;

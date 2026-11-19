@@ -127,18 +127,24 @@ test('search reaches abstracts and bios, fetched only once someone searches', as
 		if (request.url().endsWith('.js')) scripts.add(request.url());
 		if (request.url().endsWith('/search-index.json')) indexRequests.push(request.url());
 	});
-	const loadedBios = async () => {
+	const loaded = async (needle: string) => {
 		for (const url of scripts) {
-			if ((await (await page.request.get(url)).text()).includes('GERiiCO')) return true;
+			if ((await (await page.request.get(url)).text()).includes(needle)) return true;
 		}
 		return false;
 	};
+	const loadedBios = () => loaded('GERiiCO');
 
 	await page.goto(`${BASE}/papers`);
 	await expect(page.locator('.paper-title-link')).toHaveCount(25);
 	await page.waitForLoadState('networkidle');
 	expect(indexRequests).toHaveLength(0);
 	expect(await loadedBios(), 'bios and abstracts fetched before anyone searched').toBe(false);
+	// The cards print each paper's slot; the load resolves it, so the programme
+	// registry (every session description, both languages) stays off this page.
+	expect(await loaded('Registration desk open'), 'programme registry shipped for slot labels').toBe(
+		false
+	);
 
 	// A phrase from inside an abstract, in no title, author or affiliation.
 	await page.getByRole('searchbox', { name: 'Search' }).fill('lingua africa');

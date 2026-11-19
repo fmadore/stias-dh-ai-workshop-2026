@@ -1,20 +1,20 @@
 <script lang="ts">
-	import type { PaperSummary, ParticipantListing } from '#lib/types/index.ts';
+	import type { PlacedPaperSummary, ParticipantListing } from '#lib/types/index.ts';
 	import { t, localePath } from '#lib/utils/i18n.ts';
-	import { getPlacements } from '#lib/utils/placement.ts';
 	import Avatar from '#lib/components/shared/Avatar.svelte';
 	import { getLocale } from '#lib/paraglide/runtime.js';
 	import { countryName } from '#lib/utils/country.ts';
 
 	let {
 		participant,
-		/** Their papers, resolved by the page's load rather than from the registries. */
-		papers,
-		placements = getPlacements()
+		/**
+		 * Their papers with each one's slot, resolved by the page's load rather
+		 * than from the registries.
+		 */
+		papers
 	}: {
 		participant: ParticipantListing;
-		papers: PaperSummary[];
-		placements?: ReturnType<typeof getPlacements>;
+		papers: PlacedPaperSummary[];
 	} = $props();
 
 	const presentations = $derived(papers);
@@ -39,7 +39,7 @@
 	</p>
 
 	{#each presentations as presentation (presentation.id)}
-		{@const placement = placements.get(presentation.id)}
+		{@const placement = presentation.placement}
 		<p
 			class="border-accent/55 text-link text-caption mt-3 border-l-2 pl-2.5 leading-snug"
 			lang={presentation.language}

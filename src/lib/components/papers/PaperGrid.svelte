@@ -1,12 +1,8 @@
 <script lang="ts">
 	import type { PaperListing } from '#lib/types/index.ts';
 	import PaperCard from './PaperCard.svelte';
-	import { getPlacements } from '#lib/utils/placement.ts';
 
 	let { presentations }: { presentations: PaperListing[] } = $props();
-
-	// Built once for the whole grid rather than walking the programme per card.
-	const placements = $derived(getPlacements());
 </script>
 
 {#if presentations.length > 0}
@@ -14,7 +10,7 @@
 	     every keystroke is friction. Reveal the page around it instead. -->
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		{#each presentations as presentation (presentation.id)}
-			<PaperCard {presentation} {placements} />
+			<PaperCard {presentation} />
 		{/each}
 	</div>
 {/if}

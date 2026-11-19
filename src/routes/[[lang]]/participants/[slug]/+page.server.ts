@@ -7,7 +7,7 @@ import { getPerson } from '#lib/data/people.ts';
 import { getParticipantPresentations } from '#lib/data/presentations/index.ts';
 import { paperSummary } from '#lib/server/views.ts';
 import { langEntries } from '#lib/utils/i18n.ts';
-import { getPlacements } from '#lib/utils/placement.ts';
+import { getPlacements } from '#lib/server/placement.ts';
 
 export const prerender = true;
 
