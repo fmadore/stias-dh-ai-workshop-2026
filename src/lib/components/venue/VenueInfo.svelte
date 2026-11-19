@@ -5,14 +5,13 @@
 	import { Check, ExternalLink, Info, Minus } from '@lucide/svelte';
 	import { getLocale } from '#lib/paraglide/runtime.js';
 	import { countryName } from '#lib/utils/country.ts';
+	import { withNewTabHint } from '#lib/components/shared/NewTabHint.svelte';
 
-	const locale = $derived(getLocale());
+	const locale = getLocale();
 
 	// Two lists, not one sentence. See the comment on `logisticsCovered`.
-	const covered = $derived(venueInfo.logisticsCovered[locale] ?? venueInfo.logisticsCovered.en);
-	const notCovered = $derived(
-		venueInfo.logisticsNotCovered[locale] ?? venueInfo.logisticsNotCovered.en
-	);
+	const covered = venueInfo.logisticsCovered[locale] ?? venueInfo.logisticsCovered.en;
+	const notCovered = venueInfo.logisticsNotCovered[locale] ?? venueInfo.logisticsNotCovered.en;
 </script>
 
 <div class="space-y-10">
@@ -42,7 +41,7 @@
 			target="_blank"
 			rel="noopener noreferrer"
 			class="link-arrow mt-3 text-sm"
-			aria-label={m.visit_website_of({ name: venueInfo.name })}
+			aria-label={withNewTabHint(m.visit_website_of({ name: venueInfo.name }))}
 		>
 			<ExternalLink size={14} strokeWidth={1.75} aria-hidden="true" />
 			{m.visit_website()}

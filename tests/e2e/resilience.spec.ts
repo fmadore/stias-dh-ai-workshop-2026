@@ -184,7 +184,10 @@ test('static pages state the archive without JavaScript', async ({ browser }) =>
 		page.getByText(/^L’appel à contributions s’est clôturé le 30 avril 2026\./)
 	).toBeVisible();
 	await page.goto(`${BASE}/programme`);
-	await expect(page.getByText('Teraco CT2, Brackenfell', { exact: true })).toBeVisible();
+	// A link out, so its name carries the new-tab hint after the venue.
+	await expect(
+		page.getByRole('link', { name: 'Teraco CT2, Brackenfell (opens in a new tab)', exact: true })
+	).toBeVisible();
 	await context.close();
 });
 

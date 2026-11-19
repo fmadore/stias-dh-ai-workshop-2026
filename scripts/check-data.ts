@@ -142,6 +142,14 @@ for (const day of programme) {
 		]) {
 			if (!peopleById.has(personId)) fail(`programme ${session.id}: unknown person '${personId}'`);
 		}
+		// The programme is a record of what happened: every panel and keynote had
+		// a chair, and SessionCard no longer carries a "to be confirmed" line.
+		if (
+			(session.type === 'panel' || session.type === 'keynote') &&
+			!session.chair &&
+			!session.chairName
+		)
+			fail(`programme ${session.id}: a ${session.type} needs a chair (chair or chairName)`);
 		for (const presentationId of session.presentationIds ?? []) {
 			if (!presentationsById.has(presentationId))
 				fail(`programme ${session.id}: unknown presentation '${presentationId}'`);

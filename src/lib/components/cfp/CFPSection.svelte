@@ -11,13 +11,14 @@
 	import * as m from '#lib/paraglide/messages.js';
 	import { ExternalLink } from '@lucide/svelte';
 	import ScrollReveal from '#lib/components/ScrollReveal.svelte';
+	import NewTabHint from '#lib/components/shared/NewTabHint.svelte';
 
-	const locale = $derived(getLocale());
+	const locale = getLocale();
 
 	const JDHASA_NAME = 'Journal of the Digital Humanities Association of Southern Africa (JDHASA)';
 	const JDHASA_URL = 'https://upjournals.up.ac.za/index.php/dhasa';
 
-	const publicationParts = $derived.by(() => {
+	const publicationParts = (() => {
 		const full = t(cfpInfo.publication);
 		const idx = full.indexOf(JDHASA_NAME);
 		if (idx === -1) return { before: full, after: '' };
@@ -162,7 +163,11 @@
 					target="_blank"
 					rel="noopener noreferrer"
 					class="link-inline italic"
-					>{JDHASA_NAME}<ExternalLink size={13} class="-mt-0.5 ml-1 inline" aria-hidden="true" /></a
+					>{JDHASA_NAME}<ExternalLink
+						size={13}
+						class="-mt-0.5 ml-1 inline"
+						aria-hidden="true"
+					/><NewTabHint /></a
 				>{publicationParts.after}
 			</p>
 		</section>

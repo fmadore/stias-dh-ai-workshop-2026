@@ -5,6 +5,7 @@
 	import { localePath } from '#lib/utils/i18n.ts';
 	import { formatDateRange, formatPartialDate } from '#lib/utils/date.ts';
 	import { ArrowRight, ExternalLink } from '@lucide/svelte';
+	import NewTabHint from '#lib/components/shared/NewTabHint.svelte';
 
 	let { resource }: { resource: ResourceListing } = $props();
 
@@ -73,7 +74,7 @@
 				strokeWidth={1.75}
 				class="text-muted ml-1.5 inline-block align-[-0.0625em]"
 				aria-hidden="true"
-			/><span class="sr-only">{m.opens_new_tab()}</span>
+			/><NewTabHint />
 		</a>
 	</h3>
 
@@ -131,7 +132,7 @@
 						class="link-arrow text-sm"
 					>
 						<ExternalLink size={14} strokeWidth={1.75} aria-hidden="true" />
-						{link.label}<span class="sr-only">{m.opens_new_tab()}</span>
+						{link.label}<NewTabHint />
 					</a>
 				</li>
 			{/each}

@@ -6,6 +6,7 @@
 	import { siteConfig } from '#lib/data/site-config.ts';
 	import { localePath, t } from '#lib/utils/i18n.ts';
 	import { getMilestones } from '#lib/utils/milestones.ts';
+	import NewTabHint from '#lib/components/shared/NewTabHint.svelte';
 
 	// The footer used to be logos and a copyright line, so every route out of
 	// a page depended on the navbar and the sponsor row read as terminal.
@@ -113,7 +114,7 @@
 							class="h-10 w-auto object-contain"
 							loading="lazy"
 							decoding="async"
-						/>
+						/><NewTabHint />
 					</a>
 				{/each}
 			</div>

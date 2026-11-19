@@ -357,6 +357,11 @@ button:not(:disabled),
 	outline-offset: 3px;
 	border-radius: var(--radius-xs);
 }
+/* <main> takes focus only as a landing point (the skip link, back to top).
+   A ring around the whole page body would say nothing the next Tab does not. */
+#main:focus {
+	outline: none;
+}
 
 /* The hero and the footer are dark in BOTH themes, so the light and dark values
    of several ink roles are both wrong against them. Set the roles once on the
