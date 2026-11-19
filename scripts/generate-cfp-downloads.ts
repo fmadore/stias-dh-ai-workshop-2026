@@ -60,6 +60,17 @@ const GOLD = rgb(212 / 255, 168 / 255, 67 / 255);
 const INK = rgb(30 / 255, 30 / 255, 30 / 255);
 const BODY = rgb(60 / 255, 60 / 255, 60 / 255);
 const MUTED = rgb(112 / 255, 112 / 255, 112 / 255);
+/**
+ * Fixed CreationDate/ModDate, so every build publishes byte-identical PDFs
+ * (pdf-lib otherwise stamps "now"). Neither the data nor the (shallow) git
+ * history records the day the call was issued, so this uses the submission
+ * deadline: the call's text was final by then, and the PDF is an archival
+ * record of it rather than of the build that happened to render it. The rest
+ * of pdf-lib's output is already stable: subset-font name suffixes come from a
+ * fixed-seed RNG and save() writes no random file /ID (see loadLogos for the
+ * one ordering hazard).
+ */
+const DOCUMENT_DATE = new Date(`${cfpInfo.deadline}T00:00:00Z`);
 
 function localize(value: LocalizedString, locale: Locale): string {
 	return value[locale] ?? value.en;
@@ -159,24 +170,28 @@ function wrapText(text: string, font: PDFFont, size: number, maxWidth: number): 
 }
 
 async function loadLogos(pdf: PDFDocument): Promise<Array<{ image: PDFImage; ratio: number }>> {
-	const loaded = await Promise.all(
+	// Decode in parallel but embed in sponsor order: pdf-lib numbers objects as
+	// they are embedded, so embedding in completion order would shuffle the
+	// object table from one build to the next. Any failure is fatal — a logo
+	// silently missing from a published PDF is worse than a red build.
+	const decoded = await Promise.all(
 		sponsors.map(async (sponsor) => {
 			try {
 				const source = await readFile(path.join('static', sponsor.logo.replace(/^\//, '')));
 				const pipeline = sharp(source).png();
 				const metadata = await pipeline.metadata();
-				const png = await pipeline.toBuffer();
 				return {
-					image: await pdf.embedPng(png),
+					png: await pipeline.toBuffer(),
 					ratio: (metadata.width ?? 2) / (metadata.height ?? 1)
 				};
 			} catch (error) {
-				console.warn(`Skipping PDF logo ${sponsor.logo}:`, error);
-				return null;
+				throw new Error(`Could not load PDF logo ${sponsor.logo}`, { cause: error });
 			}
 		})
 	);
-	return loaded.filter((logo): logo is { image: PDFImage; ratio: number } => logo !== null);
+	const logos: Array<{ image: PDFImage; ratio: number }> = [];
+	for (const { png, ratio } of decoded) logos.push({ image: await pdf.embedPng(png), ratio });
+	return logos;
 }
 
 async function createPdf(labels: Labels, locale: Locale): Promise<Uint8Array> {
@@ -186,6 +201,8 @@ async function createPdf(labels: Labels, locale: Locale): Promise<Uint8Array> {
 	pdf.setSubject(labels.cfpLabel);
 	pdf.setAuthor('STIAS DH & AI Workshop 2026');
 	pdf.setLanguage(locale);
+	pdf.setCreationDate(DOCUMENT_DATE);
+	pdf.setModificationDate(DOCUMENT_DATE);
 
 	const [regularBytes, semiboldBytes] = await Promise.all([
 		readFile(path.join(FONT_DIR, 'Outfit-Regular.ttf')),
