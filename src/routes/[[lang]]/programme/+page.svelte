@@ -1,54 +1,35 @@
 <script lang="ts">
-	import { venueClock } from '#lib/utils/venue-clock.ts';
 	import * as m from '#lib/paraglide/messages.js';
 	import { getLocale } from '#lib/paraglide/runtime.js';
-	import { siteConfig } from '#lib/data/site-config.ts';
 	import SEO from '#lib/components/SEO.svelte';
 	import PageHeader from '#lib/components/layout/PageHeader.svelte';
 	import { programme, programmeLastUpdated } from '#lib/data/programme.ts';
-	import { dateAtVenue, workshopPhase } from '#lib/utils/milestones.ts';
 	import { formatDate, formatShortDay } from '#lib/utils/date.ts';
 	import { panelNumbers } from '#lib/utils/schedule.ts';
 	import ScheduleDay from '#lib/components/programme/ScheduleDay.svelte';
-	import JoinOnline from '#lib/components/shared/JoinOnline.svelte';
 	import { asset } from '$app/paths';
 	import { staticAsset } from '#lib/utils/base-path.ts';
-	import { Calendar, CalendarPlus, FileText } from '@lucide/svelte';
+	import { CalendarPlus, FileText } from '@lucide/svelte';
 
 	let { data } = $props();
 
 	// One calendar file per locale, unlike the PDF: an .ics carries the session
 	// titles themselves, and a calendar entry written in both languages at once
 	// is unreadable in the one line a day view gives it.
-	const icsFile = $derived(`Programme-STIAS-2026-${getLocale()}.ics`);
+	const icsFile = `Programme-STIAS-2026-${getLocale()}.ics`;
 
-	const lastUpdated = $derived(formatDate(programmeLastUpdated));
-
-	/** Today's date in South African time, so "happening now" matches the venue. */
-	const todayAtVenue = $derived(dateAtVenue($venueClock.now));
-
-	// "Happening now" is a claim about the present, not about the date. The
-	// closing session ends at 18:00 on the fourth day and the badge sat on that
-	// day until midnight, so for six hours the programme said the workshop was
-	// under way while the home page said it had concluded.
-	const stillRunning = $derived($venueClock.live && workshopPhase($venueClock.now) !== 'after');
+	const lastUpdated = formatDate(programmeLastUpdated);
 
 	// Panel numbers run across the whole programme, not per day.
 	const panels = panelNumbers(programme);
 
-	const days = $derived(
-		programme.map((day) => ({
-			day,
-			isToday: day.date === todayAtVenue && stillRunning,
-			short: formatShortDay(day.date)
-		}))
-	);
+	const days = programme.map((day) => ({
+		day,
+		short: formatShortDay(day.date)
+	}));
 </script>
 
-<SEO
-	title="{m.nav_programme()} | {siteConfig.shortTitle}"
-	description={m.seo_programme_description()}
-/>
+<SEO title={m.nav_programme()} description={m.seo_programme_description()} />
 
 <PageHeader
 	title={m.section_programme()}
@@ -59,8 +40,13 @@
 >
 	{#snippet actions()}
 		<!-- One file for both locales: the printed programme is a single bilingual
-		     document, so unlike the call for papers there is no per-locale stem. -->
-		<a href={asset('downloads/Programme-STIAS-2026.pdf')} download class="btn btn-primary btn-sm">
+		     document, so unlike the call for papers there is no per-locale stem.
+		     It is the hand-made export circulated on 15 September and cannot be
+		     regenerated, so it disagrees with the final programme in places (the
+		     data-centre visit, the chairs). The label says which document it is,
+		     and the note above the schedule says which one is the record. No
+		     longer the primary button either: the page outranks it. -->
+		<a href={asset('downloads/Programme-STIAS-2026.pdf')} download class="btn btn-secondary btn-sm">
 			<FileText size={15} strokeWidth={1.75} aria-hidden="true" />
 			{m.download_programme()}
 		</a>
@@ -75,69 +61,52 @@
 </PageHeader>
 
 <div class="page-end">
-	{#if programme.length > 0}
-		<!-- A four-day programme is otherwise 3000px of scroll with no way in.
-		     bg-page, not bg-cream/90: the .bg-cream alias is unlayered so it beats
-		     the generated utility, but an alpha modifier is a different class name
-		     and falls through to the raw light-only token. -->
-		<nav
-			class="programme-day-nav bg-page/90 border-subtle sticky top-[var(--nav-height)] z-30 border-b backdrop-blur-md"
-			aria-label={m.programme_jump_to_day()}
-		>
-			<!-- flex-nowrap, not flex-wrap: --day-bar-height is a declared constant
-			     that days and sessions consume as scroll-margin-top, so the bar is
-			     only allowed one height. At 320px four day pills measured 290.7px
-			     (EN) and 293.6px (FR) against 288px of content, wrapped to a second
-			     row, and rendered 113px — leaving every day heading 36px *behind*
-			     the bar it was supposed to clear. A row that cannot wrap keeps the
-			     token true by construction; overflow-x is the escape valve if a
-			     fifth day or a longer locale ever exceeds the width, so it scrolls
-			     rather than silently lying about its height again. -->
-			<div class="container-page flex flex-nowrap items-center gap-2 overflow-x-auto py-2">
-				<span class="text-meta mr-1 hidden sm:inline">{m.programme_jump_to_day()}</span>
-				{#each days as entry (entry.day.date)}
-					<a href="#day-{entry.day.date}" class="day-pill" class:is-today={entry.isToday}>
-						{entry.short}
-					</a>
-				{/each}
-			</div>
-		</nav>
-
-		<div class="container-page programme-body block-flow pt-6 sm:pt-10">
-			<!-- Above the schedule, not beside the download buttons: someone who
-			     cannot travel needs to know the sessions are open to them before
-			     they start reading four days of panels. -->
-			<JoinOnline variant="callout" />
-
-			<!-- The revision date used to be the small print under a "this programme
-			     is preliminary" notice. With the notice gone it is a fact about the
-			     page, not a warning about it, so it drops the callout's amber frame
-			     and Info mark and sits as a quiet meta line above the schedule. -->
-			<p class="text-muted text-xs">
-				{m.programme_last_updated({ date: lastUpdated })}
-			</p>
-
-			<div class="block-flow">
-				{#each days as entry (entry.day.date)}
-					<ScheduleDay day={entry.day} {panels} casts={data.casts} isToday={entry.isToday} />
-				{/each}
-			</div>
+	<!-- A four-day programme is otherwise 3000px of scroll with no way in.
+	     bg-page, not bg-cream/90: the .bg-cream alias is unlayered so it beats
+	     the generated utility, but an alpha modifier is a different class name
+	     and falls through to the raw light-only token. -->
+	<nav
+		class="programme-day-nav bg-page/90 border-subtle sticky top-[var(--nav-height)] z-30 border-b backdrop-blur-md"
+		aria-label={m.programme_jump_to_day()}
+	>
+		<!-- flex-nowrap, not flex-wrap: --day-bar-height is a declared constant
+		     that days and sessions consume as scroll-margin-top, so the bar is
+		     only allowed one height. At 320px four day pills measured 290.7px
+		     (EN) and 293.6px (FR) against 288px of content, wrapped to a second
+		     row, and rendered 113px — leaving every day heading 36px *behind*
+		     the bar it was supposed to clear. A row that cannot wrap keeps the
+		     token true by construction; overflow-x is the escape valve if a
+		     fifth day or a longer locale ever exceeds the width, so it scrolls
+		     rather than silently lying about its height again. -->
+		<div class="container-page flex flex-nowrap items-center gap-2 overflow-x-auto py-2">
+			<span class="text-meta mr-1 hidden sm:inline">{m.programme_jump_to_day()}</span>
+			{#each days as entry (entry.day.date)}
+				<a href="#day-{entry.day.date}" class="day-pill">
+					{entry.short}
+				</a>
+			{/each}
 		</div>
-	{:else}
-		<div class="container-readable page-body">
-			<div class="card p-14 text-center">
-				<Calendar
-					size={44}
-					strokeWidth={1.25}
-					class="text-surface-300 dark:text-surface-600 mx-auto mb-5"
-					aria-hidden="true"
-				/>
-				<p class="text-muted text-lg font-light">
-					{m.programme_tba()}
-				</p>
-			</div>
+	</nav>
+
+	<div class="container-page programme-body block-flow pt-6 sm:pt-10">
+		<!-- The revision date used to be the small print under a "this programme
+		     is preliminary" notice. With the notice gone it is a fact about the
+		     page, not a warning about it, so it drops the callout's amber frame
+		     and Info mark and sits as a quiet meta line above the schedule. The
+		     same line says, once, that the PDF in the header predates the
+		     workshop and that this page is the version to cite. -->
+		<p class="text-muted text-xs">
+			{m.programme_last_updated({ date: lastUpdated })}
+			<span aria-hidden="true">·</span>
+			{m.programme_pdf_note()}
+		</p>
+
+		<div class="block-flow">
+			{#each days as entry (entry.day.date)}
+				<ScheduleDay day={entry.day} {panels} casts={data.casts} />
+			{/each}
 		</div>
-	{/if}
+	</div>
 </div>
 
 <style>
@@ -184,12 +153,5 @@
 	.day-pill:hover {
 		color: var(--ink-strong);
 		border-color: var(--border-strong);
-	}
-
-	/* Solid gold, one per page — the "happening now" day. */
-	.day-pill.is-today {
-		background-color: var(--accent);
-		border-color: var(--accent);
-		color: var(--color-ink);
 	}
 </style>

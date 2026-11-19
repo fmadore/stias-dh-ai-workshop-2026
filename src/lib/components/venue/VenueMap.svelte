@@ -1,15 +1,9 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import type {
-		LngLatBounds as MapLibreBounds,
-		Map as MapLibreMap,
-		Marker as MapLibreMarker,
-		Popup as MapLibrePopup
-	} from 'maplibre-gl';
 	import * as m from '#lib/paraglide/messages.js';
 	import { venueInfo, venueStreet } from '#lib/data/venue.ts';
 	import { accommodations } from '#lib/data/accommodation.ts';
-	import { createLazyMap } from '#lib/utils/map.ts';
+	import { createPinMap } from '#lib/utils/pin-map.svelte.ts';
+	import MapFrame from '#lib/components/shared/MapFrame.svelte';
 
 	type Place = {
 		id: string;
@@ -42,44 +36,28 @@
 		}))
 	];
 
-	let mapHost: HTMLDivElement;
-	let map: MapLibreMap | undefined;
-	let bounds: MapLibreBounds | undefined;
-	let popup: MapLibrePopup | undefined;
-	let markers: Array<{ id: string; marker: MapLibreMarker }> = [];
-	let selectedId = $state<string | null>(null);
-	let mapReady = $state(false);
-	let mapFailed = $state(false);
-
-	/**
-	 * The popup is MapLibre's, drawn outside this component's markup and
-	 * dismissed on any map interaction, so the announcement belongs to the chip
-	 * row instead — which is also where the keyboard path already lives.
-	 */
-	const selectionSummary = $derived.by(() => {
-		const place = selectedId ? places.find((entry) => entry.id === selectedId) : undefined;
-		if (!place) return '';
-		return [place.name, place.role, place.address].filter(Boolean).join(' — ');
-	});
-
-	function setSelectedMarker(id: string | null) {
-		selectedId = id;
-		for (const entry of markers) {
-			entry.marker.getElement().classList.toggle('is-active', entry.id === id);
-		}
+	function markerElement(place: Place): HTMLElement {
+		const markerButton = document.createElement('button');
+		markerButton.type = 'button';
+		markerButton.className = place.isVenue ? 'venue-marker is-venue' : 'venue-marker is-stay';
+		// No `title`: it repeated the accessible name word for word, which some
+		// screen readers then read twice. The chip row under the map names every
+		// pin in the same colours, so a hover tooltip was not the only label.
+		markerButton.setAttribute('aria-label', m.venue_map_select({ place: place.name }));
+		return markerButton;
 	}
 
 	function popupContent(place: Place): HTMLElement {
 		const content = document.createElement('article');
-		content.className = 'venue-popup-body';
+		content.className = 'map-popup-body';
 
 		const role = document.createElement('p');
-		role.className = 'venue-popup-role';
+		role.className = 'map-popup-eyebrow';
 		role.textContent = place.role;
 		content.appendChild(role);
 
 		const heading = document.createElement('h3');
-		heading.className = 'venue-popup-title';
+		heading.className = 'map-popup-title venue-popup-title';
 		heading.textContent = place.name;
 		content.appendChild(heading);
 
@@ -89,7 +67,7 @@
 		content.appendChild(address);
 
 		const link = document.createElement('a');
-		link.className = 'venue-popup-link';
+		link.className = 'map-popup-link venue-popup-link';
 		link.href = place.website;
 		link.target = '_blank';
 		link.rel = 'noopener noreferrer';
@@ -99,129 +77,43 @@
 		return content;
 	}
 
-	function selectPlace(id: string, moveMap = true) {
-		const place = places.find((entry) => entry.id === id);
-		if (!place) return;
+	const pinMap = createPinMap({
+		items: () => places,
+		mapTitle: m.venue_map_label(),
+		popupCloseLabel: m.venue_map_popup_close(),
+		popup: { className: 'venue-popup', offset: 16, maxWidth: '20rem' },
+		options: {
+			center: [venueInfo.coordinates.lng, venueInfo.coordinates.lat],
+			zoom: 13.5,
+			minZoom: 9,
+			maxZoom: 18
+		},
+		markerElement,
+		popupContent,
+		fit: { padding: { narrow: 46, wide: 84 }, maxZoom: 16 },
+		focusZoom: 16
+	});
 
-		setSelectedMarker(id);
-		if (!map || !popup || !mapReady) return;
-
-		if (moveMap) {
-			const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-			map.easeTo({
-				center: [place.coordinates.lng, place.coordinates.lat],
-				zoom: Math.max(map.getZoom(), 16),
-				duration: reducedMotion ? 0 : 700
-			});
-		}
-
-		popup
-			.setLngLat([place.coordinates.lng, place.coordinates.lat])
-			.setDOMContent(popupContent(place))
-			.addTo(map);
-
-		// Reassert the selection because moving an already-open shared popup
-		// emits `close` before MapLibre attaches it at the new location.
-		setSelectedMarker(id);
-	}
-
-	function showAllPlaces(animate = true) {
-		setSelectedMarker(null);
-		popup?.remove();
-		if (!map || !bounds || !mapReady) return;
-
-		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		const narrow = window.matchMedia('(max-width: 639px)').matches;
-		map.fitBounds(bounds, {
-			padding: narrow ? 46 : 84,
-			maxZoom: 16,
-			duration: animate && !reducedMotion ? 700 : 0
-		});
-	}
-
-	onMount(() =>
-		createLazyMap({
-			container: mapHost,
-			popupCloseLabel: m.venue_map_popup_close(),
-			options: {
-				center: [venueInfo.coordinates.lng, venueInfo.coordinates.lat],
-				zoom: 13.5,
-				minZoom: 9,
-				maxZoom: 18
-			},
-			setup(instance, maplibre) {
-				map = instance;
-
-				popup = new maplibre.Popup({
-					className: 'venue-popup',
-					closeOnClick: true,
-					offset: 16,
-					maxWidth: '20rem',
-					focusAfterOpen: false
-				});
-				popup.on('close', () => {
-					selectedId = null;
-					setSelectedMarker(null);
-				});
-
-				bounds = new maplibre.LngLatBounds();
-				for (const place of places) {
-					const markerButton = document.createElement('button');
-					markerButton.type = 'button';
-					markerButton.className = place.isVenue ? 'venue-marker is-venue' : 'venue-marker is-stay';
-					markerButton.setAttribute('aria-label', m.venue_map_select({ place: place.name }));
-					markerButton.title = place.name;
-					markerButton.addEventListener('click', (event) => {
-						// Otherwise the same click bubbles to MapLibre's map-level
-						// close handler and immediately dismisses the popup we just opened.
-						event.stopPropagation();
-						selectPlace(place.id, false);
-					});
-
-					const marker = new maplibre.Marker({ element: markerButton })
-						.setLngLat([place.coordinates.lng, place.coordinates.lat])
-						.addTo(instance);
-					markers.push({ id: place.id, marker });
-					bounds.extend([place.coordinates.lng, place.coordinates.lat]);
-				}
-			},
-			onReady() {
-				mapReady = true;
-				mapFailed = false;
-				if (selectedId) selectPlace(selectedId);
-				else showAllPlaces(false);
-			},
-			onFail() {
-				mapFailed = true;
-			},
-			onResize() {
-				if (!selectedId) showAllPlaces(false);
-			},
-			teardown() {
-				popup?.remove();
-				for (const entry of markers) entry.marker.remove();
-				markers = [];
-				map = undefined;
-			}
-		})
-	);
+	/**
+	 * The popup is MapLibre's, drawn outside this component's markup and
+	 * dismissed on any map interaction, so the announcement belongs to the chip
+	 * row instead — which is also where the keyboard path already lives.
+	 */
+	const selectionSummary = $derived.by(() => {
+		const id = pinMap.selectedId;
+		const place = id ? places.find((entry) => entry.id === id) : undefined;
+		if (!place) return '';
+		return [place.name, place.role, place.address].filter(Boolean).join(' — ');
+	});
 </script>
 
 <div class="venue-map-shell">
-	<div class="map-frame" role="region" aria-label={m.venue_map_label()}>
-		<div bind:this={mapHost} class="venue-map"></div>
-		<noscript>
-			<p class="map-state map-error">{m.venue_map_error()}</p>
-		</noscript>
-		{#if !mapReady && !mapFailed}
-			<div class="map-state map-loading" aria-live="polite">
-				<span class="map-loader" aria-hidden="true"></span>
-				<span>{m.venue_map_loading()}</span>
-			</div>
-		{:else if mapFailed}
-			<p class="map-state map-error" role="status">{m.venue_map_error()}</p>
-		{/if}
-	</div>
+	<MapFrame
+		map={pinMap}
+		hostClass="venue-map"
+		loadingLabel={m.venue_map_loading()}
+		errorLabel={m.venue_map_error()}
+	/>
 
 	<div class="venue-map-legend">
 		<h3 class="sr-only">{m.venue_map_places_label()}</h3>
@@ -233,9 +125,9 @@
 						type="button"
 						class="venue-chip"
 						class:is-venue={place.isVenue}
-						class:active={selectedId === place.id}
-						aria-pressed={selectedId === place.id}
-						onclick={() => selectPlace(place.id)}
+						class:active={pinMap.selectedId === place.id}
+						aria-pressed={pinMap.selectedId === place.id}
+						onclick={(event) => pinMap.select(place.id, { returnFocusTo: event.currentTarget })}
 					>
 						<span class="venue-chip-dot" aria-hidden="true"></span>
 						{place.name}
@@ -243,65 +135,20 @@
 				</li>
 			{/each}
 		</ul>
-		<button class="btn btn-secondary btn-sm" type="button" onclick={() => showAllPlaces()}>
+		<button class="btn btn-secondary btn-sm" type="button" onclick={() => pinMap.showAll()}>
 			{m.venue_map_show_all()}
 		</button>
 	</div>
 </div>
 
 <style>
-	/* The loading state is prerendered, so without JavaScript it is a spinner
-	   that spins forever under a promise nothing will keep. The <noscript>
-	   message above takes its place; the addresses listed below the map are
-	   static markup and work either way. */
-	:global(.no-js) .map-loading {
-		display: none;
-	}
-
 	.venue-map-shell {
+		--map-min-height: 22rem;
 		overflow: hidden;
 		background: var(--surface-raised);
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-xl);
 		box-shadow: var(--shadow-sm);
-	}
-
-	.map-frame {
-		position: relative;
-		min-height: 22rem;
-		background: var(--surface-sunken);
-	}
-
-	.venue-map {
-		position: absolute;
-		inset: 0;
-	}
-
-	.map-state {
-		position: absolute;
-		inset: 0;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.65rem;
-		padding: 2rem;
-		background: var(--surface-sunken);
-		color: var(--ink-subtle);
-		font-size: var(--text-ui);
-		text-align: center;
-	}
-
-	.map-loader {
-		width: 1rem;
-		height: 1rem;
-		border: 2px solid color-mix(in oklab, var(--color-primary-500) 25%, transparent);
-		border-top-color: var(--color-primary-600);
-		border-radius: var(--radius-full);
-		animation: map-spin 700ms linear infinite;
-	}
-
-	.map-error {
-		color: var(--ink-body);
 	}
 
 	.venue-map-legend {
@@ -374,6 +221,20 @@
 			box-shadow var(--duration-fast) var(--ease-standard);
 	}
 
+	/* The guest-house dot is 1.1rem — 17.6px, under the 24px a pointer target
+	   needs. The dot stays that size and the button's box stays the one MapLibre
+	   anchors on; a transparent ring around it takes the extra clicks. No
+	   `position` here: MapLibre's own `.maplibregl-marker` makes the button
+	   absolute, which is what this ring is placed against, and setting it would
+	   tie with that rule on specificity. The inset is measured from inside the
+	   2px border, hence the extra 2px: 17.6px + 2 × 6px is a 25.6px target. */
+	:global(.venue-marker)::before {
+		content: '';
+		position: absolute;
+		inset: calc(-0.25rem - 2px);
+		border-radius: inherit;
+	}
+
 	/* The venue is the point of reference the other two are measured against,
 	   so it reads as the larger gold pin and the guest houses as smaller teal
 	   ones. Size and hue both carry it — hue alone would not survive a
@@ -396,55 +257,15 @@
 		box-shadow: var(--shadow-lg);
 	}
 
-	/* --- Popup --- */
+	/* --- Popup: the card chrome is MapFrame's; this is its size and content. --- */
 
-	:global(.venue-popup .maplibregl-popup-tip) {
-		display: none;
-	}
-
-	:global(.venue-popup .maplibregl-popup-content) {
-		min-width: min(15rem, calc(100vw - 4rem));
-		padding: 1rem 1.15rem;
-		background: var(--surface-raised);
-		border: 1px solid var(--border-subtle);
-		border-radius: var(--radius-lg);
-		box-shadow: var(--shadow-xl);
-		color: var(--ink-body);
-	}
-
-	:global(.venue-popup .maplibregl-popup-close-button) {
-		width: 2.5rem;
-		height: 2.5rem;
-		color: var(--ink-subtle);
-		font-size: 1.25rem;
-	}
-
-	:global(.venue-popup .maplibregl-popup-close-button:hover) {
-		background: color-mix(in oklab, var(--ink-strong) 7%, transparent);
-		color: var(--ink-strong);
-	}
-
-	:global(.venue-popup-body) {
-		padding-inline-end: 1.5rem;
-	}
-
-	:global(.venue-popup-role) {
-		color: var(--ink-subtle);
-		font-size: var(--text-badge);
-		font-weight: 600;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
+	:global(.venue-popup) {
+		--map-popup-min-width: 15rem;
+		--map-popup-padding: 1rem 1.15rem;
 	}
 
 	:global(.venue-popup-title) {
 		margin-top: 0.3rem;
-		color: var(--ink-strong);
-		font-family: var(--font-display);
-		/* The card-title role at its floor, fixed rather than fluid: the popup
-		   has a max-width, so it must not grow with the viewport. */
-		font-size: 1.1875rem;
-		line-height: 1.25;
-		letter-spacing: -0.012em;
 	}
 
 	:global(.venue-popup-meta) {
@@ -457,53 +278,11 @@
 	:global(.venue-popup-link) {
 		display: inline-block;
 		margin-top: 0.6rem;
-		color: var(--link);
-		font-size: var(--text-ui-sm);
-		text-decoration: underline;
-		text-decoration-color: color-mix(in oklab, var(--link) 30%, transparent);
-		text-underline-offset: 0.18em;
-	}
-
-	:global(.venue-popup-link:hover) {
-		color: var(--link-hover);
-		text-decoration-color: currentColor;
-	}
-
-	/* --- MapLibre chrome --- */
-
-	.venue-map :global(.maplibregl-ctrl-group) {
-		overflow: hidden;
-		background: var(--surface-raised);
-		border: 1px solid var(--border-subtle);
-		border-radius: var(--radius-md);
-		box-shadow: var(--shadow-md);
-	}
-
-	.venue-map :global(.maplibregl-ctrl-group button + button) {
-		border-top-color: var(--border-subtle);
-	}
-
-	.venue-map :global(.maplibregl-ctrl-group button) {
-		width: 2.5rem;
-		height: 2.5rem;
-	}
-
-	:global(.dark) .venue-map :global(.maplibregl-ctrl-icon) {
-		filter: invert(1);
-	}
-
-	.venue-map :global(.maplibregl-ctrl-attrib) {
-		background: color-mix(in oklab, var(--surface-raised) 88%, transparent);
-		color: var(--ink-subtle);
-	}
-
-	.venue-map :global(.maplibregl-ctrl-attrib a) {
-		color: var(--link);
 	}
 
 	@media (min-width: 768px) {
-		.map-frame {
-			min-height: 28rem;
+		.venue-map-shell {
+			--map-min-height: 28rem;
 		}
 	}
 
@@ -519,10 +298,6 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.map-loader {
-			animation-duration: 1.5s;
-		}
-
 		:global(.venue-marker) {
 			transition: none;
 		}
@@ -530,12 +305,6 @@
 		:global(.venue-marker:hover),
 		:global(.venue-marker.is-active) {
 			transform: none;
-		}
-	}
-
-	@keyframes map-spin {
-		to {
-			transform: rotate(360deg);
 		}
 	}
 </style>

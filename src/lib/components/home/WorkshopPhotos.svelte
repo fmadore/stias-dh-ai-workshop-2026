@@ -8,7 +8,7 @@
 	// `ratio` is width / height of the source. On desktop it is each figure's
 	// flex-grow, so widths are proportional to it and both photos end up the
 	// same height without cropping anyone off the edge of a group shot.
-	const photos = $derived([
+	const photos = [
 		{
 			name: 'group-stias',
 			width: 1600,
@@ -25,7 +25,7 @@
 			alt: m.photos_hoofgebou_alt(),
 			caption: m.photos_hoofgebou_caption()
 		}
-	]);
+	];
 
 	const src = (name: string, w: number) => staticAsset(`/images/workshop/${name}-${w}.webp`);
 </script>

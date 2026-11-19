@@ -169,8 +169,24 @@ export interface PersonRef {
 	affiliation?: LocalizedString;
 }
 
+/**
+ * Where a paper sits in the running order, in the page's locale. Resolved by
+ * the server load, so a card can print it without the programme registry.
+ */
+export interface PlacementLabel {
+	/** "Panel 3" / "Keynote" — the session's name in the running order. */
+	sessionLabel: string;
+	/** "Mon 21 · 14:00" — where it sits in the week. */
+	slotLabel: string;
+}
+
+/** A paper summary with its slot, as a participant card lists it. */
+export interface PlacedPaperSummary extends PaperSummary {
+	placement?: PlacementLabel;
+}
+
 /** A paper as the papers directory lists it: everything but the full abstract. */
-export interface PaperListing extends PaperSummary {
+export interface PaperListing extends PlacedPaperSummary {
 	authors: PersonRef[];
 	/** Countries of the authors who are attending — what the country filter matches. */
 	countries: CountryCode[];
@@ -189,12 +205,25 @@ export interface MappedAffiliation extends Omit<AffiliationLocation, 'personIds'
 	people: PersonRef[];
 }
 
-/** A resource as its page renders it: authors resolved from ids to bylines. */
-export interface ResourceListing extends Omit<Resource, 'authors'> {
+/**
+ * A resource as its page renders it: authors resolved from ids to bylines, and
+ * every `LocalizedString` resolved to the page's locale at prerender.
+ */
+export interface ResourceListing extends Omit<
+	Resource,
+	'authors' | 'source' | 'place' | 'description' | 'links'
+> {
 	authors: PersonRef[];
+	source?: string[];
+	place?: string;
+	description?: string;
+	links?: Array<Omit<ResourceLink, 'label'> & { label: string }>;
 }
 
-export interface ResourceListingSection extends Omit<ResourceSection, 'resources'> {
+export interface ResourceListingSection {
+	id: string;
+	title: string;
+	intro?: string;
 	resources: ResourceListing[];
 }
 
@@ -384,7 +413,6 @@ export interface CFPInfo {
 	deadline: string;
 	notificationDate: string;
 	fullPapersDeadline: string;
-	submissionUrl?: string;
 	rationale: LocalizedString;
 	guidelines: LocalizedString;
 	selectionCriteria: LocalizedString;
@@ -394,7 +422,8 @@ export interface CFPInfo {
 
 export interface SiteConfig {
 	title: LocalizedString;
-	shortTitle: string;
+	/** The site's name, as page titles, `og:site_name` and the WebSite schema carry it. */
+	shortTitle: LocalizedString;
 	description: LocalizedString;
 	dates: { start: string; end: string };
 	/**

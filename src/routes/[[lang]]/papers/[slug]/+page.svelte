@@ -2,9 +2,9 @@
 	import * as m from '#lib/paraglide/messages.js';
 	import { ArrowLeft, ArrowRight, CalendarClock, Presentation as SlidesIcon } from '@lucide/svelte';
 	import { t, localePath } from '#lib/utils/i18n.ts';
-	import { siteConfig } from '#lib/data/site-config.ts';
 	import SEO from '#lib/components/SEO.svelte';
 	import PageHeader from '#lib/components/layout/PageHeader.svelte';
+	import NewTabHint from '#lib/components/shared/NewTabHint.svelte';
 
 	let { data } = $props();
 
@@ -18,9 +18,11 @@
 </script>
 
 <SEO
-	title="{presentation.title} | {siteConfig.shortTitle}"
+	title={presentation.title}
 	description={data.description}
-	additionalSchema={data.citationSchema}
+	type="article"
+	meta={data.citationMeta}
+	additionalSchema={[data.citationSchema, data.breadcrumbs]}
 />
 
 <svelte:head>
@@ -44,7 +46,7 @@
 {#snippet slidesAction()}
 	<a href={data.slides} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
 		<SlidesIcon size={15} strokeWidth={1.75} aria-hidden="true" />
-		{m.paper_view_slides()}<span class="sr-only">{m.opens_new_tab()}</span>
+		{m.paper_view_slides()}<NewTabHint />
 	</a>
 {/snippet}
 

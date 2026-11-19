@@ -7,7 +7,8 @@
 #     (they can carry breaking changes).
 #   * GitHub Actions are pinned to immutable release SHAs; Dependabot updates
 #     the pins while inline comments preserve their human-readable versions.
-#   * Checks run monthly. Security updates are unaffected and still arrive immediately.
+#   * Checks run quarterly: the site is an archive now. Security updates are
+#     unaffected and still arrive immediately.
 version: 2
 
 updates:
@@ -15,7 +16,7 @@ updates:
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
-      interval: 'monthly'
+      interval: 'quarterly'
       time: '06:00'
       timezone: 'Europe/Berlin'
     open-pull-requests-limit: 10
@@ -31,6 +32,10 @@ updates:
     ignore:
       - dependency-name: 'typescript'
         versions: ['7.x']
+      # The repo pins Node 24 (.nvmrc, engines), so @types/node must stay on
+      # that major; a newer one would type APIs the runtime does not have.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
     groups:
       # Renderer updates need their own bundle-budget review. They must not
       # hold up unrelated fixes when upstream adds substantial bundle weight.
@@ -54,7 +59,7 @@ updates:
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
-      interval: 'monthly'
+      interval: 'quarterly'
       time: '06:00'
       timezone: 'Europe/Berlin'
     open-pull-requests-limit: 5

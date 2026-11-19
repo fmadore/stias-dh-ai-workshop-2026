@@ -1,6 +1,5 @@
 <script lang="ts">
 	import * as m from '#lib/paraglide/messages.js';
-	import { siteConfig } from '#lib/data/site-config.ts';
 	import SEO from '#lib/components/SEO.svelte';
 	import PageHeader from '#lib/components/layout/PageHeader.svelte';
 	import { organizers } from '#lib/data/organizers.ts';
@@ -17,11 +16,11 @@
 	import { fullText, loadFullText, retryFullText } from '#lib/utils/search-text.svelte.ts';
 	import type { DirectoryGrouping } from '#lib/utils/filter-params.ts';
 
-	const groupingOptions: Array<{ value: DirectoryGrouping; label: string }> = $derived([
+	const groupingOptions: Array<{ value: DirectoryGrouping; label: string }> = [
 		{ value: 'none', label: m.directory_no_group() },
 		{ value: 'alpha', label: m.directory_group_alpha() },
 		{ value: 'country', label: m.directory_group_country() }
-	]);
+	];
 
 	// One directory, three card treatments — not three directories. The filter
 	// used to narrow the participants array alone while the two sections above it
@@ -63,10 +62,7 @@
 	}
 </script>
 
-<SEO
-	title="{m.nav_participants()} | {siteConfig.shortTitle}"
-	description={m.seo_participants_description()}
-/>
+<SEO title={m.nav_participants()} description={m.seo_participants_description()} />
 
 <PageHeader
 	title={m.nav_participants()}

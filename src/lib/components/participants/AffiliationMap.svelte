@@ -1,17 +1,11 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import type {
-		LngLatBounds as MapLibreBounds,
-		Map as MapLibreMap,
-		Marker as MapLibreMarker,
-		Popup as MapLibrePopup
-	} from 'maplibre-gl';
 	import * as m from '#lib/paraglide/messages.js';
 	import type { MappedAffiliation } from '#lib/types/index.ts';
 	import { countryName } from '#lib/utils/country.ts';
 	import { localePath, t } from '#lib/utils/i18n.ts';
 	import { getLocale } from '#lib/paraglide/runtime.js';
-	import { createLazyMap } from '#lib/utils/map.ts';
+	import { createPinMap } from '#lib/utils/pin-map.svelte.ts';
+	import MapFrame from '#lib/components/shared/MapFrame.svelte';
 
 	let {
 		/** The campuses and who works at each, resolved by the page's load. */
@@ -34,52 +28,29 @@
 			.sort((a, b) => a.label.localeCompare(b.label, locale))
 	);
 
-	let mapHost: HTMLDivElement;
-	let map: MapLibreMap | undefined;
-	let bounds: MapLibreBounds | undefined;
-	let popup: MapLibrePopup | undefined;
-	let markers: Array<{ id: string; marker: MapLibreMarker }> = [];
-	let selectedId = $state<string | null>(null);
-	let mapReady = $state(false);
-	let mapFailed = $state(false);
-
 	function memberCount(count: number): string {
 		return count === 1 ? m.affiliations_member_one() : m.affiliations_member_many({ count });
 	}
 
-	/**
-	 * Selecting a location moved the map and opened a popup, and announced
-	 * nothing — so the one control that answers "who works here" was silent to
-	 * anyone not looking at the pin. The popup is MapLibre's, drawn outside this
-	 * component's markup and dismissed on any map interaction, so the
-	 * announcement belongs to the panel instead, which is also where the
-	 * keyboard path already lives.
-	 */
-	const selectedLocation = $derived(
-		selectedId ? locations.find((entry) => entry.id === selectedId) : undefined
-	);
-
-	const selectionSummary = $derived(
-		selectedLocation
-			? `${selectedLocation.label}, ${selectedLocation.place} — ${memberCount(
-					selectedLocation.people.length
-				)}: ${selectedLocation.people.map((person) => person.name).join(', ')}`
-			: ''
-	);
-
-	function setSelectedMarker(id: string | null) {
-		selectedId = id;
-		for (const entry of markers) {
-			entry.marker.getElement().classList.toggle('is-active', entry.id === id);
-		}
+	function markerElement(location: LocationView): HTMLElement {
+		const markerButton = document.createElement('button');
+		markerButton.type = 'button';
+		markerButton.className = 'affiliation-marker';
+		markerButton.textContent = String(location.people.length);
+		// No `title`: it repeated the accessible name word for word, which some
+		// screen readers then read twice. Sighted readers lose a hover tooltip
+		// with the campus name, and get it from the popup a click away and the
+		// list beside the map.
+		markerButton.setAttribute('aria-label', m.affiliations_select({ affiliation: location.label }));
+		return markerButton;
 	}
 
 	function popupContent(location: LocationView): HTMLElement {
 		const content = document.createElement('article');
-		content.className = 'affiliation-popup-body';
+		content.className = 'map-popup-body';
 
 		const heading = document.createElement('h3');
-		heading.className = 'affiliation-popup-title';
+		heading.className = 'map-popup-title';
 		heading.textContent = location.label;
 		content.appendChild(heading);
 
@@ -89,7 +60,7 @@
 		content.appendChild(place);
 
 		const peopleLabel = document.createElement('p');
-		peopleLabel.className = 'affiliation-popup-label';
+		peopleLabel.className = 'map-popup-eyebrow affiliation-popup-label';
 		peopleLabel.textContent = m.affiliations_popup_people();
 		content.appendChild(peopleLabel);
 
@@ -98,6 +69,7 @@
 		for (const person of location.people) {
 			const item = document.createElement('li');
 			const link = document.createElement('a');
+			link.className = 'map-popup-link';
 			link.href = localePath(`/participants/${person.id}`);
 			link.textContent = person.name;
 			item.appendChild(link);
@@ -108,116 +80,42 @@
 		return content;
 	}
 
-	function selectLocation(id: string, moveMap = true) {
-		const location = locations.find((entry) => entry.id === id);
-		if (!location) return;
+	const pinMap = createPinMap({
+		items: () => locations,
+		mapTitle: m.affiliations_map_label(),
+		popupCloseLabel: m.map_popup_close(),
+		popup: { className: 'affiliation-popup', offset: 18, maxWidth: '22rem' },
+		options: {
+			center: [-10, 18],
+			zoom: 1.25,
+			minZoom: 0.5,
+			maxZoom: 12,
+			renderWorldCopies: false
+		},
+		markerElement,
+		popupContent,
+		fit: { padding: { narrow: 30, wide: 52 }, maxZoom: 2.8 },
+		focusZoom: 4.5
+	});
 
-		setSelectedMarker(id);
-		if (!map || !popup || !mapReady) return;
+	/**
+	 * Selecting a location moved the map and opened a popup, and announced
+	 * nothing — so the one control that answers "who works here" was silent to
+	 * anyone not looking at the pin. The popup is MapLibre's, drawn outside this
+	 * component's markup and dismissed on any map interaction, so the
+	 * announcement belongs to the panel instead, which is also where the
+	 * keyboard path already lives.
+	 */
+	const selectedLocation = $derived(
+		pinMap.selectedId ? locations.find((entry) => entry.id === pinMap.selectedId) : undefined
+	);
 
-		if (moveMap) {
-			const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-			map.easeTo({
-				center: [location.coordinates.lng, location.coordinates.lat],
-				zoom: Math.max(map.getZoom(), 4.5),
-				duration: reducedMotion ? 0 : 700
-			});
-		}
-
-		popup
-			.setLngLat([location.coordinates.lng, location.coordinates.lat])
-			.setDOMContent(popupContent(location))
-			.addTo(map);
-
-		// Reassert the selection because moving an already-open shared popup
-		// emits `close` before MapLibre attaches it at the new location.
-		setSelectedMarker(id);
-	}
-
-	function showAllLocations(animate = true) {
-		setSelectedMarker(null);
-		popup?.remove();
-		if (!map || !bounds || !mapReady) return;
-
-		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		const narrow = window.matchMedia('(max-width: 639px)').matches;
-		map.fitBounds(bounds, {
-			padding: narrow ? 30 : 52,
-			maxZoom: 2.8,
-			duration: animate && !reducedMotion ? 700 : 0
-		});
-	}
-
-	onMount(() =>
-		createLazyMap({
-			container: mapHost,
-			popupCloseLabel: m.map_popup_close(),
-			options: {
-				center: [-10, 18],
-				zoom: 1.25,
-				minZoom: 0.5,
-				maxZoom: 12,
-				renderWorldCopies: false
-			},
-			setup(instance, maplibre) {
-				map = instance;
-
-				popup = new maplibre.Popup({
-					className: 'affiliation-popup',
-					closeOnClick: true,
-					offset: 18,
-					maxWidth: '22rem',
-					focusAfterOpen: false
-				});
-				popup.on('close', () => {
-					selectedId = null;
-					setSelectedMarker(null);
-				});
-
-				bounds = new maplibre.LngLatBounds();
-				for (const location of locations) {
-					const markerButton = document.createElement('button');
-					markerButton.type = 'button';
-					markerButton.className = 'affiliation-marker';
-					markerButton.textContent = String(location.people.length);
-					markerButton.setAttribute(
-						'aria-label',
-						m.affiliations_select({ affiliation: location.label })
-					);
-					markerButton.title = location.label;
-					markerButton.addEventListener('click', (event) => {
-						// Otherwise the same click bubbles to MapLibre's map-level
-						// close handler and immediately dismisses the popup we just opened.
-						event.stopPropagation();
-						selectLocation(location.id, false);
-					});
-
-					const marker = new maplibre.Marker({ element: markerButton })
-						.setLngLat([location.coordinates.lng, location.coordinates.lat])
-						.addTo(instance);
-					markers.push({ id: location.id, marker });
-					bounds.extend([location.coordinates.lng, location.coordinates.lat]);
-				}
-			},
-			onReady() {
-				mapReady = true;
-				mapFailed = false;
-				if (selectedId) selectLocation(selectedId);
-				else showAllLocations(false);
-			},
-			onFail() {
-				mapFailed = true;
-			},
-			onResize() {
-				if (!selectedId) showAllLocations(false);
-			},
-			teardown() {
-				popup?.remove();
-				for (const entry of markers) entry.marker.remove();
-				markers = [];
-				map = undefined;
-			}
-		})
+	const selectionSummary = $derived(
+		selectedLocation
+			? `${selectedLocation.label}, ${selectedLocation.place} — ${memberCount(
+					selectedLocation.people.length
+				)}: ${selectedLocation.people.map((person) => person.name).join(', ')}`
+			: ''
 	);
 </script>
 
@@ -227,20 +125,12 @@
 </div>
 
 <div class="affiliation-shell">
-	<div class="map-frame" role="region" aria-label={m.affiliations_map_label()}>
-		<div bind:this={mapHost} class="affiliation-map"></div>
-		<noscript>
-			<p class="map-state map-error">{m.affiliations_map_error()}</p>
-		</noscript>
-		{#if !mapReady && !mapFailed}
-			<div class="map-state map-loading" aria-live="polite">
-				<span class="map-loader" aria-hidden="true"></span>
-				<span>{m.affiliations_map_loading()}</span>
-			</div>
-		{:else if mapFailed}
-			<p class="map-state map-error" role="status">{m.affiliations_map_error()}</p>
-		{/if}
-	</div>
+	<MapFrame
+		map={pinMap}
+		hostClass="affiliation-map"
+		loadingLabel={m.affiliations_map_loading()}
+		errorLabel={m.affiliations_map_error()}
+	/>
 
 	<aside class="affiliation-panel" aria-labelledby="affiliation-list-heading">
 		<div class="affiliation-panel-header">
@@ -254,7 +144,7 @@
 					)}
 				</p>
 			</div>
-			<button class="btn btn-secondary btn-sm" type="button" onclick={() => showAllLocations()}>
+			<button class="btn btn-secondary btn-sm" type="button" onclick={() => pinMap.showAll()}>
 				{m.affiliations_show_all()}
 			</button>
 		</div>
@@ -266,9 +156,9 @@
 				<li>
 					<button
 						type="button"
-						class:active={selectedId === location.id}
-						aria-pressed={selectedId === location.id}
-						onclick={() => selectLocation(location.id)}
+						class:active={pinMap.selectedId === location.id}
+						aria-pressed={pinMap.selectedId === location.id}
+						onclick={(event) => pinMap.select(location.id, { returnFocusTo: event.currentTarget })}
 					>
 						<span class="affiliation-name">{location.label}</span>
 						<span class="affiliation-place">{location.place}</span>
@@ -283,15 +173,8 @@
 <p class="text-muted measure-prose mt-3 text-sm leading-relaxed">{m.affiliations_note()}</p>
 
 <style>
-	/* The loading state is prerendered, so without JavaScript it is a spinner
-	   that spins forever under a promise nothing will keep. The <noscript>
-	   message above takes its place; the affiliation list beside it is static
-	   markup and works either way. */
-	:global(.no-js) .map-loading {
-		display: none;
-	}
-
 	.affiliation-shell {
+		--map-min-height: 24rem;
 		display: grid;
 		grid-template-columns: minmax(0, 1fr);
 		overflow: hidden;
@@ -299,44 +182,6 @@
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-xl);
 		box-shadow: var(--shadow-sm);
-	}
-
-	.map-frame {
-		position: relative;
-		min-height: 24rem;
-		background: var(--surface-sunken);
-	}
-
-	.affiliation-map {
-		position: absolute;
-		inset: 0;
-	}
-
-	.map-state {
-		position: absolute;
-		inset: 0;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.65rem;
-		padding: 2rem;
-		background: var(--surface-sunken);
-		color: var(--ink-subtle);
-		font-size: var(--text-ui);
-		text-align: center;
-	}
-
-	.map-loader {
-		width: 1rem;
-		height: 1rem;
-		border: 2px solid color-mix(in oklab, var(--color-primary-500) 25%, transparent);
-		border-top-color: var(--color-primary-600);
-		border-radius: var(--radius-full);
-		animation: map-spin 700ms linear infinite;
-	}
-
-	.map-error {
-		color: var(--ink-body);
 	}
 
 	.affiliation-panel {
@@ -457,44 +302,11 @@
 		color: var(--color-ink);
 	}
 
-	:global(.affiliation-popup .maplibregl-popup-tip) {
-		display: none;
-	}
+	/* --- Popup: the card chrome is MapFrame's; this is its size and content. --- */
 
-	:global(.affiliation-popup .maplibregl-popup-content) {
-		min-width: min(18rem, calc(100vw - 4rem));
-		padding: 1.1rem 1.2rem;
-		background: var(--surface-raised);
-		border: 1px solid var(--border-subtle);
-		border-radius: var(--radius-lg);
-		box-shadow: var(--shadow-xl);
-		color: var(--ink-body);
-	}
-
-	:global(.affiliation-popup .maplibregl-popup-close-button) {
-		width: 2.5rem;
-		height: 2.5rem;
-		color: var(--ink-subtle);
-		font-size: 1.25rem;
-	}
-
-	:global(.affiliation-popup .maplibregl-popup-close-button:hover) {
-		background: color-mix(in oklab, var(--ink-strong) 7%, transparent);
-		color: var(--ink-strong);
-	}
-
-	:global(.affiliation-popup-body) {
-		padding-inline-end: 1.5rem;
-	}
-
-	:global(.affiliation-popup-title) {
-		color: var(--ink-strong);
-		font-family: var(--font-display);
-		/* The card-title role at its floor, fixed rather than fluid: the popup
-		   has a max-width, so it must not grow with the viewport. */
-		font-size: 1.1875rem;
-		line-height: 1.25;
-		letter-spacing: -0.012em;
+	:global(.affiliation-popup) {
+		--map-popup-min-width: 18rem;
+		--map-popup-padding: 1.1rem 1.2rem;
 	}
 
 	:global(.affiliation-popup-place) {
@@ -505,11 +317,6 @@
 
 	:global(.affiliation-popup-label) {
 		margin-top: 0.9rem;
-		color: var(--ink-subtle);
-		font-size: var(--text-badge);
-		font-weight: 600;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
 	}
 
 	:global(.affiliation-popup-list) {
@@ -520,56 +327,10 @@
 		margin-top: 0.25rem;
 	}
 
-	:global(.affiliation-popup-list a) {
-		color: var(--link);
-		font-size: var(--text-ui-sm);
-		text-decoration: underline;
-		text-decoration-color: color-mix(in oklab, var(--link) 30%, transparent);
-		text-underline-offset: 0.18em;
-	}
-
-	:global(.affiliation-popup-list a:hover) {
-		color: var(--link-hover);
-		text-decoration-color: currentColor;
-	}
-
-	.affiliation-map :global(.maplibregl-ctrl-group) {
-		overflow: hidden;
-		background: var(--surface-raised);
-		border: 1px solid var(--border-subtle);
-		border-radius: var(--radius-md);
-		box-shadow: var(--shadow-md);
-	}
-
-	.affiliation-map :global(.maplibregl-ctrl-group button + button) {
-		border-top-color: var(--border-subtle);
-	}
-
-	.affiliation-map :global(.maplibregl-ctrl-group button) {
-		width: 2.5rem;
-		height: 2.5rem;
-	}
-
-	:global(.dark) .affiliation-map :global(.maplibregl-ctrl-icon) {
-		filter: invert(1);
-	}
-
-	.affiliation-map :global(.maplibregl-ctrl-attrib) {
-		background: color-mix(in oklab, var(--surface-raised) 88%, transparent);
-		color: var(--ink-subtle);
-	}
-
-	.affiliation-map :global(.maplibregl-ctrl-attrib a) {
-		color: var(--link);
-	}
-
 	@media (min-width: 1024px) {
 		.affiliation-shell {
+			--map-min-height: 34rem;
 			grid-template-columns: minmax(0, 2fr) minmax(20rem, 1fr);
-		}
-
-		.map-frame {
-			min-height: 34rem;
 		}
 
 		.affiliation-panel {
@@ -598,10 +359,6 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.map-loader {
-			animation-duration: 1.5s;
-		}
-
 		:global(.affiliation-marker) {
 			transition: none;
 		}
@@ -609,12 +366,6 @@
 		:global(.affiliation-marker:hover),
 		:global(.affiliation-marker.is-active) {
 			transform: none;
-		}
-	}
-
-	@keyframes map-spin {
-		to {
-			transform: rotate(360deg);
 		}
 	}
 </style>

@@ -11,6 +11,7 @@ Use the repository [README](../../README.md) for setup and checks,
 - [Original implementation plan](implementation-plan.md)
 - [July repository review](code-review-2026-07.md)
 - [25 July follow-up](code-review-2026-07-25.md)
+- [17 August design critique](design-critique-2026-08-17.md) (moved from `.impeccable/critique/`)
 - [August design findings](design-findings-2026-08.md)
 - [Completed design roadmap](impeccable-roadmap.md)
 - [24 August technical audit](audit-2026-08-24.md)

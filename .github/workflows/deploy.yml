@@ -12,7 +12,9 @@ permissions:
 
 concurrency:
   group: pages-${{ github.ref }}
-  cancel-in-progress: false
+  # A newer push to the same PR supersedes the run, so cancel it. Never cancel
+  # a main run: that could interrupt a Pages deployment half-way.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -57,8 +59,27 @@ jobs:
       - name: Build
         run: npm run build
 
+      # Browser downloads are large and only change with Playwright itself, so
+      # key the cache on the version npm ci actually installed. System
+      # libraries live outside the cache and are installed on every run.
+      - name: Resolve Playwright version
+        id: playwright-version
+        run: echo "version=$(node -p "require('./package-lock.json').packages['node_modules/@playwright/test'].version")" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}-chromium-firefox-webkit
+
       - name: Install browsers for end-to-end tests
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Install browser system dependencies
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium firefox webkit
 
       - name: End-to-end and accessibility tests
         run: npm run test:e2e

@@ -7,10 +7,11 @@
 	import { countryName } from '#lib/utils/country.ts';
 	import { venueInfo } from '#lib/data/venue.ts';
 	import { distanceMetres, formatDistance } from '#lib/utils/geo.ts';
+	import { withNewTabHint } from '#lib/components/shared/NewTabHint.svelte';
 
 	let { accommodation }: { accommodation: Accommodation } = $props();
 
-	const locale = $derived(getLocale());
+	const locale = getLocale();
 	const distance = $derived(
 		m.accommodation_distance({
 			distance: formatDistance(
@@ -46,7 +47,7 @@
 		target="_blank"
 		rel="noopener noreferrer"
 		class="link-arrow mt-auto pt-4 text-sm"
-		aria-label={m.visit_website_of({ name: accommodation.name })}
+		aria-label={withNewTabHint(m.visit_website_of({ name: accommodation.name }))}
 	>
 		<ExternalLink size={14} strokeWidth={1.75} aria-hidden="true" />
 		{m.visit_website()}

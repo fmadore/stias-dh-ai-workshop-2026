@@ -1,6 +1,5 @@
 <script lang="ts">
 	import * as m from '#lib/paraglide/messages.js';
-	import { siteConfig } from '#lib/data/site-config.ts';
 	import SEO from '#lib/components/SEO.svelte';
 	import PageHeader from '#lib/components/layout/PageHeader.svelte';
 	import AbstractSection from '#lib/components/about/AbstractSection.svelte';
@@ -14,7 +13,7 @@
 	// for papers does for its journal. It stays English inside the French
 	// sentence and carries `lang` for that.
 	const APP_NAME = 'Live Translation & Subtitles';
-	const languageParts = $derived.by(() => {
+	const languageParts = (() => {
 		const full = m.about_languages_body({ platform: onlineAccess.platform });
 		const idx = full.indexOf(APP_NAME);
 		if (idx === -1) return { before: full, linked: false, after: '' };
@@ -23,10 +22,10 @@
 			linked: true,
 			after: full.slice(idx + APP_NAME.length)
 		};
-	});
+	})();
 </script>
 
-<SEO title="{m.nav_about()} | {siteConfig.shortTitle}" description={m.seo_about_description()} />
+<SEO title={m.nav_about()} description={m.seo_about_description()} />
 
 <PageHeader
 	title={m.nav_about()}

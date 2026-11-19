@@ -2,16 +2,20 @@
 	import type { Session, SessionCast } from '#lib/types/index.ts';
 	import { t, localePath } from '#lib/utils/i18n.ts';
 	import * as m from '#lib/paraglide/messages.js';
-	import { sessionLabel } from '#lib/utils/placement.ts';
+	import { sessionLabel } from '#lib/utils/session-label.ts';
 	import { sessionAnchor, sessionTimes } from '#lib/utils/schedule.ts';
+	import { formatShortDay } from '#lib/utils/date.ts';
 	import { Video, VideoOff, Link as LinkIcon, ExternalLink } from '@lucide/svelte';
+	import NewTabHint from '#lib/components/shared/NewTabHint.svelte';
 
 	let {
 		session,
+		/** The ISO date of the session's day, for the permalink's accessible name. */
+		date,
 		panelNumber,
 		/** The session's people and papers, resolved by the page's server load. */
 		cast = { speakers: [], papers: [] }
-	}: { session: Session; panelNumber?: number; cast?: SessionCast } = $props();
+	}: { session: Session; date: string; panelNumber?: number; cast?: SessionCast } = $props();
 
 	// Three treatments, not six tinted badges. Keynote gold, panel teal-10,
 	// plenary teal-5, discussion teal-8 and social gold-8 were three
@@ -30,11 +34,11 @@
 	const isKeynote = $derived(session.type === 'keynote');
 	const isDiscussion = $derived(session.type === 'discussion');
 
-	// Panels and keynotes always show a chair line (falling back to "to be
-	// determined"); other session types only show one when a chair is set.
+	// Every panel and keynote had a chair — scripts/check-data.ts fails the
+	// build otherwise — so the line shows whenever a name is known, and the
+	// "to be confirmed" fallback it used to carry is gone with the open call.
 	const chairPerson = $derived(cast.chair);
 	const chairName = $derived(chairPerson?.name ?? session.chairName);
-	const showChair = $derived(isPanel || isKeynote || !!session.chair || !!chairName);
 
 	// A keynote or group discussion that references a single paper derives its
 	// heading (and a link to the abstract) from it; everything else uses the
@@ -49,6 +53,15 @@
 
 	const anchor = $derived(sessionAnchor(session.id));
 	const times = $derived(sessionTimes(session.time));
+	// Twenty-odd permalinks used to share one name, "Link to this session",
+	// which a screen reader's links list shows as twenty identical rows. The
+	// session's name and slot make each one say where it goes.
+	const anchorLabel = $derived(
+		m.session_anchor_label({
+			session: heading || typeLabel,
+			when: `${formatShortDay(date)} · ${times[0]}`
+		})
+	);
 </script>
 
 <!--
@@ -143,7 +156,11 @@
 									rel="noopener noreferrer"
 									class="link-quiet inline-flex items-center gap-1"
 								>
-									{session.venue}<ExternalLink size={11} strokeWidth={2} aria-hidden="true" />
+									{session.venue}<ExternalLink
+										size={11}
+										strokeWidth={2}
+										aria-hidden="true"
+									/><NewTabHint />
 								</a>
 							{:else}
 								{session.venue}
@@ -154,7 +171,7 @@
 					     link to Tuesday's panel. Sizing, resting visibility and colour
 					     are in the scoped block — a hover-revealed 12px target is a
 					     desktop affordance on the page most often read on a phone. -->
-					<a href="#{anchor}" class="session-anchor" aria-label={m.session_anchor_label()}>
+					<a href="#{anchor}" class="session-anchor" aria-label={anchorLabel}>
 						<LinkIcon size={12} strokeWidth={2} aria-hidden="true" />
 					</a>
 				</div>
@@ -186,18 +203,11 @@
 					</p>
 				{/if}
 
-				{#if showChair}
-					<!-- Two statements, not a label plus a placeholder. Several of the
-					     sessions that show this line have no chair yet, and "Chair:" is a
-					     colon that promises a name and then fails to supply one. -->
+				{#if chairName}
 					<p class="text-muted mt-2 text-xs">
-						{#if chairName}
-							<span class="font-medium">{m.session_chair()}</span>
-							<!-- prettier-ignore -->
-							{chairName}{#if chairPerson?.online}{@render onlineBadge()}{/if}
-						{:else}
-							{m.session_chair_tbd()}
-						{/if}
+						<span class="font-medium">{m.session_chair()}</span>
+						<!-- prettier-ignore -->
+						{chairName}{#if chairPerson?.online}{@render onlineBadge()}{/if}
 					</p>
 				{/if}
 
@@ -216,7 +226,8 @@
 								rel="noopener noreferrer"
 								class="link-quiet inline-flex items-center gap-1"
 							>
-								{link.label}<ExternalLink size={11} strokeWidth={2} aria-hidden="true" />
+								{link.label}<ExternalLink size={11} strokeWidth={2} aria-hidden="true" /><NewTabHint
+								/>
 							</a>
 						{/each}
 					</p>

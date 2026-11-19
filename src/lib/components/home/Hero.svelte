@@ -1,10 +1,7 @@
 <script lang="ts">
-	import { venueClock } from '#lib/utils/venue-clock.ts';
 	import * as m from '#lib/paraglide/messages.js';
 	import { siteConfig } from '#lib/data/site-config.ts';
 	import { t, localePath } from '#lib/utils/i18n.ts';
-	import { isCfpOpen, nextMilestone, workshopPhase } from '#lib/utils/milestones.ts';
-	import Countdown from './Countdown.svelte';
 	import { ArrowRight } from '@lucide/svelte';
 
 	// The title carries its own deck after the colon ("…in African Studies:
@@ -14,28 +11,14 @@
 	const headline = $derived(parts[0]);
 	const deck = $derived(parts.slice(1).join(': '));
 
-	// The call closed on 30 April 2026, so the primary ask is no longer
-	// "submit" — it is the programme. Derived rather than hard-coded so the
-	// hero is right at every stage of the workshop's life.
-	const cfpOpen = $derived($venueClock.live && isCfpOpen($venueClock.now));
-	const phase = $derived(workshopPhase($venueClock.now));
-	const milestone = $derived(nextMilestone($venueClock.now));
-
-	const primary = $derived(
-		cfpOpen
-			? { href: localePath('/call-for-papers'), label: m.submit_proposal() }
-			: { href: localePath('/programme'), label: m.section_programme() }
-	);
-	const secondary = $derived(
-		cfpOpen
-			? { href: localePath('/call-for-papers'), label: m.hero_cta_read_call() }
-			: { href: localePath('/papers'), label: m.hero_cta_browse_papers() }
-	);
-	const tertiary = $derived(
-		cfpOpen
-			? { href: localePath('/programme'), label: m.section_programme() }
-			: { href: localePath('/participants'), label: m.section_participants() }
-	);
+	// The workshop is over, so the actions are what it left behind: the slides
+	// and writing first, the papers as a body of work, then the four days they
+	// were presented across. Fixed rather than derived from a clock — every
+	// phase a clock could report is behind us, and a clock that only runs after
+	// hydration kept the static HTML on the "submit a proposal" hero for good.
+	const primary = $derived({ href: localePath('/resources'), label: m.hero_cta_resources() });
+	const secondary = $derived({ href: localePath('/papers'), label: m.hero_cta_browse_papers() });
+	const tertiary = $derived({ href: localePath('/programme'), label: m.section_programme() });
 </script>
 
 <!-- One tonal wash, top to bottom, between two adjacent steps of the same teal
@@ -81,38 +64,14 @@
 		</div>
 	</div>
 
-	<!-- Milestone strip: one status line, not a clock. The count sits third in
-	     the same label · value · count row the dates line above already uses,
-	     so the hero has one meta idiom rather than two, and the largest thing
-	     on this screen stays the title rather than a number counting down. -->
-	{#if !$venueClock.live}
-		<div class="relative z-10 border-t border-white/12">
-			<div class="container-wide text-primary-100 py-4.5 text-sm">
-				{m.workshop_dates()} · {m.hero_dates()}
-			</div>
+	<!-- Status strip: one line stating where the workshop stands, in the
+	     prerendered HTML itself. It used to be a live milestone line that only
+	     resolved after hydration, so every crawler and no-JS reader saw the
+	     dates line and the page then swapped it for this one, shifting the
+	     layout under anyone who had started reading. -->
+	<div class="relative z-10 border-t border-white/12">
+		<div class="container-wide py-4.5">
+			<p class="text-primary-100/80">{m.workshop_concluded()}</p>
 		</div>
-	{:else if milestone}
-		<div class="relative z-10 border-t border-white/12">
-			<div class="container-wide flex flex-wrap items-baseline gap-x-3 gap-y-1 py-4.5">
-				<span class="text-secondary-300 text-badge font-semibold tracking-[0.16em] uppercase">
-					{milestone.label}
-				</span>
-				<span class="text-primary-100 text-sm tabular-nums">{milestone.value}</span>
-				<span class="text-primary-300/40" aria-hidden="true">·</span>
-				<Countdown target={milestone.datetime} milestone={milestone.label} />
-			</div>
-		</div>
-	{:else if phase === 'during'}
-		<div class="relative z-10 border-t border-white/12">
-			<div class="container-wide py-4.5">
-				<p class="text-secondary-300 font-medium">{m.countdown_event_started()}</p>
-			</div>
-		</div>
-	{:else}
-		<div class="relative z-10 border-t border-white/12">
-			<div class="container-wide py-4.5">
-				<p class="text-primary-100/80">{m.countdown_event_ended()}</p>
-			</div>
-		</div>
-	{/if}
+	</div>
 </section>

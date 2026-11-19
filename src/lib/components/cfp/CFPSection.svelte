@@ -1,23 +1,24 @@
 <script lang="ts">
-	import { clockMilestones, venueClock } from '#lib/utils/venue-clock.ts';
 	import { cfpInfo } from '#lib/data/cfp.ts';
-	import { organizers } from '#lib/data/organizers.ts';
+	import { organizerRefs } from '#lib/data/organizer-refs.ts';
 	import { venueInfo } from '#lib/data/venue.ts';
 	import { joinLogisticsList } from '#lib/utils/logistics.ts';
 	import { thematicAxes } from '#lib/data/thematic-axes.ts';
 	import { contactEmails } from '#lib/data/contacts.ts';
 	import { t } from '#lib/utils/i18n.ts';
+	import { getMilestones } from '#lib/utils/milestones.ts';
 	import { getLocale } from '#lib/paraglide/runtime.js';
 	import * as m from '#lib/paraglide/messages.js';
-	import { Send, ExternalLink, Check } from '@lucide/svelte';
+	import { ExternalLink } from '@lucide/svelte';
 	import ScrollReveal from '#lib/components/ScrollReveal.svelte';
+	import NewTabHint from '#lib/components/shared/NewTabHint.svelte';
 
-	const locale = $derived(getLocale());
+	const locale = getLocale();
 
 	const JDHASA_NAME = 'Journal of the Digital Humanities Association of Southern Africa (JDHASA)';
 	const JDHASA_URL = 'https://upjournals.up.ac.za/index.php/dhasa';
 
-	const publicationParts = $derived.by(() => {
+	const publicationParts = (() => {
 		const full = t(cfpInfo.publication);
 		const idx = full.indexOf(JDHASA_NAME);
 		if (idx === -1) return { before: full, after: '' };
@@ -25,15 +26,14 @@
 			before: full.slice(0, idx),
 			after: full.slice(idx + JDHASA_NAME.length)
 		};
-	});
+	})();
 
-	// The milestones, not a stateless key-dates list: the same four dates
-	// render on the home page flagged past/next, and rendered here as a bare
-	// list with no state at all — on the one page whose whole subject is a
-	// deadline that has passed.
-	// The PDF and text exports build their own list in generate-cfp-downloads.ts
-	// and stay stateless, as a record of the call as published should.
-	const keyDates = $derived(clockMilestones($venueClock));
+	// The four dates as the call published them. They were flagged past/next
+	// off a client-side clock, which kept the flags out of the prerendered page;
+	// all four are past now, and the notice above the call already says it has
+	// closed, so a "Passed" on every card would only repeat it four times. The
+	// PDF and text exports build the same list in generate-cfp-downloads.ts.
+	const keyDates = getMilestones();
 </script>
 
 <div class="block-flow">
@@ -56,7 +56,7 @@
 				{m.cfp_convenors_label()}
 			</h2>
 			<ul class="space-y-2.5">
-				{#each organizers as organizer}
+				{#each organizerRefs as organizer}
 					<li class="text-body flex items-start gap-3 font-light">
 						<span
 							class="bg-secondary-500 mt-2.5 h-1.5 w-1.5 flex-shrink-0 rounded-full"
@@ -132,7 +132,7 @@
 				{m.cfp_contact_text()}
 			</p>
 			<ul class="space-y-2.5">
-				{#each organizers as organizer}
+				{#each organizerRefs as organizer}
 					{@const email = contactEmails[organizer.id]}
 					{#if email}
 						<li class="flex items-start gap-3 font-light">
@@ -163,7 +163,11 @@
 					target="_blank"
 					rel="noopener noreferrer"
 					class="link-inline italic"
-					>{JDHASA_NAME}<ExternalLink size={13} class="-mt-0.5 ml-1 inline" aria-hidden="true" /></a
+					>{JDHASA_NAME}<ExternalLink
+						size={13}
+						class="-mt-0.5 ml-1 inline"
+						aria-hidden="true"
+					/><NewTabHint /></a
 				>{publicationParts.after}
 			</p>
 		</section>
@@ -217,23 +221,8 @@
 								class="bg-secondary-500 border-cream dark:border-deep relative z-10 mt-1.5 hidden h-[11px] w-[11px] flex-shrink-0 rounded-full border-2 sm:block"
 								aria-hidden="true"
 							></span>
-							<div class="card flex-1 p-5" class:is-past={dateItem.past}>
-								<div class="mb-1 flex flex-wrap items-center gap-x-2 gap-y-1">
-									<p class="text-meta">{dateItem.label}</p>
-									{#if dateItem.past}
-										<span class="text-meta inline-flex items-center gap-1">
-											<Check
-												size={12}
-												strokeWidth={2.5}
-												class="text-primary-600 dark:text-primary-300"
-												aria-hidden="true"
-											/>
-											{m.milestone_done()}
-										</span>
-									{:else if dateItem.next}
-										<span class="text-eyebrow">{m.milestone_next()}</span>
-									{/if}
-								</div>
+							<div class="card flex-1 p-5">
+								<p class="text-meta mb-1">{dateItem.label}</p>
 								<p class="text-strong font-sans text-lg font-medium">
 									<time datetime={dateItem.datetime}>{dateItem.value}</time>
 								</p>
@@ -244,29 +233,4 @@
 			</div>
 		</section>
 	</ScrollReveal>
-
-	<!-- Submit button -->
-	{#if cfpInfo.submissionUrl}
-		<ScrollReveal>
-			<div class="pt-4 text-center">
-				<a
-					href={cfpInfo.submissionUrl}
-					target="_blank"
-					rel="noopener noreferrer"
-					class="btn btn-primary text-ui px-7 py-3.5"
-				>
-					<Send size={17} strokeWidth={1.75} />
-					{m.submit_proposal()}
-				</a>
-			</div>
-		</ScrollReveal>
-	{/if}
 </div>
-
-<style>
-	/* Sunken rather than raised: a date that has passed is still on the record,
-	   it just is not what the reader is waiting for. */
-	.is-past {
-		background-color: var(--surface-sunken);
-	}
-</style>

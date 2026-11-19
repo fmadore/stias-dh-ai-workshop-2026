@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as m from '#lib/paraglide/messages.js';
 	import { ExternalLink } from '@lucide/svelte';
+	import NewTabHint, { withNewTabHint } from '#lib/components/shared/NewTabHint.svelte';
 
 	let {
 		website,
@@ -27,7 +28,7 @@
 		{#if website}
 			<a href={website} target="_blank" rel="noopener noreferrer" class="link-arrow text-sm">
 				<ExternalLink size={14} strokeWidth={1.75} aria-hidden="true" />
-				{m.visit_website()}
+				{m.visit_website()}<NewTabHint />
 			</a>
 		{/if}
 		{#if orcid}
@@ -36,7 +37,7 @@
 				target="_blank"
 				rel="noopener noreferrer"
 				class="text-orcid hover:text-orcid-hover inline-flex min-h-11 items-center gap-1 text-sm transition-colors duration-[var(--duration-fast)]"
-				aria-label={m.view_orcid()}
+				aria-label={withNewTabHint(m.view_orcid())}
 			>
 				<svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
 					<path

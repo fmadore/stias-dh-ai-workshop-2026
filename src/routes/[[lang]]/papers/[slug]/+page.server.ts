@@ -12,11 +12,17 @@ import { paperRedirects } from '#lib/data/redirects.ts';
 import { programme } from '#lib/data/programme.ts';
 import { siteConfig } from '#lib/data/site-config.ts';
 import { paperSummary } from '#lib/server/views.ts';
-import { createPresentationCitation, presentationSchema } from '#lib/utils/citations.ts';
+import * as m from '#lib/paraglide/messages.js';
+import {
+	createPresentationCitation,
+	presentationMetaTags,
+	presentationSchema
+} from '#lib/utils/citations.ts';
 import { langEntries, resolveAbstract } from '#lib/utils/i18n.ts';
 import { localizedPath } from '#lib/utils/localized-paths.ts';
 import { renderAbstract } from '#lib/utils/markdown.ts';
-import { getPlacements } from '#lib/utils/placement.ts';
+import { getPlacements } from '#lib/server/placement.ts';
+import { META_DESCRIPTION_LENGTH, detailBreadcrumbs } from '#lib/utils/structured-data.ts';
 import { abstractToPlainText, truncate } from '#lib/utils/text.ts';
 
 export const prerender = true;
@@ -58,20 +64,32 @@ export const load: PageServerLoad = ({ params }) => {
 	const placement = getPlacements(locale).get(presentation.id);
 	const authors = getPresentationAuthors(presentation);
 	const citation = createPresentationCitation(presentation, authors, programme, siteConfig);
+	// Everyone on a byline but a credited co-author has a profile page.
+	const withPage = new Set(authors.filter((a) => a.group !== 'co-author').map((a) => a.id));
 
 	return {
 		presentation: paperSummary(presentation),
 		// Outside the summary, which siblings share and which has no use for it.
 		slides: presentation.slides ?? null,
 		authors: authors.map((author) => personRef(author)),
-		citationSchema: presentationSchema(citation, abstractText, locale),
+		citationSchema: presentationSchema(citation, abstractText, locale, (id) => withPage.has(id)),
+		citationMeta: presentationMetaTags(citation, locale),
+		breadcrumbs: detailBreadcrumbs(
+			siteConfig.url,
+			locale,
+			m.nav_home({}, { locale }),
+			{ name: m.nav_papers({}, { locale }), path: '/papers' },
+			{ name: presentation.title, path: `/papers/${presentation.id}` }
+		),
 		citationDownloads: {
 			bibtex: resolve('/citations/[slug].[format]', { slug: presentation.id, format: 'bib' }),
 			ris: resolve('/citations/[slug].[format]', { slug: presentation.id, format: 'ris' })
 		},
 		abstractHtml: abstract ? renderAbstract(abstract.text) : '',
 		abstractLang: abstract?.lang ?? presentation.language,
-		description: abstractText ? truncate(abstractText) : presentation.title,
+		description: abstractText
+			? truncate(abstractText, META_DESCRIPTION_LENGTH)
+			: presentation.title,
 		// An abstract page used to have exactly one exit: "Back to papers". The
 		// programme already knows its session and the other papers in it.
 		placement: placement && {

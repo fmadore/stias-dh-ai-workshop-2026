@@ -1,35 +1,46 @@
 <script lang="ts">
-	import { clockMilestones, venueClock } from '#lib/utils/venue-clock.ts';
 	import { staticAsset } from '#lib/utils/base-path.ts';
 	import * as m from '#lib/paraglide/messages.js';
-	import { organizers } from '#lib/data/organizers.ts';
+	import { organizerRefs } from '#lib/data/organizer-refs.ts';
 	import { sponsors } from '#lib/data/sponsors.ts';
 	import { siteConfig } from '#lib/data/site-config.ts';
-	import { localePath } from '#lib/utils/i18n.ts';
+	import { localePath, t } from '#lib/utils/i18n.ts';
+	import { getMilestones } from '#lib/utils/milestones.ts';
+	import NewTabHint from '#lib/components/shared/NewTabHint.svelte';
 
+	// Plain constants, here and below: neither the locale nor the messages are
+	// reactive, and the layout remounts the shell when the locale changes.
+	//
 	// The footer used to be logos and a copyright line, so every route out of
 	// a page depended on the navbar and the sponsor row read as terminal.
-	const columns = $derived([
+	//
+	// Grouped for an archive rather than an event: the workshop itself (what,
+	// when, who, where), then what it left on the record. The second column
+	// was "Taking part" — the call, the people, the travel — which read as an
+	// invitation once there was nothing left to take part in.
+	const columns = [
 		{
 			heading: m.footer_workshop(),
 			links: [
 				{ href: localePath('/about'), label: m.nav_about() },
 				{ href: localePath('/programme'), label: m.nav_programme() },
-				{ href: localePath('/papers'), label: m.nav_papers() },
-				{ href: localePath('/resources'), label: m.nav_resources() }
-			]
-		},
-		{
-			heading: m.footer_take_part(),
-			links: [
-				{ href: localePath('/call-for-papers'), label: m.nav_cfp() },
 				{ href: localePath('/participants'), label: m.nav_participants() },
 				{ href: localePath('/venue'), label: m.nav_venue() }
 			]
+		},
+		{
+			heading: m.footer_record(),
+			links: [
+				{ href: localePath('/papers'), label: m.nav_papers() },
+				{ href: localePath('/resources'), label: m.nav_resources() },
+				{ href: localePath('/call-for-papers'), label: m.nav_cfp() }
+			]
 		}
-	]);
+	];
 
-	const milestones = $derived(clockMilestones($venueClock));
+	// A plain record of the four dates. They were struck through as each one
+	// passed, which on an archive meant the whole column was crossed out.
+	const milestones = getMilestones();
 </script>
 
 <footer
@@ -41,7 +52,7 @@
 		<div class="grid grid-cols-2 gap-x-8 gap-y-10 pb-10 md:grid-cols-4">
 			<div class="col-span-2 md:col-span-1">
 				<p class="font-display mb-2 text-lg leading-snug text-white">
-					{siteConfig.shortTitle}
+					{t(siteConfig.shortTitle)}
 				</p>
 				<p class="text-sm leading-relaxed text-white/75">
 					{m.hero_dates()}<br />{m.hero_location()}
@@ -81,9 +92,7 @@
 					{#each milestones as milestone (milestone.id)}
 						<li class="text-caption text-white/75">
 							<span class="block">{milestone.label}</span>
-							<time datetime={milestone.datetime} class:line-through={milestone.past}>
-								{milestone.value}
-							</time>
+							<time datetime={milestone.datetime}>{milestone.value}</time>
 						</li>
 					{/each}
 				</ul>
@@ -108,7 +117,7 @@
 							class="h-10 w-auto object-contain"
 							loading="lazy"
 							decoding="async"
-						/>
+						/><NewTabHint />
 					</a>
 				{/each}
 			</div>
@@ -117,7 +126,7 @@
 		<div class="border-primary-800/60 dark:border-surface-800 mt-10 border-t pt-8 text-center">
 			<p class="text-sm font-light text-white/75">
 				&copy; {siteConfig.dates.end.slice(0, 4)}
-				{organizers.map((o) => o.name).join(', ')}. {m.footer_licence()}
+				{organizerRefs.map((o) => o.name).join(', ')}. {m.footer_licence()}
 			</p>
 		</div>
 	</div>

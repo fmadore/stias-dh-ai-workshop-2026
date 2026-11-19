@@ -16,6 +16,12 @@
 		// the site and the only one that ignored the preference outright.
 		const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+		// The button unmounts once the page is back above 400px, and focus on a
+		// removed element falls to <body>: a keyboard reader who pressed it was
+		// sent back to the start of the document, skip link and all. Land them
+		// where the skip link does instead. preventScroll keeps the scroll above
+		// in charge of the movement.
+		document.getElementById('main')?.focus({ preventScroll: true });
 	}
 </script>
 

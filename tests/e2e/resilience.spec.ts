@@ -127,18 +127,24 @@ test('search reaches abstracts and bios, fetched only once someone searches', as
 		if (request.url().endsWith('.js')) scripts.add(request.url());
 		if (request.url().endsWith('/search-index.json')) indexRequests.push(request.url());
 	});
-	const loadedBios = async () => {
+	const loaded = async (needle: string) => {
 		for (const url of scripts) {
-			if ((await (await page.request.get(url)).text()).includes('GERiiCO')) return true;
+			if ((await (await page.request.get(url)).text()).includes(needle)) return true;
 		}
 		return false;
 	};
+	const loadedBios = () => loaded('GERiiCO');
 
 	await page.goto(`${BASE}/papers`);
 	await expect(page.locator('.paper-title-link')).toHaveCount(25);
 	await page.waitForLoadState('networkidle');
 	expect(indexRequests).toHaveLength(0);
 	expect(await loadedBios(), 'bios and abstracts fetched before anyone searched').toBe(false);
+	// The cards print each paper's slot; the load resolves it, so the programme
+	// registry (every session description, both languages) stays off this page.
+	expect(await loaded('Registration desk open'), 'programme registry shipped for slot labels').toBe(
+		false
+	);
 
 	// A phrase from inside an abstract, in no title, author or affiliation.
 	await page.getByRole('searchbox', { name: 'Search' }).fill('lingua africa');
@@ -163,42 +169,25 @@ test('directory filters and grouping restore from a shared URL', async ({ page }
 	await expect(page.locator('.filter-count')).toContainText('39 of 39');
 });
 
-test('workshop status updates at opening and closing without reloading', async ({ page }) => {
-	await page.clock.install({ time: new Date('2026-09-21T06:59:00Z') });
-	await page.goto(`${BASE}/`);
-	const hero = page.locator('main section').first();
-	await expect(hero).toContainText('Today');
-	await page.clock.fastForward(60_000);
-	await expect(hero).toContainText('underway');
-	await page.clock.setSystemTime(new Date('2026-09-24T15:59:00Z'));
-	await page.evaluate(() => window.dispatchEvent(new Event('pageshow')));
-	await page.clock.fastForward(60_000);
-	await expect(hero).toContainText('concluded');
-});
-
-test('the programme advances its day at venue midnight and clears it after closing', async ({
-	page
-}) => {
-	await page.clock.install({ time: new Date('2026-09-21T21:59:00Z') });
-	await page.goto(`${BASE}/programme`);
-	await expect(page.locator('.day-pill.is-today')).toHaveAttribute('href', '#day-2026-09-21');
-	await page.clock.fastForward(60_000);
-	await expect(page.locator('.day-pill.is-today')).toHaveAttribute('href', '#day-2026-09-22');
-	await page.clock.setSystemTime(new Date('2026-09-24T16:00:00Z'));
-	await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
-	await expect(page.locator('.day-pill.is-today')).toHaveCount(0);
-});
-
-test('static pages publish dates without stale live status', async ({ browser }) => {
+test('static pages state the archive without JavaScript', async ({ browser }) => {
+	// The workshop's state used to be decided by a clock after hydration, so
+	// the prerendered pages crawlers and no-JS readers got still showed the
+	// workshop before it happened. Every state is final now, and baked in.
 	const context = await browser.newContext({ javaScriptEnabled: false });
 	const page = await context.newPage();
 	await page.goto(`${BASE}/`);
-	await expect(page.locator('main section').first()).not.toContainText(
-		/days remaining|Today|underway|concluded/
-	);
+	await expect(page.locator('main section').first()).toContainText('The workshop has concluded.');
+	await page.goto(`${BASE}/call-for-papers`);
+	await expect(page.getByText(/^The call for papers closed on 30 April 2026\./)).toBeVisible();
+	await page.goto(`${BASE}/fr/call-for-papers`);
+	await expect(
+		page.getByText(/^L’appel à contributions s’est clôturé le 30 avril 2026\./)
+	).toBeVisible();
 	await page.goto(`${BASE}/programme`);
-	await expect(page.locator('.day-pill.is-today')).toHaveCount(0);
-	await expect(page.getByText('Teraco CT2, Brackenfell', { exact: true })).toBeVisible();
+	// A link out, so its name carries the new-tab hint after the venue.
+	await expect(
+		page.getByRole('link', { name: 'Teraco CT2, Brackenfell (opens in a new tab)', exact: true })
+	).toBeVisible();
 	await context.close();
 });
 

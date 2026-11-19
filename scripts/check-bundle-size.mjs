@@ -1,6 +1,7 @@
-import { readFile, readdir } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { gzipSync } from 'node:zlib';
+import { walk } from './lib/walk.mjs';
 
 const root = path.resolve('build/_app/immutable');
 const manifestPath = path.resolve('.svelte-kit/output/client/.vite/manifest.json');
@@ -30,17 +31,6 @@ const budgets = {
 	// is exactly what this gate exists to stop.
 	footerLogosBytes: 90 * 1024
 };
-
-async function walk(directory) {
-	const entries = await readdir(directory, { withFileTypes: true });
-	const nested = await Promise.all(
-		entries.map((entry) => {
-			const target = path.join(directory, entry.name);
-			return entry.isDirectory() ? walk(target) : [target];
-		})
-	);
-	return nested.flat();
-}
 
 const assets = await walk(root);
 const sizes = await Promise.all(

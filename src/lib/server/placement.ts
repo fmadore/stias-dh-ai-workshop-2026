@@ -1,44 +1,15 @@
-import * as m from '#lib/paraglide/messages.js';
 import { getLocale, type Locale } from '#lib/paraglide/runtime.js';
 import { programme } from '#lib/data/programme.ts';
-import type { Session } from '#lib/types/index.ts';
-import { formatShortDay } from './date';
-import { panelNumbers, sessionAnchor, sessionTimes } from './schedule';
+import type { PlacementLabel } from '#lib/types/index.ts';
+import { formatShortDay } from '#lib/utils/date.ts';
+import { panelNumbers, sessionAnchor, sessionTimes } from '#lib/utils/schedule.ts';
+import { sessionLabel } from '#lib/utils/session-label.ts';
 
-export interface Placement {
-	/** "Panel 3" / "Keynote" — the session's name in the running order. */
-	sessionLabel: string;
-	/** "Mon 21 · 14:00" — where it sits in the week. */
-	slotLabel: string;
+export interface Placement extends PlacementLabel {
 	/** Fragment id for the session on the programme page. */
 	anchor: string;
 	/** The other papers in the same session, in running order. */
 	siblingIds: string[];
-}
-
-/** "Panel 3", "Keynote", … — a session type as the running order names it. */
-export function sessionLabel(
-	type: Session['type'],
-	panelNumber?: number,
-	locale: Locale = getLocale()
-): string {
-	const options = { locale };
-	switch (type) {
-		case 'panel':
-			return panelNumber
-				? `${m.session_panel({}, options)} ${panelNumber}`
-				: m.session_panel({}, options);
-		case 'keynote':
-			return m.session_keynote({}, options);
-		case 'discussion':
-			return m.session_discussion({}, options);
-		case 'plenary':
-			return m.session_plenary({}, options);
-		case 'social':
-			return m.session_social({}, options);
-		case 'break':
-			return m.session_break({}, options);
-	}
 }
 
 /**
@@ -48,9 +19,15 @@ export function sessionLabel(
  * nothing outside the programme page could see it, so paper and participant
  * cards led with "English" instead of "Panel 3 · Tue 14:00".
  *
+ * Server-only: it walks the whole programme registry, every session's title
+ * and description in both languages. The paper and participant cards used to
+ * call this in the browser, which put that registry in the module preloads of
+ * /papers and /participants for the sake of two short labels per card. Their
+ * loads now resolve the labels at prerender and pass them down as data.
+ *
  * Rebuilt per call rather than cached at module scope because the labels are
- * localised and the locale can change between renders. A server load passes
- * the locale explicitly: it runs before the layout load sets the global.
+ * localised. A server load passes the locale explicitly: it runs before the
+ * layout load sets the global.
  */
 export function getPlacements(locale: Locale = getLocale()): Map<string, Placement> {
 	const placements = new Map<string, Placement>();
@@ -74,4 +51,9 @@ export function getPlacements(locale: Locale = getLocale()): Map<string, Placeme
 	}
 
 	return placements;
+}
+
+/** Just the two labels a card prints — the anchor and siblings stay on the server. */
+export function placementLabel(placement: Placement | undefined): PlacementLabel | undefined {
+	return placement && { sessionLabel: placement.sessionLabel, slotLabel: placement.slotLabel };
 }
