@@ -1,5 +1,6 @@
 import type { PersonRef, Presentation, ProgrammeDay, SiteConfig } from '#lib/types/index.ts';
-import { localizedAbsoluteUrl } from './localized-paths';
+import { localizedAbsoluteUrl, type SupportedLocale } from './localized-paths';
+import { eventId, personId } from './structured-data';
 
 export interface PresentationCitation {
 	id: string;
@@ -118,7 +119,13 @@ export function presentationRis(citation: PresentationCitation): string {
 export function presentationSchema(
 	citation: PresentationCitation,
 	abstract?: string,
-	locale: 'en' | 'fr' = 'en'
+	locale: SupportedLocale = 'en',
+	/**
+	 * Whether an author has a page on the site. Those who do share the `@id`
+	 * of their profile page's Person, which joins the byline to the profile in
+	 * the graph; credited co-authors have no page and stay anonymous nodes.
+	 */
+	hasPage: (id: string) => boolean = () => false
 ) {
 	return {
 		'@context': 'https://schema.org',
@@ -131,6 +138,7 @@ export function presentationSchema(
 		url: citation.url,
 		author: citation.authors.map((author) => ({
 			'@type': 'Person',
+			...(hasPage(author.id) ? { '@id': personId(citation.event.url, author.id) } : {}),
 			name: author.name,
 			...(author.affiliation
 				? { affiliation: { '@type': 'Organization', name: author.affiliation[locale] } }
@@ -138,6 +146,52 @@ export function presentationSchema(
 		})),
 		// Event.workFeatured relates an event to a presentation; isPartOf expects
 		// a CreativeWork, so an Event must not be nested there as a publication.
-		'@reverse': { workFeatured: { '@id': `${citation.event.url}#event` } }
+		'@reverse': { workFeatured: { '@id': eventId(citation.event.url) } }
 	};
+}
+
+export interface MetaTag {
+	name: string;
+	content: string;
+}
+
+/**
+ * Highwire Press `citation_*` tags, which Google Scholar and Zotero read off
+ * the page itself, and their Dublin Core counterparts. Built from the same
+ * citation object as the BibTeX and RIS so the three cannot disagree.
+ *
+ * Deliberately absent: `citation_pdf_url` (there is no PDF — slides are
+ * external links, and Scholar penalises a PDF URL that serves HTML) and any
+ * journal, volume or DOI field (these are presentations, not proceedings).
+ * The date is the scheduled day, as in the RIS `DA`; the year alone when the
+ * paper was never placed in the programme.
+ */
+export function presentationMetaTags(
+	citation: PresentationCitation,
+	locale: SupportedLocale
+): MetaTag[] {
+	// The abstract page actually being read — `citation.url` is the stable
+	// English address, which is right for an export but not for "this page".
+	const pageUrl = localizedAbsoluteUrl(citation.event.url, `/papers/${citation.id}`, locale);
+	return [
+		{ name: 'citation_title', content: oneLine(citation.title) },
+		// Highwire pairs an institution with the author tag before it.
+		...citation.authors.flatMap((author) => [
+			{ name: 'citation_author', content: author.name },
+			...(author.affiliation
+				? [{ name: 'citation_author_institution', content: author.affiliation[locale] }]
+				: [])
+		]),
+		{ name: 'citation_conference_title', content: citation.event.title },
+		{
+			name: 'citation_publication_date',
+			content: citation.date ? citation.date.replaceAll('-', '/') : citation.year
+		},
+		{ name: 'citation_language', content: citation.language },
+		{ name: 'citation_abstract_html_url', content: pageUrl },
+		{ name: 'DC.title', content: oneLine(citation.title) },
+		...citation.authors.map((author) => ({ name: 'DC.creator', content: author.name })),
+		{ name: 'DC.date', content: citation.date ?? citation.year },
+		{ name: 'DC.language', content: citation.language }
+	];
 }

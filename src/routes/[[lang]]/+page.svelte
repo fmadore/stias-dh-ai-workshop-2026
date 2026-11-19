@@ -2,6 +2,8 @@
 	import * as m from '#lib/paraglide/messages.js';
 	import { siteConfig } from '#lib/data/site-config.ts';
 	import { buildEventSchema } from '#lib/data/event-schema.ts';
+	import { websiteSchema } from '#lib/utils/structured-data.ts';
+	import { getLocale } from '#lib/paraglide/runtime.js';
 	import { t, localePath } from '#lib/utils/i18n.ts';
 	import SEO from '#lib/components/SEO.svelte';
 	import Hero from '#lib/components/home/Hero.svelte';
@@ -18,9 +20,13 @@
 </script>
 
 <SEO
-	title={siteConfig.shortTitle}
+	title={m.seo_home_title({ site: t(siteConfig.shortTitle) })}
+	fullTitle
 	description={t(siteConfig.description)}
-	additionalSchema={buildEventSchema(`${siteConfig.url}/images/og-default.png`)}
+	additionalSchema={[
+		websiteSchema(siteConfig, getLocale()),
+		buildEventSchema(`${siteConfig.url}/images/og-default.png`)
+	]}
 />
 
 <Hero />

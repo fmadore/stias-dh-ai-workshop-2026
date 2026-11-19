@@ -1,6 +1,5 @@
 <script lang="ts">
 	import * as m from '#lib/paraglide/messages.js';
-	import { siteConfig } from '#lib/data/site-config.ts';
 	import { t } from '#lib/utils/i18n.ts';
 	import SEO from '#lib/components/SEO.svelte';
 	import PageHeader from '#lib/components/layout/PageHeader.svelte';
@@ -29,10 +28,7 @@
 	]);
 </script>
 
-<SEO
-	title="{m.nav_resources()} | {siteConfig.shortTitle}"
-	description={m.seo_resources_description()}
-/>
+<SEO title={m.nav_resources()} description={m.seo_resources_description()} />
 
 <PageHeader title={m.nav_resources()} subtitle={m.resources_page_subtitle()} />
 

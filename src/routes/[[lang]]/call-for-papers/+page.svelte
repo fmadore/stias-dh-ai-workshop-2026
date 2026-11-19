@@ -19,7 +19,7 @@
 	const closedOn = $derived(formatDate(cfpInfo.deadline));
 </script>
 
-<SEO title="{m.nav_cfp()} | {siteConfig.shortTitle}" description={m.seo_cfp_description()} />
+<SEO title={m.nav_cfp()} description={m.seo_cfp_description()} />
 
 <!-- The downloads live in the header band rather than in a card below it,
      and the workshop title is the header's subtitle instead of a second h2

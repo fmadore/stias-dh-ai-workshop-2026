@@ -5,7 +5,7 @@
 	import { organizers } from '#lib/data/organizers.ts';
 	import { sponsors } from '#lib/data/sponsors.ts';
 	import { siteConfig } from '#lib/data/site-config.ts';
-	import { localePath } from '#lib/utils/i18n.ts';
+	import { localePath, t } from '#lib/utils/i18n.ts';
 
 	// The footer used to be logos and a copyright line, so every route out of
 	// a page depended on the navbar and the sponsor row read as terminal.
@@ -41,7 +41,7 @@
 		<div class="grid grid-cols-2 gap-x-8 gap-y-10 pb-10 md:grid-cols-4">
 			<div class="col-span-2 md:col-span-1">
 				<p class="font-display mb-2 text-lg leading-snug text-white">
-					{siteConfig.shortTitle}
+					{t(siteConfig.shortTitle)}
 				</p>
 				<p class="text-sm leading-relaxed text-white/75">
 					{m.hero_dates()}<br />{m.hero_location()}

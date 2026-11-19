@@ -2,7 +2,6 @@
 	import { venueClock } from '#lib/utils/venue-clock.ts';
 	import * as m from '#lib/paraglide/messages.js';
 	import { getLocale } from '#lib/paraglide/runtime.js';
-	import { siteConfig } from '#lib/data/site-config.ts';
 	import SEO from '#lib/components/SEO.svelte';
 	import PageHeader from '#lib/components/layout/PageHeader.svelte';
 	import { programme, programmeLastUpdated } from '#lib/data/programme.ts';
@@ -45,10 +44,7 @@
 	);
 </script>
 
-<SEO
-	title="{m.nav_programme()} | {siteConfig.shortTitle}"
-	description={m.seo_programme_description()}
-/>
+<SEO title={m.nav_programme()} description={m.seo_programme_description()} />
 
 <PageHeader
 	title={m.section_programme()}

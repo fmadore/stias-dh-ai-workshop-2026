@@ -2,7 +2,6 @@
 	import * as m from '#lib/paraglide/messages.js';
 	import { ArrowLeft, ArrowRight, CalendarClock, Presentation as SlidesIcon } from '@lucide/svelte';
 	import { t, localePath } from '#lib/utils/i18n.ts';
-	import { siteConfig } from '#lib/data/site-config.ts';
 	import SEO from '#lib/components/SEO.svelte';
 	import PageHeader from '#lib/components/layout/PageHeader.svelte';
 
@@ -18,9 +17,11 @@
 </script>
 
 <SEO
-	title="{presentation.title} | {siteConfig.shortTitle}"
+	title={presentation.title}
 	description={data.description}
-	additionalSchema={data.citationSchema}
+	type="article"
+	meta={data.citationMeta}
+	additionalSchema={[data.citationSchema, data.breadcrumbs]}
 />
 
 <svelte:head>
