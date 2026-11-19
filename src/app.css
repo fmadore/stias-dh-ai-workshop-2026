@@ -1,11 +1,16 @@
 @import 'tailwindcss';
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Self-hosted fonts (unicode-range subset per file, font-display: swap) */
-@import '@fontsource/outfit/300.css';
-@import '@fontsource/outfit/400.css';
-@import '@fontsource/outfit/500.css';
-@import '@fontsource/outfit/600.css';
+/* Self-hosted fonts (unicode-range subset per file, font-display: swap).
+   Outfit is the variable build, not four static weights. The site sets
+   300/400/500/600 and every page uses all four, so the static files cost four
+   requests and 55.7 KB of latin on every page; one variable latin file covers
+   the whole axis in 32.3 KB. Its latin-ext file (14.8 KB) is heavier than one
+   static latin-ext weight (≈6.4 KB), but pages that pull latin-ext in (papers,
+   programme, resources) still come out 15 KB and three requests lighter
+   overall. The family registers as 'Outfit Variable', which --font-sans names
+   below — under 'Outfit' it would silently fall back to system-ui. */
+@import '@fontsource-variable/outfit/wght.css';
 @import '@fontsource/instrument-serif/400.css';
 @import '@fontsource/instrument-serif/400-italic.css';
 
@@ -16,7 +21,7 @@
 @theme {
 	/* --- Typography --- */
 	--font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
-	--font-sans: 'Outfit', system-ui, -apple-system, sans-serif;
+	--font-sans: 'Outfit Variable', system-ui, -apple-system, sans-serif;
 
 	/* --- Type scale, small end. The named display steps live on the
 	       .text-* component classes below; these four name the sizes that
