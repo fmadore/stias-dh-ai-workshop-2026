@@ -1,5 +1,5 @@
 import * as m from '#lib/paraglide/messages.js';
-import { cfpInfo } from '#lib/data/cfp.ts';
+import { cfpDates } from '#lib/data/cfp-dates.ts';
 import { siteConfig } from '#lib/data/site-config.ts';
 import { formatDate, formatDateRange } from './date';
 
@@ -62,23 +62,23 @@ export function getMilestones(now: number = Date.now()): Milestone[] {
 		{
 			id: 'proposals',
 			label: m.submission_deadline(),
-			value: formatDate(cfpInfo.deadline),
-			at: new Date(endOfDay(cfpInfo.deadline)).getTime(),
-			datetime: endOfDay(cfpInfo.deadline)
+			value: formatDate(cfpDates.deadline),
+			at: new Date(endOfDay(cfpDates.deadline)).getTime(),
+			datetime: endOfDay(cfpDates.deadline)
 		},
 		{
 			id: 'notification',
 			label: m.notification_date(),
-			value: formatDate(cfpInfo.notificationDate),
-			at: new Date(endOfDay(cfpInfo.notificationDate)).getTime(),
-			datetime: endOfDay(cfpInfo.notificationDate)
+			value: formatDate(cfpDates.notificationDate),
+			at: new Date(endOfDay(cfpDates.notificationDate)).getTime(),
+			datetime: endOfDay(cfpDates.notificationDate)
 		},
 		{
 			id: 'full-papers',
 			label: m.full_papers_deadline(),
-			value: formatDate(cfpInfo.fullPapersDeadline),
-			at: new Date(endOfDay(cfpInfo.fullPapersDeadline)).getTime(),
-			datetime: endOfDay(cfpInfo.fullPapersDeadline)
+			value: formatDate(cfpDates.fullPapersDeadline),
+			at: new Date(endOfDay(cfpDates.fullPapersDeadline)).getTime(),
+			datetime: endOfDay(cfpDates.fullPapersDeadline)
 		},
 		{
 			id: 'workshop',
@@ -105,7 +105,7 @@ export function nextMilestone(now: number = Date.now()): Milestone | undefined {
 
 /** Whether the call for papers is still accepting proposals. */
 export function isCfpOpen(now: number = Date.now()): boolean {
-	return now <= new Date(endOfDay(cfpInfo.deadline)).getTime();
+	return now <= new Date(endOfDay(cfpDates.deadline)).getTime();
 }
 
 export type WorkshopPhase = 'before' | 'during' | 'after';
