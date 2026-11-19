@@ -27,22 +27,22 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
     "@eslint/js": "^10.0.1",
-    "@inlang/paraglide-js": "^2.29.3",
-    "@inlang/plugin-message-format": "^4.5.7",
+    "@inlang/paraglide-js": "^3.2.2",
+    "@inlang/plugin-message-format": "^4.6.0",
     "@pdf-lib/fontkit": "^1.1.1",
-    "@playwright/test": "^1.64.1",
+    "@playwright/test": "^1.65.1",
     "@sveltejs/adapter-static": "^4.0.1",
-    "@sveltejs/kit": "^3.1.1",
+    "@sveltejs/kit": "^3.2.0",
     "@sveltejs/vite-plugin-svelte": "^7.3.1",
-    "@tailwindcss/vite": "^4.3.4",
+    "@tailwindcss/vite": "^4.3.5",
     "@types/node": "^24.19.2",
     "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-svelte": "^3.23.1",
+    "eslint-plugin-svelte": "^3.24.1",
     "globals": "^17.14.0",
     "ical.js": "^2.2.1",
     "pdf-lib": "^1.17.1",
-    "prettier": "^3.9.10",
+    "prettier": "^3.10.1",
     "prettier-plugin-svelte": "^4.1.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "sharp": "^0.35.5",
@@ -52,14 +52,14 @@
     "tsx": "^4.23.15",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.1",
-    "vite": "^8.3.5"
+    "vite": "^8.3.8"
   },
   "dependencies": {
     "@fontsource-variable/outfit": "^5.3.0",
     "@fontsource/instrument-serif": "^5.3.0",
-    "@lucide/svelte": "^1.67.0",
-    "maplibre-gl": "6.16.0",
-    "marked": "^18.1.3"
+    "@lucide/svelte": "^1.73.0",
+    "maplibre-gl": "6.18.0",
+    "marked": "^18.2.0"
   },
   "type": "module",
   "imports": {
