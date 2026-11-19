@@ -149,6 +149,100 @@ if (en && en.includes('VirtualLocation'))
 	fail('index.html: Event JSON-LD names a VirtualLocation, but no join link is published');
 if (failures === failuresBeforeArchive) ok('archive state is prerendered');
 
+// 8. Search metadata. Each of these failed silently once or could: an English
+//    site name in every French <title>, scholarly tags that Scholar and Zotero
+//    read but no reader sees, and JSON-LD that is one stray character from
+//    being ignored wholesale.
+const decode = (s) =>
+	s
+		.replaceAll('&lt;', '<')
+		.replaceAll('&gt;', '>')
+		.replaceAll('&quot;', '"')
+		.replaceAll('&#39;', "'")
+		.replaceAll('&amp;', '&');
+const titleOf = (html) => decode(html.match(/<title>([^<]*)<\/title>/)?.[1] ?? '');
+const descriptionOf = (html) =>
+	decode(html.match(/<meta name="description" content="([^"]*)"/)?.[1] ?? '');
+const jsonLd = (html) =>
+	[...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map(
+		(match) => match[1]
+	);
+
+// The French short title from src/lib/data/site-config.ts.
+const frenchSiteName = 'HN & IA en études africaines';
+const paper = 'mcp-servers-african-glams';
+// An organiser, so certain to have both a page and an ORCID.
+const orcidPerson = 'madore';
+
+const sample = {
+	'index.html': en,
+	'fr.html': fr,
+	[`papers/${paper}.html`]: await read(`build/papers/${paper}.html`),
+	[`fr/papers/${paper}.html`]: await read(`build/fr/papers/${paper}.html`),
+	[`participants/${orcidPerson}.html`]: await read(`build/participants/${orcidPerson}.html`),
+	[`fr/participants/${orcidPerson}.html`]: await read(`build/fr/participants/${orcidPerson}.html`),
+	'fr/about.html': await read('build/fr/about.html')
+};
+
+for (const [file, html] of Object.entries(sample)) {
+	if (!html) continue;
+	if (file.startsWith('fr') && !titleOf(html).includes(frenchSiteName))
+		fail(`${file}: <title> lacks the French site name — got "${titleOf(html)}"`);
+	const blocks = jsonLd(html);
+	if (blocks.length === 0) fail(`${file}: no JSON-LD`);
+	for (const block of blocks) {
+		try {
+			JSON.parse(block);
+		} catch (error) {
+			fail(`${file}: JSON-LD does not parse (${error.message})`);
+		}
+	}
+}
+ok('sampled pages have localised titles and well-formed JSON-LD');
+
+for (const file of [`papers/${paper}.html`, `fr/papers/${paper}.html`]) {
+	if (sample[file] && !/<meta name="citation_title" content="[^"]+"/.test(sample[file]))
+		fail(`${file}: citation_title meta tag missing`);
+	if (sample[file]?.includes('citation_pdf_url'))
+		fail(`${file}: citation_pdf_url present, but no paper has a PDF`);
+}
+ok('paper pages carry scholarly meta tags');
+
+const profile = sample[`participants/${orcidPerson}.html`];
+if (profile && !/"sameAs":\[[^\]]*"https:\/\/orcid\.org\/\d{4}-/.test(profile))
+	fail(`participants/${orcidPerson}.html: no orcid.org sameAs in the Person JSON-LD`);
+else ok('profile pages link ORCID through sameAs');
+
+// 7. Meta description lengths. Search results show about 160 characters; much
+//    under 70 wastes the snippet. Paper and participant descriptions are cut
+//    to fit (META_DESCRIPTION_LENGTH), so only the ceiling applies to them.
+async function htmlFiles(dir) {
+	const entries = await readdir(dir, { withFileTypes: true });
+	const nested = await Promise.all(
+		entries.map((entry) =>
+			entry.isDirectory()
+				? htmlFiles(`${dir}/${entry.name}`)
+				: entry.name.endsWith('.html')
+					? [`${dir}/${entry.name}`]
+					: []
+		)
+	);
+	return nested.flat();
+}
+let described = 0;
+for (const file of await htmlFiles('build')) {
+	const html = await readFile(file, 'utf8');
+	// Redirect stubs and the client-rendered 404 carry no description.
+	const description = descriptionOf(html);
+	if (!description) continue;
+	described++;
+	const detail = /\/(papers|participants)\/[^/]+\.html$/.test(file);
+	if (description.length > 160) fail(`${file}: description is ${description.length} characters`);
+	else if (!detail && description.length < 70)
+		fail(`${file}: description is only ${description.length} characters`);
+}
+ok(`${described} meta descriptions within length`);
+
 if (failures > 0) {
 	console.error(`\nsmoke-test: ${failures} problem(s) found`);
 	process.exit(1);

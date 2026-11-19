@@ -11,6 +11,11 @@
 	import { countryName } from '#lib/utils/country.ts';
 	import { localizedAbsoluteUrl } from '#lib/utils/localized-paths.ts';
 	import { truncate } from '#lib/utils/text.ts';
+	import {
+		META_DESCRIPTION_LENGTH,
+		detailBreadcrumbs,
+		personId
+	} from '#lib/utils/structured-data.ts';
 
 	let { data } = $props();
 
@@ -29,21 +34,60 @@
 	const presentationItems = $derived(data.presentationItems);
 	const canonicalPath = $derived(`/participants/${person.id}`);
 
-	const schema = $derived({
-		'@context': 'https://schema.org',
+	const description = $derived(
+		bio ? truncate(bio, META_DESCRIPTION_LENGTH) : `${person.name} — ${t(person.affiliation)}`
+	);
+
+	// The page is a ProfilePage whose subject is this Person (merged into the
+	// WebPage node by SEO). The `@id` is the one bylines and the Event's
+	// organiser list use too (#lib/utils/structured-data.ts), so all three are
+	// one person in the graph. ORCID goes in `sameAs` as a URL — the form
+	// Google and ORCID's own guidance expect — where a bare `identifier`
+	// string was an unlabelled number.
+	const personSchema = $derived({
 		'@type': 'Person',
+		'@id': personId(siteConfig.url, person.id),
 		name: person.name,
-		affiliation: { '@type': 'Organization', name: t(person.affiliation) },
 		url: localizedAbsoluteUrl(siteConfig.url, canonicalPath, getLocale()),
-		...(person.orcid ? { identifier: person.orcid } : {}),
-		...(person.website ? { sameAs: [person.website] } : {})
+		affiliation: { '@type': 'Organization', name: t(person.affiliation) },
+		...(person.image ? { image: `${siteConfig.url}${person.image}` } : {}),
+		...(bio ? { description } : {}),
+		...(person.orcid
+			? {
+					identifier: {
+						'@type': 'PropertyValue',
+						propertyID: 'ORCID',
+						value: person.orcid
+					}
+				}
+			: {}),
+		...(person.orcid || person.website
+			? {
+					sameAs: [
+						...(person.orcid ? [`https://orcid.org/${person.orcid}`] : []),
+						...(person.website ? [person.website] : [])
+					]
+				}
+			: {})
 	});
+
+	const breadcrumbs = $derived(
+		detailBreadcrumbs(
+			siteConfig.url,
+			getLocale(),
+			m.nav_home(),
+			{ name: m.nav_participants(), path: '/participants' },
+			{ name: person.name, path: canonicalPath }
+		)
+	);
 </script>
 
 <SEO
-	title="{person.name} | {siteConfig.shortTitle}"
-	description={bio ? truncate(bio) : `${person.name} — ${t(person.affiliation)}`}
-	additionalSchema={schema}
+	title={person.name}
+	{description}
+	pageType="ProfilePage"
+	mainEntity={personSchema}
+	additionalSchema={breadcrumbs}
 />
 
 <PageHeader

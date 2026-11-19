@@ -63,8 +63,8 @@ test('the programme downloads are served with the types browsers expect', async 
 		const href = await link.getAttribute('href');
 		expect(href).toBeTruthy();
 		const response = await request.get(new URL(href!, page.url()).href);
-		expect(response.status(), name).toBe(200);
-		expect(response.headers()['content-type'], name).toMatch(contentType);
+		expect(response.status(), signature).toBe(200);
+		expect(response.headers()['content-type'], signature).toMatch(contentType);
 		expect((await response.body()).subarray(0, signature.length).toString('latin1')).toBe(
 			signature
 		);

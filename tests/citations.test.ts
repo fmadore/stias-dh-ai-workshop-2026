@@ -9,9 +9,11 @@ import { siteConfig } from '../src/lib/data/site-config';
 import {
 	createPresentationCitation,
 	presentationBibtex,
+	presentationMetaTags,
 	presentationRis,
 	presentationSchema
 } from '../src/lib/utils/citations';
+import { breadcrumbSchema, personId, websiteSchema } from '../src/lib/utils/structured-data';
 
 // Load real content without Vite's import.meta.glob, which is unavailable to
 // Node's unit runner. New records automatically join the export regression.
@@ -123,5 +125,77 @@ test('structured data describes a workshop work without asserting publication or
 	assert.doesNotMatch(
 		JSON.stringify(schema),
 		/ScholarlyArticle|datePublished|publisher|isPartOf|doi/i
+	);
+});
+
+test('authors with a profile page share its Person @id; co-authors get none', () => {
+	const yoruba = citations.find(({ id }) => id === 'recoding-yoruba-epistemologies')!;
+	const coAuthorIds = new Set(coAuthors.map(({ id }) => id));
+	const schema = presentationSchema(yoruba, undefined, 'fr', (id) => !coAuthorIds.has(id));
+	const [presenter, ...rest] = schema.author;
+	assert.equal(
+		(presenter as { '@id'?: string })['@id'],
+		`${siteConfig.url}/participants/${yoruba.authors[0].id}#person`
+	);
+	assert.ok(rest.every((author) => !('@id' in author)));
+	// The identifier names the person, not a locale's rendering of their page.
+	assert.doesNotMatch(personId(siteConfig.url, 'frederick-madore'), /\/fr\//);
+	// Without the predicate nobody is assumed to have a page.
+	assert.ok(presentationSchema(yoruba).author.every((author) => !('@id' in author)));
+});
+
+test('scholarly meta tags mirror the citation and claim no PDF or publication venue', () => {
+	const yoruba = citations.find(({ id }) => id === 'recoding-yoruba-epistemologies')!;
+	const tags = presentationMetaTags(yoruba, 'fr');
+	const values = (name: string) => tags.filter((tag) => tag.name === name).map((t) => t.content);
+	assert.deepEqual(values('citation_title'), [yoruba.title]);
+	assert.deepEqual(
+		values('citation_author'),
+		yoruba.authors.map(({ name }) => name)
+	);
+	assert.deepEqual(
+		values('DC.creator'),
+		yoruba.authors.map(({ name }) => name)
+	);
+	assert.deepEqual(values('citation_publication_date'), [yoruba.date!.replaceAll('-', '/')]);
+	assert.deepEqual(values('DC.date'), [yoruba.date]);
+	assert.deepEqual(values('citation_conference_title'), [siteConfig.title.en]);
+	assert.deepEqual(values('citation_language'), [yoruba.language]);
+	assert.deepEqual(values('citation_abstract_html_url'), [
+		`${siteConfig.url}/fr/papers/${yoruba.id}`
+	]);
+	// Each institution directly follows the author it belongs to.
+	for (const [index, tag] of tags.entries()) {
+		if (tag.name !== 'citation_author_institution') continue;
+		const author = yoruba.authors.find(({ name }) => name === tags[index - 1].content)!;
+		assert.equal(tags[index - 1].name, 'citation_author');
+		assert.equal(tag.content, author.affiliation!.fr);
+	}
+	for (const citation of citations) {
+		const names = presentationMetaTags(citation, 'en').map(({ name }) => name);
+		assert.ok(!names.some((name) => /pdf_url|journal|doi|volume|publisher/i.test(name)));
+	}
+	const unscheduled = createPresentationCitation(presentations[0], people, [], siteConfig);
+	assert.deepEqual(
+		presentationMetaTags(unscheduled, 'en')
+			.filter(({ name }) => name === 'citation_publication_date')
+			.map(({ content }) => content),
+		[siteConfig.dates.start.slice(0, 4)]
+	);
+});
+
+test('the WebSite node and breadcrumbs are localised and linked by @id', () => {
+	const fr = websiteSchema(siteConfig, 'fr');
+	assert.equal(fr['@id'], `${siteConfig.url}#website`);
+	assert.equal(fr.name, siteConfig.shortTitle.fr);
+	assert.deepEqual(fr.inLanguage, ['en', 'fr']);
+	assert.equal(fr.about['@id'], `${siteConfig.url}#event`);
+	const crumbs = breadcrumbSchema([
+		{ name: 'Accueil', url: `${siteConfig.url}/fr` },
+		{ name: 'Communications', url: `${siteConfig.url}/fr/papers` }
+	]);
+	assert.deepEqual(
+		crumbs.itemListElement.map(({ position }) => position),
+		[1, 2]
 	);
 });

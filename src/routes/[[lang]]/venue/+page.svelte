@@ -1,6 +1,5 @@
 <script lang="ts">
 	import * as m from '#lib/paraglide/messages.js';
-	import { siteConfig } from '#lib/data/site-config.ts';
 	import SEO from '#lib/components/SEO.svelte';
 	import PageHeader from '#lib/components/layout/PageHeader.svelte';
 	import ScrollReveal from '#lib/components/ScrollReveal.svelte';
@@ -11,7 +10,7 @@
 	import { Info } from '@lucide/svelte';
 </script>
 
-<SEO title="{m.nav_venue()} | {siteConfig.shortTitle}" description={m.seo_venue_description()} />
+<SEO title={m.nav_venue()} description={m.seo_venue_description()} />
 
 <PageHeader
 	title={m.section_venue()}

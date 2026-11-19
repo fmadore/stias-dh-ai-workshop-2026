@@ -1,6 +1,5 @@
 <script lang="ts">
 	import * as m from '#lib/paraglide/messages.js';
-	import { siteConfig } from '#lib/data/site-config.ts';
 	import SEO from '#lib/components/SEO.svelte';
 	import PageHeader from '#lib/components/layout/PageHeader.svelte';
 	import { organizers } from '#lib/data/organizers.ts';
@@ -63,10 +62,7 @@
 	}
 </script>
 
-<SEO
-	title="{m.nav_participants()} | {siteConfig.shortTitle}"
-	description={m.seo_participants_description()}
-/>
+<SEO title={m.nav_participants()} description={m.seo_participants_description()} />
 
 <PageHeader
 	title={m.nav_participants()}
