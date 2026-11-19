@@ -1,4 +1,4 @@
-import type { Map as MapLibreMap, MapOptions } from 'maplibre-gl';
+import type { Map as MapLibreMap, MapEventType, MapOptions } from 'maplibre-gl';
 import * as m from '#lib/paraglide/messages.js';
 
 type MapLibre = typeof import('maplibre-gl');
@@ -8,13 +8,26 @@ export interface LazyMapOptions {
 	container: HTMLElement;
 	/** Merged over the shared defaults. `container` and `style` are supplied here. */
 	options?: Partial<Omit<MapOptions, 'container' | 'style'>>;
+	/**
+	 * The canvas's accessible name. MapLibre gives the canvas `role="region"`
+	 * and names it from its locale table, which is English ("Map") unless told
+	 * otherwise — so a French page announced an English landmark, nested
+	 * inside a second region the component drew around it. The component's
+	 * own label goes here instead, and the canvas is the one named region.
+	 */
+	mapTitle: string;
 	/** MapLibre's close button announces what it closes, which differs per map. */
 	popupCloseLabel: string;
 	/** Runs once the renderer exists, before `load`. Markers and popups go here. */
 	setup?: (map: MapLibreMap, maplibre: MapLibre) => void;
 	onReady?: (map: MapLibreMap) => void;
 	onFail?: () => void;
-	/** Debounced window resize, delivered only after `load`. */
+	/**
+	 * Debounced window resize, delivered only after `load` and only when the
+	 * container's width actually changed. Mobile browsers fire `resize` when
+	 * the URL bar collapses under a scroll, which changes nothing the map
+	 * cares about.
+	 */
 	onResize?: (map: MapLibreMap) => void;
 	/**
 	 * Runs before the map is removed, for whatever `setup` created. Markers and
@@ -41,17 +54,33 @@ export function createLazyMap(config: LazyMapOptions): () => void {
 	let map: MapLibreMap | undefined;
 	let themeObserver: MutationObserver | undefined;
 	let intersectionObserver: IntersectionObserver | undefined;
+	let failed = false;
 	let loadTimer: number | undefined;
 	let resizeTimer: number | undefined;
+	let lastWidth = 0;
 
+	// No `map.resize()` here: MapLibre 6 resizes its canvas itself, from a
+	// ResizeObserver on the container (`trackResize`, on by default), which
+	// also catches layout changes no window event reports. This listener is
+	// only for the components' reframing, which has to wait until that has
+	// happened — hence the debounce outlasting MapLibre's 50 ms throttle.
 	function handleResize() {
 		if (!map) return;
 		if (resizeTimer) window.clearTimeout(resizeTimer);
 		resizeTimer = window.setTimeout(() => {
-			if (!map) return;
-			map.resize();
-			if (ready) config.onResize?.(map);
+			if (!map || !ready) return;
+			const width = config.container.clientWidth;
+			if (width === lastWidth) return;
+			lastWidth = width;
+			config.onResize?.(map);
 		}, 150);
+	}
+
+	function fail() {
+		if (failed || ready) return;
+		failed = true;
+		if (loadTimer) window.clearTimeout(loadTimer);
+		config.onFail?.();
 	}
 
 	window.addEventListener('resize', handleResize);
@@ -89,6 +118,7 @@ export function createLazyMap(config: LazyMapOptions): () => void {
 				container: config.container,
 				style: styleUrl(),
 				locale: {
+					'Map.Title': config.mapTitle,
 					'AttributionControl.ToggleAttribution': m.map_attribution_toggle(),
 					'NavigationControl.ZoomIn': m.map_zoom_in(),
 					'NavigationControl.ZoomOut': m.map_zoom_out(),
@@ -122,11 +152,39 @@ export function createLazyMap(config: LazyMapOptions): () => void {
 			map.on('load', () => {
 				if (loadTimer) window.clearTimeout(loadTimer);
 				ready = true;
+				failed = false;
+				lastWidth = config.container.clientWidth;
 				if (map) config.onReady?.(map);
 			});
 
+			// A style that cannot be fetched used to leave the spinner up for the
+			// full fifteen seconds below, promising a map that had already failed.
+			// MapLibre reports it as an `error` event whose error is an AJAXError
+			// naming the style URL — network failure and HTTP error alike — and
+			// after that it never fires `load`, so that one is fatal at once.
+			//
+			// Nothing else is. MapLibre 6 recovers from the rest on its own: a
+			// source whose TileJSON fails is marked loaded and ignored (the event
+			// carries `sourceId`), a sprite that fails still lets the style load,
+			// and a tile that fails (`tile` set) leaves a gap the map draws
+			// around. Treating any of those as fatal would put the error up and
+			// then take it down again when `load` arrived regardless. After `load`
+			// nothing is fatal, so a tile failing mid-pan never replaces a working
+			// map with an error.
+			map.on('error', (event: MapEventType['error']) => {
+				// MapLibre prints an error only when nobody listens for it, so
+				// listening here would otherwise silence every tile and sprite
+				// failure that was visible in the console before.
+				console.error(event.error);
+				if (ready) return;
+				const url = (event.error as { url?: unknown } | undefined)?.url;
+				if (url === styleUrl()) fail();
+			});
+
+			// Kept as the backstop for whatever never reports at all — a request
+			// that hangs, a worker that never answers.
 			loadTimer = window.setTimeout(() => {
-				if (!ready) config.onFail?.();
+				if (!ready) fail();
 			}, 15000);
 
 			themeObserver = new MutationObserver(() => {
@@ -140,7 +198,7 @@ export function createLazyMap(config: LazyMapOptions): () => void {
 				attributeFilter: ['class']
 			});
 		} catch {
-			config.onFail?.();
+			fail();
 		}
 	}
 
