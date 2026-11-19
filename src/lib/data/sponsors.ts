@@ -41,7 +41,7 @@ export const sponsors: Sponsor[] = [
 	{
 		id: 'goethe',
 		name: 'Goethe University Frankfurt',
-		logo: '/images/logos/Goethe-Logo.svg.webp',
+		logo: '/images/logos/goethe-university-frankfurt-logo.webp',
 		width: 220,
 		height: 120,
 		url: 'https://www.uni-frankfurt.de/en'
@@ -57,7 +57,7 @@ export const sponsors: Sponsor[] = [
 	{
 		id: 'kcl',
 		name: "King's College London",
-		logo: "/images/logos/King's_College_London_logo.svg",
+		logo: '/images/logos/kings-college-london-logo.svg',
 		width: 923,
 		height: 703,
 		url: 'https://www.kcl.ac.uk'
@@ -65,7 +65,7 @@ export const sponsors: Sponsor[] = [
 	{
 		id: 'sadilar',
 		name: 'SADiLaR',
-		logo: '/images/logos/SADiLaR-1024x487.webp',
+		logo: '/images/logos/sadilar-logo.webp',
 		width: 252,
 		height: 120,
 		url: 'https://sadilar.org'
