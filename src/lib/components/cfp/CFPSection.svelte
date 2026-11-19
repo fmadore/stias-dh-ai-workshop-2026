@@ -26,14 +26,14 @@
 			before: full.slice(0, idx),
 			after: full.slice(idx + JDHASA_NAME.length)
 		};
-	});
+	})();
 
 	// The four dates as the call published them. They were flagged past/next
 	// off a client-side clock, which kept the flags out of the prerendered page;
 	// all four are past now, and the notice above the call already says it has
 	// closed, so a "Passed" on every card would only repeat it four times. The
 	// PDF and text exports build the same list in generate-cfp-downloads.ts.
-	const keyDates = $derived(getMilestones());
+	const keyDates = getMilestones();
 </script>
 
 <div class="block-flow">

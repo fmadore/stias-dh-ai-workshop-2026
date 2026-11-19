@@ -61,11 +61,11 @@
 
 	const uid = $props.id();
 
-	const languageOptions: Array<{ value: 'en' | 'fr' | null; label: string }> = $derived([
+	const languageOptions: Array<{ value: 'en' | 'fr' | null; label: string }> = [
 		{ value: null, label: m.filter_language_all() },
 		{ value: 'en', label: 'EN' },
 		{ value: 'fr', label: 'FR' }
-	]);
+	];
 
 	// Sorted here rather than upstream: the order depends on the locale the
 	// names render in, which the data layer knows nothing about.
