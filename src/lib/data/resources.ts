@@ -1,6 +1,13 @@
 import type { ResourceSection } from '#lib/types/index.ts';
 
 /**
+ * Date the resources below were last revised (ISO `yyyy-mm-dd`). Bump this
+ * whenever you add, remove or rewrite a resource — it becomes the page's
+ * `<lastmod>` in the sitemap, which is only worth having if it is true.
+ */
+export const resourcesLastUpdated = '2026-11-13';
+
+/**
  * The resources page: writing about the workshop and software made for it,
  * and the archives, models,
  * networks and meetings that came up in its discussions. Section order and

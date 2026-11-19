@@ -5,10 +5,16 @@ export const siteConfig: SiteConfig = {
 		en: 'Digital Humanities and Artificial Intelligence in African Studies: Towards Sustainable and Equitable Practices',
 		fr: 'Humanités numériques et intelligence artificielle en études africaines\u00a0: vers des pratiques durables et équitables'
 	},
-	shortTitle: 'DH & AI in African Studies',
+	// Localised: it is the suffix of every page title, `og:site_name` and the
+	// WebSite name, so an English one put English in every French <title>. The
+	// French abbreviation is the one the French copy already uses (« HN & IA »).
+	shortTitle: {
+		en: 'DH & AI in African Studies',
+		fr: 'HN & IA en études africaines'
+	},
 	description: {
-		en: 'A workshop at STIAS, Stellenbosch, exploring how DH and AI transform research in African Studies.',
-		fr: "Un atelier au STIAS, Stellenbosch, explorant comment les HN et l'IA transforment la recherche en études africaines."
+		en: 'A workshop held at STIAS, Stellenbosch, 21–24 September 2026, on how digital humanities and AI transform research in African Studies.',
+		fr: "Un atelier tenu au STIAS, à Stellenbosch, 21–24 septembre 2026, sur la manière dont les HN et l'IA transforment la recherche en études africaines."
 	},
 	dates: { start: '2026-09-21', end: '2026-09-24' },
 	hours: { start: '09:00', end: '18:00' },

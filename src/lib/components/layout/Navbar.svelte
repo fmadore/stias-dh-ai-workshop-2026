@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { venueClock } from '#lib/utils/venue-clock.ts';
 	import { page } from '$app/state';
 	import { base } from '#lib/utils/base-path.ts';
 	import { unlocalizedPath } from '#lib/utils/localized-paths.ts';
@@ -7,7 +6,6 @@
 	import { getLocale } from '#lib/paraglide/runtime.js';
 	import * as m from '#lib/paraglide/messages.js';
 	import { localePath } from '#lib/utils/i18n.ts';
-	import { isCfpOpen } from '#lib/utils/milestones.ts';
 	import LanguageSwitcher from './LanguageSwitcher.svelte';
 	import { Menu, X, Sun, Moon } from '@lucide/svelte';
 
@@ -19,14 +17,11 @@
 		typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
 	);
 
-	// Promote the action appropriate to the current workshop phase.
-	const cfpOpen = $derived($venueClock.live && isCfpOpen($venueClock.now));
-
-	const primaryAction = $derived(
-		cfpOpen
-			? { href: localePath('/call-for-papers'), label: m.nav_cfp() }
-			: { href: localePath('/programme'), label: m.nav_programme() }
-	);
+	// The one promoted link is what the workshop left behind. It used to follow
+	// a client-side clock (the call while it was open, then the programme), so
+	// the prerendered header could only ever show the state it was built in;
+	// with every phase over there is nothing left for a clock to decide.
+	const primaryAction = $derived({ href: localePath('/resources'), label: m.nav_resources() });
 
 	// The desktop row has no Home link: the wordmark beside it already goes
 	// there, and the row could not afford both once Resources joined it — at
@@ -34,20 +29,24 @@
 	// lines. The mobile menu is a list read on its own, so it keeps one.
 	const homeLink = $derived({ href: localePath('/'), label: m.nav_home() });
 
-	const navLinks = $derived(
-		[
-			{ href: localePath('/about'), label: m.nav_about() },
-			{ href: localePath('/programme'), label: m.nav_programme() },
-			{ href: localePath('/participants'), label: m.nav_participants() },
-			{ href: localePath('/papers'), label: m.nav_papers() },
-			{ href: localePath('/venue'), label: m.nav_venue() },
-			{ href: localePath('/resources'), label: m.nav_resources() },
-			{ href: localePath('/call-for-papers'), label: m.nav_cfp() }
-		].filter((link) => link.href !== primaryAction.href)
-	);
+	/** Every section, in reading order. */
+	const sectionLinks = $derived([
+		{ href: localePath('/about'), label: m.nav_about() },
+		{ href: localePath('/programme'), label: m.nav_programme() },
+		{ href: localePath('/participants'), label: m.nav_participants() },
+		{ href: localePath('/papers'), label: m.nav_papers() },
+		{ href: localePath('/venue'), label: m.nav_venue() },
+		{ href: localePath('/resources'), label: m.nav_resources() },
+		{ href: localePath('/call-for-papers'), label: m.nav_cfp() }
+	]);
 
-	/** Every link, including the promoted one — the mobile menu keeps one list. */
-	const allLinks = $derived([homeLink, ...navLinks, primaryAction]);
+	/** The desktop row, where the promoted link stands apart as a button instead. */
+	const navLinks = $derived(sectionLinks.filter((link) => link.href !== primaryAction.href));
+
+	// The mobile menu keeps one list, and the promoted link keeps its place in
+	// it rather than trailing it: with no button to set it apart, a link out of
+	// order only reads as misplaced.
+	const allLinks = $derived([homeLink, ...sectionLinks]);
 
 	function toggleDarkMode() {
 		explicitTheme = true;

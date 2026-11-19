@@ -6,8 +6,8 @@
     "dev": "vite dev",
     "predev": "npm run downloads",
     "build": "vite build",
-    "prebuild": "npm run downloads",
-    "postbuild": "node --import tsx scripts/check-data.ts && node scripts/smoke-test.mjs && node scripts/check-links.mjs && node scripts/check-bundle-size.mjs",
+    "prebuild": "node --import tsx scripts/check-data.ts && npm run downloads",
+    "postbuild": "node scripts/smoke-test.mjs && node scripts/check-links.mjs && node scripts/check-bundle-size.mjs",
     "preview": "vite preview",
     "images": "node scripts/optimize-images.mjs",
     "og": "node --import tsx scripts/generate-og.ts",
@@ -64,11 +64,6 @@
   "type": "module",
   "imports": {
     "#lib/*": "./src/lib/*"
-  },
-  "overrides": {
-    "@tailwindcss/vite": {
-      "vite": "$vite"
-    }
   },
   "engines": {
     "node": ">=24 <25"

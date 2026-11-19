@@ -1,53 +1,42 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { daysUntil, dateAtVenue, workshopPhase, nextMilestone } from '../src/lib/utils/milestones';
-import { nextClockDelay } from '../src/lib/utils/venue-clock';
+import { getMilestones, workshopEnd, workshopStart } from '../src/lib/utils/milestones';
+import { organizerRefs } from '../src/lib/data/organizer-refs';
+import { organizers } from '../src/lib/data/organizers';
 
-const at = (iso: string) => Date.parse(iso);
-
-test('the shared clock wakes at opening, closing and venue midnight', () => {
-	assert.equal(nextClockDelay(at('2026-09-21T08:59:00+02:00')), 60_000);
-	assert.equal(nextClockDelay(at('2026-09-24T17:59:00+02:00')), 60_000);
-	assert.equal(nextClockDelay(at('2026-09-21T23:59:00+02:00')), 60_000);
-	assert.equal(nextMilestone(at('2026-09-21T09:00:00+02:00')), undefined);
-	assert.ok(nextClockDelay(at('2026-09-24T18:00:00+02:00')) > 1_000);
+test('the four dates are a fixed record, in order, at the venue offset', () => {
+	const milestones = getMilestones();
+	assert.deepEqual(
+		milestones.map((milestone) => milestone.id),
+		['proposals', 'notification', 'full-papers', 'workshop']
+	);
+	// A deadline lapsed at the end of its own day in Stellenbosch; an
+	// offset-less string would be read in the visitor's timezone.
+	assert.equal(milestones[0].datetime, '2026-04-30T23:59:59+02:00');
+	assert.equal(milestones[3].datetime, workshopStart());
+	const instants = milestones.map((milestone) => Date.parse(milestone.datetime));
+	assert.deepEqual(
+		instants,
+		instants.toSorted((a, b) => a - b)
+	);
+	// No phase flags are left to compute: the record carries none.
+	for (const milestone of milestones) {
+		assert.deepEqual(Object.keys(milestone).sort(), ['datetime', 'id', 'label', 'value']);
+	}
 });
 
-test('a deadline later the same day at the venue is today, not tomorrow', () => {
-	// Every milestone lapses at 23:59:59 SAST on its own date. Dividing the raw
-	// interval and rounding up made the last few hours of each one read as
-	// "1 day remaining", so the count was wrong on the one day it mattered.
-	const deadline = at('2026-08-31T23:59:59+02:00');
-	assert.equal(daysUntil(deadline, at('2026-08-31T20:00:00+02:00')), 0);
-	assert.equal(daysUntil(deadline, at('2026-08-31T00:05:00+02:00')), 0);
-	assert.equal(daysUntil(deadline, at('2026-08-30T23:00:00+02:00')), 1);
+test('the workshop opened and closed at the hours the Event JSON-LD states', () => {
+	assert.equal(workshopStart(), '2026-09-21T09:00:00+02:00');
+	assert.equal(workshopEnd(), '2026-09-24T18:00:00+02:00');
 });
 
-test('the workshop reads as today from midnight, not from an hour before it opens', () => {
-	const opening = at('2026-09-21T09:00:00+02:00');
-	assert.equal(daysUntil(opening, at('2026-09-21T08:00:00+02:00')), 0);
-	assert.equal(daysUntil(opening, at('2026-09-20T22:00:00+02:00')), 1);
-	assert.equal(daysUntil(opening, at('2026-09-01T09:00:00+02:00')), 20);
-});
-
-test('the count is the venue calendar, not the reader s', () => {
-	// A reader in Auckland is already on the next date when Stellenbosch is not.
-	const opening = at('2026-09-21T09:00:00+02:00');
-	assert.equal(daysUntil(opening, at('2026-09-20T23:00:00+12:00')), 1);
-});
-
-test('a lapsed target counts zero rather than going negative', () => {
-	assert.equal(daysUntil(at('2026-08-31T23:59:59+02:00'), at('2026-09-05T12:00:00+02:00')), 0);
-});
-
-test('the venue date is South African, whatever the reader s clock says', () => {
-	// 00:30 on the 22nd in Auckland is still the 21st in Stellenbosch.
-	assert.equal(dateAtVenue(at('2026-09-22T00:30:00+12:00')), '2026-09-21');
-});
-
-test('the workshop phase turns over at the opening and at the close', () => {
-	assert.equal(workshopPhase(at('2026-09-21T08:59:00+02:00')), 'before');
-	assert.equal(workshopPhase(at('2026-09-21T09:00:01+02:00')), 'during');
-	assert.equal(workshopPhase(at('2026-09-24T17:59:00+02:00')), 'during');
-	assert.equal(workshopPhase(at('2026-09-24T18:00:01+02:00')), 'after');
+test('the bio-less convenor list is the full one, minus the bios', () => {
+	assert.deepEqual(
+		organizers.map((organizer) => organizer.id),
+		organizerRefs.map((ref) => ref.id)
+	);
+	for (const organizer of organizers) {
+		assert.ok(organizer.bio.en.length > 0 && organizer.bio.fr.length > 0, organizer.id);
+	}
+	for (const ref of organizerRefs) assert.equal('bio' in ref, false, ref.id);
 });

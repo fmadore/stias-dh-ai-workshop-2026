@@ -384,7 +384,6 @@ export interface CFPInfo {
 	deadline: string;
 	notificationDate: string;
 	fullPapersDeadline: string;
-	submissionUrl?: string;
 	rationale: LocalizedString;
 	guidelines: LocalizedString;
 	selectionCriteria: LocalizedString;
@@ -394,7 +393,8 @@ export interface CFPInfo {
 
 export interface SiteConfig {
 	title: LocalizedString;
-	shortTitle: string;
+	/** The site's name, as page titles, `og:site_name` and the WebSite schema carry it. */
+	shortTitle: LocalizedString;
 	description: LocalizedString;
 	dates: { start: string; end: string };
 	/**
