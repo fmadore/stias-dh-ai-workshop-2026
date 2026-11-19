@@ -1,5 +1,4 @@
 import { onMount } from 'svelte';
-import { SvelteURL, SvelteURLSearchParams } from 'svelte/reactivity';
 import { page } from '$app/state';
 import { goto } from '$app/navigation';
 import type { CountryCode } from '#lib/types/index.ts';
@@ -18,9 +17,14 @@ export function createUrlFilters(countries: () => CountryCode[]) {
 	// fields in a row: without this, the second and third would rebuild the URL
 	// from the filters the first had just cleared, and put them back.
 	let pendingSearch = $state<string | null>(null);
+	// Plain URLSearchParams and URL, not their svelte/reactivity twins: each is
+	// read once, here, and discarded. The reactivity comes from page.url and
+	// pendingSearch, which the derived already tracks; a reactive wrapper
+	// around a throwaway value only adds signals nobody subscribes to.
 	const filters = $derived(
 		parseFilters(
-			new SvelteURLSearchParams(
+			// eslint-disable-next-line svelte/prefer-svelte-reactivity -- read once, never mutated; see above
+			new URLSearchParams(
 				// Shallow routing leaves page.url on the URL that was rendered; the
 				// address bar's is page.shallow.url.
 				mounted ? (pendingSearch ?? (page.shallow?.url ?? page.url).search) : ''
@@ -29,7 +33,8 @@ export function createUrlFilters(countries: () => CountryCode[]) {
 		)
 	);
 	function update(values: Partial<UrlFilters>) {
-		const url = filterUrl(new SvelteURL(window.location.href), { ...filters, ...values });
+		// eslint-disable-next-line svelte/prefer-svelte-reactivity -- a one-off value handed to goto()
+		const url = filterUrl(new URL(window.location.href), { ...filters, ...values });
 		const search = url.search;
 		pendingSearch = search;
 		goto(url, { shallow: true, replace: true }).finally(() => {

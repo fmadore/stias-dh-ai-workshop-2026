@@ -3,9 +3,12 @@ import type { LocalizedString, Presentation } from '#lib/types/index.ts';
 import { base } from './base-path';
 import { localizedPath, type SupportedLocale } from './localized-paths';
 
-export function t(str: LocalizedString): string {
-	const locale = getLocale();
-	return str[locale as keyof LocalizedString] ?? str.en;
+/**
+ * A `LocalizedString` in the page's language. A server load passes the locale
+ * explicitly: it runs before the layout load sets the Paraglide global.
+ */
+export function t(str: LocalizedString, locale: SupportedLocale = getLocale()): string {
+	return str[locale] ?? str.en;
 }
 
 export function localePath(path: string): string {

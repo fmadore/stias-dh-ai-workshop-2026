@@ -23,7 +23,12 @@
 	<h2 class="text-section text-strong mb-5">{t(day.dayLabel)}</h2>
 	<div class="card px-4 py-1 sm:px-6 sm:py-2">
 		{#each day.sessions as session (session.id)}
-			<SessionCard {session} panelNumber={panels.get(session.id)} cast={casts[session.id]} />
+			<SessionCard
+				{session}
+				date={day.date}
+				panelNumber={panels.get(session.id)}
+				cast={casts[session.id]}
+			/>
 		{/each}
 	</div>
 </section>

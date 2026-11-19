@@ -1,8 +1,7 @@
 <script lang="ts">
-	import type { PaperSummary, ParticipantListing } from '#lib/types/index.ts';
+	import type { PlacedPaperSummary, ParticipantListing } from '#lib/types/index.ts';
 	import type { DirectoryGrouping } from '#lib/utils/filter-params.ts';
 	import ParticipantCard from './ParticipantCard.svelte';
-	import { getPlacements } from '#lib/utils/placement.ts';
 	import { getLocale } from '#lib/paraglide/runtime.js';
 	import { countryName } from '#lib/utils/country.ts';
 
@@ -15,12 +14,9 @@
 	}: {
 		participants: ParticipantListing[];
 		/** Each person's papers, from the page's load data. */
-		papersByPerson: Record<string, PaperSummary[]>;
+		papersByPerson: Record<string, PlacedPaperSummary[]>;
 		grouping?: DirectoryGrouping;
 	} = $props();
-
-	// Built once for the whole grid rather than walking the programme per card.
-	const placements = $derived(getPlacements());
 
 	/** Match the display-name sort without guessing how a person's name is structured. */
 	function initial(participant: ParticipantListing): string {
@@ -57,11 +53,7 @@
 			{/if}
 			<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 				{#each group.items as participant (participant.id)}
-					<ParticipantCard
-						{participant}
-						papers={papersByPerson[participant.id] ?? []}
-						{placements}
-					/>
+					<ParticipantCard {participant} papers={papersByPerson[participant.id] ?? []} />
 				{/each}
 			</div>
 		</section>

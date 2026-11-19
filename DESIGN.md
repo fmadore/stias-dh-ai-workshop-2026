@@ -52,27 +52,27 @@ typography:
     lineHeight: 1.25
     letterSpacing: '-0.012em'
   lede:
-    fontFamily: "'Outfit', system-ui, -apple-system, sans-serif"
+    fontFamily: "'Outfit Variable', system-ui, -apple-system, sans-serif"
     fontSize: '1.0625rem'
     fontWeight: 300
     lineHeight: 1.65
   prose:
-    fontFamily: "'Outfit', system-ui, -apple-system, sans-serif"
+    fontFamily: "'Outfit Variable', system-ui, -apple-system, sans-serif"
     fontSize: '1.0625rem'
     fontWeight: 400
     lineHeight: 1.72
   eyebrow:
-    fontFamily: "'Outfit', system-ui, -apple-system, sans-serif"
+    fontFamily: "'Outfit Variable', system-ui, -apple-system, sans-serif"
     fontSize: '0.75rem'
     fontWeight: 500
     letterSpacing: '0.18em'
   meta:
-    fontFamily: "'Outfit', system-ui, -apple-system, sans-serif"
+    fontFamily: "'Outfit Variable', system-ui, -apple-system, sans-serif"
     fontSize: '0.75rem'
     fontWeight: 600
     letterSpacing: '0.16em'
   badge:
-    fontFamily: "'Outfit', system-ui, -apple-system, sans-serif"
+    fontFamily: "'Outfit Variable', system-ui, -apple-system, sans-serif"
     fontSize: '0.6875rem'
     fontWeight: 600
     letterSpacing: '0.16em'
@@ -230,7 +230,7 @@ Surface, ink, border, accent, link, eyebrow and focus roles are declared once on
 ## Typography
 
 **Display Font:** Instrument Serif (with Georgia, Times New Roman fallbacks) — self-hosted, 400 and 400-italic only, latin subset preloaded.
-**Body Font:** Outfit (with system-ui, -apple-system fallbacks) — self-hosted at 300/400/500/600.
+**Body Font:** Outfit (with system-ui, -apple-system fallbacks) — self-hosted as the variable build (one file per subset, registered as `'Outfit Variable'`), set at 300/400/500/600 only.
 **Numerals:** Outfit with `font-variant-numeric: tabular-nums` wherever figures align (filter counts, session times).
 
 **Character:** A high-contrast editorial serif against a geometric humanist sans. The serif is used at one weight and allowed to get very large; the sans does all the small, dense, functional work. Body text carries `font-feature-settings: 'ss01', 'cv11'` for a single-storey lowercase g and straight-sided digits, which keeps Outfit from reading generically.

@@ -6,7 +6,11 @@
 	import { siteConfig } from '#lib/data/site-config.ts';
 	import { localePath, t } from '#lib/utils/i18n.ts';
 	import { getMilestones } from '#lib/utils/milestones.ts';
+	import NewTabHint from '#lib/components/shared/NewTabHint.svelte';
 
+	// Plain constants, here and below: neither the locale nor the messages are
+	// reactive, and the layout remounts the shell when the locale changes.
+	//
 	// The footer used to be logos and a copyright line, so every route out of
 	// a page depended on the navbar and the sponsor row read as terminal.
 	//
@@ -14,7 +18,7 @@
 	// when, who, where), then what it left on the record. The second column
 	// was "Taking part" — the call, the people, the travel — which read as an
 	// invitation once there was nothing left to take part in.
-	const columns = $derived([
+	const columns = [
 		{
 			heading: m.footer_workshop(),
 			links: [
@@ -32,11 +36,11 @@
 				{ href: localePath('/call-for-papers'), label: m.nav_cfp() }
 			]
 		}
-	]);
+	];
 
 	// A plain record of the four dates. They were struck through as each one
 	// passed, which on an archive meant the whole column was crossed out.
-	const milestones = $derived(getMilestones());
+	const milestones = getMilestones();
 </script>
 
 <footer
@@ -113,7 +117,7 @@
 							class="h-10 w-auto object-contain"
 							loading="lazy"
 							decoding="async"
-						/>
+						/><NewTabHint />
 					</a>
 				{/each}
 			</div>

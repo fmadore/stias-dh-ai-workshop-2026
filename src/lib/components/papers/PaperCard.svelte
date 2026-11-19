@@ -1,13 +1,8 @@
 <script lang="ts">
 	import type { PaperListing } from '#lib/types/index.ts';
 	import { t, localePath } from '#lib/utils/i18n.ts';
-	import { getPlacements } from '#lib/utils/placement.ts';
 
-	let {
-		presentation,
-		/** Passed down from the grid so the map is built once, not once per card. */
-		placements = getPlacements()
-	}: { presentation: PaperListing; placements?: ReturnType<typeof getPlacements> } = $props();
+	let { presentation }: { presentation: PaperListing } = $props();
 
 	const authors = $derived(presentation.authors);
 	const authorNames = $derived(authors.map((a) => a.name).join(', '));
@@ -24,7 +19,8 @@
 	// well past what three lines can hold, so the clamp is what the reader sees.
 	const excerpt = $derived(presentation.excerpt);
 	const href = $derived(localePath(`/papers/${presentation.id}`));
-	const placement = $derived(placements.get(presentation.id));
+	// Resolved by the page's server load, so the card needs no programme registry.
+	const placement = $derived(presentation.placement);
 </script>
 
 <article class="card card-hover border-t-accent flex h-full flex-col border-t-2 p-6 sm:p-7">

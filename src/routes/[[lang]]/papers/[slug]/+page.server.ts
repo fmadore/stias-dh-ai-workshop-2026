@@ -21,7 +21,7 @@ import {
 import { langEntries, resolveAbstract } from '#lib/utils/i18n.ts';
 import { localizedPath } from '#lib/utils/localized-paths.ts';
 import { renderAbstract } from '#lib/utils/markdown.ts';
-import { getPlacements } from '#lib/utils/placement.ts';
+import { getPlacements } from '#lib/server/placement.ts';
 import { META_DESCRIPTION_LENGTH, detailBreadcrumbs } from '#lib/utils/structured-data.ts';
 import { abstractToPlainText, truncate } from '#lib/utils/text.ts';
 

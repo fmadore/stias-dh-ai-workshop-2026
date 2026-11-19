@@ -37,8 +37,8 @@ const MAX_BYTES = 1024 * 1024;
 const FONT_FILES = {
 	serif: '@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2',
 	serifItalic: '@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2',
-	sans: '@fontsource/outfit/files/outfit-latin-400-normal.woff2',
-	sansMedium: '@fontsource/outfit/files/outfit-latin-500-normal.woff2'
+	// The variable build: one file covers both the 400 and the 500 the card sets.
+	sans: '@fontsource-variable/outfit/files/outfit-latin-wght-normal.woff2'
 } as const;
 
 /* Brand tokens, mirrored from the @theme block in src/app.css. */
@@ -85,7 +85,6 @@ interface Fonts {
 	serif: string;
 	serifItalic: string;
 	sans: string;
-	sansMedium: string;
 }
 
 function card(target: Target, m: Record<string, string>, fonts: Fonts): string {
@@ -104,8 +103,7 @@ function card(target: Target, m: Record<string, string>, fonts: Fonts): string {
 <style>
 @font-face { font-family: 'Instrument Serif'; font-style: normal; font-weight: 400; src: url('${fonts.serif}') format('woff2'); }
 @font-face { font-family: 'Instrument Serif'; font-style: italic; font-weight: 400; src: url('${fonts.serifItalic}') format('woff2'); }
-@font-face { font-family: 'Outfit'; font-style: normal; font-weight: 400; src: url('${fonts.sans}') format('woff2'); }
-@font-face { font-family: 'Outfit'; font-style: normal; font-weight: 500; src: url('${fonts.sansMedium}') format('woff2'); }
+@font-face { font-family: 'Outfit'; font-style: normal; font-weight: 100 900; src: url('${fonts.sans}') format('woff2'); }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { width: ${width}px; height: ${height}px; }
@@ -231,8 +229,7 @@ async function fitToBudget(shot: Buffer, label: string): Promise<Buffer> {
 const fonts: Fonts = {
 	serif: await fontDataUrl(FONT_FILES.serif),
 	serifItalic: await fontDataUrl(FONT_FILES.serifItalic),
-	sans: await fontDataUrl(FONT_FILES.sans),
-	sansMedium: await fontDataUrl(FONT_FILES.sansMedium)
+	sans: await fontDataUrl(FONT_FILES.sans)
 };
 
 const catalogues = new Map<Locale, Record<string, string>>();

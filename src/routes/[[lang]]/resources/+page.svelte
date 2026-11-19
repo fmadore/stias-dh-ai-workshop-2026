@@ -1,6 +1,5 @@
 <script lang="ts">
 	import * as m from '#lib/paraglide/messages.js';
-	import { t } from '#lib/utils/i18n.ts';
 	import SEO from '#lib/components/SEO.svelte';
 	import PageHeader from '#lib/components/layout/PageHeader.svelte';
 	import ScrollReveal from '#lib/components/ScrollReveal.svelte';
@@ -19,12 +18,7 @@
 					}
 				]
 			: []),
-		...data.sections.map((section) => ({
-			id: section.id,
-			title: t(section.title),
-			intro: section.intro ? t(section.intro) : '',
-			resources: section.resources
-		}))
+		...data.sections
 	]);
 </script>
 

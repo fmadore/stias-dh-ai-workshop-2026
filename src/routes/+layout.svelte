@@ -52,7 +52,10 @@
 
 	<div class="bg-cream flex min-h-screen flex-col">
 		<Navbar />
-		<main id="main" class="flex-1 pt-[var(--nav-height)]">
+		<!-- tabindex="-1": a focus target for BackToTop, which unmounts under the
+		     focus it holds, and for the skip link in every engine. Programmatic
+		     only — it is not a tab stop. -->
+		<main id="main" tabindex="-1" class="flex-1 pt-[var(--nav-height)]">
 			{@render children()}
 		</main>
 		<WhatNext />

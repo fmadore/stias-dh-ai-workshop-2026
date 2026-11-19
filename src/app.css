@@ -1,11 +1,16 @@
 @import 'tailwindcss';
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Self-hosted fonts (unicode-range subset per file, font-display: swap) */
-@import '@fontsource/outfit/300.css';
-@import '@fontsource/outfit/400.css';
-@import '@fontsource/outfit/500.css';
-@import '@fontsource/outfit/600.css';
+/* Self-hosted fonts (unicode-range subset per file, font-display: swap).
+   Outfit is the variable build, not four static weights. The site sets
+   300/400/500/600 and every page uses all four, so the static files cost four
+   requests and 55.7 KB of latin on every page; one variable latin file covers
+   the whole axis in 32.3 KB. Its latin-ext file (14.8 KB) is heavier than one
+   static latin-ext weight (≈6.4 KB), but pages that pull latin-ext in (papers,
+   programme, resources) still come out 15 KB and three requests lighter
+   overall. The family registers as 'Outfit Variable', which --font-sans names
+   below — under 'Outfit' it would silently fall back to system-ui. */
+@import '@fontsource-variable/outfit/wght.css';
 @import '@fontsource/instrument-serif/400.css';
 @import '@fontsource/instrument-serif/400-italic.css';
 
@@ -16,7 +21,7 @@
 @theme {
 	/* --- Typography --- */
 	--font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
-	--font-sans: 'Outfit', system-ui, -apple-system, sans-serif;
+	--font-sans: 'Outfit Variable', system-ui, -apple-system, sans-serif;
 
 	/* --- Type scale, small end. The named display steps live on the
 	       .text-* component classes below; these four name the sizes that
@@ -43,17 +48,13 @@
 	--color-primary-900: #042828;
 	--color-primary-950: #021616;
 
-	/* --- Brand: gold --- */
-	--color-secondary-50: #faf5e6;
-	--color-secondary-100: #f0e3b8;
-	--color-secondary-200: #e6d08a;
+	/* --- Brand: gold. Only the steps the system uses: brass is held in
+	       reserve, and the other six steps had no consumer anywhere. 600 stays
+	       because DESIGN.md names it — as the brass that fails AA as text. --- */
 	--color-secondary-300: #dcbe5c;
 	--color-secondary-400: #d4a843;
 	--color-secondary-500: #c49528;
 	--color-secondary-600: #a47d22;
-	--color-secondary-700: #84641b;
-	--color-secondary-800: #644c15;
-	--color-secondary-900: #44340e;
 
 	/* --- Surface scale. Originally Skeleton's cerberus values, inlined when
 	       the dependency was removed — chroma 0, a dead neutral grey. The dark
@@ -65,7 +66,6 @@
 	--color-surface-200: oklch(0.81 0 0);
 	--color-surface-300: oklch(0.72 0 0);
 	--color-surface-400: oklch(0.62 0 0);
-	--color-surface-500: oklch(0.51 0 0);
 	--color-surface-600: oklch(0.45 0.005 75);
 	--color-surface-700: oklch(0.39 0.006 75);
 	--color-surface-800: oklch(0.32 0.007 75);
@@ -87,12 +87,9 @@
 
 	/* --- Radii --- */
 	--radius-xs: 0.25rem;
-	--radius-sm: 0.375rem;
 	--radius-md: 0.5rem;
 	--radius-lg: 0.75rem;
 	--radius-xl: 1rem;
-	--radius-2xl: 1.25rem;
-	--radius-3xl: 1.75rem;
 	--radius-full: 9999px;
 
 	/* --- Warm shadows (tinted with primary-900) --- */
@@ -105,7 +102,6 @@
 	/* --- Motion --- */
 	--ease-standard: cubic-bezier(0.32, 0.72, 0, 1);
 	--ease-expressive: cubic-bezier(0.22, 1, 0.36, 1);
-	--ease-entrance: cubic-bezier(0.2, 0.8, 0.2, 1);
 
 	--duration-fast: 150ms;
 	--duration-base: 220ms;
@@ -361,6 +357,11 @@ button:not(:disabled),
 	outline-offset: 3px;
 	border-radius: var(--radius-xs);
 }
+/* <main> takes focus only as a landing point (the skip link, back to top).
+   A ring around the whole page body would say nothing the next Tab does not. */
+#main:focus {
+	outline: none;
+}
 
 /* The hero and the footer are dark in BOTH themes, so the light and dark values
    of several ink roles are both wrong against them. Set the roles once on the
@@ -381,7 +382,6 @@ button:not(:disabled),
 .skip-link {
 	position: fixed;
 	inset-inline-start: 1rem;
-	top: -4rem;
 	z-index: 100;
 	padding: 0.7rem 1.1rem;
 	background-color: var(--color-primary-700);
@@ -496,8 +496,10 @@ button:not(:disabled),
 	}
 
 	/* Fluid like every step above it — fixed at 1.25rem the jump from
-	   section to card collapsed on wide screens. */
-	.text-card-title {
+	   section to card collapsed on wide screens. An author's subhead inside
+	   an abstract takes the same step (see `.prose .prose-subhead` below). */
+	.text-card-title,
+	.prose .prose-subhead {
 		font-family: var(--font-display);
 		font-weight: 400;
 		font-size: var(--step-card);
@@ -515,8 +517,13 @@ button:not(:disabled),
 	}
 
 	/* 400, not 300: Outfit Light at 16–17px measures fine on paper but reads
-	   washed out on a cream screen. 300 is kept for the lede and numerals. */
-	.text-prose {
+	   washed out on a cream screen. 300 is kept for the lede and numerals.
+	   `.prose` is the shared rich-text block — the paper abstract, and any
+	   future rendered markdown — and takes the same role, instead of 60 lines
+	   of scoped CSS re-implementing it; its block rhythm and inline elements
+	   follow below. */
+	.text-prose,
+	.prose {
 		font-family: var(--font-sans);
 		font-weight: 400;
 		font-size: 1rem;
@@ -525,7 +532,8 @@ button:not(:disabled),
 		max-inline-size: var(--measure-prose);
 	}
 	@media (min-width: 640px) {
-		.text-prose {
+		.text-prose,
+		.prose {
 			font-size: var(--text-reading);
 		}
 	}
@@ -538,21 +546,6 @@ button:not(:disabled),
 		max-inline-size: var(--measure-prose);
 	}
 
-	/* Shared rich-text block: the paper abstract, and any future rendered
-	   markdown, instead of 60 lines of scoped CSS re-implementing .text-prose. */
-	.prose {
-		font-family: var(--font-sans);
-		font-weight: 400;
-		font-size: 1rem;
-		line-height: 1.72;
-		color: var(--ink-body);
-		max-inline-size: var(--measure-prose);
-	}
-	@media (min-width: 640px) {
-		.prose {
-			font-size: var(--text-reading);
-		}
-	}
 	/* The interval between an abstract's blocks. There used to be a
 	   `.prose p { margin-block: 0 }` directly beneath this rule, meant as a
 	   reset — but Tailwind's preflight already zeroes every margin from `*`,
@@ -579,11 +572,6 @@ button:not(:disabled),
 	   The bold run inside it goes back to 400 — the serif carries hierarchy
 	   by size, never by weight. */
 	.prose .prose-subhead {
-		font-family: var(--font-display);
-		font-weight: 400;
-		font-size: var(--step-card);
-		line-height: 1.25;
-		letter-spacing: -0.012em;
 		color: var(--ink-strong);
 	}
 	.prose .prose-subhead strong {
@@ -730,10 +718,6 @@ button:not(:disabled),
 		inset: 0;
 		border-radius: inherit;
 	}
-	.card-link:focus-visible {
-		outline: 2px solid var(--color-primary-500);
-		outline-offset: 3px;
-	}
 
 	/* Replaces the hand-rolled secondary-500/30 + /5 notice on the programme
 	   page. */
@@ -782,7 +766,6 @@ button:not(:disabled),
 
 	.btn-sm {
 		font-size: var(--text-ui-sm);
-		min-height: 2.75rem;
 		padding: 0.625rem 0.875rem;
 		border-radius: var(--radius-md);
 	}
@@ -878,24 +861,23 @@ button:not(:disabled),
 	}
 
 	/* --- Links --- */
+	/* The link tokens carry the theme (primary-600/700 light, 300/200 dark),
+	   as `.prose a` does. The dark underline mix stays at 35% rather than 30%,
+	   as it was when the colours were spelled out per theme. */
 	.link-inline {
-		color: var(--color-primary-600);
+		color: var(--link);
 		transition: color var(--duration-fast) var(--ease-standard);
 		text-decoration: underline;
-		text-decoration-color: color-mix(in oklab, var(--color-primary-600) 30%, transparent);
+		text-decoration-color: color-mix(in oklab, var(--link) 30%, transparent);
 		text-decoration-thickness: 1px;
 		text-underline-offset: 0.2em;
 	}
 	.dark .link-inline {
-		color: var(--color-primary-300);
-		text-decoration-color: color-mix(in oklab, var(--color-primary-300) 35%, transparent);
+		text-decoration-color: color-mix(in oklab, var(--link) 35%, transparent);
 	}
 	.link-inline:hover {
-		color: var(--color-primary-700);
+		color: var(--link-hover);
 		text-decoration-color: currentColor;
-	}
-	.dark .link-inline:hover {
-		color: var(--color-primary-200);
 	}
 
 	.link-arrow {
@@ -1241,20 +1223,13 @@ button:not(:disabled),
 		display: block;
 	}
 
-	.dark body {
-		background-color: #fff;
-		color: var(--color-ink);
-	}
-
 	/* Screen-only chrome. */
 	/* `.back-to-top` was a selector for a class the button did not carry, so
 	   this rule hid nothing and the button printed on every page. It carries
 	   it now, and the reduced-motion block uses the same hook for its lift. */
 	header[class*='fixed'],
 	.skip-link,
-	.back-to-top,
-	nav[aria-label='Language'],
-	nav[aria-label='Mobile navigation'] {
+	.back-to-top {
 		display: none !important;
 	}
 

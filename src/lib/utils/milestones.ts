@@ -1,5 +1,5 @@
 import * as m from '#lib/paraglide/messages.js';
-import { cfpInfo } from '#lib/data/cfp.ts';
+import { cfpDates } from '#lib/data/cfp-dates.ts';
 import { siteConfig } from '#lib/data/site-config.ts';
 import { formatDate, formatDateRange } from './date';
 
@@ -49,20 +49,20 @@ export function getMilestones(): Milestone[] {
 		{
 			id: 'proposals',
 			label: m.submission_deadline(),
-			value: formatDate(cfpInfo.deadline),
-			datetime: endOfDay(cfpInfo.deadline)
+			value: formatDate(cfpDates.deadline),
+			datetime: endOfDay(cfpDates.deadline)
 		},
 		{
 			id: 'notification',
 			label: m.notification_date(),
-			value: formatDate(cfpInfo.notificationDate),
-			datetime: endOfDay(cfpInfo.notificationDate)
+			value: formatDate(cfpDates.notificationDate),
+			datetime: endOfDay(cfpDates.notificationDate)
 		},
 		{
 			id: 'full-papers',
 			label: m.full_papers_deadline(),
-			value: formatDate(cfpInfo.fullPapersDeadline),
-			datetime: endOfDay(cfpInfo.fullPapersDeadline)
+			value: formatDate(cfpDates.fullPapersDeadline),
+			datetime: endOfDay(cfpDates.fullPapersDeadline)
 		},
 		{
 			id: 'workshop',

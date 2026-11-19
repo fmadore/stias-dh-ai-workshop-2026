@@ -16,19 +16,17 @@
 	// One calendar file per locale, unlike the PDF: an .ics carries the session
 	// titles themselves, and a calendar entry written in both languages at once
 	// is unreadable in the one line a day view gives it.
-	const icsFile = $derived(`Programme-STIAS-2026-${getLocale()}.ics`);
+	const icsFile = `Programme-STIAS-2026-${getLocale()}.ics`;
 
-	const lastUpdated = $derived(formatDate(programmeLastUpdated));
+	const lastUpdated = formatDate(programmeLastUpdated);
 
 	// Panel numbers run across the whole programme, not per day.
 	const panels = panelNumbers(programme);
 
-	const days = $derived(
-		programme.map((day) => ({
-			day,
-			short: formatShortDay(day.date)
-		}))
-	);
+	const days = programme.map((day) => ({
+		day,
+		short: formatShortDay(day.date)
+	}));
 </script>
 
 <SEO title={m.nav_programme()} description={m.seo_programme_description()} />

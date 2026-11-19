@@ -21,11 +21,11 @@
 	// Declarative fallback: if the image fails to load we flip to initials.
 	// (An imperative onerror that mutates the DOM breaks when Svelte reuses
 	// card DOM across filter changes.)
-	let failed = $state(false);
-	$effect(() => {
-		// A reused avatar must try the next person's photograph after a failure.
-		if (image) failed = false;
-	});
+	// The failure is remembered against the image that failed, not as a bare
+	// flag, so a reused avatar tries the next person's photograph without an
+	// effect resetting state after the render that showed the wrong one.
+	let failedSrc = $state<string>();
+	const failed = $derived(failedSrc === image);
 </script>
 
 <div
@@ -42,7 +42,7 @@
 			class="h-full w-full object-cover"
 			{loading}
 			decoding="async"
-			onerror={() => (failed = true)}
+			onerror={() => (failedSrc = image)}
 		/>
 	{:else}
 		<!-- primary-600 measures 2.56:1 on the dark wash; primary-300 is 7.7:1.
