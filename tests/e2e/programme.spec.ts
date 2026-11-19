@@ -55,8 +55,8 @@ test('the programme downloads are served with the types browsers expect', async 
 }) => {
 	await page.goto(`${BASE}/programme`);
 	for (const [name, contentType, signature] of [
-		['Download programme (PDF)', /^application\/pdf\b/, '%PDF-'],
-		['Add to calendar (.ics)', /^text\/calendar\b/, 'BEGIN:VCALENDAR']
+		[/\(PDF\)/, /^application\/pdf\b/, '%PDF-'],
+		[/\(\.ics\)/, /^text\/calendar\b/, 'BEGIN:VCALENDAR']
 	] as const) {
 		const link = page.getByRole('link', { name });
 		await expect(link).toHaveAttribute('download', '');
