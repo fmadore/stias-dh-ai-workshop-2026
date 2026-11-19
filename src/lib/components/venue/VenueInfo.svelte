@@ -5,8 +5,6 @@
 	import { Check, ExternalLink, Info, Minus } from '@lucide/svelte';
 	import { getLocale } from '#lib/paraglide/runtime.js';
 	import { countryName } from '#lib/utils/country.ts';
-	import JoinOnline from '#lib/components/shared/JoinOnline.svelte';
-	import { onlineAccessPublished } from '#lib/data/online-access.ts';
 
 	const locale = $derived(getLocale());
 
@@ -29,19 +27,12 @@
 		<p class="text-prose text-body mb-4">
 			{t(venueInfo.description)}
 		</p>
-		<!-- The page that answers "where is this" is the page where someone asks
-		     whether they have to be there. The platform is a fact, and the join
-		     link follows it while there is one — the same `onlineAccess` record
-		     the home page and the programme read, so the three cannot disagree
-		     about whether a link exists. -->
-		<p class="text-prose text-body {onlineAccessPublished ? 'mb-2' : 'mb-4'}">
+		<!-- The page that answers "where was this" is the page where someone asks
+		     whether people had to be there. The platform is a fact on the record;
+		     the join link it used to carry went with the meeting series. -->
+		<p class="text-prose text-body mb-4">
 			{m.venue_hybrid()}
 		</p>
-		{#if onlineAccessPublished}
-			<div class="mb-4">
-				<JoinOnline variant="inline" />
-			</div>
-		{/if}
 		<p class="text-muted text-sm">
 			{venueStreet}, {venueInfo.postalCode}
 			{venueInfo.city}, {countryName(venueInfo.country, locale)}
@@ -86,10 +77,9 @@
 			</div>
 		</div>
 
-		<!-- What "transportation" in the covered list actually means for someone
-		     who has to get from a plane to Stellenbosch. Half of it is settled and
-		     half is not, so it takes the site's callout — the established idiom
-		     for information that is true now and not yet complete. -->
+		<!-- What "transportation" in the covered list actually meant for someone
+		     who had to get from a plane to Stellenbosch. The list names a budget
+		     line; this says how the journey was arranged. -->
 		<div class="callout mt-8">
 			<Info
 				size={18}

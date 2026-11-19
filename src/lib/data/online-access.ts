@@ -3,15 +3,16 @@
  *
  * Every session at STIAS also ran on the platform below, and the link was
  * deliberately public: anyone could follow the workshop, not only the people
- * on the programme. `joinUrl` is the single switch — filling it in turns on
- * the invitation on the home page, the programme and the venue page, writes
- * the meeting into the generated calendar files, and names it as the Event's
- * virtual location. Empty, none of that renders.
+ * on the programme. `joinUrl` is the single switch — filled in, it writes the
+ * meeting into the generated calendar files and names it as the Event's
+ * virtual location. Empty, neither happens.
  *
  * Emptied after the workshop closed on 24 September 2026: an open link that
  * carries its own passcode, to a meeting series that has ended, is an
  * invitation to misuse it, and it was in the static HTML, both calendar files
- * and the JSON-LD.
+ * and the JSON-LD. The on-page invitation it also drove (a band on the home
+ * page, a callout on the programme, a line on the venue page) was removed
+ * with the rest of the live-event machinery once the site became an archive.
  */
 export interface OnlineAccess {
 	/** Shown in the invitation copy, so it names the platform people will land in. */

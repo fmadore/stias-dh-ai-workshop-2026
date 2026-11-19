@@ -1,10 +1,8 @@
 <script lang="ts">
-	import { venueClock } from '#lib/utils/venue-clock.ts';
 	import * as m from '#lib/paraglide/messages.js';
 	import { siteConfig } from '#lib/data/site-config.ts';
 	import { cfpInfo } from '#lib/data/cfp.ts';
 	import { t, localePath } from '#lib/utils/i18n.ts';
-	import { isCfpOpen } from '#lib/utils/milestones.ts';
 	import { formatDate } from '#lib/utils/date.ts';
 	import { Archive, ArrowRight } from '@lucide/svelte';
 	import SEO from '#lib/components/SEO.svelte';
@@ -12,14 +10,14 @@
 	import CFPSection from '#lib/components/cfp/CFPSection.svelte';
 	import DownloadCFPButton from '#lib/components/cfp/DownloadCFPButton.svelte';
 
-	// The call closed on 30 April 2026 and the page said so nowhere: it still
-	// opened "We invite proposals…" and listed four addresses to send them to.
-	// Derived, not asserted — the same rule the hero follows.
-	const closed = $derived($venueClock.live && !isCfpOpen($venueClock.now));
+	// The call closed on 30 April 2026. The notice saying so used to wait for a
+	// client-side clock, so the prerendered page — the one crawlers index and
+	// no-JS readers get — still opened "We invite proposals…" with no word that
+	// the call was over. It is unconditional now: there is no later state.
 	const closedOn = $derived(formatDate(cfpInfo.deadline));
 </script>
 
-<SEO title="{m.nav_cfp()} | {siteConfig.shortTitle}" description={m.seo_cfp_description()} />
+<SEO title={m.nav_cfp()} description={m.seo_cfp_description()} />
 
 <!-- The downloads live in the header band rather than in a card below it,
      and the workshop title is the header's subtitle instead of a second h2
@@ -37,25 +35,23 @@
 
 <div class="page-end page-body">
 	<div class="container-readable block-flow">
-		{#if closed}
-			<div class="callout">
-				<Archive
-					size={18}
-					strokeWidth={1.75}
-					class="text-accent-ink mt-0.5 shrink-0"
-					aria-hidden="true"
-				/>
-				<div>
-					<p class="text-body measure-prose text-sm leading-relaxed">
-						{m.cfp_closed_notice({ date: closedOn })}
-					</p>
-					<a href={localePath('/papers')} class="link-arrow mt-2 inline-flex text-sm">
-						{m.cfp_closed_cta()}
-						<ArrowRight size={14} strokeWidth={1.75} aria-hidden="true" />
-					</a>
-				</div>
+		<div class="callout">
+			<Archive
+				size={18}
+				strokeWidth={1.75}
+				class="text-accent-ink mt-0.5 shrink-0"
+				aria-hidden="true"
+			/>
+			<div>
+				<p class="text-body measure-prose text-sm leading-relaxed">
+					{m.cfp_closed_notice({ date: closedOn })}
+				</p>
+				<a href={localePath('/papers')} class="link-arrow mt-2 inline-flex text-sm">
+					{m.cfp_closed_cta()}
+					<ArrowRight size={14} strokeWidth={1.75} aria-hidden="true" />
+				</a>
 			</div>
-		{/if}
+		</div>
 		<CFPSection />
 	</div>
 </div>

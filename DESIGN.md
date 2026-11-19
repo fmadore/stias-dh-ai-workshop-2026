@@ -196,9 +196,9 @@ A warm, low-chroma palette: paper and ink at the base, one deep institutional te
 
 ### Secondary
 
-- **Brass** (`secondary-500`, #c49528): the accent rule, callout borders, the nav's active-page underline, the "happening now" day pill, and the one solid accent button.
+- **Brass** (`secondary-500`, #c49528): the accent rule, callout borders, the nav's active-page underline, and the one solid accent button.
 - **Light Brass** (`secondary-400`, #d4a843): the hover state of the accent button, the dark-mode accent ink, the drop cap in dark mode.
-- **Pale Brass** (`secondary-300`, #dcbe5c): brass as _text_ on an inverse surface — the hero's italic deck, the milestone label, the footer's column headings. The light-mode brass ink is far too dark against `primary-900`; this is its counterpart, and the two are never interchangeable.
+- **Pale Brass** (`secondary-300`, #dcbe5c): brass as _text_ on an inverse surface — the hero's italic deck, the footer's column headings. The light-mode brass ink is far too dark against `primary-900`; this is its counterpart, and the two are never interchangeable.
 - **Brass Ink** (`accent-ink`, #7a5c15): the only brass you may set text in on paper. It measures 5.5:1 on cream where `secondary-600` manages 3.7:1 and fails AA. Eyebrow labels use it.
 
 ### Neutral
@@ -217,7 +217,7 @@ Surface, ink, border, accent, link, eyebrow and focus roles are declared once on
 
 ### Named Rules
 
-**The One Gold Moment Rule.** Brass appears as a solid fill exactly once on any given page. It has two sanctioned forms, and they are mutually exclusive per page: the `.btn-accent` (the hero's primary action, the call for papers' download) and `.day-pill.is-today` (the programme, during the workshop only). Everywhere else brass is a 2px rule, a hairline border, or a 6–10% wash. Its rarity is what makes it read as gold rather than as yellow. Note the honest exception pressure, in two places. `/papers` gives every one of its 25 cards a 2px brass top rule at **full** opacity (`border-t-accent`), so the index carries 25 of them at once — that is **P3-34**, inside the letter of the rule and against the spirit of it. `/programme` then does the same thing a second way: a 2px brass left border on each of its 25 session papers, at 55%. Both are recorded rather than resolved; if either is revisited, the answer is a quieter treatment for the rule itself, not a licence for a second solid fill.
+**The One Gold Moment Rule.** Brass appears as a solid fill exactly once on any given page. Its sanctioned form is the `.btn-accent` (the hero's primary action, the call for papers' download). The programme's `.day-pill.is-today` was the other, during the workshop only, and went with the live-event machinery once the site became an archive. Everywhere else brass is a 2px rule, a hairline border, or a 6–10% wash. Its rarity is what makes it read as gold rather than as yellow. Note the honest exception pressure, in two places. `/papers` gives every one of its 25 cards a 2px brass top rule at **full** opacity (`border-t-accent`), so the index carries 25 of them at once — that is **P3-34**, inside the letter of the rule and against the spirit of it. `/programme` then does the same thing a second way: a 2px brass left border on each of its 25 session papers, at 55%. Both are recorded rather than resolved; if either is revisited, the answer is a quieter treatment for the rule itself, not a licence for a second solid fill.
 
 **The Gold-Is-Not-Text Rule.** `--accent` (#c49528) is a graphics colour. Brass _text_ uses `--accent-ink` — #7a5c15 on paper, `secondary-400` in dark — or `secondary-300` on an inverse surface. Setting body or label text in `secondary-500` or `secondary-600` on cream fails WCAG AA and is a defect, not a style choice.
 
@@ -231,7 +231,7 @@ Surface, ink, border, accent, link, eyebrow and focus roles are declared once on
 
 **Display Font:** Instrument Serif (with Georgia, Times New Roman fallbacks) — self-hosted, 400 and 400-italic only, latin subset preloaded.
 **Body Font:** Outfit (with system-ui, -apple-system fallbacks) — self-hosted as the variable build (one file per subset, registered as `'Outfit Variable'`), set at 300/400/500/600 only.
-**Numerals:** Outfit with `font-variant-numeric: tabular-nums` wherever figures align (filter counts, the milestone strip, session times).
+**Numerals:** Outfit with `font-variant-numeric: tabular-nums` wherever figures align (filter counts, session times).
 
 **Character:** A high-contrast editorial serif against a geometric humanist sans. The serif is used at one weight and allowed to get very large; the sans does all the small, dense, functional work. Body text carries `font-feature-settings: 'ss01', 'cv11'` for a single-storey lowercase g and straight-sided digits, which keeps Outfit from reading generically.
 
@@ -373,7 +373,7 @@ A bordered notice with brass at 45% on the border and a 6% brass wash behind —
 
 ### Day Pill
 
-The programme's only in-page navigation, and the control most likely to be tapped while walking into a room: 13px semibold at 0.04em on a raised-white pill with a subtle border, `min-height: 2.75rem`. The bar's own padding gives 2px so the pill can honour the floor. `.is-today` fills it solid brass with ink text — the programme's one gold moment, and only during the workshop.
+The programme's only in-page navigation, and the control most likely to be tapped while walking into a room: 13px semibold at 0.04em on a raised-white pill with a subtle border, `min-height: 2.75rem`. The bar's own padding gives 2px so the pill can honour the floor. It had an `.is-today` state, solid brass during the workshop; with the workshop over, every pill is the same.
 
 ### Session Row
 
@@ -418,7 +418,7 @@ The idiom for a pair of short factual lists that answer each other — what the 
 - **Do** check both locales and both themes before calling a change done, at 320, 375 and 1280. French runs roughly 20% longer, and 320px is where declared constants stop being true.
 - **Do** budget page weight deliberately, and gate it: 100 KiB gzip for the largest core JS chunk, 300 KiB for core JS in total, 45 KiB for all CSS, **20 KiB of render-blocking CSS per page**, 90 KiB raw for the footer logo set, with MapLibre's renderer and worker held outside the core budget at their own ceilings. The per-page CSS gate exists because a sitewide total is blind to bytes moving from a lazy asset into a render-blocking one.
 - **Do** ship images as WebP with intrinsic `width` and `height` attributes, so a row of logos holds its shape while they load instead of assembling itself out of zero-width boxes.
-- **Do** derive workshop state from `milestones.ts` before designing anything that implies a phase. A countdown, a "today" marker or an archival notice that hard-codes its own assumption will be wrong on a date nobody is watching.
+- **Do** state the workshop's final state in the prerendered HTML. Every phase is over; a client-side clock that decides state after hydration shows crawlers and no-JS readers a workshop that has not happened yet, and shifts the layout when it corrects itself.
 
 ### Don't:
 

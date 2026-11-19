@@ -1,6 +1,7 @@
 /** Validate every generated internal link against GitHub Pages' static-file routing model. */
-import { readFile, readdir } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { walk } from './lib/walk.mjs';
 
 const BUILD_DIR = path.resolve(process.argv[2] ?? 'build');
 const DEPLOY_BASE = '/stias-dh-ai-workshop-2026';
@@ -9,17 +10,6 @@ const SITE_ORIGIN = 'https://fmadore.github.io';
 // absolute: a bare "/" is almost always a forgotten project deployment base.
 const EXTERNAL_OWNER_URLS = new Set(['https://fmadore.github.io/']);
 const failures = new Map();
-
-async function walk(directory) {
-	const entries = await readdir(directory, { withFileTypes: true });
-	const nested = await Promise.all(
-		entries.map((entry) => {
-			const target = path.join(directory, entry.name);
-			return entry.isDirectory() ? walk(target) : [target];
-		})
-	);
-	return nested.flat();
-}
 
 function decodeEntities(value) {
 	return value.replace(/&(?:amp|quot|apos|lt|gt|#\d+|#x[\da-f]+);/gi, (entity) => {
@@ -54,6 +44,27 @@ function resolveFile(route, files) {
 	return candidates.map((file) => path.resolve(BUILD_DIR, file)).find((file) => files.has(file));
 }
 
+/**
+ * The URLs in a `srcset` value. Each candidate is a URL, optionally followed by
+ * a width or density descriptor, and candidates are comma-separated — but a
+ * URL may itself contain commas, so split the way the HTML parser does: a URL
+ * runs to the next whitespace, and only trailing commas end it early.
+ */
+function srcsetUrls(value) {
+	const urls = [];
+	let rest = value;
+	for (;;) {
+		rest = rest.replace(/^[\s,]+/, '');
+		if (!rest) return urls;
+		const url = rest.match(/^\S+/)[0];
+		rest = rest.slice(url.length);
+		const trimmed = url.replace(/,+$/, '');
+		urls.push(trimmed);
+		// No trailing comma: a descriptor may follow, running to the next comma.
+		if (trimmed === url) rest = rest.replace(/^[^,]*/, '');
+	}
+}
+
 function references(source, filename) {
 	const values = [];
 	const urlProperties = new Set(['url', 'contentUrl', 'embedUrl', 'thumbnailUrl', 'image']);
@@ -83,8 +94,13 @@ function references(source, filename) {
 			return `<script${attributes}></script>`;
 		}
 	);
-	for (const match of markup.matchAll(/\b(?:href|src)=(?:"([^"]+)"|'([^']+)')/gi))
-		values.push(match[1] ?? match[2]);
+	for (const match of markup.matchAll(
+		/\b(href|src|poster|(?:image)?srcset)=(?:"([^"]+)"|'([^']+)')/gi
+	)) {
+		const value = match[2] ?? match[3];
+		if (/srcset$/i.test(match[1])) values.push(...srcsetUrls(value));
+		else values.push(value);
+	}
 	for (const match of markup.matchAll(
 		/https:\/\/fmadore\.github\.io\/stias-dh-ai-workshop-2026[^"<>\s\\]*/g
 	))

@@ -22,19 +22,20 @@ Requires Node 24 (see `.nvmrc`).
 ```bash
 npm ci             # installs locked dependencies; the `prepare` script then compiles the i18n messages and runs `svelte-kit sync`, which generates the `$app/tsconfig` base config and the route `$types` that editors, `npm run check` and `npm run test:unit` all read
 npm run dev        # dev server at http://localhost:5173
-npm run build      # static build into build/ + data & smoke checks
+npm run build      # data checks, static build into build/, then smoke/link/size checks
 npm run preview    # serve the production build locally
-npm run check      # svelte-check + script, test and configuration TypeScript checks
-npm run check:scripts # script/test/config TypeScript checks only (after npm ci)
+npm run check      # svelte-check (app, tests, configs) + script TypeScript checks
+npm run check:scripts # build-script TypeScript checks only (after npm ci)
 npm run lint       # eslint
 npm run format     # prettier --write
 ```
 
-`npm run build` also runs `scripts/check-data.ts` (referential integrity of
+`npm run build` first runs `scripts/check-data.ts` (referential integrity of
 the content data — author ids, programme references, image paths and valid
-schedule dates/times) and
+schedule dates/times), so data errors fail before Vite starts, then generates
+the CFP and calendar downloads. After the build it runs
 `scripts/smoke-test.mjs` (French pages really prerendered in French, sitemap
-complete). Generated internal links and their HTML fragments are checked by `scripts/check-links.mjs`, and `scripts/check-bundle-size.mjs` enforces asset budgets. All four checks fail the build on problems and run in CI.
+complete, manifest icons and the robots.txt sitemap present). Generated internal links and their HTML fragments are checked by `scripts/check-links.mjs`, and `scripts/check-bundle-size.mjs` enforces asset budgets. All four checks fail the build on problems and run in CI.
 
 ## Testing
 
@@ -83,9 +84,11 @@ running application server or database.
 - **Programme** — `src/lib/data/programme.ts` references papers and people by id.
 - **Sponsors/funders** — `src/lib/data/sponsors.ts` feeds the footer, the CFP
   PDF, and the Event JSON-LD.
-- **Photos** — drop a `.jpg`/`.png` into `static/images/participants/` or
-  `static/images/organizers/` and run `npm run images` to generate the
-  256 px WebP used on the site.
+- **Photos** — drop a `.jpg`/`.png` into `static/images/participants/`,
+  `static/images/organizers/` or `static/images/point-sud/` and run
+  `npm run images` to generate the 256 px wide WebP used on the site (twice
+  the largest 112 px avatar). The same command shrinks any committed WebP
+  that is wider than that.
 - **Share cards** — `npm run og` re-renders `static/images/og-default.png`
   (the Open Graph card) and `.github/social-preview.png` (GitHub's social
   preview) from the site's own tokens, fonts, and message catalogue. Run it
@@ -112,9 +115,7 @@ MapLibre is pinned to 6.16.0 and has its own Dependabot group. Later releases
 need an explicit renderer/worker size review against the 300/150 KiB gzip
 limits (raised from 260/130 after reviewing 6.16.0, which measures
 288.6/144.7 KiB); do not raise those limits just to unblock routine dependency
-updates. The `@sveltejs/kit`-scoped `cookie` override fixes the transitive
-advisory while preserving the parser/serializer API. Remove the override
-once a framework update supplies a patched compatible version itself.
+updates.
 
 Current product constraints are in [PRODUCT.md](PRODUCT.md), visual guidance
 in [DESIGN.md](DESIGN.md), and historical plans and audits in

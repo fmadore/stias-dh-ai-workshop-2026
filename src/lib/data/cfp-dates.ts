@@ -3,12 +3,11 @@ import type { CFPInfo } from '#lib/types/index.ts';
 /**
  * The call's three dates, apart from its text.
  *
- * The milestones read these on every page — the footer's key dates, the
- * navbar's "call open" check, the hero — and they used to read them from
- * `cfp.ts`, which put several KB of bilingual call text (rationale,
- * guidelines, selection criteria…) into the shared layout chunk for the sake
- * of three ISO strings. `cfp.ts` spreads this object back in, so each date is
- * still written once.
+ * The footer prints the milestones on every page, and it used to read these
+ * from `cfp.ts`, which put several KB of bilingual call text (rationale,
+ * guidelines, selection criteria…) into the layout's chunk for the sake of
+ * three ISO strings — the same trap `organizer-refs.ts` closes for the bios.
+ * `cfp.ts` spreads this object back in, so each date is still written once.
  */
 export const cfpDates: Pick<CFPInfo, 'deadline' | 'notificationDate' | 'fullPapersDeadline'> = {
 	deadline: '2026-04-30',

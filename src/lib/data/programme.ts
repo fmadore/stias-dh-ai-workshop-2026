@@ -4,7 +4,7 @@ import type { ProgrammeDay } from '#lib/types/index.ts';
  * Date the programme was last revised (ISO `yyyy-mm-dd`). Bump this whenever you
  * change the sessions below — it is shown as "Last updated" on the page.
  */
-export const programmeLastUpdated = '2026-09-23';
+export const programmeLastUpdated = '2026-09-24';
 
 /**
  * Workshop programme — STIAS, Stellenbosch, 21–24 September 2026.
