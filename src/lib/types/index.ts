@@ -205,12 +205,25 @@ export interface MappedAffiliation extends Omit<AffiliationLocation, 'personIds'
 	people: PersonRef[];
 }
 
-/** A resource as its page renders it: authors resolved from ids to bylines. */
-export interface ResourceListing extends Omit<Resource, 'authors'> {
+/**
+ * A resource as its page renders it: authors resolved from ids to bylines, and
+ * every `LocalizedString` resolved to the page's locale at prerender.
+ */
+export interface ResourceListing extends Omit<
+	Resource,
+	'authors' | 'source' | 'place' | 'description' | 'links'
+> {
 	authors: PersonRef[];
+	source?: string[];
+	place?: string;
+	description?: string;
+	links?: Array<Omit<ResourceLink, 'label'> & { label: string }>;
 }
 
-export interface ResourceListingSection extends Omit<ResourceSection, 'resources'> {
+export interface ResourceListingSection {
+	id: string;
+	title: string;
+	intro?: string;
 	resources: ResourceListing[];
 }
 

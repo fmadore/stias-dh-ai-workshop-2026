@@ -2,18 +2,18 @@
 	import type { ResourceListing } from '#lib/types/index.ts';
 	import * as m from '#lib/paraglide/messages.js';
 	import { getLocale } from '#lib/paraglide/runtime.js';
-	import { t, localePath } from '#lib/utils/i18n.ts';
+	import { localePath } from '#lib/utils/i18n.ts';
 	import { formatDateRange, formatPartialDate } from '#lib/utils/date.ts';
 	import { ArrowRight, ExternalLink } from '@lucide/svelte';
 
 	let { resource }: { resource: ResourceListing } = $props();
 
-	const locale = $derived(getLocale() as 'en' | 'fr');
-
-	// "A, B and C" / "A, B et C" — the conjunction belongs to the page, not the data.
-	const listFormat = $derived(
-		new Intl.ListFormat(locale === 'fr' ? 'fr' : 'en-GB', { type: 'conjunction' })
-	);
+	// "A, B and C" / "A, B et C" — the conjunction belongs to the page, not the
+	// data. Plain constants: the locale is not reactive, and the layout remounts
+	// the page when it changes.
+	const listFormat = new Intl.ListFormat(getLocale() === 'fr' ? 'fr' : 'en-GB', {
+		type: 'conjunction'
+	});
 
 	// The same phrase for the authors, but cut into parts so each name can be
 	// its own link: linked when the author has a page here, which a credited
@@ -31,13 +31,7 @@
 		});
 	});
 
-	const source = $derived(
-		resource.source
-			? listFormat.format(
-					resource.source.map((name) => (typeof name === 'string' ? name : t(name)))
-				)
-			: ''
-	);
+	const source = $derived(resource.source ? listFormat.format(resource.source) : '');
 
 	const when = $derived(
 		resource.date
@@ -52,7 +46,7 @@
 	const isMeeting = $derived(Boolean(resource.place));
 	const facts = $derived.by(() => {
 		const list: { text: string; isDate?: boolean }[] = isMeeting
-			? [{ text: resource.place ? t(resource.place) : '' }, { text: source }]
+			? [{ text: resource.place ?? '' }, { text: source }]
 			: [{ text: source }, { text: when, isDate: true }];
 		return list.filter((fact) => fact.text);
 	});
@@ -114,7 +108,7 @@
 	{/if}
 
 	{#if resource.description}
-		<p class="text-bio measure-prose mt-3">{t(resource.description)}</p>
+		<p class="text-bio measure-prose mt-3">{resource.description}</p>
 	{/if}
 
 	{#if resource.paper || resource.links?.length}
@@ -137,7 +131,7 @@
 						class="link-arrow text-sm"
 					>
 						<ExternalLink size={14} strokeWidth={1.75} aria-hidden="true" />
-						{t(link.label)}<span class="sr-only">{m.opens_new_tab()}</span>
+						{link.label}<span class="sr-only">{m.opens_new_tab()}</span>
 					</a>
 				</li>
 			{/each}

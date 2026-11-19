@@ -24,7 +24,7 @@ import {
 	getPresentationAuthors
 } from '#lib/data/presentations/index.ts';
 import { uniquePersonCountries } from '#lib/utils/filter.ts';
-import { resolveAbstract } from '#lib/utils/i18n.ts';
+import { resolveAbstract, t } from '#lib/utils/i18n.ts';
 import { abstractToPlainText, truncate } from '#lib/utils/text.ts';
 import { getPlacements, placementLabel } from '#lib/server/placement.ts';
 
@@ -170,10 +170,19 @@ export function directoryListings(locale: Locale): {
 	};
 }
 
-function resourceListing({ authors = [], ...resource }: Resource): ResourceListing {
+function resourceListing(
+	{ authors = [], source, place, description, links, ...resource }: Resource,
+	locale: Locale
+): ResourceListing {
 	return {
 		...resource,
-		authors: getPeople(authors).map((person) => personRef(person, { withAffiliation: false }))
+		authors: getPeople(authors).map((person) => personRef(person, { withAffiliation: false })),
+		...(source
+			? { source: source.map((name) => (typeof name === 'string' ? name : t(name, locale))) }
+			: {}),
+		...(place ? { place: t(place, locale) } : {}),
+		...(description ? { description: t(description, locale) } : {}),
+		...(links ? { links: links.map((link) => ({ ...link, label: t(link.label, locale) })) } : {})
 	};
 }
 
@@ -183,8 +192,13 @@ function resourceListing({ authors = [], ...resource }: Resource): ResourceListi
  * Slides are not kept in resources.ts but on the paper they belong to, so a
  * deck is added in one place and shows on the paper's page too. They are
  * listed in the programme's running order.
+ *
+ * Every `LocalizedString` is resolved here, for the page being written. Each
+ * locale's page used to carry both languages' descriptions, intros and labels
+ * for the component to pick one: `__data.json` was 24.8 KB, and the same data
+ * sat inline in the HTML. With one language it is 15.6 KB (16.7 KB in French).
  */
-export function resourcesPage(): {
+export function resourcesPage(locale: Locale): {
 	slideDecks: ResourceListing[];
 	sections: ResourceListingSection[];
 } {
@@ -201,18 +215,23 @@ export function resourcesPage(): {
 			.filter((paper) => paper.slides)
 			.sort((a, b) => rank(a.id) - rank(b.id))
 			.map((paper) =>
-				resourceListing({
-					id: `slides-${paper.id}`,
-					title: paper.title,
-					lang: paper.language,
-					url: paper.slides!,
-					authors: paper.authors,
-					paper: paper.id
-				})
+				resourceListing(
+					{
+						id: `slides-${paper.id}`,
+						title: paper.title,
+						lang: paper.language,
+						url: paper.slides!,
+						authors: paper.authors,
+						paper: paper.id
+					},
+					locale
+				)
 			),
-		sections: resourceSections.map((section) => ({
-			...section,
-			resources: section.resources.map(resourceListing)
+		sections: resourceSections.map(({ id, title, intro, resources }) => ({
+			id,
+			title: t(title, locale),
+			...(intro ? { intro: t(intro, locale) } : {}),
+			resources: resources.map((resource) => resourceListing(resource, locale))
 		}))
 	};
 }
