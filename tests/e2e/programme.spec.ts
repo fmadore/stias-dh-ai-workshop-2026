@@ -23,8 +23,23 @@ test('the programme day bar stays one row at the narrowest supported width', asy
 
 	// And the anchor the token exists for lands below the bar, not behind it.
 	await page.locator('.day-pill').nth(2).click();
-	await page.waitForTimeout(600);
 	await expect(page).toHaveURL(/#day-/);
+	// The hash changes at once but the smooth scroll animates, and measuring
+	// mid-flight proves nothing. Wait until the page has moved and then held
+	// still across two frames rather than guessing how long the animation runs.
+	await expect
+		.poll(() =>
+			page.evaluate(
+				() =>
+					new Promise<boolean>((resolve) => {
+						const start = window.scrollY;
+						requestAnimationFrame(() =>
+							requestAnimationFrame(() => resolve(start > 0 && window.scrollY === start))
+						);
+					})
+			)
+		)
+		.toBe(true);
 	const clearance = await page.evaluate(() => {
 		const nav = document.querySelector('nav[aria-label="Aller au jour"]')!;
 		const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
@@ -32,6 +47,28 @@ test('the programme day bar stays one row at the narrowest supported width', asy
 		return target.getBoundingClientRect().top - nav.getBoundingClientRect().bottom;
 	});
 	expect(clearance).toBeGreaterThan(0);
+});
+
+test('the programme downloads are served with the types browsers expect', async ({
+	page,
+	request
+}) => {
+	await page.goto(`${BASE}/programme`);
+	for (const [name, contentType, signature] of [
+		['Download programme (PDF)', /^application\/pdf\b/, '%PDF-'],
+		['Add to calendar (.ics)', /^text\/calendar\b/, 'BEGIN:VCALENDAR']
+	] as const) {
+		const link = page.getByRole('link', { name });
+		await expect(link).toHaveAttribute('download', '');
+		const href = await link.getAttribute('href');
+		expect(href).toBeTruthy();
+		const response = await request.get(new URL(href!, page.url()).href);
+		expect(response.status(), name).toBe(200);
+		expect(response.headers()['content-type'], name).toMatch(contentType);
+		expect((await response.body()).subarray(0, signature.length).toString('latin1')).toBe(
+			signature
+		);
+	}
 });
 
 test('the session permalink is a real target on touch', async ({ browser }) => {
