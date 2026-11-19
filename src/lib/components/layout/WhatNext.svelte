@@ -4,19 +4,23 @@
 	import * as m from '#lib/paraglide/messages.js';
 	import { localePath } from '#lib/utils/i18n.ts';
 	import { contactEmails } from '#lib/data/contacts.ts';
-	import { organizers } from '#lib/data/organizers.ts';
+	import { organizerRefs } from '#lib/data/organizer-refs.ts';
 
 	type Destination =
-		'about' | 'programme' | 'papers' | 'participants' | 'venue' | 'cfp' | 'contact';
+		'about' | 'programme' | 'papers' | 'participants' | 'venue' | 'cfp' | 'resources' | 'contact';
 
 	// Six of eight routes used to end at a thin rule and the sponsor wall, so
 	// every route out of a page depended on the navbar. Two onward links and a
 	// way to reach the convenors cost nothing.
+	//
+	// Resources leads from the home page, the programme and the papers: a
+	// reader who has just seen what was scheduled and submitted is a click from
+	// what came out of the four days themselves — the slides and the writing.
 	const ROUTE_EXITS: Record<string, Destination[]> = {
-		'/[[lang]]': ['about', 'programme', 'contact'],
+		'/[[lang]]': ['resources', 'about', 'contact'],
 		'/[[lang]]/about': ['programme', 'papers', 'contact'],
-		'/[[lang]]/programme': ['papers', 'participants', 'contact'],
-		'/[[lang]]/papers': ['programme', 'participants', 'contact'],
+		'/[[lang]]/programme': ['resources', 'papers', 'contact'],
+		'/[[lang]]/papers': ['resources', 'programme', 'contact'],
 		'/[[lang]]/papers/[slug]': ['programme', 'papers', 'contact'],
 		'/[[lang]]/participants': ['papers', 'programme', 'contact'],
 		'/[[lang]]/venue': ['programme', 'participants', 'contact'],
@@ -29,7 +33,7 @@
 	// A mailto rather than a contact page nobody would maintain. Every convenor
 	// is on the one address list, so a participant writes once instead of
 	// choosing which of four people their question belongs to.
-	const convenorMailto = organizers
+	const convenorMailto = organizerRefs
 		.map((organizer) => contactEmails[organizer.id])
 		.filter(Boolean)
 		.join(',');
@@ -59,6 +63,12 @@
 					href: localePath('/call-for-papers'),
 					title: m.nav_cfp(),
 					desc: m.next_cfp_desc()
+				};
+			case 'resources':
+				return {
+					href: localePath('/resources'),
+					title: m.nav_resources(),
+					desc: m.next_resources_desc()
 				};
 			case 'contact':
 				return {

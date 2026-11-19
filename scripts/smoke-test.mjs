@@ -120,6 +120,35 @@ if (robots) {
 	ok('robots.txt: sitemap resolves');
 }
 
+// 7. The archive state is in the prerendered HTML, not inserted after
+//    hydration. A client clock once decided every lifecycle state, so the
+//    files crawlers and no-JS readers get showed the workshop before it began
+//    — an open call, a countdown — with a green build.
+const failuresBeforeArchive = failures;
+const archiveClaims = [
+	['index.html', en, 'The workshop has concluded.'],
+	['fr.html', fr, "L'atelier est terminé."],
+	[
+		'call-for-papers.html',
+		await read('build/call-for-papers.html'),
+		'The call for papers closed on'
+	],
+	[
+		'fr/call-for-papers.html',
+		await read('build/fr/call-for-papers.html'),
+		'L’appel à contributions s’est clôturé le'
+	]
+];
+for (const [file, html, claim] of archiveClaims) {
+	if (html && !html.includes(claim)) fail(`${file}: archive state missing (“${claim}”)`);
+}
+// The Event once named a VirtualLocation pointing at the site itself, with no
+// join link anywhere on it. `onlineAccess.joinUrl` was emptied for good when
+// the meeting series ended, so the JSON-LD must not advertise one.
+if (en && en.includes('VirtualLocation'))
+	fail('index.html: Event JSON-LD names a VirtualLocation, but no join link is published');
+if (failures === failuresBeforeArchive) ok('archive state is prerendered');
+
 if (failures > 0) {
 	console.error(`\nsmoke-test: ${failures} problem(s) found`);
 	process.exit(1);

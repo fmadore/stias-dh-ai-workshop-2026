@@ -35,12 +35,13 @@
 					<h2 class="text-section text-strong mb-2">{m.accommodation_title()}</h2>
 					<p class="text-prose">{m.accommodation_intro()}</p>
 
-					<!-- The one thing a participant has to act on here is that nobody is
-					     coming to collect them in the morning. The distances on the cards
-					     below state how far it is; only this says what that means for the
-					     daily commute, and it also settles the "local transport" bullet in
-					     the logistics list above, which reads like a shuttle until it is
-					     told apart from the airport transfer and the off-site visits. -->
+					<!-- Written for participants as the one thing they had to act on —
+					     nobody was coming to collect them in the morning — and kept as the
+					     record of how the days ran. The distances on the cards below state
+					     how far it was; only this says what that meant for the daily walk,
+					     and it also settles the "local transport" bullet in the logistics
+					     list above, which reads like a shuttle until it is told apart from
+					     the airport transfer and the off-site visits. -->
 					<div class="callout mt-5">
 						<Info
 							size={18}
